@@ -9,8 +9,8 @@ npm i -g pnpm@10.9.0
 ### 1. Clone the Project
 
 ```bash
-git clone https://github.com/<owner>/<repo>.git
-cd repo
+git clone https://github.com/iwmywn/digital-business-card.git
+cd digital-business-card
 ```
 
 ### 2. Install Dependencies
