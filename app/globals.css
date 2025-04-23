@@ -112,9 +112,16 @@
 
 @layer base {
   * {
+    scrollbar-width: thin;
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  [role="button"],
+  button {
+    cursor: pointer;
   }
 }
