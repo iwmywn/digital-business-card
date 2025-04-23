@@ -17,12 +17,9 @@ import { Slash } from "lucide-react";
 
 export function Header() {
   const pathname = usePathname();
-  const currentPath = pathname === "/" ? "Home" : pathname.split("/")[1];
 
   const allNavItems = [...data.nav.navMain, ...data.nav.navSecondary];
-  const foundItem = allNavItems.find(
-    (item) => item.url.replace("/", "") === currentPath,
-  );
+  const foundItem = allNavItems.find((item) => item.url === pathname);
 
   return (
     <header className="sticky top-4 z-100 flex shrink-0 items-center justify-between bg-white/75 backdrop-blur dark:bg-black/75">
@@ -31,9 +28,13 @@ export function Header() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="/">Home</Link>
-              </BreadcrumbLink>
+              {pathname === "/" ? (
+                <BreadcrumbPage>Home</BreadcrumbPage>
+              ) : (
+                <BreadcrumbLink asChild>
+                  <Link href="/">Home</Link>
+                </BreadcrumbLink>
+              )}
             </BreadcrumbItem>
             {pathname !== "/" && (
               <>
