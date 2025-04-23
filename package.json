@@ -1,0 +1,44 @@
+{
+  "name": "digital-business-card",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "husky",
+    "release": "iwmywn-release"
+  },
+  "dependencies": {
+    "next": "15.3.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "3",
+    "@iwmywn/release": "1.1.1",
+    "@tailwindcss/postcss": "4",
+    "@types/node": "22",
+    "@types/react": "19",
+    "@types/react-dom": "19",
+    "eslint": "9",
+    "eslint-config-next": "15.3.1",
+    "husky": "9.1.7",
+    "lint-staged": "15.5.1",
+    "only-allow": "1.2.1",
+    "prettier": "3.5.3",
+    "prettier-plugin-tailwindcss": "0.6.11",
+    "tailwindcss": "4",
+    "typescript": "5"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint"
+    ],
+    "*.{css,json,md}": "prettier --write"
+  },
+  "packageManager": "pnpm@10.9.0"
+}
