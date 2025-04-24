@@ -109,7 +109,7 @@ export function LoginForm() {
                   </FormItem>
                 )}
               />
-              <FormLink href="/forgotten-password" side="right">
+              <FormLink href="/forgot-password" side="right">
                 Forgot your password?
               </FormLink>
               <Button type="submit" className="w-full">

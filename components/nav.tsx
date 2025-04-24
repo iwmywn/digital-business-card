@@ -53,9 +53,7 @@ export function Nav({ navMain, navSecondary }: NavProps) {
         <SidebarGroupContent>{renderMenu(navMain)}</SidebarGroupContent>
       </SidebarGroup>
       <SidebarGroup className="mt-auto">
-        <SidebarGroupContent>
-          {renderMenu(navSecondary, "sm")}
-        </SidebarGroupContent>
+        <SidebarGroupContent>{renderMenu(navSecondary)}</SidebarGroupContent>
       </SidebarGroup>
     </>
   );

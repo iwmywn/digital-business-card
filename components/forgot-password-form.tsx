@@ -28,7 +28,7 @@ const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
 });
 
-export function ForgetPasswordForm() {
+export function ForgotPasswordForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,7 +49,7 @@ export function ForgetPasswordForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Forgotten Password</CardTitle>
+        <CardTitle className="text-2xl">Forgot Password</CardTitle>
         <CardDescription>
           Enter your email address to receive a password reset link.
         </CardDescription>

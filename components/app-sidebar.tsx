@@ -41,12 +41,12 @@ export const data = {
       },
       {
         title: "Create Card",
-        url: "/create-card",
+        url: "/create",
         icon: BadgePlus,
       },
       {
         title: "Manage Cards",
-        url: "/manage-cards",
+        url: "/manage",
         icon: Kanban,
       },
       {
@@ -68,12 +68,12 @@ export const data = {
       },
       {
         title: "Terms of Service",
-        url: "/terms-of-service",
+        url: "/tos",
         icon: ReceiptText,
       },
       {
         title: "Privacy Policy",
-        url: "/privacy-policy",
+        url: "/privacy",
         icon: GlobeLock,
       },
     ],
