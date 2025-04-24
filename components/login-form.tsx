@@ -109,7 +109,10 @@ export function LoginForm() {
                   </FormItem>
                 )}
               />
-              <Link href="#" className="ml-auto inline-block text-sm underline">
+              <Link
+                href="/forgotten-password"
+                className="ml-auto inline-block text-sm underline"
+              >
                 Forgot your password?
               </Link>
               <Button type="submit" className="w-full">

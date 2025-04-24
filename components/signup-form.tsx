@@ -46,7 +46,7 @@ const formSchema = z
     message: "Passwords do not match",
   });
 
-export default function SignupForm() {
+export default function SignUpForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -185,7 +185,7 @@ export default function SignupForm() {
               />
 
               <Button type="submit" className="w-full">
-                Register
+                Sign up
               </Button>
             </div>
           </form>
