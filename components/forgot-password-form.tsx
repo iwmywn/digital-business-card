@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -23,70 +22,106 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { FormLink } from "@/components/form-link";
+import { useState } from "react";
+import ReCaptchaPopup from "@/components/recaptcha";
+import { emailSchema } from "@/schemas";
+import { FormButton } from "@/components/form-button";
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-});
+type EmailFormData = z.infer<typeof emailSchema>;
 
 export function ForgotPasswordForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const form = useForm<EmailFormData>({
+    resolver: zodResolver(emailSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(data: EmailFormData) {
+    if (!showCaptcha && !recaptchaToken) {
+      setShowCaptcha(true);
+      return;
+    }
+
     try {
-      console.log(values);
-      toast.success("Password reset email sent. Please check your inbox.");
+      const res = await fetch("/api/forgot-password", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...data, recaptchaToken }),
+      });
+
+      const message = await res.json();
+
+      if (res.ok) {
+        toast(message);
+        form.reset();
+      } else {
+        toast.error(message);
+      }
     } catch (error) {
-      console.error("Error sending password reset email", error);
-      toast.error("Failed to send password reset email. Please try again.");
+      console.error("Reset Password Error: ", error);
+      toast.error("Something went wrong! Please try again.");
+    } finally {
+      setRecaptchaToken(null);
+      setShowCaptcha(false);
     }
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-2xl">Forgot Password</CardTitle>
-        <CardDescription>
-          Enter your email address to receive a password reset link.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid gap-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="email">Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="email"
-                        placeholder="johndoe@mail.com"
-                        type="email"
-                        autoComplete="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full">
-                Send Reset Link
-              </Button>
-              <FormLink href="/login" side="center">
-                Back to Login
-              </FormLink>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+    <>
+      {showCaptcha && (
+        <ReCaptchaPopup
+          onClose={() => setShowCaptcha(false)}
+          setRecaptchaToken={(token) => setRecaptchaToken(token)}
+        />
+      )}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl">Forgot Password</CardTitle>
+          <CardDescription>
+            Enter your email address to receive a password reset link.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <div className="grid gap-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="email">Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="email"
+                          placeholder="johndoe@mail.com"
+                          type="email"
+                          autoComplete="email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormButton
+                  isValid={form.formState.isValid}
+                  isSubmitting={form.formState.isSubmitting}
+                  text="Send Reset Link"
+                />
+                <FormLink href="/login" side="center">
+                  Back to Login
+                </FormLink>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </>
   );
 }

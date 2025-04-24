@@ -20,45 +20,50 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
-import { FormLink } from "@/components/form-link";
-import { logInSchema } from "@/schemas";
+import { resetPasswordSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 
-type LogInFormData = z.infer<typeof logInSchema>;
+type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
-export function LogInForm() {
-  const form = useForm<LogInFormData>({
-    resolver: zodResolver(logInSchema),
+export function ResetPasswordForm({
+  token,
+  email,
+}: {
+  token: string | undefined;
+  email: string | undefined;
+}) {
+  const form = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  async function onSubmit(data: LogInFormData) {
+  async function onSubmit(data: ResetPasswordFormData) {
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `/api/reset-password?email=${email}&token=${token}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      });
+      );
 
       const message = await res.json();
 
       if (res.ok) {
-        const searchParams = new URLSearchParams(window.location.search);
-        const callbackUrl = searchParams.get("next") || "/";
-
-        window.location.href = callbackUrl;
+        toast.error(message);
+        form.reset();
       } else {
         toast.error(message);
       }
     } catch (error) {
-      console.error("Log in Error: ", error);
+      console.error("Reset password Error: ", error);
       toast.error("Something went wrong! Please try again.");
     }
   }
@@ -66,9 +71,9 @@ export function LogInForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Log In</CardTitle>
+        <CardTitle className="text-2xl">Reset Password</CardTitle>
         <CardDescription>
-          Enter your email and password to login to your account.
+          Enter your new password to reset your password.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -77,36 +82,15 @@ export function LogInForm() {
             <div className="grid gap-4">
               <FormField
                 control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="email">Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="email"
-                        placeholder="johndoe@mail.com"
-                        type="email"
-                        autoComplete="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem className="grid gap-2">
-                    <div className="flex items-center justify-between">
-                      <FormLabel htmlFor="password">Password</FormLabel>
-                    </div>
+                    <FormLabel htmlFor="password">New Password</FormLabel>
                     <FormControl>
                       <PasswordInput
                         id="password"
                         placeholder="********"
-                        autoComplete="current-password"
+                        autoComplete="new-password"
                         {...field}
                       />
                     </FormControl>
@@ -114,21 +98,36 @@ export function LogInForm() {
                   </FormItem>
                 )}
               />
-              <FormLink href="/forgot-password" side="right">
-                Forgot your password?
-              </FormLink>
+
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel htmlFor="confirmPassword">
+                      Confirm Password
+                    </FormLabel>
+                    <FormControl>
+                      <PasswordInput
+                        id="confirmPassword"
+                        placeholder="********"
+                        autoComplete="new-password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormButton
                 isValid={form.formState.isValid}
                 isSubmitting={form.formState.isSubmitting}
-                text="Log in"
+                text="Reset Password"
               />
             </div>
           </form>
         </Form>
-        <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <FormLink href="/signup">Sign up</FormLink>
-        </div>
       </CardContent>
     </Card>
   );

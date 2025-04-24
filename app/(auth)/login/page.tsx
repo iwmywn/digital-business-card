@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/login-form";
+import { LogInForm } from "@/components/login-form";
 import type { Metadata } from "next";
 
 export function generateMetadata(): Metadata {
@@ -6,5 +6,5 @@ export function generateMetadata(): Metadata {
 }
 
 export default function page() {
-  return <LoginForm />;
+  return <LogInForm />;
 }
