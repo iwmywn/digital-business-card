@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,6 +23,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
+import { FormLink } from "@/components/form-link";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -109,12 +109,9 @@ export function LoginForm() {
                   </FormItem>
                 )}
               />
-              <Link
-                href="/forgotten-password"
-                className="ml-auto inline-block text-sm underline"
-              >
+              <FormLink href="/forgotten-password" side="right">
                 Forgot your password?
-              </Link>
+              </FormLink>
               <Button type="submit" className="w-full">
                 Login
               </Button>
@@ -126,9 +123,7 @@ export function LoginForm() {
         </Form>
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="underline">
-            Sign up
-          </Link>
+          <FormLink href="/signup">Sign up</FormLink>
         </div>
       </CardContent>
     </Card>

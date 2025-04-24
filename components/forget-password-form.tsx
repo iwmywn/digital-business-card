@@ -22,6 +22,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { FormLink } from "@/components/form-link";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -79,6 +80,9 @@ export function ForgetPasswordForm() {
               <Button type="submit" className="w-full">
                 Send Reset Link
               </Button>
+              <FormLink href="/login" side="center">
+                Back to Login
+              </FormLink>
             </div>
           </form>
         </Form>

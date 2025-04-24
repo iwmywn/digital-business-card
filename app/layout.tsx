@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { montserrat } from "@/app/fonts";
 import "./globals.css";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Header } from "@/components/header";
-
-const montserrat = Montserrat({
-  subsets: ["latin", "vietnamese"],
-});
 
 export const metadata: Metadata = {
   title: {
@@ -32,18 +25,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset className="p-2 peer-data-[state=collapsed]:pl-0">
-              <div
-                className="overflow-y-auto rounded-[var(--radius)] border border-[var(--border)] bg-[var(--primary-foreground)] p-2 pt-0 shadow-sm"
-                style={{ maxHeight: "calc(100vh - 1rem)" }}
-              >
-                <Header />
-                <section>{children}</section>
-              </div>
-            </SidebarInset>
-          </SidebarProvider>
+          {children}
         </ThemeProvider>
       </body>
     </html>

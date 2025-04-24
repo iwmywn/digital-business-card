@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -25,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { FormLink } from "@/components/form-link";
 
 const formSchema = z
   .object({
@@ -191,10 +191,7 @@ export default function SignUpForm() {
           </form>
         </Form>
         <div className="mt-4 text-center text-sm">
-          Already have an account?{" "}
-          <Link href="/login" className="underline">
-            Login
-          </Link>
+          Already have an account? <FormLink href="/login">Log in</FormLink>
         </div>
       </CardContent>
     </Card>
