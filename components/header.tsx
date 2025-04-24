@@ -22,7 +22,7 @@ export function Header() {
   const foundItem = allNavItems.find((item) => item.url === pathname);
 
   return (
-    <header className="sticky top-4 z-100 flex shrink-0 items-center justify-between bg-white/75 backdrop-blur dark:bg-black/75">
+    <header className="sticky top-0 z-100 flex shrink-0 items-center justify-between bg-(--primary-foreground)/75 py-2 backdrop-blur">
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1" />
         <Breadcrumb>

@@ -34,9 +34,14 @@ export default function RootLayout({
         >
           <SidebarProvider>
             <AppSidebar />
-            <SidebarInset className="p-2">
-              <Header />
-              {children}
+            <SidebarInset className="p-2 pl-0">
+              <div
+                className="overflow-y-auto rounded-[var(--radius)] border border-[var(--border)] bg-[var(--primary-foreground)] p-2 pt-0 shadow-sm"
+                style={{ maxHeight: "calc(100vh - 1rem)" }}
+              >
+                <Header />
+                <section>{children}</section>
+              </div>
             </SidebarInset>
           </SidebarProvider>
         </ThemeProvider>
