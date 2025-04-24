@@ -48,7 +48,7 @@ export function ForgetPasswordForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Forgot Password</CardTitle>
+        <CardTitle className="text-2xl">Forgotten Password</CardTitle>
         <CardDescription>
           Enter your email address to receive a password reset link.
         </CardDescription>
