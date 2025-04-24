@@ -82,7 +82,12 @@ export const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar className="pr-0" variant="floating" {...props}>
+    <Sidebar
+      className="pr-0 group-data-[state=collapsed]:pr-[0.5625rem]"
+      variant="floating"
+      collapsible="icon"
+      {...props}
+    >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
