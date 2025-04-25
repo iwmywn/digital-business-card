@@ -57,7 +57,7 @@ export function ResetPasswordForm({
       const message = await res.json();
 
       if (res.ok) {
-        toast.error(message);
+        toast.success(message);
         form.reset();
       } else {
         toast.error(message);

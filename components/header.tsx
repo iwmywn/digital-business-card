@@ -14,6 +14,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Slash } from "lucide-react";
+import { ColorDialog } from "@/components/color-dialog";
 
 export function Header() {
   const pathname = usePathname();
@@ -32,7 +33,7 @@ export function Header() {
                 <BreadcrumbPage>Home</BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
-                  <Link href="/">Home</Link>
+                  <Link href="/home">Home</Link>
                 </BreadcrumbLink>
               )}
             </BreadcrumbItem>
@@ -42,16 +43,17 @@ export function Header() {
                   <Slash />
                 </BreadcrumbSeparator>
                 <BreadcrumbItem>
-                  <BreadcrumbPage>
-                    {foundItem ? foundItem.title : "Not found"}
-                  </BreadcrumbPage>
+                  <BreadcrumbPage>{foundItem?.title}</BreadcrumbPage>
                 </BreadcrumbItem>
               </>
             )}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <ModeToggle />
+      <div className="flex items-center gap-2">
+        <ColorDialog />
+        <ModeToggle />
+      </div>
     </header>
   );
 }

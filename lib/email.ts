@@ -31,7 +31,7 @@ export async function sendEmail(
     subject: subject,
     html: `
       <table
-      style="width: 100%; background-color: #f9b228; padding: 20px 40px; border-radius: 12px; text-align: center; font-family: Arial, sans-serif;">
+      style="width: 100%; background-color: #fff4db; padding: 20px 40px; border-radius: 12px; text-align: center; font-family: Arial, sans-serif;">
       <tr>
         <td>
           <p style="font-size: 22px; font-weight: 600; margin-bottom: 20px; margin-top: 0px">Eznect</p>

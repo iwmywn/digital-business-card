@@ -1,10 +1,9 @@
 "use client";
 
 import ReCAPTCHA from "react-google-recaptcha";
-import { createPortal } from "react-dom";
-import { useAnimation } from "@/hooks/use-animation";
-import { useOverflow } from "@/hooks/use-overflow";
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface ReCaptchaPopupProps {
   onClose: () => void;
@@ -15,10 +14,7 @@ interface ReCaptchaPopupProps {
 export default function ReCaptchaPopup({
   onClose,
   setRecaptchaToken,
-  overflow = true,
 }: ReCaptchaPopupProps) {
-  const { isAnimating, triggerAnimation } = useAnimation();
-  const animteAndClose = () => triggerAnimation(() => onClose());
   const handleRecaptchaChange = async (token: string | null) => {
     if (!token) {
       toast.error("CAPTCHA verification failed! Please try again.");
@@ -27,34 +23,28 @@ export default function ReCaptchaPopup({
 
     setRecaptchaToken(token);
     setTimeout(() => {
-      animteAndClose();
+      onClose();
     }, 500);
   };
 
-  const handleClose = () => {
-    animteAndClose();
+  const handleDialogClose = () => {
     toast.error("Please complete the CAPTCHA!");
+    onClose();
   };
 
-  //eslint-disable-next-line react-hooks/rules-of-hooks
-  if (overflow) useOverflow(!isAnimating);
-
-  return createPortal(
-    <div
-      className={`fixed inset-0 z-[9998] flex items-center justify-center bg-black/80 ${isAnimating ? "animate-fade-out" : "animate-fadeIn"}`}
-      onClick={handleClose}
-    >
-      <div
-        className={`rounded bg-white p-4 shadow-lg ${isAnimating ? "animate-zoom-out" : "animate-zoom-in"}`}
-        onClick={(e) => e.stopPropagation()}
-      >
+  return (
+    <Dialog open={true} onOpenChange={handleDialogClose}>
+      <DialogContent className="w-fit">
+        <VisuallyHidden>
+          <DialogTitle>CAPTCHA verification</DialogTitle>
+        </VisuallyHidden>
         <ReCAPTCHA
           sitekey={process.env.NEXT_PUBLIC_RECAPTCHA!}
           onChange={handleRecaptchaChange}
           hl="en"
+          className="m-3"
         />
-      </div>
-    </div>,
-    document.getElementById("popups")!,
+      </DialogContent>
+    </Dialog>
   );
 }
