@@ -8,9 +8,9 @@ import { siteConfig } from "@/lib/config";
 export const metadata: Metadata = {
   title: {
     template: "%s | EZNECT",
-    default: siteConfig.maintenanceMode ? "Maintenance | EZNECT" : "EZNECT",
+    default: "EZNECT",
   },
-  description: siteConfig.maintenanceMode ? "Website is under maintenance" : "",
+  description: "",
 };
 
 export default async function RootLayout({
@@ -22,9 +22,7 @@ export default async function RootLayout({
     return (
       <html lang="en">
         <body className={`${montserrat.className} antialiased`}>
-          <main className="flex min-h-screen items-center justify-center text-3xl font-bold">
-            Be right back!
-          </main>
+          {children}
         </body>
       </html>
     );

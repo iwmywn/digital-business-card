@@ -1,7 +1,12 @@
 "use server";
 
 import { NextResponse, type NextRequest } from "next/server";
-import { authRoutes, DEFAULT_LOGIN_REDIRECT, protectedRoutes } from "@/routes";
+import {
+  authRoutes,
+  DEFAULT_LOGIN_REDIRECT,
+  protectedRoutes,
+  maintenanceRoute,
+} from "@/routes";
 import { siteConfig } from "@/lib/config";
 import { updateSession } from "@/lib/session";
 import { verifySession } from "@/lib/dal";
@@ -10,27 +15,29 @@ export async function middleware(req: NextRequest) {
   const { nextUrl, cookies } = req;
   const path = nextUrl.pathname;
 
-  if (siteConfig.maintenanceMode && path !== "/") {
-    return NextResponse.redirect(new URL("/", nextUrl));
-  }
+  if (siteConfig.maintenanceMode) {
+    if (path !== maintenanceRoute) {
+      return NextResponse.redirect(new URL(maintenanceRoute, nextUrl));
+    }
 
-  if (path === "/") {
-    return NextResponse.redirect(new URL("/home", nextUrl));
+    return NextResponse.next();
+  } else {
+    if (path === maintenanceRoute || path === "/") {
+      return NextResponse.redirect(new URL("/home", nextUrl));
+    }
   }
 
   const session = cookies.get("session")?.value;
   const { isLoggedIn, expires } = await verifySession();
 
   if (!isLoggedIn) {
-    const response = NextResponse.next();
-
     if (protectedRoutes.some((route) => path.startsWith(route))) {
       const redirectUrl = new URL("/login", nextUrl);
       redirectUrl.searchParams.set("next", path);
       return NextResponse.redirect(redirectUrl);
     }
 
-    return response;
+    return NextResponse.next();
   }
 
   if (authRoutes.some((route) => path.startsWith(route)) && isLoggedIn) {

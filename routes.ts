@@ -1,11 +1,6 @@
-export const authRoutes = [
-  "/login",
-  "/signup",
-  "/forgot-password",
-  "/email-handler",
-];
-export const DEFAULT_LOGIN_REDIRECT = "/home";
-export const protectedRoutes = [
+const authRoutes = ["/login", "/signup", "/forgot-password", "/email-handler"];
+const DEFAULT_LOGIN_REDIRECT = "/home";
+const protectedRoutes = [
   "/analytics",
   "/create",
   "/faq",
@@ -16,3 +11,11 @@ export const protectedRoutes = [
   "/privacy",
   "/tos",
 ];
+const maintenanceRoute = "/maintenance";
+
+export {
+  authRoutes,
+  DEFAULT_LOGIN_REDIRECT,
+  protectedRoutes,
+  maintenanceRoute,
+};
