@@ -10,7 +10,8 @@ export const metadata: Metadata = {
     template: "%s | EZNECT",
     default: "EZNECT",
   },
-  description: "",
+  description:
+    "Eznect's digital business cards make sharing your contact info a breeze with a simple QR code. They're easy to customize, quick to update, and perfect for making a strong first impression.",
 };
 
 export default async function RootLayout({

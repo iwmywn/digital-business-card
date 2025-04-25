@@ -6,6 +6,7 @@ import {
   DEFAULT_LOGIN_REDIRECT,
   protectedRoutes,
   maintenanceRoute,
+  ogRoute,
 } from "@/routes";
 import { siteConfig } from "@/lib/config";
 import { updateSession } from "@/lib/session";
@@ -16,7 +17,7 @@ export async function middleware(req: NextRequest) {
   const path = nextUrl.pathname;
 
   if (siteConfig.maintenanceMode) {
-    if (path !== maintenanceRoute) {
+    if (path !== maintenanceRoute && path !== ogRoute) {
       return NextResponse.redirect(new URL(maintenanceRoute, nextUrl));
     }
 

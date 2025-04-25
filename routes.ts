@@ -12,10 +12,12 @@ const protectedRoutes = [
   "/tos",
 ];
 const maintenanceRoute = "/maintenance";
+const ogRoute = "/opengraph-image.png";
 
 export {
   authRoutes,
   DEFAULT_LOGIN_REDIRECT,
   protectedRoutes,
   maintenanceRoute,
+  ogRoute,
 };
