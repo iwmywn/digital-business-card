@@ -1,6 +1,6 @@
 "use client";
 
-import { montserrat } from "@/app/fonts";
+import { nunito } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
 
 export default function GlobalError({
@@ -12,7 +12,7 @@ export default function GlobalError({
 }) {
   return (
     <html>
-      <body className={`${montserrat.className} antialiased`}>
+      <body className={`${nunito.className} antialiased`}>
         <main className="relative z-10 flex h-screen flex-col items-center justify-center gap-2 px-6 text-center md:px-16">
           <h2 className="text-lg font-semibold">Something went wrong!</h2>
           <p>{error.message}</p>

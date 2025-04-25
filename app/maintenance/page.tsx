@@ -6,7 +6,7 @@ export function generateMetadata(): Metadata {
 
 export default function page() {
   return (
-    <main className="flex min-h-screen items-center justify-center text-3xl font-bold">
+    <main className="flex min-h-screen items-center justify-center text-4xl font-black">
       Be right back!
     </main>
   );

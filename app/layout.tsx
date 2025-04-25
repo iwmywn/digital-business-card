@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { montserrat } from "@/app/fonts";
+import { nunito } from "@/app/fonts";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -21,16 +21,14 @@ export default async function RootLayout({
   if (siteConfig.maintenanceMode) {
     return (
       <html lang="en">
-        <body className={`${montserrat.className} antialiased`}>
-          {children}
-        </body>
+        <body className={`${nunito.className} antialiased`}>{children}</body>
       </html>
     );
   }
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${montserrat.className} antialiased`}>
+      <body className={`${nunito.className} antialiased`}>
         <div id="popups" className="relative z-[9999]" />
         <ThemeProvider
           attribute="class"
