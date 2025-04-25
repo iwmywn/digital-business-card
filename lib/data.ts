@@ -1,6 +1,20 @@
+"use server";
+
 import { getAvatarCollection, getUserCollection } from "@/lib/collections";
 import { Avatar } from "@/lib/definitions";
+import { ObjectId } from "mongodb";
 import { cache } from "react";
+
+export async function getUserById(id: string) {
+  try {
+    const user = await (
+      await getUserCollection()
+    ).findOne({ _id: new ObjectId(id) });
+    return user;
+  } catch (error) {
+    console.error("Failed to fetch user:", error);
+  }
+}
 
 export async function getUserByEmail(email: string) {
   try {

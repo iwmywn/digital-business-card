@@ -8,14 +8,13 @@ export const verifySession = cache(async () => {
   const session = (await cookies()).get("session")?.value;
   const payload = await decrypt(session);
 
-  if (!payload) return {};
+  if (!payload) return { isLoggedIn: false };
 
-  const { userId, userImage } = payload.user;
-  const expires = payload.expires;
+  const { userId, expires } = payload;
 
   return {
+    isLoggedIn: true,
     userId,
-    userImage,
     expires,
   };
 });

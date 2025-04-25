@@ -27,7 +27,7 @@ export function VerifyEmail({
         if (res.ok) setIcon(() => Check);
         setMessage(message);
       } catch (error) {
-        console.error("Verification Token Error: ", error);
+        console.error("Verification token error: ", error);
         setMessage("Something went wrong! Please try again.");
       } finally {
         setLoading(false);

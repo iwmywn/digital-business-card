@@ -1,3 +1,5 @@
+"use server";
+
 import { createResponse } from "@/app/api/utils";
 import { getUserCollection } from "@/lib/collections";
 import { resetPasswordSchema } from "@/schemas";

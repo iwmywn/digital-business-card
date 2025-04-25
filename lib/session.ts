@@ -3,13 +3,8 @@ import "server-only";
 import { type JWTPayload, SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-export interface User {
-  userId: string | undefined;
-  userImage: string | undefined;
-}
-
 interface SessionPayload extends JWTPayload {
-  user: User;
+  userId: string | undefined;
   expires: Date;
 }
 
@@ -54,8 +49,11 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-export async function createSession(userId: string, userImage: string) {
-  const session = await encrypt({ user: { userId, userImage }, expires });
+export async function createSession(userId: string) {
+  const session = await encrypt({
+    userId,
+    expires,
+  });
   await setSessionCookie(session);
 }
 
@@ -66,6 +64,4 @@ export async function updateSession(session: string) {
 export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete("session");
-  cookieStore.delete("userId");
-  cookieStore.delete("userImage");
 }

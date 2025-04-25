@@ -63,7 +63,7 @@ export function ResetPasswordForm({
         toast.error(message);
       }
     } catch (error) {
-      console.error("Reset password Error: ", error);
+      console.error("Reset password error: ", error);
       toast.error("Something went wrong! Please try again.");
     }
   }

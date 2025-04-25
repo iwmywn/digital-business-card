@@ -25,59 +25,51 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 
-export const data = {
-  user: {
-    name: "iwmywn",
-    email: "user@nextmail.com",
-    avatar: "/avatars/iwmywn.jpeg",
-  },
-  nav: {
-    navMain: [
-      {
-        title: "Information",
-        url: "/info",
-        icon: User,
-        // isActive: true,
-      },
-      {
-        title: "Create Card",
-        url: "/create",
-        icon: BadgePlus,
-      },
-      {
-        title: "Manage Cards",
-        url: "/manage",
-        icon: Kanban,
-      },
-      {
-        title: "Analytics",
-        url: "/analytics",
-        icon: ChartColumnIncreasing,
-      },
-      {
-        title: "Payment Management",
-        url: "/payments",
-        icon: CreditCard,
-      },
-    ],
-    navSecondary: [
-      {
-        title: "FAQ",
-        url: "/faq",
-        icon: CircleHelp,
-      },
-      {
-        title: "Terms of Service",
-        url: "/tos",
-        icon: ReceiptText,
-      },
-      {
-        title: "Privacy Policy",
-        url: "/privacy",
-        icon: GlobeLock,
-      },
-    ],
-  },
+export const nav = {
+  navMain: [
+    {
+      title: "Information",
+      url: "/info",
+      icon: User,
+    },
+    {
+      title: "Create Card",
+      url: "/create",
+      icon: BadgePlus,
+    },
+    {
+      title: "Manage Cards",
+      url: "/manage",
+      icon: Kanban,
+    },
+    {
+      title: "Analytics",
+      url: "/analytics",
+      icon: ChartColumnIncreasing,
+    },
+    {
+      title: "Payment Management",
+      url: "/payments",
+      icon: CreditCard,
+    },
+  ],
+  navSecondary: [
+    {
+      title: "FAQ",
+      url: "/faq",
+      icon: CircleHelp,
+    },
+    {
+      title: "Terms of Service",
+      url: "/tos",
+      icon: ReceiptText,
+    },
+    {
+      title: "Privacy Policy",
+      url: "/privacy",
+      icon: GlobeLock,
+    },
+  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -102,7 +94,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">EZNECT</span>
-                  <span className="truncate text-xs">Free</span>
+                  <span className="truncate text-xs">Premium</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -110,10 +102,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <Nav navMain={data.nav.navMain} navSecondary={data.nav.navSecondary} />
+        <Nav navMain={nav.navMain} navSecondary={nav.navSecondary} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

@@ -8,12 +8,12 @@ import { siteConfig } from "@/lib/config";
 export const metadata: Metadata = {
   title: {
     template: "%s | EZNECT",
-    default: "EZNECT",
+    default: siteConfig.maintenanceMode ? "Maintenance | EZNECT" : "EZNECT",
   },
-  description: "",
+  description: siteConfig.maintenanceMode ? "Website is under maintenance" : "",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

@@ -63,7 +63,7 @@ export function ForgotPasswordForm() {
         toast.error(message);
       }
     } catch (error) {
-      console.error("Reset Password Error: ", error);
+      console.error("Reset password error: ", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
       setRecaptchaToken(null);

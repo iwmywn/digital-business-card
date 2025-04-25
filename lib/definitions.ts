@@ -12,7 +12,7 @@ type BaseUser<T> = {
   phone: string;
   password: string;
   emailVerified: boolean;
-  image: string;
+  avatar: string;
   verificationToken: string;
   resendVerification: number;
   createdAt: Date;

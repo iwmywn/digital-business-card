@@ -51,14 +51,14 @@ export function LogInForm() {
 
       if (res.ok) {
         const searchParams = new URLSearchParams(window.location.search);
-        const callbackUrl = searchParams.get("next") || "/";
+        const callbackUrl = searchParams.get("next") || "/home";
 
         window.location.href = callbackUrl;
       } else {
         toast.error(message);
       }
     } catch (error) {
-      console.error("Log in Error: ", error);
+      console.error("Log in error: ", error);
       toast.error("Something went wrong! Please try again.");
     }
   }

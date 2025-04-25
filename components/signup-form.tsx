@@ -69,8 +69,8 @@ export default function SignUpForm() {
         toast.error(message);
       }
     } catch (error) {
-      console.error("Sign Up Error: ", error);
-      toast.error("Failed to submit the form. Please try again.");
+      console.error("Sign up error: ", error);
+      toast.error("Something went wrong! Please try again.");
     } finally {
       setRecaptchaToken(null);
       setShowCaptcha(false);

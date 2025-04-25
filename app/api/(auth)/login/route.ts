@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       400,
     );
 
-  await createSession(existingUser._id.toString(), existingUser.image);
+  await createSession(existingUser._id.toString());
 
   return new Response(JSON.stringify({ message: "Login successful." }), {
     status: 200,

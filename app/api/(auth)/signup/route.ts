@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     phone,
     password: hashedPassword,
     emailVerified: false,
-    image: `${avatar}`,
+    avatar: `${avatar}`,
     verificationToken,
     resendVerification: 1,
     createdAt: new Date(),

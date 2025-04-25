@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { data } from "@/components/app-sidebar";
+import { nav } from "@/components/app-sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ModeToggle } from "@/components/mode-toggle";
 import {
@@ -18,7 +18,7 @@ import { Slash } from "lucide-react";
 export function Header() {
   const pathname = usePathname();
 
-  const allNavItems = [...data.nav.navMain, ...data.nav.navSecondary];
+  const allNavItems = [...nav.navMain, ...nav.navSecondary];
   const foundItem = allNavItems.find((item) => item.url === pathname);
 
   return (
@@ -28,7 +28,7 @@ export function Header() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              {pathname === "/" ? (
+              {pathname === "/home" ? (
                 <BreadcrumbPage>Home</BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
@@ -36,7 +36,7 @@ export function Header() {
                 </BreadcrumbLink>
               )}
             </BreadcrumbItem>
-            {pathname !== "/" && (
+            {pathname !== "/home" && (
               <>
                 <BreadcrumbSeparator>
                   <Slash />
