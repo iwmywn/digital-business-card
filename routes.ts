@@ -14,7 +14,7 @@ const protectedRoutes = [
 const maintenanceRoute = "/maintenance";
 const privateRoute = "/private";
 const ogRoute = "/opengraph-image.png";
-const pageBgRoute = ["/page-bg-dark.png", "/page-bg-light.png"];
+const pageBgRoutes = ["/page-bg-dark.png", "/page-bg-light.png"];
 
 export {
   authRoutes,
@@ -23,5 +23,5 @@ export {
   maintenanceRoute,
   ogRoute,
   privateRoute,
-  pageBgRoute,
+  pageBgRoutes,
 };

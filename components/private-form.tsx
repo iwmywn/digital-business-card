@@ -55,7 +55,7 @@ export function PrivateForm() {
       });
 
       if (res.ok) {
-        toast.success("You have 10 mins for this session. Redirecting...");
+        toast.success("You have 15 mins for this session. Redirecting...");
         const searchParams = new URLSearchParams(window.location.search);
         const callbackUrl = searchParams.get("next") || "/login";
 

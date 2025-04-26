@@ -8,21 +8,21 @@ export interface UserSessionPayload extends JWTPayload {
   expires: Date;
 }
 
-const secretKey = process.env.JWT_SECRET;
+const secretKey = process.env.JWT_SECRET!;
 const encodedKey = new TextEncoder().encode(secretKey);
 const issuer = process.env.JWT_ISSUER!;
 const audience = process.env.JWT_AUDIENCE!;
 
 function getSessionExpiry(key: string): Date {
   const sevenDays = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const tenMinutes = new Date(Date.now() + 10 * 60 * 1000);
-  const oneMinute = new Date(Date.now() + 1 * 30 * 1000);
+  const fifteenMinutes = new Date(Date.now() + 15 * 60 * 1000);
+  const oneMinute = new Date(Date.now() + 1 * 60 * 1000);
 
   if (key === "user_session") {
     return sevenDays;
   }
   if (key === "private_session") {
-    return tenMinutes;
+    return fifteenMinutes;
   }
   return oneMinute;
 }
@@ -66,7 +66,8 @@ export async function decrypt(
     });
 
     return payload as UserSessionPayload | JWTPayload;
-  } catch {
+  } catch (error) {
+    console.error("Verify session error: ", error);
     return null;
   }
 }

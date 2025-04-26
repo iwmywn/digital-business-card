@@ -4,20 +4,7 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      disallow: [
-        "/login",
-        "/signup",
-        "/forgot-password",
-        "/reset-password",
-        "/info",
-        "/create",
-        "/manage",
-        "/analytics",
-        "/payments",
-        "/faq",
-        "/tos",
-        "/privacy",
-      ],
+      disallow: "/",
     },
     sitemap: `${process.env.NEXT_PUBLIC_URL}/sitemap.xml`,
   };
