@@ -1,5 +1,9 @@
 import { collection } from "@/lib/mongodb";
-import { DBUser, DBAvatar } from "@/lib/definitions";
+import { DBPrivateToken, DBUser, DBAvatar } from "@/lib/definitions";
+
+export async function getPrivateTokenCollection() {
+  return await collection<DBPrivateToken>("private_tokens");
+}
 
 export async function getAvatarCollection() {
   return await collection<DBAvatar>("avatars");

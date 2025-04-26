@@ -5,6 +5,7 @@ import { logInSchema } from "@/schemas";
 import { createResponse } from "@/app/api/utils";
 import { createSession } from "@/lib/session";
 import { getUserByEmail } from "@/lib/data";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -29,9 +30,7 @@ export async function POST(req: Request) {
       400,
     );
 
-  await createSession(existingUser._id.toString());
+  await createSession("user_session", existingUser._id.toString());
 
-  return new Response(JSON.stringify({ message: "Login successful." }), {
-    status: 200,
-  });
+  return new NextResponse(null, { status: 204 });
 }

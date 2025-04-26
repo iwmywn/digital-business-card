@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
-    "format": "prettier . --write",
+    "format": "prettier --write .",
     "release": "iwmywn-release"
   },
   "dependencies": {

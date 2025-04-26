@@ -14,13 +14,22 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Slash } from "lucide-react";
-import { ColorDialog } from "@/components/color-dialog";
+import dynamic from "next/dynamic";
 
 export function Header() {
   const pathname = usePathname();
 
   const allNavItems = [...nav.navMain, ...nav.navSecondary];
   const foundItem = allNavItems.find((item) => item.url === pathname);
+
+  const ColorDialog =
+    process.env.NODE_ENV === "development"
+      ? dynamic(
+          () =>
+            import("@/components/color-dialog").then((mod) => mod.ColorDialog),
+          { ssr: false },
+        )
+      : () => null;
 
   return (
     <header className="sticky top-0 z-49 flex shrink-0 items-center justify-between bg-(--primary-foreground)/75 py-2 backdrop-blur">

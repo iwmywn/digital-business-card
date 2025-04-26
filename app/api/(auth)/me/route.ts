@@ -1,11 +1,11 @@
 "use server";
 
 import { createResponse } from "@/app/api/utils";
-import { verifySession } from "@/lib/dal";
+import { verifyUserSession } from "@/lib/dal";
 import { getUserById } from "@/lib/data";
 
 export async function GET() {
-  const { isLoggedIn, userId } = await verifySession();
+  const { isLoggedIn, userId } = await verifyUserSession();
 
   if (!isLoggedIn) {
     return createResponse("Unauthorized!", 401);

@@ -47,14 +47,13 @@ export function LogInForm() {
         body: JSON.stringify(data),
       });
 
-      const message = await res.json();
-
       if (res.ok) {
         const searchParams = new URLSearchParams(window.location.search);
         const callbackUrl = searchParams.get("next") || "/home";
 
         window.location.href = callbackUrl;
       } else {
+        const message = await res.json();
         toast.error(message);
       }
     } catch (error) {

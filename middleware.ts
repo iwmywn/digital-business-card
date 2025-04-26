@@ -1,55 +1,86 @@
 "use server";
 
 import { NextResponse, type NextRequest } from "next/server";
-import {
-  authRoutes,
-  DEFAULT_LOGIN_REDIRECT,
-  protectedRoutes,
-  maintenanceRoute,
-  ogRoute,
-} from "@/routes";
+import * as routes from "@/routes";
 import { siteConfig } from "@/lib/config";
 import { updateSession } from "@/lib/session";
-import { verifySession } from "@/lib/dal";
+import { verifyPrivateSession, verifyUserSession } from "@/lib/dal";
+import { NextURL } from "next/dist/server/web/next-url";
+
+function redirectIfProtectedRoute(path: string, nextUrl: NextURL) {
+  if (routes.protectedRoutes.some((route) => path.startsWith(route))) {
+    const redirectUrl = new URL("/login", nextUrl);
+    if (path !== "/") redirectUrl.searchParams.set("next", path);
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  return NextResponse.next();
+}
+
+function redirectIfNotPrivateRoute(path: string, nextUrl: NextURL) {
+  if (
+    path !== routes.privateRoute &&
+    path !== routes.ogRoute &&
+    !routes.pageBgRoute.some((route) => path.startsWith(route))
+  ) {
+    const redirectUrl = new URL(routes.privateRoute, nextUrl);
+    if (path !== "/") redirectUrl.searchParams.set("next", path);
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  return NextResponse.next();
+}
+
+function redirectTo(path: string, nextUrl: NextURL) {
+  return NextResponse.redirect(new URL(path, nextUrl));
+}
 
 export async function middleware(req: NextRequest) {
   const { nextUrl, cookies } = req;
   const path = nextUrl.pathname;
 
+  const private_session = cookies.get("private_session")?.value;
+
+  if (siteConfig.privateMode) {
+    if (!private_session) return redirectIfNotPrivateRoute(path, nextUrl);
+
+    const { hasPrivateAccess } = await verifyPrivateSession();
+
+    if (!hasPrivateAccess) return redirectIfNotPrivateRoute(path, nextUrl);
+  } else {
+    if (path === routes.privateRoute || path === "/")
+      return redirectTo("/login", nextUrl);
+  }
+
   if (siteConfig.maintenanceMode) {
-    if (path !== maintenanceRoute && path !== ogRoute) {
-      return NextResponse.redirect(new URL(maintenanceRoute, nextUrl));
+    if (path !== routes.maintenanceRoute && path !== routes.ogRoute) {
+      return redirectTo(routes.maintenanceRoute, nextUrl);
     }
 
     return NextResponse.next();
   } else {
-    if (path === maintenanceRoute || path === "/") {
-      return NextResponse.redirect(new URL("/home", nextUrl));
+    if (path === routes.maintenanceRoute || path === "/") {
+      return redirectTo("/login", nextUrl);
     }
   }
 
-  const session = cookies.get("session")?.value;
-  const { isLoggedIn, expires } = await verifySession();
+  const user_session = cookies.get("user_session")?.value;
 
-  if (!isLoggedIn) {
-    if (protectedRoutes.some((route) => path.startsWith(route))) {
-      const redirectUrl = new URL("/login", nextUrl);
-      redirectUrl.searchParams.set("next", path);
-      return NextResponse.redirect(redirectUrl);
-    }
+  if (!user_session) return redirectIfProtectedRoute(path, nextUrl);
 
-    return NextResponse.next();
+  const { isLoggedIn, expires } = await verifyUserSession();
+
+  if (!isLoggedIn) return redirectIfProtectedRoute(path, nextUrl);
+
+  if (routes.authRoutes.some((route) => path.startsWith(route)) && isLoggedIn) {
+    return redirectTo(routes.DEFAULT_LOGIN_REDIRECT, nextUrl);
   }
 
-  if (authRoutes.some((route) => path.startsWith(route)) && isLoggedIn) {
-    return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  }
-
-  if (session && expires) {
+  if (user_session && expires) {
     const expiresIn = new Date(expires).getTime() - Date.now();
 
     if (expiresIn < 24 * 60 * 60 * 1000) {
-      await updateSession(session);
+      await updateSession("user_session", user_session);
     }
   }
 

@@ -1,5 +1,10 @@
 import { ObjectId } from "mongodb";
 
+type BasePrivateToken<T> = {
+  _id: T;
+  token: string;
+};
+
 type BaseAvatar<T> = {
   _id: T;
   image: string;
@@ -18,6 +23,9 @@ type BaseUser<T> = {
   createdAt: Date;
   updatedAt?: Date;
 };
+
+export type PrivateToken = BasePrivateToken<string>;
+export type DBPrivateToken = BasePrivateToken<ObjectId>;
 
 export type Avatar = BaseAvatar<string>;
 export type DBAvatar = BaseAvatar<ObjectId>;

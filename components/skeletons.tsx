@@ -1,6 +1,6 @@
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar } from "@radix-ui/react-avatar";
+import { Avatar } from "@/components/ui/avatar";
 
 export function UserSkeleton() {
   return (

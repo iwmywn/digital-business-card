@@ -12,7 +12,7 @@ export function FormLink({
   href,
   side = "none",
   children,
-  className = "",
+  className,
   ...props
 }: FormLinkProps) {
   return (

@@ -3,7 +3,7 @@ import "server-only";
 import { type JWTPayload, SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-interface SessionPayload extends JWTPayload {
+export interface UserSessionPayload extends JWTPayload {
   userId: string | undefined;
   expires: Date;
 }
@@ -12,22 +12,41 @@ const secretKey = process.env.JWT_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 const issuer = process.env.JWT_ISSUER!;
 const audience = process.env.JWT_AUDIENCE!;
-const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-async function setSessionCookie(session: string) {
+function getSessionExpiry(key: string): Date {
+  const sevenDays = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const tenMinutes = new Date(Date.now() + 10 * 60 * 1000);
+  const oneMinute = new Date(Date.now() + 1 * 30 * 1000);
+
+  if (key === "user_session") {
+    return sevenDays;
+  }
+  if (key === "private_session") {
+    return tenMinutes;
+  }
+  return oneMinute;
+}
+
+async function setSessionCookie(key: string, session: string): Promise<void> {
   const cookieStore = await cookies();
+  const expires = getSessionExpiry(key);
 
-  cookieStore.set("session", session, {
+  cookieStore.set(key, session, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    expires: expires,
+    expires,
     sameSite: "lax",
     path: "/",
   });
 }
 
-export async function encrypt(payload: SessionPayload) {
-  return new SignJWT(payload)
+export async function encrypt(
+  key: string,
+  payload?: UserSessionPayload | undefined,
+): Promise<string> {
+  const expires = getSessionExpiry(key);
+
+  return new SignJWT(payload ?? {})
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setIssuer(issuer)
@@ -36,32 +55,46 @@ export async function encrypt(payload: SessionPayload) {
     .sign(encodedKey);
 }
 
-export async function decrypt(session: string | undefined = "") {
+export async function decrypt(
+  session: string | undefined = "",
+): Promise<UserSessionPayload | JWTPayload | null> {
   try {
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ["HS256"],
       issuer: issuer,
       audience: audience,
     });
-    return payload as SessionPayload;
+
+    return payload as UserSessionPayload | JWTPayload;
   } catch {
     return null;
   }
 }
 
-export async function createSession(userId: string) {
-  const session = await encrypt({
-    userId,
-    expires,
-  });
-  await setSessionCookie(session);
+export async function createSession(
+  key: string,
+  userId?: string,
+): Promise<void> {
+  const expires = getSessionExpiry(key);
+
+  let payload: UserSessionPayload | undefined;
+
+  if (key === "user_session") {
+    payload = {
+      userId,
+      expires,
+    };
+  }
+
+  const session = await encrypt(key, payload);
+  await setSessionCookie(key, session);
 }
 
-export async function updateSession(session: string) {
-  await setSessionCookie(session);
+export async function updateSession(key: string, session: string) {
+  await setSessionCookie(key, session);
 }
 
 export async function deleteSession() {
   const cookieStore = await cookies();
-  cookieStore.delete("session");
+  cookieStore.delete("user_session");
 }

@@ -8,7 +8,6 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 interface ReCaptchaPopupProps {
   onClose: () => void;
   setRecaptchaToken: (token: string | null) => void;
-  overflow?: boolean;
 }
 
 export default function ReCaptchaPopup({

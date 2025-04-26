@@ -45,7 +45,9 @@ export function ColorDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">View Color Palette</Button>
+        <Button variant="outline" title="View Color Palette">
+          View Color Palette
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>
