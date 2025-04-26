@@ -25,6 +25,7 @@ import { useState } from "react";
 import ReCaptchaPopup from "@/components/recaptcha";
 import { tokenSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
+import { FormLink } from "@/components/form-link";
 
 type PrivateFormData = z.infer<typeof tokenSchema>;
 
@@ -87,7 +88,15 @@ export function PrivateForm() {
         <CardHeader>
           <CardTitle className="text-2xl">Secure Access</CardTitle>
           <CardDescription>
-            Please contact the administrartor to receive your access token.
+            Please contact{" "}
+            <FormLink
+              href="https://github.com/iwmywn"
+              target="_blank"
+              className="text-foreground/85"
+            >
+              the administrator
+            </FormLink>{" "}
+            to receive your access token.
           </CardDescription>
         </CardHeader>
         <CardContent>

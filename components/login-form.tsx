@@ -51,6 +51,7 @@ export function LogInForm() {
         const searchParams = new URLSearchParams(window.location.search);
         const callbackUrl = searchParams.get("next") || "/home";
 
+        form.reset();
         window.location.href = callbackUrl;
       } else {
         const message = await res.json();
