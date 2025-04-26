@@ -26,10 +26,19 @@ export async function PATCH(req: Request) {
 
   if (!existingToken) return createResponse("Token expired!", 404);
 
-  await Promise.all([
+  const [result] = await Promise.all([
     privateTokenCollection.deleteOne({ token: token }),
     createSession("private_session"),
   ]);
+
+  if (!result.acknowledged) {
+    const errorRes = await createResponse(
+      "Request failed! Try again later.",
+      500,
+    );
+    errorRes.cookies.delete("private_session");
+    return errorRes;
+  }
 
   return new NextResponse(null, { status: 204 });
 }
