@@ -21,7 +21,7 @@ function redirectIfNotPrivateRoute(path: string, nextUrl: NextURL) {
   if (
     path !== routes.privateRoute &&
     path !== routes.ogRoute &&
-    !routes.pageBgRoutes.some((route) => path.startsWith(route))
+    !routes.ignoredRoutes.some((route) => path.startsWith(route))
   ) {
     const redirectUrl = new URL(routes.privateRoute, nextUrl);
     if (path !== "/") redirectUrl.searchParams.set("next", path);

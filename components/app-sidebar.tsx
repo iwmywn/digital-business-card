@@ -86,7 +86,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild tooltip="Eznect Home">
               <Link href="/home">
                 <Image
-                  src="/logo.png"
+                  src="/images/logo.png"
                   alt="EZNECT"
                   width={32}
                   height={32}
