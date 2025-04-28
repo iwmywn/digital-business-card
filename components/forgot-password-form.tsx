@@ -57,7 +57,7 @@ export function ForgotPasswordForm() {
       const message = await res.json();
 
       if (res.ok) {
-        toast(message);
+        toast.success(message);
         form.reset();
       } else {
         toast.error(message);
