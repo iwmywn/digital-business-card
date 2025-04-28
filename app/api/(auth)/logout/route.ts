@@ -1,9 +1,9 @@
 "use server";
 
-import { deleteSession } from "@/lib/session";
+import { session } from "@/lib/session";
 import { NextResponse } from "next/server";
 
 export async function POST() {
-  await deleteSession();
+  await session.user.delete();
   return new NextResponse(null, { status: 204 });
 }

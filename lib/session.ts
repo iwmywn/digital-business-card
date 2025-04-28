@@ -1,101 +1,79 @@
-import "server-only";
-
-import { type JWTPayload, SignJWT, jwtVerify } from "jose";
+import { SessionOptions, getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 
-export interface UserSessionPayload extends JWTPayload {
-  userId: string | undefined;
+interface UserSession {
+  userId: string;
   expires: Date;
+  isLoggedIn: boolean;
 }
 
-const secretKey = process.env.JWT_SECRET!;
-const encodedKey = new TextEncoder().encode(secretKey);
-const issuer = process.env.JWT_ISSUER!;
-const audience = process.env.JWT_AUDIENCE!;
-
-function getSessionExpiry(key: string): Date {
-  const sevenDays = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const fifteenMinutes = new Date(Date.now() + 15 * 60 * 1000);
-  const oneMinute = new Date(Date.now() + 1 * 60 * 1000);
-
-  if (key === "user_session") {
-    return sevenDays;
-  }
-  if (key === "private_session") {
-    return fifteenMinutes;
-  }
-  return oneMinute;
+interface PrivateSession {
+  hasPrivateAccess: boolean;
 }
 
-async function setSessionCookie(key: string, session: string): Promise<void> {
-  const cookieStore = await cookies();
-  const expires = getSessionExpiry(key);
+const sevenDays = 7 * 24 * 60 * 60;
+const fifteenMinutes = 15 * 60;
 
-  cookieStore.set(key, session, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    expires,
-    sameSite: "lax",
-    path: "/",
-  });
+const sessionOptions = {
+  user: {
+    password: process.env.SESSION_SECRET!,
+    cookieName: "user_session",
+    cookieOptions: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: sevenDays,
+    },
+  },
+  private: {
+    password: process.env.SESSION_SECRET!,
+    cookieName: "private_session",
+    cookieOptions: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: fifteenMinutes,
+    },
+  },
+} as const;
+
+async function getSession<T extends object>(options: SessionOptions) {
+  return await getIronSession<T>(await cookies(), options);
 }
 
-export async function encrypt(
-  key: string,
-  payload?: UserSessionPayload | undefined,
-): Promise<string> {
-  const expires = getSessionExpiry(key);
-
-  return new SignJWT(payload ?? {})
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setIssuer(issuer)
-    .setAudience(audience)
-    .setExpirationTime(expires)
-    .sign(encodedKey);
-}
-
-export async function decrypt(
-  session: string | undefined = "",
-): Promise<UserSessionPayload | JWTPayload | null> {
-  try {
-    const { payload } = await jwtVerify(session, encodedKey, {
-      algorithms: ["HS256"],
-      issuer: issuer,
-      audience: audience,
-    });
-
-    return payload as UserSessionPayload | JWTPayload;
-  } catch (error) {
-    console.error("Verify session error: ", error);
-    return null;
-  }
-}
-
-export async function createSession(
-  key: string,
-  userId?: string,
-): Promise<void> {
-  const expires = getSessionExpiry(key);
-
-  let payload: UserSessionPayload | undefined;
-
-  if (key === "user_session") {
-    payload = {
-      userId,
-      expires,
-    };
-  }
-
-  const session = await encrypt(key, payload);
-  await setSessionCookie(key, session);
-}
-
-export async function updateSession(key: string, session: string) {
-  await setSessionCookie(key, session);
-}
-
-export async function deleteSession() {
-  const cookieStore = await cookies();
-  cookieStore.delete("user_session");
-}
+export const session = {
+  user: {
+    get: async () => getSession<UserSession>(sessionOptions.user),
+    create: async (userId: string) => {
+      const s = await session.user.get();
+      s.userId = userId;
+      s.expires = new Date(Date.now() + sevenDays * 1000);
+      s.isLoggedIn = true;
+      await s.save();
+    },
+    update: async () => {
+      const s = await session.user.get();
+      s.expires = new Date(Date.now() + sevenDays * 1000);
+      s.updateConfig(sessionOptions.user);
+      await s.save();
+    },
+    delete: async () => {
+      const s = await session.user.get();
+      s.destroy();
+    },
+  },
+  private: {
+    get: async () => getSession<PrivateSession>(sessionOptions.private),
+    create: async () => {
+      const s = await session.private.get();
+      s.hasPrivateAccess = true;
+      await s.save();
+    },
+    delete: async () => {
+      const s = await session.private.get();
+      s.destroy();
+    },
+  },
+};

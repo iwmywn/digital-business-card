@@ -3,9 +3,9 @@
 import bcrypt from "bcryptjs";
 import { logInSchema } from "@/schemas";
 import { createResponse } from "@/app/api/utils";
-import { createSession } from "@/lib/session";
 import { getUserByEmail } from "@/lib/data";
 import { NextResponse } from "next/server";
+import { session } from "@/lib/session";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       400,
     );
 
-  await createSession("user_session", existingUser._id.toString());
+  await session.user.create(existingUser._id.toString());
 
   return new NextResponse(null, { status: 204 });
 }

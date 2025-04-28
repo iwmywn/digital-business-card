@@ -3,9 +3,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import * as routes from "@/routes";
 import { siteConfig } from "@/lib/config";
-import { updateSession } from "@/lib/session";
-import { verifyPrivateSession, verifyUserSession } from "@/lib/dal";
 import { NextURL } from "next/dist/server/web/next-url";
+import { session } from "@/lib/session";
 
 function redirectIfProtectedRoute(path: string, nextUrl: NextURL) {
   if (routes.protectedRoutes.some((route) => path.startsWith(route))) {
@@ -44,7 +43,7 @@ export async function middleware(req: NextRequest) {
   if (siteConfig.privateMode) {
     if (!private_session) return redirectIfNotPrivateRoute(path, nextUrl);
 
-    const { hasPrivateAccess } = await verifyPrivateSession();
+    const { hasPrivateAccess } = await session.private.get();
 
     if (!hasPrivateAccess) return redirectIfNotPrivateRoute(path, nextUrl);
   } else {
@@ -68,7 +67,7 @@ export async function middleware(req: NextRequest) {
 
   if (!user_session) return redirectIfProtectedRoute(path, nextUrl);
 
-  const { isLoggedIn, expires } = await verifyUserSession();
+  const { isLoggedIn, expires } = await session.user.get();
 
   if (!isLoggedIn) return redirectIfProtectedRoute(path, nextUrl);
 
@@ -76,12 +75,10 @@ export async function middleware(req: NextRequest) {
     return redirectTo(routes.DEFAULT_LOGIN_REDIRECT, nextUrl);
   }
 
-  if (user_session && expires) {
+  if (isLoggedIn) {
     const expiresIn = new Date(expires).getTime() - Date.now();
 
-    if (expiresIn < 24 * 60 * 60 * 1000) {
-      await updateSession("user_session", user_session);
-    }
+    if (expiresIn < 30 * 1000) await session.user.update();
   }
 
   return NextResponse.next();
