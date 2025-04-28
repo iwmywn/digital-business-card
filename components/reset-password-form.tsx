@@ -121,7 +121,6 @@ export function ResetPasswordForm({
               />
 
               <FormButton
-                isValid={form.formState.isValid}
                 isSubmitting={form.formState.isSubmitting}
                 text="Reset Password"
               />

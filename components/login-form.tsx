@@ -118,7 +118,6 @@ export function LogInForm() {
                 Forgot your password?
               </FormLink>
               <FormButton
-                isValid={form.formState.isValid}
                 isSubmitting={form.formState.isSubmitting}
                 text="Log in"
               />

@@ -124,7 +124,6 @@ export function PrivateForm() {
                   )}
                 />
                 <FormButton
-                  isValid={form.formState.isValid}
                   isSubmitting={form.formState.isSubmitting}
                   text="Submit"
                 />

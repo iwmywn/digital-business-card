@@ -110,7 +110,6 @@ export function ForgotPasswordForm() {
                   )}
                 />
                 <FormButton
-                  isValid={form.formState.isValid}
                   isSubmitting={form.formState.isSubmitting}
                   text="Send Reset Link"
                 />

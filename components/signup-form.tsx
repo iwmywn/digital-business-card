@@ -192,7 +192,6 @@ export default function SignUpForm() {
                 />
 
                 <FormButton
-                  isValid={form.formState.isValid}
                   isSubmitting={form.formState.isSubmitting}
                   text="Sign up"
                 />
