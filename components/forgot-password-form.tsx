@@ -113,8 +113,8 @@ export function ForgotPasswordForm() {
                   isSubmitting={form.formState.isSubmitting}
                   text="Send Reset Link"
                 />
-                <FormLink href="/login" side="center">
-                  Back to Login
+                <FormLink href="/signin" side="center">
+                  Back to sign in
                 </FormLink>
               </div>
             </form>

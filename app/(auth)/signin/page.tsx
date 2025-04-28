@@ -1,10 +1,10 @@
-import { LogInForm } from "@/components/login-form";
+import { SignInForm } from "@/components/signin-form";
 import type { Metadata } from "next";
 
 export function generateMetadata(): Metadata {
-  return { title: "Log in" };
+  return { title: "Sign in" };
 }
 
 export default function page() {
-  return <LogInForm />;
+  return <SignInForm />;
 }

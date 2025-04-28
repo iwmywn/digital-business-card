@@ -30,7 +30,7 @@ const signUpSchema = z
     message: "Passwords do not match.",
   });
 
-const logInSchema = z.object({
+const signInSchema = z.object({
   email: baseEmailSchema,
   password: basePasswordSchema,
 });
@@ -51,7 +51,7 @@ const emailSchema = z.object({
 
 export {
   signUpSchema,
-  logInSchema,
+  signInSchema,
   resetPasswordSchema,
   emailSchema,
   tokenSchema,

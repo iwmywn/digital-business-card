@@ -5,9 +5,9 @@ import { getUserById } from "@/lib/data";
 import { session } from "@/lib/session";
 
 export async function GET() {
-  const { isLoggedIn, userId } = await session.user.get();
+  const { isSignedIn, userId } = await session.user.get();
 
-  if (!isLoggedIn) {
+  if (!isSignedIn) {
     return createResponse("Unauthorized!", 401);
   }
 

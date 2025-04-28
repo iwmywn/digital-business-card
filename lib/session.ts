@@ -5,7 +5,7 @@ import { cache } from "react";
 interface UserSession {
   userId: string;
   expires: Date;
-  isLoggedIn: boolean;
+  isSignedIn: boolean;
 }
 
 interface PrivateSession {
@@ -51,7 +51,7 @@ const session = {
       const s = await session.user.get();
       s.userId = userId;
       s.expires = new Date(Date.now() + sevenDays * 1000);
-      s.isLoggedIn = true;
+      s.isSignedIn = true;
       await s.save();
     },
     update: async () => {

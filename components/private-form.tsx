@@ -57,7 +57,7 @@ export function PrivateForm() {
       if (res.ok) {
         toast.success("You have 20 mins for this session. Redirecting...");
         const searchParams = new URLSearchParams(window.location.search);
-        const callbackUrl = searchParams.get("next") || "/login";
+        const callbackUrl = searchParams.get("next") || "/signin";
 
         form.reset();
         setTimeout(() => {

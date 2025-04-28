@@ -1,7 +1,7 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import { logInSchema } from "@/schemas";
+import { signInSchema } from "@/schemas";
 import { createResponse } from "@/app/api/utils";
 import { getUserByEmail } from "@/lib/data";
 import { NextResponse } from "next/server";
@@ -9,7 +9,7 @@ import { session } from "@/lib/session";
 
 export async function POST(req: Request) {
   const data = await req.json();
-  const parsedCredentials = logInSchema.safeParse(data);
+  const parsedCredentials = signInSchema.safeParse(data);
 
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 

@@ -23,23 +23,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { FormLink } from "@/components/form-link";
-import { logInSchema } from "@/schemas";
+import { signInSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 
-type LogInFormData = z.infer<typeof logInSchema>;
+type SignInFormData = z.infer<typeof signInSchema>;
 
-export function LogInForm() {
-  const form = useForm<LogInFormData>({
-    resolver: zodResolver(logInSchema),
+export function SignInForm() {
+  const form = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(data: LogInFormData) {
+  async function onSubmit(data: SignInFormData) {
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch("/api/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export function LogInForm() {
         toast.error(message);
       }
     } catch (error) {
-      console.error("Log in error: ", error);
+      console.error("Sign in error: ", error);
       toast.error("Something went wrong! Please try again.");
     }
   }
@@ -66,9 +66,9 @@ export function LogInForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Log In</CardTitle>
+        <CardTitle className="text-2xl">Sign In</CardTitle>
         <CardDescription>
-          Enter your email and password to login to your account.
+          Enter your email and password to sign in to your account.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -119,7 +119,7 @@ export function LogInForm() {
               </FormLink>
               <FormButton
                 isSubmitting={form.formState.isSubmitting}
-                text="Log in"
+                text="Sign in"
               />
             </div>
           </form>

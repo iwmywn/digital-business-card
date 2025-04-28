@@ -8,7 +8,7 @@ import { session, sevenDays } from "@/lib/session";
 
 function redirectIfProtectedRoute(path: string, nextUrl: NextURL) {
   if (routes.protectedRoutes.some((route) => path.startsWith(route))) {
-    const redirectUrl = new URL(routes.loginRoute, nextUrl);
+    const redirectUrl = new URL(routes.signInRoute, nextUrl);
     if (path !== "/") redirectUrl.searchParams.set("next", path);
     return NextResponse.redirect(redirectUrl);
   }
@@ -48,7 +48,7 @@ export async function middleware(req: NextRequest) {
     if (!hasPrivateAccess) return redirectIfNotPrivateRoute(path, nextUrl);
   } else {
     if (path === routes.privateRoute)
-      return redirectTo(routes.loginRoute, nextUrl);
+      return redirectTo(routes.signInRoute, nextUrl);
   }
 
   if (siteConfig.maintenanceMode) {
@@ -59,27 +59,27 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   } else {
     if (path === routes.maintenanceRoute) {
-      return redirectTo(routes.loginRoute, nextUrl);
+      return redirectTo(routes.signInRoute, nextUrl);
     }
   }
 
   if (path === "/") {
-    return redirectTo(routes.loginRoute, nextUrl);
+    return redirectTo(routes.signInRoute, nextUrl);
   }
 
   const user_session = cookies.get("user_session")?.value;
 
   if (!user_session) return redirectIfProtectedRoute(path, nextUrl);
 
-  const { isLoggedIn, expires } = await session.user.get();
+  const { isSignedIn, expires } = await session.user.get();
 
-  if (!isLoggedIn) return redirectIfProtectedRoute(path, nextUrl);
+  if (!isSignedIn) return redirectIfProtectedRoute(path, nextUrl);
 
-  if (routes.authRoutes.some((route) => path.startsWith(route)) && isLoggedIn) {
-    return redirectTo(routes.DEFAULT_LOGIN_REDIRECT, nextUrl);
+  if (routes.authRoutes.some((route) => path.startsWith(route)) && isSignedIn) {
+    return redirectTo(routes.DEFAULT_SIGNIN_REDIRECT, nextUrl);
   }
 
-  if (isLoggedIn) {
+  if (isSignedIn) {
     const expiresIn = new Date(expires).getTime() - Date.now();
 
     if (expiresIn < sevenDays * 1000) await session.user.update();

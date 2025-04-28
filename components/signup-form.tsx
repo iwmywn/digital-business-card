@@ -199,7 +199,7 @@ export default function SignUpForm() {
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
-            Already have an account? <FormLink href="/login">Log in</FormLink>
+            Already have an account? <FormLink href="/signin">Sign in</FormLink>
           </div>
         </CardContent>
       </Card>

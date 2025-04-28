@@ -32,20 +32,20 @@ export function NavUser() {
   const { isMobile } = useSidebar();
   const { user, isLoading, error } = useUser();
 
-  async function onLogout() {
+  async function onSignOut() {
     try {
-      const res = await fetch("/api/logout", {
+      const res = await fetch("/api/signout", {
         method: "POST",
       });
 
       if (res.ok) {
-        toast.success("You need to log back in.");
+        toast.success("You need to sign back in.");
         setTimeout(() => {
-          window.location.href = "/login";
+          window.location.href = "/signin";
         }, 1500);
       }
     } catch (error) {
-      console.error("Log out error: ", error);
+      console.error("Sign out error: ", error);
       toast.error("Something went wrong! Please try again.");
     }
   }
@@ -116,9 +116,9 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onLogout}>
+            <DropdownMenuItem onClick={onSignOut}>
               <LogOut />
-              Log out
+              Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

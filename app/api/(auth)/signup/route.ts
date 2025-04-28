@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   const { name, email, phone, password } = parsedCredentials.data;
   const existingUser = await getUserByEmail(email);
 
-  if (existingUser) return createResponse("Email already registered!", 400);
+  if (existingUser) return createResponse("Email already signed up!", 400);
 
   const [hashedPassword, avatars] = await Promise.all([
     bcrypt.hash(password, 10),

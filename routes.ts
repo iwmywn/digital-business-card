@@ -1,6 +1,6 @@
-const authRoutes = ["/login", "/signup", "/forgot-password", "/email-handler"];
-const loginRoute = "/login";
-const DEFAULT_LOGIN_REDIRECT = "/home";
+const authRoutes = ["/signin", "/signup", "/forgot-password", "/email-handler"];
+const signInRoute = "/signin";
+const DEFAULT_SIGNIN_REDIRECT = "/home";
 const maintenanceRoute = "/maintenance";
 const privateRoute = "/private";
 const ogRoute = "/opengraph-image.png";
@@ -19,11 +19,11 @@ const protectedRoutes = [
 
 export {
   authRoutes,
-  DEFAULT_LOGIN_REDIRECT,
+  DEFAULT_SIGNIN_REDIRECT,
   protectedRoutes,
   maintenanceRoute,
   ogRoute,
   privateRoute,
   ignoredRoutes,
-  loginRoute,
+  signInRoute,
 };
