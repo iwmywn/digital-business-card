@@ -1,5 +1,6 @@
 import { SessionOptions, getIronSession } from "iron-session";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 interface UserSession {
   userId: string;
@@ -11,8 +12,8 @@ interface PrivateSession {
   hasPrivateAccess: boolean;
 }
 
-const sevenDays = 7 * 24 * 60 * 60;
-const fifteenMinutes = 15 * 60;
+export const sevenDays = 7 * 24 * 60 * 60;
+const twentyMinutes = 20 * 60;
 
 const sessionOptions = {
   user: {
@@ -34,7 +35,7 @@ const sessionOptions = {
       httpOnly: true,
       sameSite: "lax",
       path: "/",
-      maxAge: fifteenMinutes,
+      maxAge: twentyMinutes,
     },
   },
 } as const;
@@ -45,7 +46,7 @@ async function getSession<T extends object>(options: SessionOptions) {
 
 export const session = {
   user: {
-    get: async () => getSession<UserSession>(sessionOptions.user),
+    get: cache(async () => getSession<UserSession>(sessionOptions.user)),
     create: async (userId: string) => {
       const s = await session.user.get();
       s.userId = userId;
@@ -65,7 +66,7 @@ export const session = {
     },
   },
   private: {
-    get: async () => getSession<PrivateSession>(sessionOptions.private),
+    get: cache(async () => getSession<PrivateSession>(sessionOptions.private)),
     create: async () => {
       const s = await session.private.get();
       s.hasPrivateAccess = true;

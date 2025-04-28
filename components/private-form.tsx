@@ -55,14 +55,14 @@ export function PrivateForm() {
       });
 
       if (res.ok) {
-        toast.success("You have 15 mins for this session. Redirecting...");
+        toast.success("You have 20 mins for this session. Redirecting...");
         const searchParams = new URLSearchParams(window.location.search);
         const callbackUrl = searchParams.get("next") || "/login";
 
         form.reset();
         setTimeout(() => {
           window.location.href = callbackUrl;
-        }, 4000);
+        }, 3000);
       } else {
         const message = await res.json();
         toast.error(message);

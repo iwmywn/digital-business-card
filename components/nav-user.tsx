@@ -39,7 +39,10 @@ export function NavUser() {
       });
 
       if (res.ok) {
-        window.location.href = "/login";
+        toast.success("You need to log back in.");
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1500);
       }
     } catch (error) {
       console.error("Log out error: ", error);
