@@ -8,7 +8,7 @@ import { session, sevenDays } from "@/lib/session";
 
 function redirectIfProtectedRoute(path: string, nextUrl: NextURL) {
   if (routes.protectedRoutes.some((route) => path.startsWith(route))) {
-    const redirectUrl = new URL("/login", nextUrl);
+    const redirectUrl = new URL(routes.loginRoute, nextUrl);
     if (path !== "/") redirectUrl.searchParams.set("next", path);
     return NextResponse.redirect(redirectUrl);
   }
@@ -47,8 +47,8 @@ export async function middleware(req: NextRequest) {
 
     if (!hasPrivateAccess) return redirectIfNotPrivateRoute(path, nextUrl);
   } else {
-    if (path === routes.privateRoute || path === "/")
-      return redirectTo("/login", nextUrl);
+    if (path === routes.privateRoute)
+      return redirectTo(routes.loginRoute, nextUrl);
   }
 
   if (siteConfig.maintenanceMode) {
@@ -58,9 +58,13 @@ export async function middleware(req: NextRequest) {
 
     return NextResponse.next();
   } else {
-    if (path === routes.maintenanceRoute || path === "/") {
-      return redirectTo("/login", nextUrl);
+    if (path === routes.maintenanceRoute) {
+      return redirectTo(routes.loginRoute, nextUrl);
     }
+  }
+
+  if (path === "/") {
+    return redirectTo(routes.loginRoute, nextUrl);
   }
 
   const user_session = cookies.get("user_session")?.value;

@@ -93,6 +93,7 @@ export function PrivateForm() {
               href="https://github.com/iwmywn"
               target="_blank"
               className="text-foreground/85"
+              rel="noopener"
             >
               the administrator
             </FormLink>{" "}

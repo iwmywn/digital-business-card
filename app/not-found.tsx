@@ -13,7 +13,7 @@ export default function NotFound() {
         THE PAGE YOU ARE LOOKING FOR COULD NOT BE FOUND
       </h2>
       <p>This page does not exist.</p>
-      <Link href="/" className="mt-2">
+      <Link href="/home" className="mt-2">
         <Button>Go home</Button>
       </Link>
     </div>

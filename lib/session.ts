@@ -12,7 +12,7 @@ interface PrivateSession {
   hasPrivateAccess: boolean;
 }
 
-export const sevenDays = 7 * 24 * 60 * 60;
+const sevenDays = 7 * 24 * 60 * 60;
 const twentyMinutes = 20 * 60;
 
 const sessionOptions = {
@@ -44,7 +44,7 @@ async function getSession<T extends object>(options: SessionOptions) {
   return await getIronSession<T>(await cookies(), options);
 }
 
-export const session = {
+const session = {
   user: {
     get: cache(async () => getSession<UserSession>(sessionOptions.user)),
     create: async (userId: string) => {
@@ -78,3 +78,5 @@ export const session = {
     },
   },
 };
+
+export { sevenDays, session };
