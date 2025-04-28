@@ -9,7 +9,9 @@ import { session, sevenDays } from "@/lib/session";
 function redirectIfProtectedRoute(path: string, nextUrl: NextURL) {
   if (routes.protectedRoutes.some((route) => path.startsWith(route))) {
     const redirectUrl = new URL(routes.signInRoute, nextUrl);
-    if (path !== "/") redirectUrl.searchParams.set("next", path);
+    if (path !== "/") {
+      redirectUrl.searchParams.set("next", path);
+    }
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -19,11 +21,12 @@ function redirectIfProtectedRoute(path: string, nextUrl: NextURL) {
 function redirectIfNotPrivateRoute(path: string, nextUrl: NextURL) {
   if (
     path !== routes.privateRoute &&
-    path !== routes.ogRoute &&
     !routes.ignoredRoutes.some((route) => path.startsWith(route))
   ) {
     const redirectUrl = new URL(routes.privateRoute, nextUrl);
-    if (path !== "/") redirectUrl.searchParams.set("next", path);
+    if (path !== "/") {
+      redirectUrl.searchParams.set("next", path);
+    }
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -41,14 +44,23 @@ export async function middleware(req: NextRequest) {
   const private_session = cookies.get("private_session")?.value;
 
   if (siteConfig.privateMode) {
-    if (!private_session) return redirectIfNotPrivateRoute(path, nextUrl);
+    if (!private_session) {
+      return redirectIfNotPrivateRoute(path, nextUrl);
+    }
 
     const { hasPrivateAccess } = await session.private.get();
 
-    if (!hasPrivateAccess) return redirectIfNotPrivateRoute(path, nextUrl);
-  } else {
-    if (path === routes.privateRoute)
+    if (!hasPrivateAccess) {
+      return redirectIfNotPrivateRoute(path, nextUrl);
+    }
+
+    if (path === routes.privateRoute) {
       return redirectTo(routes.signInRoute, nextUrl);
+    }
+  } else {
+    if (path === routes.privateRoute) {
+      return redirectTo(routes.signInRoute, nextUrl);
+    }
   }
 
   if (siteConfig.maintenanceMode) {
@@ -69,20 +81,24 @@ export async function middleware(req: NextRequest) {
 
   const user_session = cookies.get("user_session")?.value;
 
-  if (!user_session) return redirectIfProtectedRoute(path, nextUrl);
+  if (!user_session) {
+    return redirectIfProtectedRoute(path, nextUrl);
+  }
 
   const { isSignedIn, expires } = await session.user.get();
 
-  if (!isSignedIn) return redirectIfProtectedRoute(path, nextUrl);
+  if (!isSignedIn) {
+    return redirectIfProtectedRoute(path, nextUrl);
+  }
 
-  if (routes.authRoutes.some((route) => path.startsWith(route)) && isSignedIn) {
+  if (routes.authRoutes.some((route) => path.startsWith(route))) {
     return redirectTo(routes.DEFAULT_SIGNIN_REDIRECT, nextUrl);
   }
 
-  if (isSignedIn) {
-    const expiresIn = new Date(expires).getTime() - Date.now();
+  const expiresIn = new Date(expires).getTime() - Date.now();
 
-    if (expiresIn < sevenDays * 1000) await session.user.update();
+  if (expiresIn < sevenDays * 1000) {
+    await session.user.update();
   }
 
   return NextResponse.next();

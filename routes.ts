@@ -3,8 +3,8 @@ const signInRoute = "/signin";
 const DEFAULT_SIGNIN_REDIRECT = "/home";
 const maintenanceRoute = "/maintenance";
 const privateRoute = "/private";
+const ignoredRoutes = ["/opengraph-image.png", "/images/"];
 const ogRoute = "/opengraph-image.png";
-const ignoredRoutes = ["/images/"];
 const protectedRoutes = [
   "/analytics",
   "/create",
