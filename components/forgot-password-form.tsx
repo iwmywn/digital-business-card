@@ -39,7 +39,7 @@ export function ForgotPasswordForm() {
     },
   });
 
-  async function onSubmit(data: EmailFormData) {
+  async function onSubmit(values: EmailFormData) {
     if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;
@@ -51,7 +51,7 @@ export function ForgotPasswordForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...data, recaptchaToken }),
+        body: JSON.stringify({ ...values, recaptchaToken }),
       });
 
       const message = await res.json();

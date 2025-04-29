@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { FAQ } from "@/components/faq";
 
-export function generateMetadata(): Metadata {
-  return { title: "FAQ" };
-}
+export const metadata: Metadata = {
+  title: "FAQ",
+  description:
+    "Frequently asked questions about our digital business card service.",
+};
 
 export default function page() {
-  return <div>page</div>;
+  return <FAQ />;
 }

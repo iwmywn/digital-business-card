@@ -49,7 +49,7 @@ export function ColorDialog() {
           View Color Palette
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Color Palette & Tokens</DialogTitle>
         </DialogHeader>

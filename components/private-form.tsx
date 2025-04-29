@@ -39,7 +39,7 @@ export function PrivateForm() {
     },
   });
 
-  async function onSubmit(data: PrivateFormData) {
+  async function onSubmit(values: PrivateFormData) {
     if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;
@@ -51,7 +51,7 @@ export function PrivateForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...data, recaptchaToken }),
+        body: JSON.stringify({ ...values, recaptchaToken }),
       });
 
       if (res.ok) {

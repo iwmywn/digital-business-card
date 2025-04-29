@@ -45,7 +45,7 @@ export default function SignUpForm() {
     },
   });
 
-  async function onSubmit(data: SignUpFormData) {
+  async function onSubmit(values: SignUpFormData) {
     if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;
@@ -57,7 +57,7 @@ export default function SignUpForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...data, recaptchaToken }),
+        body: JSON.stringify({ ...values, recaptchaToken }),
       });
 
       const message = await res.json();
@@ -138,13 +138,6 @@ export default function SignUpForm() {
                       <FormLabel htmlFor="phone">Phone Number</FormLabel>
                       <FormControl>
                         <PhoneInput {...field} defaultCountry="VN" />
-                        {/* <Input
-                          id="phone"
-                          placeholder="555-123-4567"
-                          type="tel"
-                          autoComplete="tel"
-                          {...field}
-                        /> */}
                       </FormControl>
                       <FormMessage />
                     </FormItem>

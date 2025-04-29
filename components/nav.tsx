@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ContactForm } from "@/components/contact-form";
 
 interface NavItem {
   title: string;
@@ -29,7 +30,7 @@ export function Nav({ navMain, navSecondary }: NavProps) {
     items: NavItem[],
     size?: "default" | "sm" | "lg" | null,
   ) => (
-    <SidebarMenu>
+    <>
       {items.map((item) => {
         const isActive = pathname === item.url;
 
@@ -49,16 +50,23 @@ export function Nav({ navMain, navSecondary }: NavProps) {
           </SidebarMenuItem>
         );
       })}
-    </SidebarMenu>
+    </>
   );
 
   return (
     <>
       <SidebarGroup>
-        <SidebarGroupContent>{renderMenu(navMain)}</SidebarGroupContent>
+        <SidebarGroupContent>
+          <SidebarMenu>{renderMenu(navMain)}</SidebarMenu>
+        </SidebarGroupContent>
       </SidebarGroup>
       <SidebarGroup className="mt-auto">
-        <SidebarGroupContent>{renderMenu(navSecondary)}</SidebarGroupContent>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            {renderMenu(navSecondary)}
+            <ContactForm />
+          </SidebarMenu>
+        </SidebarGroupContent>
       </SidebarGroup>
     </>
   );

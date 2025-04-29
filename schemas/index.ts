@@ -49,10 +49,23 @@ const emailSchema = z.object({
   email: baseEmailSchema,
 });
 
+const contactSchema = z.object({
+  firstName: z.string().min(1, { message: "First name is required." }),
+  lastName: z.string().min(1, { message: "Last name is required." }),
+  companyName: z.string().min(1, { message: "Company name is required." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  phone: z.string().optional(),
+  department: z.string().min(1, { message: "Please select a department." }),
+  message: z
+    .string()
+    .min(10, { message: "Message must be at least 10 characters." }),
+});
+
 export {
   signUpSchema,
   signInSchema,
   resetPasswordSchema,
   emailSchema,
   tokenSchema,
+  contactSchema,
 };

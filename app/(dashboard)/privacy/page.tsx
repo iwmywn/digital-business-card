@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { PrivacyPolicy } from "@/components/privacy-policy";
 
-export function generateMetadata(): Metadata {
-  return { title: "Privacy Policy" };
-}
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "Privacy policy for our digital business card platform.",
+};
 
-export default function page() {
-  return <div>page</div>;
+export default function PrivacyPage() {
+  return <PrivacyPolicy />;
 }

@@ -41,7 +41,7 @@ export function ResetPasswordForm({
     },
   });
 
-  async function onSubmit(data: ResetPasswordFormData) {
+  async function onSubmit(values: ResetPasswordFormData) {
     try {
       const res = await fetch(
         `/api/reset-password?email=${email}&token=${token}`,
@@ -50,7 +50,7 @@ export function ResetPasswordForm({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(values),
         },
       );
 

@@ -37,14 +37,14 @@ export function SignInForm() {
     },
   });
 
-  async function onSubmit(data: SignInFormData) {
+  async function onSubmit(values: SignInFormData) {
     try {
       const res = await fetch("/api/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(values),
       });
 
       if (res.ok) {

@@ -61,7 +61,7 @@ export const nav = {
     },
     {
       title: "Terms of Service",
-      url: "/tos",
+      url: "/terms",
       icon: ReceiptText,
     },
     {

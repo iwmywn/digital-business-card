@@ -14,7 +14,7 @@ const protectedRoutes = [
   "/manage",
   "/payments",
   "/privacy",
-  "/tos",
+  "/terms",
 ];
 
 export {
