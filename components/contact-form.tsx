@@ -45,10 +45,10 @@ const departments = [
   { value: "feedback", label: "Product Feedback" },
 ];
 
-type ContactFormData = z.infer<typeof contactSchema>;
+type ContactFormValues = z.infer<typeof contactSchema>;
 
 export function ContactForm() {
-  const form = useForm<ContactFormData>({
+  const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       firstName: "",
@@ -61,7 +61,7 @@ export function ContactForm() {
     },
   });
 
-  // values: ContactFormData
+  // values: ContactFormValues
   async function onSubmit() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 

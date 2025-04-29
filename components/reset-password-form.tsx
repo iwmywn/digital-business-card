@@ -24,7 +24,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { resetPasswordSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 
-type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 
 export function ResetPasswordForm({
   token,
@@ -33,7 +33,7 @@ export function ResetPasswordForm({
   token: string | undefined;
   email: string | undefined;
 }) {
-  const form = useForm<ResetPasswordFormData>({
+  const form = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       password: "",
@@ -41,7 +41,7 @@ export function ResetPasswordForm({
     },
   });
 
-  async function onSubmit(values: ResetPasswordFormData) {
+  async function onSubmit(values: ResetPasswordFormValues) {
     try {
       const res = await fetch(
         `/api/reset-password?email=${email}&token=${token}`,

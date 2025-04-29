@@ -846,7 +846,7 @@ export function CreateCard() {
           </div>
 
           <div className="hidden lg:block">
-            <Card className="sticky top-4 rounded-lg">
+            <Card className="sticky top-[3.75rem] rounded-lg">
               <CardHeader>
                 <CardTitle>Card Preview</CardTitle>
                 <CardDescription>

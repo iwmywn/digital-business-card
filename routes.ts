@@ -10,11 +10,11 @@ const protectedRoutes = [
   "/create",
   "/faq",
   "/home",
-  "/info",
   "/manage",
   "/payment",
   "/privacy",
   "/terms",
+  "/settings",
 ];
 
 export {

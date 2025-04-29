@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import {
-  User,
   BadgePlus,
   Kanban,
   ChartColumnIncreasing,
@@ -27,11 +26,6 @@ import Image from "next/image";
 
 export const nav = {
   navMain: [
-    {
-      title: "Information",
-      url: "/info",
-      icon: User,
-    },
     {
       title: "Create Card",
       url: "/create",

@@ -26,10 +26,10 @@ import { FormLink } from "@/components/form-link";
 import { signInSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 
-type SignInFormData = z.infer<typeof signInSchema>;
+type SignInFormValues = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
-  const form = useForm<SignInFormData>({
+  const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
@@ -37,7 +37,7 @@ export function SignInForm() {
     },
   });
 
-  async function onSubmit(values: SignInFormData) {
+  async function onSubmit(values: SignInFormValues) {
     try {
       const res = await fetch("/api/signin", {
         method: "POST",

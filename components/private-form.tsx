@@ -27,19 +27,19 @@ import { tokenSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { FormLink } from "@/components/form-link";
 
-type PrivateFormData = z.infer<typeof tokenSchema>;
+type PrivateFormValues = z.infer<typeof tokenSchema>;
 
 export function PrivateForm() {
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const form = useForm<PrivateFormData>({
+  const form = useForm<PrivateFormValues>({
     resolver: zodResolver(tokenSchema),
     defaultValues: {
       token: "",
     },
   });
 
-  async function onSubmit(values: PrivateFormData) {
+  async function onSubmit(values: PrivateFormValues) {
     if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;

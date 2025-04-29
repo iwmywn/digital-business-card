@@ -29,12 +29,12 @@ import { useState } from "react";
 import ReCaptchaPopup from "@/components/recaptcha";
 import { FormButton } from "@/components/form-button";
 
-type SignUpFormData = z.infer<typeof signUpSchema>;
+type SignUpFormValues = z.infer<typeof signUpSchema>;
 
-export default function SignUpForm() {
+export function SignUpForm() {
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const form = useForm<SignUpFormData>({
+  const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       name: "",
@@ -45,7 +45,7 @@ export default function SignUpForm() {
     },
   });
 
-  async function onSubmit(values: SignUpFormData) {
+  async function onSubmit(values: SignUpFormValues) {
     if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;

@@ -27,19 +27,19 @@ import ReCaptchaPopup from "@/components/recaptcha";
 import { emailSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 
-type EmailFormData = z.infer<typeof emailSchema>;
+type EmailFormValues = z.infer<typeof emailSchema>;
 
 export function ForgotPasswordForm() {
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const form = useForm<EmailFormData>({
+  const form = useForm<EmailFormValues>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  async function onSubmit(values: EmailFormData) {
+  async function onSubmit(values: EmailFormValues) {
     if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;

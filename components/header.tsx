@@ -16,10 +16,17 @@ import {
 import { Slash } from "lucide-react";
 import dynamic from "next/dynamic";
 
+const other = [
+  {
+    title: "Settings",
+    url: "/settings",
+  },
+];
+
 export function Header() {
   const pathname = usePathname();
 
-  const allNavItems = [...nav.navMain, ...nav.navSecondary];
+  const allNavItems = [...nav.navMain, ...nav.navSecondary, ...other];
   const foundItem = allNavItems.find((item) => item.url === pathname);
 
   const ColorDialog =

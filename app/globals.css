@@ -124,4 +124,8 @@
   button {
     cursor: pointer;
   }
+
+  [data-slot="form-item"] input[type="checkbox"] {
+    position: static !important;
+  }
 }

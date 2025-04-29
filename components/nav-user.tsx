@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  BadgeCheck,
+  Settings,
   Bell,
   ChevronsUpDown,
   CreditCard,
@@ -27,6 +27,7 @@ import {
 import { useUser } from "@/lib/hooks";
 import { UserSkeleton } from "@/components/skeletons";
 import { toast } from "sonner";
+import Link from "next/link";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -102,9 +103,11 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem asChild>
+                <Link href="/settings">
+                  <Settings />
+                  Settings
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard />
