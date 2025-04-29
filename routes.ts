@@ -12,7 +12,7 @@ const protectedRoutes = [
   "/home",
   "/info",
   "/manage",
-  "/payments",
+  "/payment",
   "/privacy",
   "/terms",
 ];

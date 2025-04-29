@@ -115,7 +115,7 @@ export function FAQ() {
                 How do I update my information?
               </AccordionTrigger>
               <AccordionContent>
-                You can update your information at any time by logging into your
+                You can update your information at any time by signing into your
                 account, navigating to your profile, and clicking
                 &quot;Edit.&quot; All changes will be reflected immediately on
                 your digital business card.

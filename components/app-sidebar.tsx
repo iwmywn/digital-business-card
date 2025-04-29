@@ -49,7 +49,7 @@ export const nav = {
     },
     {
       title: "Payment Management",
-      url: "/payments",
+      url: "/payment",
       icon: CreditCard,
     },
   ],
