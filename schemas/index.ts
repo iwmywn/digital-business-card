@@ -61,11 +61,15 @@ const contactSchema = z.object({
     .min(10, { message: "Message must be at least 10 characters." }),
 });
 
-const profileSchema = z.object({
+const publicProfileSchema = z.object({
   name: z
     .string()
-    .min(2, { message: "Name must be at least 2 characters long." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
+    .min(2, { message: "Name must be at least 2 characters long." })
+    .optional(),
+  email: z
+    .string()
+    .email({ message: "Please enter a valid email address." })
+    .optional(),
   bio: z
     .string()
     .max(160, { message: "Bio must not exceed 160 characters." })
@@ -79,7 +83,10 @@ const profileSchema = z.object({
     .min(2, { message: "Company name must be at least 2 characters long." })
     .optional(),
   website: z.string().url({ message: "Please enter a valid URL." }).optional(),
-  phone: z.string().optional(),
+  phone: z
+    .string()
+    .min(10, { message: "Phone number must be valid." })
+    .optional(),
   gender: z.string().optional(),
   dateOfBirth: z.date({
     required_error: "A date of birth is required.",
@@ -138,7 +145,7 @@ export {
   emailSchema,
   tokenSchema,
   contactSchema,
-  profileSchema,
+  publicProfileSchema,
   settingsSchema,
   notificationsSchema,
 };

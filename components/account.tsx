@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { settingsSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
+import { PasswordInput } from "@/components/ui/password-input";
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
 
@@ -43,7 +44,7 @@ export function Account() {
   }
 
   return (
-    <Card className="rounded-lg" style={{ minHeight: "calc(100vh - 4.83rem)" }}>
+    <Card className="rounded-lg">
       <CardHeader>
         <CardTitle className="text-2xl">Account</CardTitle>
         <CardDescription>
@@ -61,9 +62,9 @@ export function Account() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel htmlFor="username">Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Username" {...field} />
+                    <Input id="username" placeholder="Username" {...field} />
                   </FormControl>
                   <FormDescription>
                     This is your public display name. It can be your real name
@@ -102,11 +103,14 @@ export function Account() {
               name="currentPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Current Password</FormLabel>
+                  <FormLabel htmlFor="currentPassword">
+                    Current Password
+                  </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Current Password"
-                      type="password"
+                    <PasswordInput
+                      id="currentPassword"
+                      placeholder="********"
+                      autoComplete="current-password"
                       {...field}
                     />
                   </FormControl>
@@ -122,11 +126,12 @@ export function Account() {
                   name="newPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>New Password</FormLabel>
+                      <FormLabel htmlFor="newPassword">New Password</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="New Password"
-                          type="password"
+                        <PasswordInput
+                          id="newPassword"
+                          placeholder="********"
+                          autoComplete="new-password"
                           {...field}
                         />
                       </FormControl>
@@ -142,11 +147,14 @@ export function Account() {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm New Password</FormLabel>
+                      <FormLabel htmlFor="confirmPassword">
+                        Confirm New Password
+                      </FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Confirm New Password"
-                          type="password"
+                        <PasswordInput
+                          id="confirmPassword"
+                          placeholder="********"
+                          autoComplete="new-password"
                           {...field}
                         />
                       </FormControl>
