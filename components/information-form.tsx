@@ -77,7 +77,6 @@ export function InformationForm() {
     const file = event.target.files?.[0];
     if (file) {
       setIsUploading(true);
-      // Simulate upload delay
       setTimeout(() => {
         const reader = new FileReader();
         reader.onload = (e) => {

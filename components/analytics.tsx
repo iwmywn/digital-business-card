@@ -1,18 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Download,
-  Eye,
-  MousePointerClick,
-  Phone,
-  Mail,
-  Globe,
-  BarChart3,
-} from "lucide-react";
-import * as RechartsPrimitive from "recharts";
+import * as React from "react";
+import { Eye, MousePointerClick, BarChart3 } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -29,95 +19,89 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  type ChartConfig,
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
 
-// Mock data for analytics
-const viewsData = [
-  { date: "2024-04-01", views: 42 },
-  { date: "2024-04-02", views: 38 },
-  { date: "2024-04-03", views: 45 },
-  { date: "2024-04-04", views: 39 },
-  { date: "2024-04-05", views: 47 },
-  { date: "2024-04-06", views: 30 },
-  { date: "2024-04-07", views: 25 },
-  { date: "2024-04-08", views: 55 },
-  { date: "2024-04-09", views: 60 },
-  { date: "2024-04-10", views: 58 },
-  { date: "2024-04-11", views: 65 },
-  { date: "2024-04-12", views: 70 },
-  { date: "2024-04-13", views: 68 },
-  { date: "2024-04-14", views: 72 },
+const chartData = [
+  { date: "2024-04-01", views: 42, clicks: 12 },
+  { date: "2024-04-02", views: 38, clicks: 15 },
+  { date: "2024-04-03", views: 45, clicks: 18 },
+  { date: "2024-04-04", views: 39, clicks: 14 },
+  { date: "2024-04-05", views: 47, clicks: 20 },
+  { date: "2024-04-06", views: 30, clicks: 10 },
+  { date: "2024-04-07", views: 25, clicks: 8 },
+  { date: "2024-04-08", views: 55, clicks: 22 },
+  { date: "2024-04-09", views: 60, clicks: 25 },
+  { date: "2024-04-10", views: 58, clicks: 23 },
+  { date: "2024-04-11", views: 65, clicks: 28 },
+  { date: "2024-04-12", views: 70, clicks: 30 },
+  { date: "2024-04-13", views: 68, clicks: 27 },
+  { date: "2024-04-14", views: 72, clicks: 32 },
+  { date: "2024-04-15", views: 75, clicks: 35 },
+  { date: "2024-04-16", views: 80, clicks: 38 },
+  { date: "2024-04-17", views: 82, clicks: 40 },
+  { date: "2024-04-18", views: 85, clicks: 42 },
+  { date: "2024-04-19", views: 88, clicks: 45 },
+  { date: "2024-04-20", views: 90, clicks: 48 },
+  { date: "2024-04-21", views: 92, clicks: 50 },
+  { date: "2024-04-22", views: 95, clicks: 52 },
+  { date: "2024-04-23", views: 98, clicks: 55 },
+  { date: "2024-04-24", views: 100, clicks: 58 },
+  { date: "2024-04-25", views: 105, clicks: 60 },
+  { date: "2024-04-26", views: 110, clicks: 62 },
+  { date: "2024-04-27", views: 115, clicks: 65 },
+  { date: "2024-04-28", views: 120, clicks: 68 },
+  { date: "2024-04-29", views: 125, clicks: 70 },
+  { date: "2024-04-30", views: 130, clicks: 72 },
+  { date: "2024-05-01", views: 145, clicks: 90 },
+  { date: "2024-05-02", views: 167, clicks: 113 },
 ];
 
-const clicksData = [
-  { date: "2024-04-01", clicks: 12 },
-  { date: "2024-04-02", clicks: 15 },
-  { date: "2024-04-03", clicks: 18 },
-  { date: "2024-04-04", clicks: 14 },
-  { date: "2024-04-05", clicks: 20 },
-  { date: "2024-04-06", clicks: 10 },
-  { date: "2024-04-07", clicks: 8 },
-  { date: "2024-04-08", clicks: 22 },
-  { date: "2024-04-09", clicks: 25 },
-  { date: "2024-04-10", clicks: 23 },
-  { date: "2024-04-11", clicks: 28 },
-  { date: "2024-04-12", clicks: 30 },
-  { date: "2024-04-13", clicks: 27 },
-  { date: "2024-04-14", clicks: 32 },
-];
-
-const contactMethodsData = [
-  { method: "Phone", count: 45 },
-  { method: "Email", count: 78 },
-  { method: "Website", count: 32 },
-  { method: "Social", count: 65 },
-];
-
-const topCardsData = [
-  { name: "Professional Card", views: 245, clicks: 98 },
-  { name: "Creative Portfolio", views: 187, clicks: 76 },
-  { name: "Conference Speaker", views: 156, clicks: 62 },
-  { name: "Networking Event", views: 92, clicks: 41 },
-];
-
-const visitorLocationsData = [
-  { country: "United States", count: 156 },
-  { country: "United Kingdom", count: 89 },
-  { country: "Canada", count: 72 },
-  { country: "Australia", count: 54 },
-  { country: "Germany", count: 48 },
-  { country: "France", count: 42 },
-  { country: "India", count: 38 },
-  { country: "Japan", count: 29 },
-  { country: "Brazil", count: 25 },
-  { country: "Other", count: 67 },
-];
+const chartConfig = {
+  views: {
+    label: "Views",
+    color: "var(--chart-1)",
+  },
+  clicks: {
+    label: "Clicks",
+    color: "var(--chart-2)",
+  },
+} satisfies ChartConfig;
 
 export function Analytics() {
-  const [dateRange, setDateRange] = useState("last14days");
-  const [selectedCard, setSelectedCard] = useState("all");
+  const [dateRange, setDateRange] = React.useState("7days");
+  const [selectedCard, setSelectedCard] = React.useState("all");
 
-  // Format date for display
-  function formatDate(dateString: string) {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-    }).format(date);
-  }
+  const filteredData = React.useMemo(() => {
+    if (dateRange === "alltime") {
+      return chartData;
+    }
 
-  // Calculate total views and clicks
-  const totalViews = viewsData.reduce((sum, item) => sum + item.views, 0);
-  const totalClicks = clicksData.reduce((sum, item) => sum + item.clicks, 0);
-  const clickThroughRate = Math.round((totalClicks / totalViews) * 100);
+    const lastDataDate = chartData[chartData.length - 1].date;
+    const referenceDate = new Date(lastDataDate);
 
-  // Calculate percentage changes (mock data)
+    let daysToSubtract = 30;
+    if (dateRange === "24hours") daysToSubtract = 1;
+    else if (dateRange === "7days") daysToSubtract = 7;
+
+    const startDate = new Date(referenceDate);
+    startDate.setDate(startDate.getDate() - daysToSubtract);
+    const startDateStr = startDate.toISOString().split("T")[0];
+
+    return chartData.filter((item) => item.date >= startDateStr);
+  }, [dateRange]);
+
+  const totalViews = filteredData.reduce((sum, item) => sum + item.views, 0);
+  const totalClicks = filteredData.reduce((sum, item) => sum + item.clicks, 0);
+  const clickThroughRate =
+    totalViews > 0 ? Math.round((totalClicks / totalViews) * 100) : 0;
+
   const viewsChange = 18.5;
   const clicksChange = 24.2;
   const ctrChange = 4.8;
@@ -129,7 +113,7 @@ export function Analytics() {
           <h2 className="text-2xl font-bold tracking-tight">
             Analytics Dashboard
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Track the performance of your digital business cards.
           </p>
         </div>
@@ -152,18 +136,12 @@ export function Analytics() {
               <SelectValue placeholder="Select date range" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="last7days">Last 7 days</SelectItem>
-              <SelectItem value="last14days">Last 14 days</SelectItem>
-              <SelectItem value="last30days">Last 30 days</SelectItem>
-              <SelectItem value="last90days">Last 90 days</SelectItem>
-              <SelectItem value="custom">Custom range</SelectItem>
+              <SelectItem value="24hours">Last 24 hours</SelectItem>
+              <SelectItem value="7days">Last 7 days</SelectItem>
+              <SelectItem value="30days">Last 30 days</SelectItem>
+              <SelectItem value="alltime">All time</SelectItem>
             </SelectContent>
           </Select>
-
-          <Button variant="outline" className="gap-1">
-            <Download className="h-4 w-4" />
-            Export
-          </Button>
         </div>
       </div>
 
@@ -232,199 +210,93 @@ export function Analytics() {
         </Card>
       </div>
 
-      <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 md:inline-flex md:w-auto">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="engagement">Engagement</TabsTrigger>
-          <TabsTrigger value="locations">Locations</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-6 pt-4">
-          <Card className="rounded-lg">
-            <CardHeader>
-              <CardTitle>Views & Clicks</CardTitle>
-              <CardDescription>
-                Track how many people view and interact with your cards.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="h-[300px]">
-              <ChartContainer
-                className="h-full"
-                config={{
-                  views: {
-                    label: "Views",
-                    color: "hsl(var(--chart-1))",
-                  },
-                  clicks: {
-                    label: "Clicks",
-                    color: "hsl(var(--chart-2))",
-                  },
+      <Card className="rounded-lg">
+        <CardHeader>
+          <CardTitle>Card Performance</CardTitle>
+          <CardDescription>
+            Showing views and clicks for the selected time period
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[250px] w-full"
+          >
+            <AreaChart data={filteredData}>
+              <defs>
+                <linearGradient id="fillViews" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-views)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-views)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+                <linearGradient id="fillClicks" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-clicks)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-clicks)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+              </defs>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={32}
+                tickFormatter={(value) => {
+                  const date = new Date(value);
+                  return date.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  });
                 }}
-              >
-                <RechartsPrimitive.ComposedChart
-                  data={viewsData.map((item, index) => ({
-                    date: formatDate(item.date),
-                    views: item.views,
-                    clicks: clicksData[index]?.clicks || 0,
-                  }))}
-                  margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-                >
-                  <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" />
-                  <RechartsPrimitive.XAxis dataKey="date" />
-                  <RechartsPrimitive.YAxis yAxisId="left" />
-                  <RechartsPrimitive.YAxis
-                    yAxisId="right"
-                    orientation="right"
+              />
+              <ChartTooltip
+                cursor={false}
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(value) => {
+                      return new Date(value).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      });
+                    }}
+                    indicator="dot"
                   />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <ChartLegend content={<ChartLegendContent />} />
-                  <RechartsPrimitive.Line
-                    yAxisId="left"
-                    type="monotone"
-                    dataKey="views"
-                    stroke="var(--color-views)"
-                    activeDot={{ r: 8 }}
-                  />
-                  <RechartsPrimitive.Line
-                    yAxisId="right"
-                    type="monotone"
-                    dataKey="clicks"
-                    stroke="var(--color-clicks)"
-                  />
-                </RechartsPrimitive.ComposedChart>
-              </ChartContainer>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="engagement" className="space-y-6 pt-4">
-          <Card className="rounded-lg">
-            <CardHeader>
-              <CardTitle>Engagement Over Time</CardTitle>
-              <CardDescription>
-                Track how users interact with your cards over time.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="h-[300px]">
-              <ChartContainer
-                className="h-full"
-                config={{
-                  views: {
-                    label: "Views",
-                    color: "hsl(var(--chart-1))",
-                  },
-                }}
-              >
-                <RechartsPrimitive.AreaChart
-                  data={viewsData.map((item) => ({
-                    date: formatDate(item.date),
-                    views: item.views,
-                  }))}
-                  margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-                >
-                  <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" />
-                  <RechartsPrimitive.XAxis dataKey="date" />
-                  <RechartsPrimitive.YAxis />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <RechartsPrimitive.Area
-                    type="monotone"
-                    dataKey="views"
-                    stroke="var(--color-views)"
-                    fill="var(--color-views)"
-                    fillOpacity={0.3}
-                  />
-                </RechartsPrimitive.AreaChart>
-              </ChartContainer>
-            </CardContent>
-          </Card>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            <Card className="rounded-lg">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Phone Clicks
-                </CardTitle>
-                <Phone className="text-muted-foreground h-4 w-4" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">45</div>
-                <p className="text-xs text-green-500">
-                  +12.5% from previous period
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-lg">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Email Clicks
-                </CardTitle>
-                <Mail className="text-muted-foreground h-4 w-4" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">78</div>
-                <p className="text-xs text-green-500">
-                  +24.8% from previous period
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-lg">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Website Visits
-                </CardTitle>
-                <Globe className="text-muted-foreground h-4 w-4" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">32</div>
-                <p className="text-xs text-red-500">
-                  -5.2% from previous period
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="locations" className="space-y-6 pt-4">
-          <Card className="rounded-lg">
-            <CardHeader>
-              <CardTitle>Visitor Locations</CardTitle>
-              <CardDescription>
-                See where your card viewers are located.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {visitorLocationsData.map((location, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="bg-primary h-2 w-2 rounded-full" />
-                      <p className="text-sm font-medium">{location.country}</p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="bg-muted h-2 w-32 overflow-hidden rounded-full">
-                        <div
-                          className="bg-primary h-full"
-                          style={{
-                            width: `${(location.count / visitorLocationsData[0].count) * 100}%`,
-                          }}
-                        />
-                      </div>
-                      <p className="w-12 text-right text-sm font-medium">
-                        {location.count}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                }
+              />
+              <Area
+                dataKey="clicks"
+                type="natural"
+                fill="url(#fillClicks)"
+                stroke="var(--color-clicks)"
+                stackId="a"
+              />
+              <Area
+                dataKey="views"
+                type="natural"
+                fill="url(#fillViews)"
+                stroke="var(--color-views)"
+                stackId="a"
+              />
+              <ChartLegend content={<ChartLegendContent />} />
+            </AreaChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
     </div>
   );
 }

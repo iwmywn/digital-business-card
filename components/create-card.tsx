@@ -11,7 +11,8 @@ import {
   PersonalInfo,
   type PersonalInfoValues,
 } from "@/components/personal-info";
-import { Links, type LinkType } from "@/components/links";
+import { Links } from "@/components/links";
+import type { LinkType } from "@/components/icons";
 import { CardPreview } from "@/components/card-preview";
 
 export function CreateCard() {
@@ -70,11 +71,8 @@ export function CreateCard() {
               : "Design your digital business card"}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant={previewMode ? "outline" : "default"}
-            onClick={() => setPreviewMode(!previewMode)}
-          >
+        <div className="flex items-center justify-end gap-2">
+          <Button onClick={() => setPreviewMode(!previewMode)}>
             {previewMode ? "Back to Editor" : "Preview Card"}
           </Button>
           <Button onClick={saveCard}>Save Card</Button>
@@ -82,7 +80,7 @@ export function CreateCard() {
       </div>
 
       {previewMode ? (
-        <div className="flex justify-center py-8">
+        <div className="flex justify-center">
           <CardPreview
             cardDesign={cardDesign}
             personalInfo={personalInfo}
@@ -91,8 +89,8 @@ export function CreateCard() {
           />
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="space-y-6 lg:col-span-2">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+          <div className="space-y-6 xl:col-span-2">
             <Tabs
               value={activeTab}
               onValueChange={setActiveTab}
@@ -124,7 +122,7 @@ export function CreateCard() {
             </Tabs>
           </div>
 
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <div className="sticky top-[3.75rem] space-y-4">
               <CardPreview
                 cardDesign={cardDesign}

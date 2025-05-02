@@ -68,7 +68,6 @@ const billingFormSchema = z.object({
 type PaymentFormValues = z.infer<typeof paymentFormSchema>;
 type BillingFormValues = z.infer<typeof billingFormSchema>;
 
-// Mock data for invoices
 const invoices = [
   {
     id: "INV-001",
@@ -107,7 +106,6 @@ const invoices = [
   },
 ];
 
-// Mock data for subscription plans
 const subscriptionPlans = [
   {
     id: "free",

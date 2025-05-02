@@ -42,20 +42,30 @@ const colorOptions = [
   {
     value: "gradient",
     label: "Gradient",
-    color: "bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500",
+    color: "bg-gradient-to-r from-pink-400 via-red-400 to-yellow-400",
   },
-  { value: "red", label: "Red", color: "bg-red-500" },
-  { value: "orange", label: "Orange", color: "bg-orange-500" },
-  { value: "yellow", label: "Yellow", color: "bg-yellow-500" },
-  { value: "amber", label: "Amber", color: "bg-amber-500" },
-  { value: "green", label: "Green", color: "bg-green-500" },
-  { value: "teal", label: "Teal", color: "bg-teal-500" },
-  { value: "blue", label: "Blue", color: "bg-blue-500" },
-  { value: "indigo", label: "Indigo", color: "bg-indigo-500" },
-  { value: "purple", label: "Purple", color: "bg-purple-500" },
-  { value: "pink", label: "Pink", color: "bg-pink-500" },
-  { value: "slate", label: "Slate", color: "bg-slate-800" },
+  { value: "red", label: "Red", color: "bg-red-400" },
+  { value: "orange", label: "Orange", color: "bg-orange-400" },
+  { value: "amber", label: "Amber", color: "bg-amber-400" },
+  { value: "yellow", label: "Yellow", color: "bg-yellow-400" },
+  { value: "lime", label: "Lime", color: "bg-lime-400" },
+  { value: "green", label: "Green", color: "bg-green-400" },
+  { value: "emerald", label: "Emerald", color: "bg-emerald-400" },
+  { value: "teal", label: "Teal", color: "bg-teal-400" },
+  { value: "cyan", label: "Cyan", color: "bg-cyan-400" },
+  { value: "sky", label: "Sky", color: "bg-sky-400" },
+  { value: "blue", label: "Blue", color: "bg-blue-400" },
+  { value: "indigo", label: "Indigo", color: "bg-indigo-400" },
+  { value: "violet", label: "Violet", color: "bg-violet-400" },
+  { value: "purple", label: "Purple", color: "bg-purple-400" },
+  { value: "fuchsia", label: "Fuchsia", color: "bg-fuchsia-400" },
+  { value: "pink", label: "Pink", color: "bg-pink-400" },
+  { value: "rose", label: "Rose", color: "bg-rose-400" },
+  { value: "slate", label: "Slate", color: "bg-slate-400" },
   { value: "gray", label: "Gray", color: "bg-gray-400" },
+  { value: "zinc", label: "Zinc", color: "bg-zinc-400" },
+  { value: "neutral", label: "Neutral", color: "bg-neutral-400" },
+  { value: "stone", label: "Stone", color: "bg-stone-400" },
 ];
 
 export function CardDesign({
@@ -233,7 +243,7 @@ export function CardDesign({
         </Label>
         <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
           <div className="flex flex-col items-center space-y-3">
-            <Label className="text-base">Company Logo</Label>
+            <Label className="text-sm">Company Logo</Label>
             <div className="flex flex-col items-center gap-2">
               <div
                 className={getImageContainerClass("logo")}
@@ -276,7 +286,7 @@ export function CardDesign({
           </div>
 
           <div className="flex flex-col items-center space-y-3">
-            <Label className="text-base">Profile Picture</Label>
+            <Label className="text-sm">Profile Picture</Label>
             <div className="flex flex-col items-center gap-2">
               <div
                 className={getImageContainerClass("profile")}
@@ -319,7 +329,7 @@ export function CardDesign({
           </div>
 
           <div className="flex flex-col items-center space-y-3">
-            <Label className="text-base">Cover Photo</Label>
+            <Label className="text-sm">Cover Photo</Label>
             <div className="flex flex-col items-center gap-2">
               <div
                 className={getImageContainerClass("cover")}

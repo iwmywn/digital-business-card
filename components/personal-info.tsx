@@ -13,7 +13,7 @@ import {
   FileText,
   FileEdit,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -25,7 +25,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-// Define the schema for personal info
 const personalInfoSchema = z.object({
   fullName: z
     .string()
@@ -66,11 +65,9 @@ export function PersonalInfo({
     },
   });
 
-  // Update parent component whenever form values change
   const formValues = form.watch();
 
   useEffect(() => {
-    // Check if values have actually changed before calling onSave
     const hasChanged =
       formValues.fullName !== initialValues?.fullName ||
       formValues.jobTitle !== initialValues?.jobTitle ||
@@ -87,9 +84,6 @@ export function PersonalInfo({
 
   return (
     <Card className="rounded-lg">
-      <CardHeader>
-        <CardTitle>Personal Information</CardTitle>
-      </CardHeader>
       <CardContent>
         <Form {...form}>
           <form className="space-y-4">

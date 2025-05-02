@@ -4,7 +4,7 @@ import type React from "react";
 import Image from "next/image";
 import type { CardDesignValues } from "@/components/card-design";
 import type { PersonalInfoValues } from "@/components/personal-info";
-import type { LinkType } from "@/components/links";
+import type { LinkType } from "@/components/icons";
 import { QrCode, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { nunito, inter, roboto, montserrat, openSans } from "@/app/fonts";
@@ -24,19 +24,29 @@ export function CardPreview({
 }: CardPreviewProps) {
   const getColorClass = (color: string): string => {
     const colorMap: Record<string, string> = {
-      gradient: "bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500",
-      red: "bg-red-500",
-      orange: "bg-orange-500",
-      yellow: "bg-yellow-500",
-      amber: "bg-amber-500",
-      green: "bg-green-500",
-      teal: "bg-teal-500",
-      blue: "bg-blue-500",
-      indigo: "bg-indigo-500",
-      purple: "bg-purple-500",
-      pink: "bg-pink-500",
-      slate: "bg-slate-800",
+      gradient: "bg-gradient-to-r from-pink-400 via-red-400 to-yellow-400",
+      red: "bg-red-400",
+      orange: "bg-orange-400",
+      amber: "bg-amber-400",
+      yellow: "bg-yellow-400",
+      lime: "bg-lime-400",
+      green: "bg-green-400",
+      emerald: "bg-emerald-400",
+      teal: "bg-teal-400",
+      cyan: "bg-cyan-400",
+      sky: "bg-sky-400",
+      blue: "bg-blue-400",
+      indigo: "bg-indigo-400",
+      violet: "bg-violet-400",
+      purple: "bg-purple-400",
+      fuchsia: "bg-fuchsia-400",
+      pink: "bg-pink-400",
+      rose: "bg-rose-400",
+      slate: "bg-slate-400",
       gray: "bg-gray-400",
+      zinc: "bg-zinc-400",
+      neutral: "bg-neutral-400",
+      stone: "bg-stone-400",
     };
 
     return colorMap[color] || "bg-gray-500";
@@ -191,12 +201,14 @@ export function CardPreview({
                     >
                       <IconComponent className="h-4 w-4" />
                     </div>
-                    <div className="flex-1">
+                    <div className="w-full flex-1">
                       <span className="font-medium text-gray-800">
                         {link.label || link.type}
                       </span>
                       {link.value && (
-                        <p className="truncate text-gray-600">{link.value}</p>
+                        <p className="max-w-[85%] truncate text-gray-600">
+                          {link.value}
+                        </p>
                       )}
                     </div>
                   </div>

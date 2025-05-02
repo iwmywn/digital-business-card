@@ -2,8 +2,8 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
-import { Trash2, Grip, Plus } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Trash2, GripVertical, Plus } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -24,76 +24,8 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import {
-  Mail,
-  Phone,
-  Globe,
-  Link2,
-  MapPin,
-  Twitter,
-  Instagram,
-  CircleDashed,
-  Linkedin,
-  Facebook,
-  Youtube,
-  SnailIcon as Snapchat,
-  TwitterIcon as TikTok,
-  Twitch,
-  YoutubeIcon as Yelp,
-  PhoneIcon as WhatsApp,
-  MessageCircle,
-  DiscIcon as Discord,
-  WebcamIcon as Skype,
-  Send,
-  Github,
-  Calendar,
-  ShoppingCartIcon as Paypal,
-  DollarSign,
-  CreditCard,
-} from "lucide-react";
 
-export type LinkType = {
-  id: string;
-  type: string;
-  value: string;
-  category: string;
-  icon: React.ElementType;
-  label?: string;
-};
-
-const linkTypes = [
-  { type: "Email", icon: Mail, category: "General" },
-  { type: "Phone", icon: Phone, category: "General" },
-  { type: "Company URL", icon: Globe, category: "General" },
-  { type: "Link", icon: Link2, category: "General" },
-  { type: "Address", icon: MapPin, category: "General" },
-
-  { type: "X", icon: Twitter, category: "Social" },
-  { type: "Instagram", icon: Instagram, category: "Social" },
-  { type: "Threads", icon: CircleDashed, category: "Social" },
-  { type: "LinkedIn", icon: Linkedin, category: "Social" },
-  { type: "Facebook", icon: Facebook, category: "Social" },
-  { type: "YouTube", icon: Youtube, category: "Social" },
-  { type: "Snapchat", icon: Snapchat, category: "Social" },
-  { type: "TikTok", icon: TikTok, category: "Social" },
-  { type: "Twitch", icon: Twitch, category: "Social" },
-  { type: "Yelp", icon: Yelp, category: "Social" },
-
-  { type: "WhatsApp", icon: WhatsApp, category: "Messaging" },
-  { type: "Signal", icon: MessageCircle, category: "Messaging" },
-  { type: "Discord", icon: Discord, category: "Messaging" },
-  { type: "Skype", icon: Skype, category: "Messaging" },
-  { type: "Telegram", icon: Send, category: "Messaging" },
-
-  { type: "GitHub", icon: Github, category: "Business" },
-  { type: "Calendly", icon: Calendar, category: "Business" },
-
-  { type: "PayPal", icon: Paypal, category: "Payment" },
-  { type: "Venmo", icon: DollarSign, category: "Payment" },
-  { type: "CashApp", icon: CreditCard, category: "Payment" },
-];
-
-const categories = ["General", "Social", "Messaging", "Business", "Payment"];
+import { linkTypes, categories, type LinkType } from "@/components/icons";
 
 function SortableLink({
   link,
@@ -132,7 +64,7 @@ function SortableLink({
         {...listeners}
         className="cursor-grab touch-manipulation"
       >
-        <Grip className="text-muted-foreground h-5 w-5" />
+        <GripVertical className="text-muted-foreground h-5 w-5" />
       </div>
       <IconComponent className="h-5 w-5 flex-shrink-0" />
       <div className="flex flex-grow flex-col gap-2 sm:flex-row">
@@ -140,7 +72,7 @@ function SortableLink({
           placeholder="Custom label (optional)"
           value={link.label || ""}
           onChange={(e) => updateLink(link.id, "label", e.target.value)}
-          className="flex-grow sm:w-1/3"
+          className="flex-grow sm:w-1/2"
         />
         <Input
           placeholder={`Enter your ${link.type}`}
@@ -228,9 +160,6 @@ export function Links({
 
   return (
     <Card className="rounded-lg">
-      <CardHeader>
-        <CardTitle>Links</CardTitle>
-      </CardHeader>
       <CardContent className="space-y-6">
         {links.length > 0 && (
           <div className="space-y-4">
@@ -267,7 +196,7 @@ export function Links({
 
         {categories.map((category) => (
           <div key={category} className="space-y-4">
-            <h3 className="text-sm font-medium">{category}</h3>
+            <h3 className="text-base font-medium">{category}</h3>
 
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
               {linkTypes
@@ -285,7 +214,7 @@ export function Links({
                         addLink(linkType.type, linkType.category, linkType.icon)
                       }
                     >
-                      <IconComponent className="h-6 w-6" />
+                      <IconComponent />
                       <span className="text-center text-xs">
                         {linkType.type}
                       </span>
