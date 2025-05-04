@@ -63,13 +63,20 @@ export async function POST(req: NextRequest) {
           : 0;
 
         const { userId: id } = await session.user.get();
+        const idType = typeof id;
+        const idValue = id;
+        const userIdType = typeof userId;
+        const userIdValue = userId;
 
         if (userId !== id) {
           console.error(
             "User ID mismatch: Webhook called with different user ID than current session!",
           );
           return createResponse(
-            { received: true, warning: "User ID mismatch!" },
+            {
+              received: true,
+              warning: `User ID mismatch! ${idType} ${idValue} ${userIdType} ${userIdValue}`,
+            },
             200,
           );
         }
