@@ -22,8 +22,8 @@ const other = [
     url: "/settings",
   },
   {
-    title: "Payment Success",
-    url: "/subscription/success",
+    title: "Payment Status",
+    url: "/subscription/status",
   },
 ];
 

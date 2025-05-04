@@ -1,11 +1,10 @@
 "use server";
 
 import Stripe from "stripe";
-import { ObjectId } from "mongodb";
-import { getUserCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
 import { basicId, professionalId } from "@/constants";
+import { processSuccessfulPayment } from "./stripe-utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-04-30.basil",
@@ -50,7 +49,7 @@ export async function createCheckoutSession(priceId: string) {
         },
       ],
       mode: "payment",
-      success_url: `${url}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${url}/subscription/status?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${url}/subscription`,
       metadata: {
         userId: existingUser._id.toString(),
@@ -74,87 +73,68 @@ export async function createCheckoutSession(priceId: string) {
 
 export async function verifyCheckoutSession(sessionId: string) {
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+    const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["line_items", "payment_intent"],
     });
 
-    if (session.payment_status === "paid") {
-      const userId = session.metadata?.userId;
-      const planId = session.metadata?.planId as
+    if (checkoutSession.payment_status === "paid") {
+      const userId = checkoutSession.metadata?.userId;
+      const planId = checkoutSession.metadata?.planId as
         | "basic"
         | "professional"
         | undefined;
 
-      if (userId && planId) {
-        const userCollection = await getUserCollection();
-
-        const now = new Date();
-        const expiresAt = new Date(now);
-        expiresAt.setDate(now.getDate() + 30);
-
-        const paymentIntentId =
-          typeof session.payment_intent === "string"
-            ? session.payment_intent
-            : session.payment_intent?.id;
-
-        const user = await userCollection.findOne({
-          _id: new ObjectId(userId),
-          "paymentHistory.paymentIntentId": paymentIntentId,
-        });
-
-        if (user) {
-          return {
-            success: true,
-            alreadyProcessed: true,
-          };
-        }
-
-        const userToUpdate = await userCollection.findOne({
-          _id: new ObjectId(userId),
-        });
-
-        if (userToUpdate) {
-          const purchasedPlans = userToUpdate.purchasedPlans || [];
-
-          purchasedPlans.push({
-            planId,
-            purchasedAt: now,
-            expiresAt,
-          });
-
-          const paymentHistory = userToUpdate.paymentHistory || [];
-          paymentHistory.push({
-            paymentIntentId: paymentIntentId || "",
-            amount: session.amount_total ? session.amount_total / 100 : 0,
-            planId: planId,
-            status: "succeeded",
-            createdAt: now,
-          });
-
-          await userCollection.updateOne(
-            { _id: new ObjectId(userId) },
-            {
-              $set: {
-                currentPlan: planId,
-                planExpiresAt: expiresAt,
-                purchasedPlans: purchasedPlans,
-                paymentHistory: paymentHistory,
-                updatedAt: now,
-              },
-            },
-          );
-        }
+      if (!userId || !planId) {
+        return {
+          success: false,
+          alreadyProcessed: false,
+          error: "Missing user ID or plan ID!",
+        };
       }
 
-      return {
-        success: true,
-      };
+      const paymentIntentId =
+        typeof checkoutSession.payment_intent === "string"
+          ? checkoutSession.payment_intent
+          : checkoutSession.payment_intent?.id;
+
+      if (!paymentIntentId) {
+        return {
+          success: false,
+          alreadyProcessed: false,
+          error: "Missing payment intent ID!",
+        };
+      }
+
+      const amount = checkoutSession.amount_total
+        ? checkoutSession.amount_total / 100
+        : 0;
+      const { userId: id } = await session.user.get();
+
+      if (userId !== id)
+        return {
+          success: false,
+          alreadyProcessed: false,
+          error: "unauthorized_access",
+        };
+
+      const result = await processSuccessfulPayment({
+        userId,
+        planId,
+        paymentIntentId,
+        amount,
+      });
+
+      return result;
     }
 
-    return { success: false };
+    return { success: false, alreadyProcessed: false, error: undefined };
   } catch (error) {
     console.error("Error verifying checkout session:", error);
-    return { success: false, error: "Failed to verify checkout session!" };
+    return {
+      success: false,
+      alreadyProcessed: false,
+      error: "Failed to verify checkout session!",
+    };
   }
 }
 
