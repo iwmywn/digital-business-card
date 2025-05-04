@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import Image from "next/image";
+import { useUser } from "@/lib/hooks";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const nav = {
   navMain: [
@@ -42,8 +44,8 @@ export const nav = {
       icon: ChartColumnIncreasing,
     },
     {
-      title: "Payment Management",
-      url: "/payment",
+      title: "Subscription Plans",
+      url: "/subscription",
       icon: CreditCard,
     },
   ],
@@ -67,6 +69,8 @@ export const nav = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user, isLoading, error } = useUser();
+
   return (
     <Sidebar
       className="pr-0 group-data-[state=collapsed]:pr-[0.5625rem]"
@@ -88,7 +92,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">EZNECT</span>
-                  <span className="truncate text-xs">Premium</span>
+                  {isLoading || error ? (
+                    <Skeleton className="h-3 w-24" />
+                  ) : (
+                    <span className="truncate text-xs capitalize">
+                      {user?.currentPlan}
+                    </span>
+                  )}
                 </div>
               </Link>
             </SidebarMenuButton>

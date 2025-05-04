@@ -7,7 +7,7 @@ import { session } from "@/lib/session";
 export async function GET() {
   const { isSignedIn, userId } = await session.user.get();
 
-  if (!isSignedIn) {
+  if (!isSignedIn || !userId) {
     return createResponse("Unauthorized!", 401);
   }
 
@@ -15,13 +15,14 @@ export async function GET() {
 
   if (!existingUser) return createResponse("User not found!", 404);
 
-  const { name, email, avatar } = existingUser;
+  const { name, email, avatar, currentPlan } = existingUser;
 
   return createResponse(
     {
       name,
       email,
       avatar,
+      currentPlan,
     },
     200,
   );

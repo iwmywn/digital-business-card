@@ -11,7 +11,7 @@ const protectedRoutes = [
   "/faq",
   "/home",
   "/manage",
-  "/payment",
+  "/subscription",
   "/privacy",
   "/terms",
   "/settings",

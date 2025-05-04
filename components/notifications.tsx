@@ -49,11 +49,11 @@ export function Notifications() {
           Configure how and when you receive notifications.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onNotificationSubmit)}
-            className="space-y-4"
+            className="space-y-3"
           >
             <FormField
               control={form.control}

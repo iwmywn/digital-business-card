@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import type { ObjectId } from "mongodb";
 
 type BasePrivateToken<T> = {
   _id: T;
@@ -20,8 +20,16 @@ type BaseUser<T> = {
   avatar: string;
   verificationToken: string;
   resendVerification: number;
+  stripeCustomerId?: string;
+  currentPlan: "free" | "basic" | "professional";
+  planExpiresAt?: Date;
+  purchasedPlans?: {
+    planId: "basic" | "professional";
+    purchasedAt: Date;
+    expiresAt: Date;
+  }[];
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt: Date;
 };
 
 export type PrivateToken = BasePrivateToken<string>;

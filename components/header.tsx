@@ -21,6 +21,10 @@ const other = [
     title: "Settings",
     url: "/settings",
   },
+  {
+    title: "Payment Success",
+    url: "/subscription/success",
+  },
 ];
 
 export function Header() {
