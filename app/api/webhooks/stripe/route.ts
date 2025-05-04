@@ -2,7 +2,6 @@ import type { NextRequest } from "next/server";
 import Stripe from "stripe";
 import { createResponse } from "@/app/api/utils";
 import { processSuccessfulPayment } from "@/actions/stripe-utils";
-import { session } from "@/lib/session";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-04-30.basil",
@@ -61,25 +60,6 @@ export async function POST(req: NextRequest) {
         const amount = checkoutSession.amount_total
           ? checkoutSession.amount_total / 100
           : 0;
-
-        const { userId: id } = await session.user.get();
-        const idType = typeof id;
-        const idValue = id;
-        const userIdType = typeof userId;
-        const userIdValue = userId;
-
-        if (userId !== id) {
-          console.error(
-            "User ID mismatch: Webhook called with different user ID than current session!",
-          );
-          return createResponse(
-            {
-              received: true,
-              warning: `User ID mismatch! ${idType} ${idValue} ${userIdType} ${userIdValue}`,
-            },
-            200,
-          );
-        }
 
         const { success, error, alreadyProcessed } =
           await processSuccessfulPayment({
