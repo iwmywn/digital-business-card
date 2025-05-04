@@ -1,16 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePlanStatus } from "@/lib/hooks";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { CurrentPlan } from "@/components/subscription/current-plan";
 import { SubscriptionManagement } from "@/components/subscription/management";
+import { BillingHistory } from "@/components/subscription/billing-history";
 import { SubscriptionPlansSkeleton } from "@/components/skeletons";
 
 export function SubscriptionPlans() {
   const { isError, isLoading } = usePlanStatus();
+  const [activeTab, setActiveTab] = useState("plans");
 
   useEffect(() => {
     if (isError) toast.error(isError);
@@ -24,24 +28,36 @@ export function SubscriptionPlans() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold tracking-tight">
-          Subscription Plans
+          Subscription Management
         </h2>
         <p className="text-muted-foreground text-sm">
-          Choose the perfect plan for your business needs
+          Manage your subscription plans and billing history
         </p>
       </div>
 
       <Alert className="bg-muted/50 border-muted-foreground/20">
         <ShieldCheck className="h-5 w-5" />
-        <AlertTitle>Privacy First</AlertTitle>
+        <AlertTitle>Secure Payments</AlertTitle>
         <AlertDescription>
-          Our service only requires one-time registration and doesn&apos;t store
-          your personal information. Your privacy is our priority.
+          We never store your card details on our servers. Your payment
+          information is securely processed by Stripe, ensuring maximum
+          protection for your financial data.
         </AlertDescription>
       </Alert>
 
-      <CurrentPlan />
-      <SubscriptionManagement />
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="plans">Subscription Plans</TabsTrigger>
+          <TabsTrigger value="history">Billing History</TabsTrigger>
+        </TabsList>
+        <TabsContent value="plans" className="space-y-6 pt-4">
+          <CurrentPlan />
+          <SubscriptionManagement />
+        </TabsContent>
+        <TabsContent value="history" className="pt-4">
+          <BillingHistory />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

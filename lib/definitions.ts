@@ -10,6 +10,14 @@ type BaseAvatar<T> = {
   image: string;
 };
 
+type PaymentHistory = {
+  paymentIntentId: string;
+  amount: number;
+  planId: "basic" | "professional";
+  status: string;
+  createdAt: Date;
+};
+
 type BaseUser<T> = {
   _id: T;
   name: string;
@@ -28,6 +36,7 @@ type BaseUser<T> = {
     purchasedAt: Date;
     expiresAt: Date;
   }[];
+  paymentHistory?: PaymentHistory[];
   createdAt: Date;
   updatedAt: Date;
 };
@@ -40,3 +49,5 @@ export type DBAvatar = BaseAvatar<ObjectId>;
 
 export type User = BaseUser<string>;
 export type DBUser = BaseUser<ObjectId>;
+
+export type { PaymentHistory };
