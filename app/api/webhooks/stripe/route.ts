@@ -61,25 +61,16 @@ export async function POST(req: NextRequest) {
           ? checkoutSession.amount_total / 100
           : 0;
 
-        const { success, error, alreadyProcessed } =
-          await processSuccessfulPayment({
-            userId,
-            planId,
-            paymentIntentId,
-            amount,
-          });
+        const { error } = await processSuccessfulPayment({
+          userId,
+          planId,
+          paymentIntentId,
+          amount,
+        });
 
-        if (error || !success) {
+        if (error) {
           console.error(`Error processing payment: ${error}`);
           return createResponse({ received: true, warning: error }, 200);
-        }
-
-        if (alreadyProcessed) {
-          console.log(`Payment ${paymentIntentId} already processed!`);
-          return createResponse(
-            { received: true, status: "already_processed" },
-            200,
-          );
         }
 
         return createResponse({ received: true, status: "processed" }, 200);

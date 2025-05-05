@@ -86,8 +86,6 @@ export async function verifyCheckoutSession(sessionId: string) {
 
       if (!userId || !planId) {
         return {
-          success: false,
-          alreadyProcessed: false,
           error: "Missing user ID or plan ID!",
         };
       }
@@ -99,8 +97,6 @@ export async function verifyCheckoutSession(sessionId: string) {
 
       if (!paymentIntentId) {
         return {
-          success: false,
-          alreadyProcessed: false,
           error: "Missing payment intent ID!",
         };
       }
@@ -112,8 +108,6 @@ export async function verifyCheckoutSession(sessionId: string) {
 
       if (userId !== id)
         return {
-          success: false,
-          alreadyProcessed: false,
           error: "unauthorized_access",
         };
 
@@ -127,12 +121,10 @@ export async function verifyCheckoutSession(sessionId: string) {
       return result;
     }
 
-    return { success: false, alreadyProcessed: false, error: undefined };
+    return { error: undefined };
   } catch (error) {
     console.error("Error verifying checkout session:", error);
     return {
-      success: false,
-      alreadyProcessed: false,
       error: "Failed to verify checkout session!",
     };
   }

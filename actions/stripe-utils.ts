@@ -21,7 +21,7 @@ export async function processSuccessfulPayment({
     });
 
     if (existingPayment) {
-      return { success: true, alreadyProcessed: true, error: undefined };
+      return { error: undefined };
     }
 
     const user = await userCollection.findOne({
@@ -30,8 +30,6 @@ export async function processSuccessfulPayment({
 
     if (!user) {
       return {
-        success: false,
-        alreadyProcessed: false,
         error: "User not found!",
       };
     }
@@ -69,12 +67,10 @@ export async function processSuccessfulPayment({
       },
     );
 
-    return { success: true, alreadyProcessed: false, error: undefined };
+    return { error: undefined };
   } catch (error) {
     console.error("Error processing payment:", error);
     return {
-      success: false,
-      alreadyProcessed: false,
       error: "Failed to process payment!",
     };
   }

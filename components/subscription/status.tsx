@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { AlertCircle, CheckCircle, ShieldAlert, XCircle } from "lucide-react";
+import { CheckCircle, ShieldAlert, XCircle } from "lucide-react";
 import Link from "next/link";
 
 function PaymentStatusUI({
@@ -41,19 +41,7 @@ export function PaymentSuccessUI() {
       iconColor="text-green-600"
       iconBg="bg-green-100"
       title="Payment Successful!"
-      message="Your subscription has been activated successfully."
-    />
-  );
-}
-
-export function PaymentAlreadyProcessedUI() {
-  return (
-    <PaymentStatusUI
-      icon={<AlertCircle />}
-      iconColor="text-yellow-600"
-      iconBg="bg-yellow-100"
-      title="Payment Already Processed"
-      message="This payment has already been processed. No changes were made to your subscription."
+      message="Your subscription is active. Thank you for your payment."
     />
   );
 }
