@@ -5,7 +5,7 @@ import {
   PaymentErrorUI,
   PaymentSuccessUI,
   UnauthorizedAccessUI,
-} from "@/components/subscription/status";
+} from "@/components/payment-status";
 
 export function generateMetadata(): Metadata {
   return { title: "Payment Status" };

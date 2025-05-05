@@ -28,10 +28,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { PaymentReceipt } from "@/components/subscription/payment-receipt";
+import { PaymentReceipt } from "@/components/payment-receipt";
 import { getPaymentHistoryDetails } from "@/actions/user";
 import { toast } from "sonner";
-import { ReceiptData } from "@/components/subscription/payment-receipt";
+import { ReceiptData } from "@/components/payment-receipt";
 import { useSubscription } from "@/lib/hooks";
 
 export function BillingHistory() {

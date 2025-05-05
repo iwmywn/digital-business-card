@@ -7,9 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSubscription } from "@/lib/hooks";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { CurrentPlan } from "@/components/subscription/current-plan";
-import { SubscriptionManagement } from "@/components/subscription/management";
-import { BillingHistory } from "@/components/subscription/billing-history";
+import { CurrentPlan } from "@/components/current-plan";
+import { SubscriptionManagement } from "@/components/subscription-management";
+import { BillingHistory } from "@/components/billing-history";
 import { SubscriptionPlansSkeleton } from "@/components/skeletons";
 
 export function SubscriptionPlans() {

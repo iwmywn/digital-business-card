@@ -27,7 +27,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
 
-export function Account() {
+export function AccountForm() {
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {

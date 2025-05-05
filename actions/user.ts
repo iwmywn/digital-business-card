@@ -5,7 +5,7 @@ import { getUserCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
 import { getPaymentDetails } from "@/actions/stripe";
-import { ReceiptData } from "@/components/subscription/payment-receipt";
+import { ReceiptData } from "@/components/payment-receipt";
 
 export async function updatePlanIfExpired() {
   const { isSignedIn, userId } = await session.user.get();

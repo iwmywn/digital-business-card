@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { InformationForm } from "@/components/information-form";
-import { Account } from "@/components/account";
+import { AccountForm } from "@/components/account-form";
 import { Notifications } from "@/components/notifications";
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export default function page() {
     <>
       <div className="space-y-2">
         <InformationForm />
-        <Account />
+        <AccountForm />
         <Notifications />
       </div>
     </>
