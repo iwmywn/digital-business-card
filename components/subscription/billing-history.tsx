@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { format } from "date-fns";
 import { Loader2, Receipt, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,60 +29,26 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PaymentReceipt } from "@/components/subscription/payment-receipt";
-import {
-  getUserPaymentHistory,
-  getPaymentHistoryDetails,
-} from "@/actions/user";
-import type { PaymentHistory } from "@/lib/definitions";
+import { getPaymentHistoryDetails } from "@/actions/user";
 import { toast } from "sonner";
 import { ReceiptData } from "@/components/subscription/payment-receipt";
-import { BillingHistorySkeleton } from "@/components/skeletons";
+import { useSubscription } from "@/lib/hooks";
 
 export function BillingHistory() {
-  const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
-  const [filteredHistory, setFilteredHistory] = useState<PaymentHistory[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
   const [receiptData, setReceiptData] = useState<ReceiptData | null>(null);
   const [isReceiptLoading, setIsReceiptLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    async function fetchPaymentHistory() {
-      setIsLoading(true);
-      try {
-        const result = await getUserPaymentHistory();
-        if (result.success && result.data) {
-          setPaymentHistory(result.data);
-          setFilteredHistory(result.data);
-        } else {
-          toast.error(result.error || "Failed to load payment history");
-        }
-      } catch (error) {
-        console.error("Error fetching payment history:", error);
-        toast.error("An error occurred while loading payment history");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchPaymentHistory();
-  }, []);
-
-  useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredHistory(paymentHistory);
-    } else {
-      const query = searchQuery.toLowerCase();
-      setFilteredHistory(
-        paymentHistory.filter(
-          (payment) =>
-            payment.paymentIntentId.toLowerCase().includes(query) ||
-            payment.planId.toLowerCase().includes(query) ||
-            payment.status.toLowerCase().includes(query),
-        ),
-      );
-    }
+  const { paymentHistory } = useSubscription();
+  const filteredHistory = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (query === "") return paymentHistory;
+    return paymentHistory.filter(
+      (payment) =>
+        payment.paymentIntentId.toLowerCase().includes(query) ||
+        payment.planId.toLowerCase().includes(query) ||
+        payment.status.toLowerCase().includes(query),
+    );
   }, [searchQuery, paymentHistory]);
 
   const handleViewReceipt = async (paymentIntentId: string) => {
@@ -91,7 +57,7 @@ export function BillingHistory() {
 
     try {
       const result = await getPaymentHistoryDetails(paymentIntentId);
-      if (result.success && result.data) {
+      if (result.data) {
         setReceiptData(result.data);
       } else {
         toast.error(result.error || "Failed to load receipt details");
@@ -122,10 +88,6 @@ export function BillingHistory() {
         return "bg-gray-400";
     }
   };
-
-  if (isLoading) {
-    return <BillingHistorySkeleton />;
-  }
 
   return (
     <>

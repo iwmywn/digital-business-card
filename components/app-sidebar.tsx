@@ -69,7 +69,7 @@ export const nav = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user, isLoading, error } = useUser();
+  const { currentPlan, isLoading, isError } = useUser();
 
   return (
     <Sidebar
@@ -92,11 +92,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">EZNECT</span>
-                  {isLoading || error ? (
+                  {isLoading || isError ? (
                     <Skeleton className="h-3 w-24" />
                   ) : (
                     <span className="truncate text-xs capitalize">
-                      {user?.currentPlan}
+                      {currentPlan}
                     </span>
                   )}
                 </div>

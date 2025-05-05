@@ -26,8 +26,9 @@ import ReCaptchaPopup from "@/components/recaptcha";
 import { tokenSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { FormLink } from "@/components/form-link";
+import { signInPrivate } from "@/actions/auth";
 
-type PrivateFormValues = z.infer<typeof tokenSchema>;
+export type PrivateFormValues = z.infer<typeof tokenSchema>;
 
 export function PrivateForm() {
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
@@ -46,15 +47,9 @@ export function PrivateForm() {
     }
 
     try {
-      const res = await fetch("/api/private", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...values, recaptchaToken }),
-      });
+      const res = await signInPrivate(values, recaptchaToken);
 
-      if (res.ok) {
+      if (res.success) {
         toast.success("You have 20 mins for this session. Redirecting...");
         const searchParams = new URLSearchParams(window.location.search);
         const callbackUrl = searchParams.get("next") || "/signin";
@@ -64,8 +59,7 @@ export function PrivateForm() {
           window.location.href = callbackUrl;
         }, 3000);
       } else {
-        const message = await res.json();
-        toast.error(message);
+        toast.error(res.error);
       }
     } catch (error) {
       console.error("Verify token error: ", error);

@@ -28,8 +28,9 @@ import { signUpSchema } from "@/schemas";
 import { useState } from "react";
 import ReCaptchaPopup from "@/components/recaptcha";
 import { FormButton } from "@/components/form-button";
+import { signUp } from "@/actions/auth";
 
-type SignUpFormValues = z.infer<typeof signUpSchema>;
+export type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUpForm() {
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
@@ -52,21 +53,13 @@ export function SignUpForm() {
     }
 
     try {
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...values, recaptchaToken }),
-      });
+      const res = await signUp(values, recaptchaToken);
 
-      const message = await res.json();
-
-      if (res.ok) {
-        toast.success(message);
+      if (res.success) {
+        toast.success(res.success);
         form.reset();
       } else {
-        toast.error(message);
+        toast.error(res.error);
       }
     } catch (error) {
       console.error("Sign up error: ", error);

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { usePlanStatus } from "@/lib/hooks";
+import { useSubscription } from "@/lib/hooks";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { CurrentPlan } from "@/components/subscription/current-plan";
@@ -13,8 +13,8 @@ import { BillingHistory } from "@/components/subscription/billing-history";
 import { SubscriptionPlansSkeleton } from "@/components/skeletons";
 
 export function SubscriptionPlans() {
-  const { isError, isLoading } = usePlanStatus();
-  const [activeTab, setActiveTab] = useState("plans");
+  const { isError, isLoading } = useSubscription();
+  const [activeTab, setActiveTab] = useState<string>("plans");
 
   useEffect(() => {
     if (isError) toast.error(isError);
@@ -39,9 +39,10 @@ export function SubscriptionPlans() {
         <ShieldCheck className="h-5 w-5" />
         <AlertTitle>Secure Payments</AlertTitle>
         <AlertDescription>
-          We never store your card details on our servers. Your payment
-          information is securely processed by Stripe, ensuring maximum
-          protection for your financial data.
+          Our service only requires a one-time registration and doesn&apos;t
+          store your card details on its servers. Your payment information is
+          securely processed by Stripe, ensuring maximum protection for your
+          financial data.
         </AlertDescription>
       </Alert>
 

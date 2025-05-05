@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Check, X, type LucideIcon } from "lucide-react";
 import { Loading } from "@/components/loading";
+import { verifyEmail } from "@/actions/auth";
 
 export function VerifyEmail({
   token,
@@ -12,20 +13,21 @@ export function VerifyEmail({
   email: string | undefined;
 }) {
   const [Icon, setIcon] = useState<LucideIcon>(() => X);
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchToken = async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          `/api/verify-email?email=${email}&token=${token}`,
-        );
-        const message = await res.json();
+        const res = await verifyEmail(email, token);
 
-        if (res.ok) setIcon(() => Check);
-        setMessage(message);
+        if (res.success) {
+          setIcon(() => Check);
+          setMessage(res.success);
+        } else {
+          setMessage(res.error);
+        }
       } catch (error) {
         console.error("Verification token error: ", error);
         setMessage("Something went wrong! Please try again.");

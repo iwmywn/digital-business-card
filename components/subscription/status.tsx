@@ -21,7 +21,7 @@ function PaymentStatusUI({
       style={{ minHeight: "calc(100vh - 4.83rem)" }}
     >
       <div className={`mb-4 rounded-full p-3 ${iconBg}`}>
-        <div className={`h-8 w-8 ${iconColor}`}>{icon}</div>
+        <div className={`${iconColor}`}>{icon}</div>
       </div>
       <h1 className="mb-2 text-2xl font-bold">{title}</h1>
       <p className="text-muted-foreground mb-6">{message}</p>

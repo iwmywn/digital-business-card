@@ -25,8 +25,9 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { FormLink } from "@/components/form-link";
 import { signInSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
+import { signIn } from "@/actions/auth";
 
-type SignInFormValues = z.infer<typeof signInSchema>;
+export type SignInFormValues = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
   const form = useForm<SignInFormValues>({
@@ -39,23 +40,17 @@ export function SignInForm() {
 
   async function onSubmit(values: SignInFormValues) {
     try {
-      const res = await fetch("/api/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
+      const res = await signIn(values);
+      console.log(res);
 
-      if (res.ok) {
+      if (res.success) {
         const searchParams = new URLSearchParams(window.location.search);
         const callbackUrl = searchParams.get("next") || "/home";
 
         form.reset();
         window.location.href = callbackUrl;
       } else {
-        const message = await res.json();
-        toast.error(message);
+        toast.error(res.error);
       }
     } catch (error) {
       console.error("Sign in error: ", error);

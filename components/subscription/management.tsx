@@ -14,11 +14,11 @@ import { Button } from "@/components/ui/button";
 import { createCheckoutSession } from "@/actions/stripe";
 import { switchToPlan } from "@/actions/user";
 import { subscriptionPlans } from "@/constants";
-import { usePlanStatus } from "@/lib/hooks";
+import { useSubscription } from "@/lib/hooks";
 
 export function SubscriptionManagement() {
   const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
-  const { currentPlan, basic, professional } = usePlanStatus();
+  const { currentPlan, basic, professional } = useSubscription();
 
   async function handleSubscribe(priceId: string, planId: string) {
     setIsLoading((prev) => ({ ...prev, [planId]: true }));

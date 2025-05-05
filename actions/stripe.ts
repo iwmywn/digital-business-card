@@ -74,7 +74,7 @@ export async function createCheckoutSession(priceId: string) {
 export async function verifyCheckoutSession(sessionId: string) {
   try {
     const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ["line_items", "payment_intent"],
+      expand: ["payment_intent"],
     });
 
     if (checkoutSession.payment_status === "paid") {
@@ -216,9 +216,9 @@ export async function getPaymentDetails(paymentIntentId: string) {
         })) || [],
     };
 
-    return { success: true, data: receiptData };
+    return { data: receiptData, error: undefined };
   } catch (error) {
     console.error("Error retrieving payment details:", error);
-    return { success: false, error: "Failed to retrieve payment details!" };
+    return { data: undefined, error: "Failed to retrieve payment details!" };
   }
 }

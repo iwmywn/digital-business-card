@@ -1,26 +1,38 @@
 import useSWR from "swr";
 import { updatePlanIfExpired } from "@/actions/user";
+import type { PaymentHistory } from "@/lib/definitions";
+import { me } from "@/actions/auth";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+// const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export function useUser() {
-  const { data, error, isLoading } = useSWR<{
-    name: string;
-    email: string;
-    avatar: string;
-    currentPlan: string;
-  }>("/api/me", fetcher, {
+  const { data, isLoading } = useSWR<{
+    name?: string;
+    email?: string;
+    avatar?: string;
+    currentPlan?: string;
+    error?: string;
+  }>("me", me, {
     keepPreviousData: true,
   });
 
+  const name = data?.name;
+  const email = data?.email;
+  const avatar = data?.avatar;
+  const currentPlan = data?.currentPlan;
+  const isError = data?.error || null;
+
   return {
-    user: data,
+    name,
+    email,
+    avatar,
+    currentPlan,
     isLoading,
-    error,
+    isError,
   };
 }
 
-export function usePlanStatus() {
+export function useSubscription() {
   const { data, isLoading } = useSWR<{
     currentPlan?: string;
     error?: string;
@@ -32,6 +44,7 @@ export function usePlanStatus() {
       hasAccess: boolean;
       expiresAt: Date | null;
     };
+    paymentHistory?: PaymentHistory[];
   }>("plan-status", updatePlanIfExpired, { keepPreviousData: true });
 
   const currentPlan = data?.currentPlan;
@@ -40,6 +53,7 @@ export function usePlanStatus() {
     hasAccess: false,
     expiresAt: null,
   };
+  const paymentHistory = data?.paymentHistory || [];
   const isError = data?.error || null;
 
   return {
@@ -48,5 +62,6 @@ export function usePlanStatus() {
     professional,
     isLoading,
     isError,
+    paymentHistory,
   };
 }

@@ -4,8 +4,6 @@ import { ObjectId } from "mongodb";
 import { getUserCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
-import { revalidatePath } from "next/cache";
-import type { PaymentHistory } from "@/lib/definitions";
 import { getPaymentDetails } from "@/actions/stripe";
 import { ReceiptData } from "@/components/subscription/payment-receipt";
 
@@ -57,6 +55,7 @@ export async function updatePlanIfExpired() {
             ? new Date(validProfessionalPlan.expiresAt)
             : null,
         },
+        paymentHistory: existingUser.paymentHistory,
       };
     }
   }
@@ -73,6 +72,7 @@ export async function updatePlanIfExpired() {
         ? new Date(validProfessionalPlan.expiresAt)
         : null,
     },
+    paymentHistory: existingUser.paymentHistory,
   };
 }
 
@@ -101,7 +101,7 @@ export async function switchToPlan(planId: "free" | "basic" | "professional") {
         },
       },
     );
-    return { success: true };
+    return { error: undefined };
   }
 
   const validPlan = existingUser.purchasedPlans?.find(
@@ -123,42 +123,12 @@ export async function switchToPlan(planId: "free" | "basic" | "professional") {
     },
   );
 
-  revalidatePath("/subscription");
-  return { success: true };
-}
-
-export async function getUserPaymentHistory(): Promise<{
-  success: boolean;
-  data?: PaymentHistory[];
-  error?: string;
-}> {
-  try {
-    const { isSignedIn, userId } = await session.user.get();
-
-    if (!isSignedIn || !userId) {
-      return { success: false, error: "Unauthorized!" };
-    }
-
-    const existingUser = await getUserById(userId);
-
-    if (!existingUser) {
-      return { success: false, error: "User not found!" };
-    }
-
-    return {
-      success: true,
-      data: existingUser.paymentHistory || [],
-    };
-  } catch (error) {
-    console.error("Error fetching payment history:", error);
-    return { success: false, error: "Failed to fetch payment history" };
-  }
+  return { error: undefined };
 }
 
 export async function getPaymentHistoryDetails(
   paymentIntentId: string,
 ): Promise<{
-  success: boolean;
   data?: ReceiptData;
   error?: string;
 }> {
@@ -166,13 +136,13 @@ export async function getPaymentHistoryDetails(
     const { isSignedIn, userId } = await session.user.get();
 
     if (!isSignedIn || !userId) {
-      return { success: false, error: "Unauthorized!" };
+      return { error: "Unauthorized!" };
     }
 
     const existingUser = await getUserById(userId);
 
     if (!existingUser) {
-      return { success: false, error: "User not found!" };
+      return { error: "User not found!" };
     }
 
     const paymentRecord = existingUser.paymentHistory?.find(
@@ -180,7 +150,7 @@ export async function getPaymentHistoryDetails(
     );
 
     if (!paymentRecord) {
-      return { success: false, error: "Payment record not found" };
+      return { error: "Payment record not found" };
     }
 
     const paymentDetails = await getPaymentDetails(paymentIntentId);
@@ -188,6 +158,6 @@ export async function getPaymentHistoryDetails(
     return paymentDetails;
   } catch (error) {
     console.error("Error fetching payment details:", error);
-    return { success: false, error: "Failed to fetch payment details" };
+    return { error: "Failed to fetch payment details" };
   }
 }

@@ -23,8 +23,9 @@ import {
 import { PasswordInput } from "@/components/ui/password-input";
 import { resetPasswordSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
+import { resetPassword } from "@/actions/auth";
 
-type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
+export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 
 export function ResetPasswordForm({
   token,
@@ -43,24 +44,13 @@ export function ResetPasswordForm({
 
   async function onSubmit(values: ResetPasswordFormValues) {
     try {
-      const res = await fetch(
-        `/api/reset-password?email=${email}&token=${token}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        },
-      );
+      const res = await resetPassword(values, email, token);
 
-      const message = await res.json();
-
-      if (res.ok) {
-        toast.success(message);
+      if (res.success) {
+        toast.success(res.success);
         form.reset();
       } else {
-        toast.error(message);
+        toast.error(res.error);
       }
     } catch (error) {
       console.error("Reset password error: ", error);

@@ -26,8 +26,9 @@ import { useState } from "react";
 import ReCaptchaPopup from "@/components/recaptcha";
 import { emailSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
+import { forgotPassword } from "@/actions/auth";
 
-type EmailFormValues = z.infer<typeof emailSchema>;
+export type EmailFormValues = z.infer<typeof emailSchema>;
 
 export function ForgotPasswordForm() {
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
@@ -46,21 +47,13 @@ export function ForgotPasswordForm() {
     }
 
     try {
-      const res = await fetch("/api/forgot-password", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...values, recaptchaToken }),
-      });
+      const res = await forgotPassword(values, recaptchaToken);
 
-      const message = await res.json();
-
-      if (res.ok) {
-        toast.success(message);
+      if (res.success) {
+        toast.success(res.success);
         form.reset();
       } else {
-        toast.error(message);
+        toast.error(res.error);
       }
     } catch (error) {
       console.error("Reset password error: ", error);

@@ -9,10 +9,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { subscriptionPlans } from "@/constants";
-import { usePlanStatus } from "@/lib/hooks";
+import { useSubscription } from "@/lib/hooks";
 
 export function CurrentPlan() {
-  const { currentPlan } = usePlanStatus();
+  const { currentPlan } = useSubscription();
   const selectedPlan =
     subscriptionPlans.find((plan) => plan.id === currentPlan) ||
     subscriptionPlans[0];
