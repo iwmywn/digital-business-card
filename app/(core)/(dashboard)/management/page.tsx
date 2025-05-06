@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { ManageCards } from "@/components/manage-cards";
+import { CardManagement } from "@/components/card-management";
 
 export const metadata: Metadata = {
-  title: "Manage Cards",
+  title: "Card management",
   description: "View and manage your digital business cards.",
 };
 
 export default function ManageCardsPage() {
-  return <ManageCards />;
+  return <CardManagement />;
 }

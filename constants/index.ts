@@ -1,4 +1,5 @@
-const baseImgUrl = "https://res.cloudinary.com/duobwq5xg/image/upload";
+const cloudinaryName = "duobwq5xg";
+const baseImgUrl = `https://res.cloudinary.com/${cloudinaryName}/image/upload`;
 
 const basicId = "price_1RKWrNGLhvibmNX6gVIdO8tm";
 const professionalId = "price_1RKWqsGLhvibmNX6JwNErxrI";
@@ -9,10 +10,9 @@ const subscriptionPlans = [
     name: "Free",
     price: 0,
     features: [
-      "1 digital business card",
-      "Basic analytics",
-      "Standard templates",
-      "QR code sharing",
+      "Create 1 digital business card",
+      "Access to standard templates",
+      "Basic QR code sharing",
     ],
     popular: false,
     priceId: "",
@@ -22,11 +22,11 @@ const subscriptionPlans = [
     name: "Basic",
     price: 9.99,
     features: [
-      "5 digital business cards",
-      "Advanced analytics",
-      "Premium templates",
-      "QR code customization",
-      "Remove branding",
+      "Create up to 5 digital business cards",
+      "Basic analytics to track card views",
+      "Access to basic themes",
+      "Customizable QR codes",
+      "Choose from 3 professional fonts",
     ],
     popular: false,
     priceId: basicId,
@@ -36,16 +36,23 @@ const subscriptionPlans = [
     name: "Professional",
     price: 19.99,
     features: [
-      "Unlimited digital business cards",
-      "Comprehensive analytics",
-      "All premium templates",
-      "Custom domain",
-      "Priority support",
-      "Team management",
+      "Create up to 15 digital business cards",
+      "Advanced analytics with detailed insights",
+      "Full access to all themes",
+      "Custom domain support",
+      "Priority customer support",
+      "Remove platform branding",
+      "Unlimited font options",
     ],
     popular: true,
     priceId: professionalId,
   },
 ];
 
-export { baseImgUrl, subscriptionPlans, basicId, professionalId };
+export {
+  baseImgUrl,
+  subscriptionPlans,
+  cloudinaryName,
+  basicId,
+  professionalId,
+};

@@ -42,7 +42,7 @@ export function NavUser() {
         toast.success("You need to sign back in.");
         setTimeout(() => {
           window.location.href = "/signin";
-        }, 1500);
+        }, 1000);
       }
     } catch (error) {
       console.error("Sign out error: ", error);

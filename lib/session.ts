@@ -13,7 +13,7 @@ interface PrivateSession {
 }
 
 const sevenDays = 7 * 24 * 60 * 60;
-const twentyMinutes = 20 * 60;
+const twohours = 2 * 60 * 60;
 
 const sessionOptions = {
   user: {
@@ -35,7 +35,7 @@ const sessionOptions = {
       httpOnly: true,
       sameSite: "lax",
       path: "/",
-      maxAge: twentyMinutes,
+      maxAge: twohours,
     },
   },
 } as const;

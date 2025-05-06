@@ -34,8 +34,8 @@ export const nav = {
       icon: BadgePlus,
     },
     {
-      title: "Manage Cards",
-      url: "/manage",
+      title: "Card Management",
+      url: "/management",
       icon: Kanban,
     },
     {

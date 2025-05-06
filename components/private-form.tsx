@@ -50,7 +50,7 @@ export function PrivateForm() {
       const res = await signInPrivate(values, recaptchaToken);
 
       if (res.success) {
-        toast.success("You have 20 mins for this session. Redirecting...");
+        toast.success("You have 2 hours for this session. Redirecting...");
         const searchParams = new URLSearchParams(window.location.search);
         const callbackUrl = searchParams.get("next") || "/signin";
 

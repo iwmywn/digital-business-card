@@ -77,14 +77,12 @@ export function InformationForm() {
     const file = event.target.files?.[0];
     if (file) {
       setIsUploading(true);
-      setTimeout(() => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          setProfileImage(e.target?.result as string);
-          setIsUploading(false);
-        };
-        reader.readAsDataURL(file);
-      }, 1500);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImage(e.target?.result as string);
+        setIsUploading(false);
+      };
+      reader.readAsDataURL(file);
     }
   }
 

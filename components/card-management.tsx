@@ -99,7 +99,7 @@ const mockCards = [
   },
 ];
 
-export function ManageCards() {
+export function CardManagement() {
   const [cards, setCards] = useState(mockCards);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCard, setSelectedCard] = useState<

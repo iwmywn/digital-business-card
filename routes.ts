@@ -10,7 +10,7 @@ const protectedRoutes = [
   "/create",
   "/faq",
   "/home",
-  "/manage",
+  "/management",
   "/subscription",
   "/privacy",
   "/terms",
