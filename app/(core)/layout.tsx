@@ -14,7 +14,7 @@ export default async function DashboardLayout({
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
-      <SidebarInset className="p-2 peer-data-[state=collapsed]:max-w-[calc(100vw-4rem)] peer-data-[state=collapsed]:pl-0 peer-data-[state=expanded]:max-w-[calc(100vw-16rem)]">
+      <SidebarInset className="p-2 peer-data-[state=collapsed]:max-w-[calc(100vw-4rem)] peer-data-[state=collapsed]:pl-0 peer-data-[state=expanded]:max-w-[calc(100vw-16rem)] peer-data-[state=expanded]:transition-[max-width] peer-data-[state=expanded]:duration-500">
         <div
           className="h-full overflow-y-auto rounded-[var(--radius)] border border-[var(--border)] bg-[var(--primary-foreground)] p-2 pt-0 shadow-sm"
           style={{ maxHeight: "calc(100vh - 1rem)" }}
