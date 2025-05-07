@@ -44,7 +44,6 @@ export async function updatePlanIfExpired() {
       );
 
       return {
-        currentPlan: "free",
         basic: {
           hasAccess: validBasicPlan ? true : false,
           expiresAt: validBasicPlan ? new Date(validBasicPlan.expiresAt) : null,
@@ -61,7 +60,6 @@ export async function updatePlanIfExpired() {
   }
 
   return {
-    currentPlan: existingUser.currentPlan,
     basic: {
       hasAccess: validBasicPlan ? true : false,
       expiresAt: validBasicPlan ? new Date(validBasicPlan.expiresAt) : null,
@@ -132,32 +130,27 @@ export async function getPaymentHistoryDetails(
   data?: ReceiptData;
   error?: string;
 }> {
-  try {
-    const { isSignedIn, userId } = await session.user.get();
+  const { isSignedIn, userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
-    }
-
-    const existingUser = await getUserById(userId);
-
-    if (!existingUser) {
-      return { error: "User not found!" };
-    }
-
-    const paymentRecord = existingUser.paymentHistory?.find(
-      (payment) => payment.paymentIntentId === paymentIntentId,
-    );
-
-    if (!paymentRecord) {
-      return { error: "Payment record not found" };
-    }
-
-    const paymentDetails = await getPaymentDetails(paymentIntentId);
-
-    return paymentDetails;
-  } catch (error) {
-    console.error("Error fetching payment details:", error);
-    return { error: "Failed to fetch payment details" };
+  if (!isSignedIn || !userId) {
+    return { error: "Unauthorized!" };
   }
+
+  const existingUser = await getUserById(userId);
+
+  if (!existingUser) {
+    return { error: "User not found!" };
+  }
+
+  const paymentRecord = existingUser.paymentHistory?.find(
+    (payment) => payment.paymentIntentId === paymentIntentId,
+  );
+
+  if (!paymentRecord) {
+    return { error: "Payment record not found" };
+  }
+
+  const paymentDetails = await getPaymentDetails(paymentIntentId);
+
+  return paymentDetails;
 }

@@ -35,18 +35,15 @@ export function NavUser() {
   const { name, email, avatar, isLoading, isError } = useUser();
 
   async function onSignOut() {
-    try {
-      const res = await signOut();
+    const { error } = await signOut();
 
-      if (res.success) {
-        toast.success("You need to sign back in.");
-        setTimeout(() => {
-          window.location.href = "/signin";
-        }, 1000);
-      }
-    } catch (error) {
-      console.error("Sign out error: ", error);
-      toast.error("Something went wrong! Please try again.");
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success("You need to sign back in.");
+      setTimeout(() => {
+        window.location.href = "/signin";
+      }, 1000);
     }
   }
 

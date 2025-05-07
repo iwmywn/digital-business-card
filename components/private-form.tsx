@@ -46,28 +46,22 @@ export function PrivateForm() {
       return;
     }
 
-    try {
-      const res = await signInPrivate(values, recaptchaToken);
+    const { error } = await signInPrivate(values, recaptchaToken);
 
-      if (res.success) {
-        toast.success("You have 2 hours for this session. Redirecting...");
-        const searchParams = new URLSearchParams(window.location.search);
-        const callbackUrl = searchParams.get("next") || "/signin";
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success("You have 2 hours for this session. Redirecting...");
+      const searchParams = new URLSearchParams(window.location.search);
+      const callbackUrl = searchParams.get("next") || "/signin";
 
-        form.reset();
-        setTimeout(() => {
-          window.location.href = callbackUrl;
-        }, 3000);
-      } else {
-        toast.error(res.error);
-      }
-    } catch (error) {
-      console.error("Verify token error: ", error);
-      toast.error("Something went wrong! Please try again.");
-    } finally {
-      setRecaptchaToken(null);
-      setShowCaptcha(false);
+      form.reset();
+      setTimeout(() => {
+        window.location.href = callbackUrl;
+      }, 3000);
     }
+    setRecaptchaToken(null);
+    setShowCaptcha(false);
   }
 
   return (

@@ -25,13 +25,20 @@ const other = [
     title: "Payment Status",
     url: "/subscription/status",
   },
+  {
+    title: "Edit card",
+    url: "/edit",
+  },
 ];
 
 export function Header() {
   const pathname = usePathname();
+  console.log(pathname);
 
   const allNavItems = [...nav.navMain, ...nav.navSecondary, ...other];
-  const foundItem = allNavItems.find((item) => item.url === pathname);
+  const foundItem = allNavItems.find(
+    (item) => item.url === pathname || pathname.startsWith(item.url),
+  );
 
   const ColorDialog =
     process.env.NODE_ENV === "development"

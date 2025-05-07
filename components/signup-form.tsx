@@ -52,22 +52,17 @@ export function SignUpForm() {
       return;
     }
 
-    try {
-      const res = await signUp(values, recaptchaToken);
+    const { error } = await signUp(values, recaptchaToken);
 
-      if (res.success) {
-        toast.success(res.success);
-        form.reset();
-      } else {
-        toast.error(res.error);
-      }
-    } catch (error) {
-      console.error("Sign up error: ", error);
-      toast.error("Something went wrong! Please try again.");
-    } finally {
-      setRecaptchaToken(null);
-      setShowCaptcha(false);
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success("Verification email sent.");
+      form.reset();
     }
+
+    setRecaptchaToken(null);
+    setShowCaptcha(false);
   }
 
   return (

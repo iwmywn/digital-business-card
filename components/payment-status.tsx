@@ -16,20 +16,15 @@ function PaymentStatusUI({
   message: React.ReactNode;
 }) {
   return (
-    <div
-      className="flex flex-col items-center justify-center p-6 text-center"
-      style={{ minHeight: "calc(100vh - 4.83rem)" }}
-    >
-      <div className={`mb-4 rounded-full p-3 ${iconBg}`}>
+    <div className="flex min-h-[calc(100vh-4.83rem)] flex-col items-center justify-center gap-2 px-6 text-center md:px-16">
+      <div className={`rounded-full p-3 ${iconBg}`}>
         <div className={`${iconColor}`}>{icon}</div>
       </div>
-      <h1 className="mb-2 text-2xl font-bold">{title}</h1>
-      <p className="text-muted-foreground mb-6">{message}</p>
-      <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
-        <Button asChild>
-          <Link href="/subscription">Return to Subscription</Link>
-        </Button>
-      </div>
+      <h2 className="text-lg font-semibold">{title}</h2>
+      <p>{message}</p>
+      <Button asChild>
+        <Link href="/subscription">Return to Subscription</Link>
+      </Button>
     </div>
   );
 }

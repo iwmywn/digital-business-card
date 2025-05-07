@@ -19,21 +19,15 @@ export function VerifyEmail({
   useEffect(() => {
     const fetchToken = async () => {
       setLoading(true);
-      try {
-        const res = await verifyEmail(email, token);
+      const { error } = await verifyEmail(email, token);
 
-        if (res.success) {
-          setIcon(() => Check);
-          setMessage(res.success);
-        } else {
-          setMessage(res.error);
-        }
-      } catch (error) {
-        console.error("Verification token error: ", error);
-        setMessage("Something went wrong! Please try again.");
-      } finally {
-        setLoading(false);
+      if (error) {
+        setMessage(error);
+      } else {
+        setIcon(() => Check);
+        setMessage("Email verified successfully.");
       }
+      setLoading(false);
     };
 
     fetchToken();

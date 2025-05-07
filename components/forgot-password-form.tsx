@@ -46,22 +46,19 @@ export function ForgotPasswordForm() {
       return;
     }
 
-    try {
-      const res = await forgotPassword(values, recaptchaToken);
+    const { error } = await forgotPassword(values, recaptchaToken);
 
-      if (res.success) {
-        toast.success(res.success);
-        form.reset();
-      } else {
-        toast.error(res.error);
-      }
-    } catch (error) {
-      console.error("Reset password error: ", error);
-      toast.error("Something went wrong! Please try again.");
-    } finally {
-      setRecaptchaToken(null);
-      setShowCaptcha(false);
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success(
+        "If this email is valid, we will send a new password reset email.",
+      );
+      form.reset();
     }
+
+    setRecaptchaToken(null);
+    setShowCaptcha(false);
   }
 
   return (

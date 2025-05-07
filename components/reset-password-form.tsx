@@ -43,18 +43,13 @@ export function ResetPasswordForm({
   });
 
   async function onSubmit(values: ResetPasswordFormValues) {
-    try {
-      const res = await resetPassword(values, email, token);
+    const { error } = await resetPassword(values, email, token);
 
-      if (res.success) {
-        toast.success(res.success);
-        form.reset();
-      } else {
-        toast.error(res.error);
-      }
-    } catch (error) {
-      console.error("Reset password error: ", error);
-      toast.error("Something went wrong! Please try again.");
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success("Your password has been changed.");
+      form.reset();
     }
   }
 

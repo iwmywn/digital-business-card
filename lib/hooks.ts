@@ -34,7 +34,6 @@ export function useUser() {
 
 export function useSubscription() {
   const { data, isLoading } = useSWR<{
-    currentPlan?: string;
     error?: string;
     basic?: {
       hasAccess: boolean;
@@ -47,7 +46,6 @@ export function useSubscription() {
     paymentHistory?: PaymentHistory[];
   }>("plan-status", updatePlanIfExpired, { keepPreviousData: true });
 
-  const currentPlan = data?.currentPlan;
   const basic = data?.basic || { hasAccess: false, expiresAt: null };
   const professional = data?.professional || {
     hasAccess: false,
@@ -57,7 +55,6 @@ export function useSubscription() {
   const isError = data?.error || null;
 
   return {
-    currentPlan,
     basic,
     professional,
     isLoading,

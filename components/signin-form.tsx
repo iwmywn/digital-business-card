@@ -39,22 +39,16 @@ export function SignInForm() {
   });
 
   async function onSubmit(values: SignInFormValues) {
-    try {
-      const res = await signIn(values);
-      console.log(res);
+    const { error } = await signIn(values);
 
-      if (res.success) {
-        const searchParams = new URLSearchParams(window.location.search);
-        const callbackUrl = searchParams.get("next") || "/home";
+    if (error) {
+      toast.error(error);
+    } else {
+      const searchParams = new URLSearchParams(window.location.search);
+      const callbackUrl = searchParams.get("next") || "/home";
 
-        form.reset();
-        window.location.href = callbackUrl;
-      } else {
-        toast.error(res.error);
-      }
-    } catch (error) {
-      console.error("Sign in error: ", error);
-      toast.error("Something went wrong! Please try again.");
+      form.reset();
+      window.location.href = callbackUrl;
     }
   }
 
