@@ -17,7 +17,7 @@ const baseEmailSchema = z.string().email({ message: "Invalid email address." });
 
 const signUpSchema = z
   .object({
-    name: z
+    fullName: z
       .string()
       .min(2, { message: "Name must be at least 2 characters long." }),
     email: baseEmailSchema,

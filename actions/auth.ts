@@ -39,7 +39,7 @@ export async function signUp(
 
     if (!parsedCredentials.success) return { error: "Invalid field!" };
 
-    const { name, email, phone, password } = parsedCredentials.data;
+    const { fullName, email, phone, password } = parsedCredentials.data;
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) return { error: "Email already signed up!" };
@@ -47,7 +47,7 @@ export async function signUp(
     const [hashedPassword, avatars, customer] = await Promise.all([
       bcrypt.hash(password, 10),
       getAvatars(),
-      createStripeCustomer(email, name),
+      createStripeCustomer(email, fullName),
     ]);
 
     if (customer.error) {
@@ -60,7 +60,7 @@ export async function signUp(
     const result = await (
       await getUserCollection()
     ).insertOne({
-      name,
+      fullName,
       email,
       phone,
       password: hashedPassword,
@@ -319,10 +319,10 @@ export async function me() {
 
     if (!existingUser) return { error: "User not found!" };
 
-    const { name, email, avatar, currentPlan } = existingUser;
+    const { fullName, email, avatar, currentPlan } = existingUser;
 
     return {
-      name,
+      fullName,
       email,
       avatar,
       currentPlan,

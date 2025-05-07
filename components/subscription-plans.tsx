@@ -35,8 +35,8 @@ export function SubscriptionPlans() {
         </p>
       </div>
 
-      <Alert className="bg-muted/50 border-muted-foreground/20">
-        <ShieldCheck className="h-5 w-5" />
+      <Alert>
+        <ShieldCheck />
         <AlertTitle>Secure Payments</AlertTitle>
         <AlertDescription>
           Our service only requires a one-time registration and doesn&apos;t

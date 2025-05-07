@@ -33,7 +33,6 @@ const other = [
 
 export function Header() {
   const pathname = usePathname();
-  console.log(pathname);
 
   const allNavItems = [...nav.navMain, ...nav.navSecondary, ...other];
   const foundItem = allNavItems.find(
@@ -50,7 +49,7 @@ export function Header() {
       : () => null;
 
   return (
-    <header className="sticky top-0 z-49 flex shrink-0 items-center justify-between bg-(--primary-foreground)/75 py-2 backdrop-blur">
+    <header className="bg-primary-foreground/75 sticky top-0 z-49 flex shrink-0 items-center justify-between py-2 backdrop-blur">
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1" />
         <Breadcrumb>

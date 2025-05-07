@@ -48,7 +48,7 @@ export function UnauthorizedAccessUI() {
       iconColor="text-red-600"
       iconBg="bg-red-100"
       title="Unauthorized Access"
-      message="This payment session belongs to another user account. If you believe this is a mistake, please sign in with the correct account."
+      message="This payment session belongs to another user account. If you believe this is a mistake, please contact our customer support."
     />
   );
 }
