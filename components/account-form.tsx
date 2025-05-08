@@ -48,7 +48,7 @@ export function AccountForm() {
       <CardHeader>
         <CardTitle className="text-2xl">Account</CardTitle>
         <CardDescription>
-          Update your username and change your password.
+          Update your username and change your password
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -85,8 +85,6 @@ export function AccountForm() {
               />
               <FormDescription>
                 This email is linked to your account and cannot be changed.
-                {/* We&apos;ll send important account notifications to this
-                    email. */}
               </FormDescription>
               <FormMessage />
             </FormItem>

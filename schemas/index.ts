@@ -138,6 +138,24 @@ const notificationsSchema = z.object({
   securityAlerts: z.boolean(),
 });
 
+const personalInfoSchema = z.object({
+  fullName: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters." }),
+  jobTitle: z.string().optional(),
+  department: z.string().optional(),
+  company: z.string().optional(),
+  accreditations: z.string().optional(),
+  headline: z
+    .string()
+    .max(100, { message: "Headline must not exceed 100 characters." })
+    .optional(),
+  bio: z
+    .string()
+    .max(160, { message: "Bio must not exceed 160 characters." })
+    .optional(),
+});
+
 export {
   signUpSchema,
   signInSchema,
@@ -148,4 +166,5 @@ export {
   publicProfileSchema,
   settingsSchema,
   notificationsSchema,
+  personalInfoSchema,
 };

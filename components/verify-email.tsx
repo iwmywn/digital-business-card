@@ -19,13 +19,13 @@ export function VerifyEmail({
   useEffect(() => {
     const fetchToken = async () => {
       setLoading(true);
-      const { error } = await verifyEmail(email, token);
+      const { success, error } = await verifyEmail(email, token);
 
-      if (error) {
+      if (error || !success) {
         setMessage(error);
       } else {
         setIcon(() => Check);
-        setMessage("Email verified successfully.");
+        setMessage(success);
       }
       setLoading(false);
     };
@@ -34,7 +34,7 @@ export function VerifyEmail({
   }, [token, email]);
 
   if (loading) {
-    return <Loading />;
+    return <Loading className="h-8 w-8" />;
   }
 
   return (

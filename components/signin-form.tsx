@@ -26,6 +26,7 @@ import { FormLink } from "@/components/form-link";
 import { signInSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { signIn } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 export type SignInFormValues = z.infer<typeof signInSchema>;
 
@@ -37,6 +38,7 @@ export function SignInForm() {
       password: "",
     },
   });
+  const router = useRouter();
 
   async function onSubmit(values: SignInFormValues) {
     const { error } = await signIn(values);
@@ -48,7 +50,7 @@ export function SignInForm() {
       const callbackUrl = searchParams.get("next") || "/home";
 
       form.reset();
-      window.location.href = callbackUrl;
+      router.push(callbackUrl);
     }
   }
 

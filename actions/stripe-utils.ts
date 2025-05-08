@@ -71,7 +71,7 @@ export async function processSuccessfulPayment({
   } catch (error) {
     console.error("Error processing payment:", error);
     return {
-      error: "Failed to process payment!",
+      error: "Failed to process payment! Please try again later.",
     };
   }
 }

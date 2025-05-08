@@ -33,6 +33,7 @@ import { getPaymentHistoryDetails } from "@/actions/user";
 import { toast } from "sonner";
 import { ReceiptData } from "@/components/payment-receipt";
 import { useSubscription } from "@/lib/hooks";
+import { NotFoundUI } from "@/components/not-found-ui";
 
 export function BillingHistory() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -55,21 +56,16 @@ export function BillingHistory() {
     setSelectedPayment(paymentIntentId);
     setIsReceiptLoading(true);
 
-    try {
-      const result = await getPaymentHistoryDetails(paymentIntentId);
-      if (result.data) {
-        setReceiptData(result.data);
-      } else {
-        toast.error(result.error || "Failed to load receipt details");
-        setSelectedPayment(null);
-      }
-    } catch (error) {
-      console.error("Error fetching receipt details:", error);
-      toast.error("An error occurred while loading receipt details");
+    const { data, error } = await getPaymentHistoryDetails(paymentIntentId);
+
+    if (error || !data) {
+      toast.error(error);
       setSelectedPayment(null);
-    } finally {
-      setIsReceiptLoading(false);
+    } else {
+      setReceiptData(data);
     }
+
+    setIsReceiptLoading(false);
   };
 
   const formatDate = (date: Date) => {
@@ -113,15 +109,16 @@ export function BillingHistory() {
         </CardHeader>
         <CardContent>
           {filteredHistory.length === 0 ? (
-            <div className="flex h-64 flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-8 text-center">
-              <Receipt className="h-10 w-10 text-gray-400" />
-              <h3 className="text-lg font-medium">No transactions found</h3>
-              <p className="text-sm text-gray-500">
-                {paymentHistory.length === 0
+            <NotFoundUI
+              icon={<Receipt />}
+              title="NO TRANSACTIONS FOUND"
+              message={
+                paymentHistory.length === 0
                   ? "You haven't made any payments yet."
-                  : "No transactions match your search criteria."}
-              </p>
-            </div>
+                  : "No transactions match your search criteria."
+              }
+              className="border border-dashed"
+            />
           ) : (
             <Table>
               <TableHeader>
@@ -138,7 +135,7 @@ export function BillingHistory() {
                 {filteredHistory.map((payment) => (
                   <TableRow key={payment.paymentIntentId}>
                     <TableCell>{formatDate(payment.createdAt)}</TableCell>
-                    <TableCell>{payment.paymentIntentId}</TableCell>
+                    <TableCell>{payment.paymentIntentId.slice(3)}</TableCell>
                     <TableCell className="capitalize">
                       {payment.planId} plan
                     </TableCell>

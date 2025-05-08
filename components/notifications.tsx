@@ -46,7 +46,7 @@ export function Notifications() {
       <CardHeader>
         <CardTitle className="text-2xl">Notification Preferences</CardTitle>
         <CardDescription>
-          Configure how and when you receive notifications.
+          Configure how and when you receive notifications
         </CardDescription>
       </CardHeader>
       <CardContent>

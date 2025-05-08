@@ -27,6 +27,7 @@ import { tokenSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { FormLink } from "@/components/form-link";
 import { signInPrivate } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 export type PrivateFormValues = z.infer<typeof tokenSchema>;
 
@@ -39,6 +40,7 @@ export function PrivateForm() {
       token: "",
     },
   });
+  const router = useRouter();
 
   async function onSubmit(values: PrivateFormValues) {
     if (!showCaptcha && !recaptchaToken) {
@@ -46,20 +48,21 @@ export function PrivateForm() {
       return;
     }
 
-    const { error } = await signInPrivate(values, recaptchaToken);
+    const { success, error } = await signInPrivate(values, recaptchaToken);
 
-    if (error) {
+    if (error || !success) {
       toast.error(error);
     } else {
-      toast.success("You have 2 hours for this session. Redirecting...");
+      toast.success(success);
       const searchParams = new URLSearchParams(window.location.search);
       const callbackUrl = searchParams.get("next") || "/signin";
 
       form.reset();
       setTimeout(() => {
-        window.location.href = callbackUrl;
+        router.push(callbackUrl);
       }, 3000);
     }
+
     setRecaptchaToken(null);
     setShowCaptcha(false);
   }

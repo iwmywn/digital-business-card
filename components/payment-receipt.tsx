@@ -77,7 +77,7 @@ export function PaymentReceipt({ receiptData }: { receiptData: ReceiptData }) {
     <Card className="rounded-lg text-sm">
       <CardHeader>
         <div className="">
-          <p>Transaction ID: {receiptData.paymentIntent.id}</p>
+          <p>Transaction ID: {receiptData.paymentIntent.id.slice(3)}</p>
           <p>Date: {formatDate(receiptData.paymentIntent.created)}</p>
         </div>
         <Badge

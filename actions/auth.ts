@@ -79,10 +79,10 @@ export async function signUp(
 
     await sendEmail(email, verificationToken, "verifyEmail");
 
-    return { error: undefined };
+    return { success: "Verification email sent.", error: undefined };
   } catch (error) {
-    console.error("Sign up error: ", error);
-    return { error: "Something went wrong! Please try again." };
+    console.error("Error signing up: ", error);
+    return { error: "Failed to sign up! Please try again later." };
   }
 }
 
@@ -113,8 +113,8 @@ export async function signIn(values: SignInFormValues) {
 
     return { error: undefined };
   } catch (error) {
-    console.error("Sign in error: ", error);
-    return { error: "Something went wrong! Please try again." };
+    console.error("Error signing in: ", error);
+    return { error: "Failed to sign in! Please try again later." };
   }
 }
 
@@ -138,6 +138,8 @@ export async function forgotPassword(
 
     if (!existingUser)
       return {
+        success:
+          "If this email is valid, we will send a new password reset email.",
         error: undefined,
       };
 
@@ -164,11 +166,15 @@ export async function forgotPassword(
     await sendEmail(email, verificationToken, "resetPassword");
 
     return {
+      success:
+        "If this email is valid, we will send a new password reset email.",
       error: undefined,
     };
   } catch (error) {
-    console.error("Reset password error: ", error);
-    return { error: "Something went wrong! Please try again." };
+    console.error("Error sending reset password email: ", error);
+    return {
+      error: "Failed to send reset password email! Please try again later.",
+    };
   }
 }
 
@@ -213,10 +219,10 @@ export async function resetPassword(
     if (result.modifiedCount === 0)
       return { error: "Password update failed! Try again later." };
 
-    return { error: undefined };
+    return { success: "Your password has been changed.", error: undefined };
   } catch (error) {
-    console.error("Reset password error: ", error);
-    return { error: "Something went wrong! Please try again." };
+    console.error("Error reseting password: ", error);
+    return { error: "Failed to reset password! Please try again later." };
   }
 }
 
@@ -250,20 +256,20 @@ export async function verifyEmail(
     if (userUpdateResult.modifiedCount === 0)
       return { error: "Email verification failed! Try again later." };
 
-    return { error: undefined };
+    return { success: "Email verified successfully.", error: undefined };
   } catch (error) {
-    console.error("Verification token error: ", error);
-    return { error: "Something went wrong! Please try again." };
+    console.error("Error verifying token: ", error);
+    return { error: "Failed to verify token! Please try again later." };
   }
 }
 
 export async function signOut() {
   try {
     await session.user.delete();
-    return { error: undefined };
+    return { success: "You need to sign back in.", error: undefined };
   } catch (error) {
-    console.error("Sign out error: ", error);
-    return { error: "Something went wrong! Please try again." };
+    console.error("Error signing out: ", error);
+    return { error: "Failed to sign out! Please try again later." };
   }
 }
 
@@ -300,10 +306,13 @@ export async function signInPrivate(
       return { error: "Request failed! Try again later." };
     }
 
-    return { error: undefined };
+    return {
+      success: "You have 2 hours for this session. Redirecting...",
+      error: undefined,
+    };
   } catch (error) {
-    console.error("Verify token error: ", error);
-    return { error: "Something went wrong! Please try again." };
+    console.error("Error verifying private token: ", error);
+    return { error: "Failed to verify private token! Please try again later." };
   }
 }
 
@@ -328,7 +337,7 @@ export async function me() {
       currentPlan,
     };
   } catch (error) {
-    console.error("Fetch me error: ", error);
-    return { error: "Something went wrong! Please try again." };
+    console.error("Error fetching me: ", error);
+    return { error: "Failed to fetch me! Please try again later." };
   }
 }

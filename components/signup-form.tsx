@@ -52,12 +52,12 @@ export function SignUpForm() {
       return;
     }
 
-    const { error } = await signUp(values, recaptchaToken);
+    const { success, error } = await signUp(values, recaptchaToken);
 
-    if (error) {
+    if (error || !success) {
       toast.error(error);
     } else {
-      toast.success("Verification email sent.");
+      toast.success(success);
       form.reset();
     }
 

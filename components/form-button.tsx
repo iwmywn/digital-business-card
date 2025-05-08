@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ButtonProps } from "react-day-picker";
+import { Loading } from "@/components/loading";
 
 export function FormButton({
   isSubmitting,
@@ -19,11 +20,7 @@ export function FormButton({
       type="submit"
       {...props}
     >
-      {isSubmitting ? (
-        <div className="border-primary-foreground border-t-primary mx-auto h-4 w-4 animate-spin rounded-full border-4" />
-      ) : (
-        text
-      )}
+      {isSubmitting ? <Loading /> : text}
     </Button>
   );
 }

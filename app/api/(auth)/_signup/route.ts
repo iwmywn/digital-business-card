@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
-  const { name, email, phone, password } = parsedCredentials.data;
+  const { fullName, email, phone, password } = parsedCredentials.data;
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) return createResponse("Email already signed up!", 400);
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
   const [hashedPassword, avatars, customer] = await Promise.all([
     bcrypt.hash(password, 10),
     getAvatars(),
-    createStripeCustomer(email, name),
+    createStripeCustomer(email, fullName),
   ]);
 
   if (customer.error) {
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
   const result = await (
     await getUserCollection()
   ).insertOne({
-    name,
+    fullName,
     email,
     phone,
     password: hashedPassword,

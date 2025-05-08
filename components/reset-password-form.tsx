@@ -43,12 +43,12 @@ export function ResetPasswordForm({
   });
 
   async function onSubmit(values: ResetPasswordFormValues) {
-    const { error } = await resetPassword(values, email, token);
+    const { success, error } = await resetPassword(values, email, token);
 
-    if (error) {
+    if (error || !success) {
       toast.error(error);
     } else {
-      toast.success("Your password has been changed.");
+      toast.success(success);
       form.reset();
     }
   }

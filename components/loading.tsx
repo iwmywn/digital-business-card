@@ -1,5 +1,12 @@
-export function Loading() {
+import { cn } from "@/lib/utils";
+
+export function Loading({ className }: { className?: string }) {
   return (
-    <div className="border-primary-foreground border-t-primary mx-auto h-8 w-8 animate-spin rounded-full border-4" />
+    <div
+      className={cn(
+        "border-primary-foreground border-t-primary/10 mx-auto h-4 w-4 animate-spin rounded-full border-4",
+        className,
+      )}
+    />
   );
 }

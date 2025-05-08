@@ -13,14 +13,14 @@ import { BillingHistory } from "@/components/billing-history";
 import { SubscriptionPlansSkeleton } from "@/components/skeletons";
 
 export function SubscriptionPlans() {
-  const { isError, isLoading } = useSubscription();
+  const { isSubScriptionLoading, isSubscriptionError } = useSubscription();
   const [activeTab, setActiveTab] = useState<string>("plans");
 
   useEffect(() => {
-    if (isError) toast.error(isError);
-  }, [isError]);
+    if (isSubscriptionError) toast.error(isSubscriptionError);
+  }, [isSubscriptionError]);
 
-  if (isLoading) {
+  if (isSubScriptionLoading) {
     return <SubscriptionPlansSkeleton />;
   }
 

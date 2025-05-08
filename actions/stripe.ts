@@ -3,7 +3,7 @@
 import Stripe from "stripe";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
-import { basicId, professionalId } from "@/constants";
+import * as constants from "@/constants";
 import { processSuccessfulPayment } from "./stripe-utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -29,9 +29,9 @@ export async function createCheckoutSession(priceId: string) {
     const url = process.env.NEXT_PUBLIC_URL;
 
     let planId: "basic" | "professional" | undefined;
-    if (priceId === basicId) {
+    if (priceId === constants.basicId) {
       planId = "basic";
-    } else if (priceId === professionalId) {
+    } else if (priceId === constants.professionalId) {
       planId = "professional";
     }
 
@@ -64,10 +64,12 @@ export async function createCheckoutSession(priceId: string) {
 
     const stripeSession = await stripe.checkout.sessions.create(sessionOptions);
 
-    return { url: stripeSession.url };
+    return { url: stripeSession.url, error: undefined };
   } catch (error) {
     console.error("Error creating checkout session:", error);
-    return { error: "Failed to create checkout session!" };
+    return {
+      error: "Failed to create checkout session! Please try again later.",
+    };
   }
 }
 
@@ -125,7 +127,7 @@ export async function verifyCheckoutSession(sessionId: string) {
   } catch (error) {
     console.error("Error verifying checkout session:", error);
     return {
-      error: "Failed to verify checkout session!",
+      error: "Failed to verify checkout session! PLease try again later.",
     };
   }
 }
@@ -137,10 +139,12 @@ export async function createStripeCustomer(email: string, name: string) {
       name,
     });
 
-    return { customerId: customer.id };
+    return { customerId: customer.id, error: undefined };
   } catch (error) {
     console.error("Error creating Stripe customer:", error);
-    return { error: "Failed to create Stripe customer!" };
+    return {
+      error: "Failed to create Stripe customer! Please try again later.",
+    };
   }
 }
 
@@ -219,6 +223,8 @@ export async function getPaymentDetails(paymentIntentId: string) {
     return { data: receiptData, error: undefined };
   } catch (error) {
     console.error("Error retrieving payment details:", error);
-    return { data: undefined, error: "Failed to retrieve payment details!" };
+    return {
+      error: "Failed to retrieve payment details! Please try again later.",
+    };
   }
 }

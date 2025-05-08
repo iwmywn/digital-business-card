@@ -90,7 +90,7 @@ export function InformationForm() {
     <Card className="rounded-lg">
       <CardHeader>
         <CardTitle className="text-2xl">Public Profile</CardTitle>
-        <CardDescription>Update your profile information.</CardDescription>
+        <CardDescription>Update your profile information</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">

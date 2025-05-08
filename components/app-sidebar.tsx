@@ -25,6 +25,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useUser } from "@/lib/hooks";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export const nav = {
   navMain: [
@@ -69,7 +71,11 @@ export const nav = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { currentPlan, isLoading, isError } = useUser();
+  const { currentPlan, isUserLoading, isUserError } = useUser();
+
+  useEffect(() => {
+    if (isUserError) toast.error(isUserError);
+  }, [isUserError]);
 
   return (
     <Sidebar
@@ -92,7 +98,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">EZNECT</span>
-                  {isLoading || isError ? (
+                  {isUserLoading || isUserError ? (
                     <Skeleton className="h-3 w-24" />
                   ) : (
                     <span className="truncate text-xs capitalize">

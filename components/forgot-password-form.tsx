@@ -46,14 +46,12 @@ export function ForgotPasswordForm() {
       return;
     }
 
-    const { error } = await forgotPassword(values, recaptchaToken);
+    const { success, error } = await forgotPassword(values, recaptchaToken);
 
-    if (error) {
+    if (error || !success) {
       toast.error(error);
     } else {
-      toast.success(
-        "If this email is valid, we will send a new password reset email.",
-      );
+      toast.success(success);
       form.reset();
     }
 

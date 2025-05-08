@@ -15,46 +15,39 @@ import { createCheckoutSession } from "@/actions/stripe";
 import { switchToPlan } from "@/actions/user";
 import { subscriptionPlans } from "@/constants";
 import { useSubscription, useUser } from "@/lib/hooks";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function SubscriptionManagement() {
   const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
   const { basic, professional } = useSubscription();
-  const { currentPlan } = useUser();
+  const { userData, currentPlan, mutate } = useUser();
+  const router = useRouter();
 
   async function handleSubscribe(priceId: string, planId: string) {
     setIsLoading((prev) => ({ ...prev, [planId]: true }));
 
-    try {
-      const result = await createCheckoutSession(priceId);
+    const { error, url } = await createCheckoutSession(priceId);
 
-      if (result.url) {
-        window.location.href = result.url;
-      } else {
-        console.error("Failed to create checkout session:", result.error);
-      }
-    } catch (error) {
-      console.error("Error creating checkout session:", error);
-    } finally {
-      setIsLoading((prev) => ({ ...prev, [planId]: false }));
+    if (error || !url) {
+      toast.error(error);
+    } else {
+      router.push(url);
     }
+    setIsLoading((prev) => ({ ...prev, [planId]: false }));
   }
 
   async function handleSwitchPlan(planId: "free" | "basic" | "professional") {
     setIsLoading((prev) => ({ ...prev, [planId]: true }));
 
-    try {
-      const result = await switchToPlan(planId);
+    const { error } = await switchToPlan(planId);
 
-      if (result.error) {
-        console.error("Failed to switch plan:", result.error);
-      } else {
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error("Error switching plan:", error);
-    } finally {
-      setIsLoading((prev) => ({ ...prev, [planId]: false }));
+    if (error) {
+      toast.error(error);
+    } else {
+      mutate({ ...userData, currentPlan: planId });
     }
+    setIsLoading((prev) => ({ ...prev, [planId]: false }));
   }
 
   const formatExpirationDate = (date: Date | null) => {
