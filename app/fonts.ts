@@ -17,8 +17,8 @@ import {
   Saira,
   Yrsa,
   REM,
-  Kanit,
-  Old_Standard_TT,
+  League_Spartan,
+  Signika,
 } from "next/font/google";
 
 const roboto = Roboto({
@@ -81,27 +81,23 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin", "vietnamese"],
 });
 
-const oswald = Oswald({
-  subsets: ["latin", "vietnamese"],
-});
-
 const yrsa = Yrsa({
-  weight: "400",
   subsets: ["latin", "vietnamese"],
 });
 
 const rem = REM({
-  weight: "400",
   subsets: ["latin", "vietnamese"],
 });
 
-const kanit = Kanit({
-  weight: "400",
+const signika = Signika({
   subsets: ["latin", "vietnamese"],
 });
 
-const oldStandardTT = Old_Standard_TT({
-  weight: "400",
+const leagueSpartan = League_Spartan({
+  subsets: ["latin", "vietnamese"],
+});
+
+const oswald = Oswald({
   subsets: ["latin", "vietnamese"],
 });
 
@@ -110,7 +106,6 @@ export {
   openSans,
   montserrat,
   inter,
-  oswald,
   raleway,
   playfairDisplay,
   nunito,
@@ -124,6 +119,7 @@ export {
   saira,
   yrsa,
   rem,
-  kanit,
-  oldStandardTT,
+  signika,
+  leagueSpartan,
+  oswald,
 };
