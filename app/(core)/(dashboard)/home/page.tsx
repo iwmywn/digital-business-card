@@ -4,7 +4,7 @@ export function generateMetadata(): Metadata {
   return { title: "Home" };
 }
 
-export default function Home() {
+export default function page() {
   return (
     <div className="flex h-full flex-1 flex-col gap-4 p-4 pt-0">
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">

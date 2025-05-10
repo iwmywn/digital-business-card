@@ -6,6 +6,6 @@ export const metadata: Metadata = {
   description: "Privacy policy for our digital business card platform.",
 };
 
-export default function PrivacyPage() {
+export default function page() {
   return <PrivacyPolicy />;
 }

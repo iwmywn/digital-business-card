@@ -6,6 +6,6 @@ export const metadata: Metadata = {
   description: "View and manage your digital business cards.",
 };
 
-export default function ManageCardsPage() {
+export default function page() {
   return <CardManagement />;
 }

@@ -6,6 +6,6 @@ export const metadata: Metadata = {
   description: "Track the performance of your digital business cards.",
 };
 
-export default function AnalyticsPage() {
+export default function page() {
   return <Analytics />;
 }

@@ -6,6 +6,6 @@ export const metadata: Metadata = {
   description: "Terms of service for using our digital business card platform.",
 };
 
-export default function TermsPage() {
+export default function page() {
   return <TermsOfService />;
 }

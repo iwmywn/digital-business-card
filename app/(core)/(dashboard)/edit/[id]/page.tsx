@@ -24,7 +24,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function EditCardPage({
+export default async function page({
   params,
 }: {
   params: Promise<{ id: string }>;
