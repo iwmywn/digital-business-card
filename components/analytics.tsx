@@ -299,7 +299,7 @@ export function Analytics() {
                 </div>
                 <h2 className="text-lg font-semibold">UNLOCK ANALYTICS</h2>
                 <p>
-                  Upgrade to our Professional plan to access detailed analytics
+                  Upgrade to our professional plan to access detailed analytics
                   for your digital business cards.
                 </p>
                 <Button asChild>

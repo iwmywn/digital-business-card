@@ -28,7 +28,7 @@ export function CreateCardSkeleton() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-2">
-          <Skeleton className="h-6 w-48" />
+          <Skeleton className="h-8 w-48" />
           <Skeleton className="h-4 w-64" />
         </div>
         <div className="flex items-center justify-end gap-2">
@@ -108,7 +108,7 @@ export function CardManagementSkeleton() {
       </div>
 
       <div className="flex items-center">
-        <Skeleton className="h-10 w-full rounded-md sm:w-96" />
+        <Skeleton className="h-10 w-full rounded-md" />
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -140,8 +140,8 @@ export function AnalyticsSkeleton() {
           <Skeleton className="h-4 w-64" />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
-          <Skeleton className="h-10 w-[180px] rounded-md" />
-          <Skeleton className="h-10 w-[180px] rounded-md" />
+          <Skeleton className="h-9 rounded-md sm:w-[180px]" />
+          <Skeleton className="h-9 rounded-md sm:w-[180px]" />
         </div>
       </div>
 
@@ -153,8 +153,8 @@ export function AnalyticsSkeleton() {
               <Skeleton className="h-4 w-4 rounded-full" />
             </CardHeader>
             <CardContent className="space-y-2">
-              <Skeleton className="h-8 w-24" />
-              <Skeleton className="h-3 w-32" />
+              <Skeleton className="h-7 w-24" />
+              <Skeleton className="h-3 w-40" />
             </CardContent>
           </Card>
         ))}
@@ -163,9 +163,9 @@ export function AnalyticsSkeleton() {
       <Card className="rounded-lg">
         <CardHeader>
           <Skeleton className="h-5 w-40" />
-          <Skeleton className="mt-1 h-4 w-72" />
+          <Skeleton className="h-4 w-72" />
         </CardHeader>
-        <CardContent className="pt-4 sm:pt-6">
+        <CardContent>
           <Skeleton className="h-[250px] w-full rounded-md" />
         </CardContent>
       </Card>
@@ -177,7 +177,7 @@ export function SubscriptionPlansSkeleton() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <Skeleton className="h-6 w-48" />
+        <Skeleton className="h-8 w-48" />
         <Skeleton className="h-4 w-64" />
       </div>
 
