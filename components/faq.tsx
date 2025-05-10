@@ -77,9 +77,9 @@ export function FAQ() {
                 What subscription plans do you offer?
               </AccordionTrigger>
               <AccordionContent>
-                We offer several subscription plans including a free basic plan,
-                a premium plan with additional features, and an enterprise plan
-                for businesses. Visit our pricing page for detailed information.
+                We offer several subscription plans including a basic plan, a
+                professional plan with additional features. Visit our
+                subscription plans page for detailed information.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="account-3">
@@ -87,10 +87,9 @@ export function FAQ() {
                 How do I cancel my subscription?
               </AccordionTrigger>
               <AccordionContent>
-                You can cancel your subscription at any time by going to your
-                account settings, selecting &quot;Subscription,&quot; and
-                clicking on &quot;Cancel Subscription.&quot; Your access will
-                continue until the end of your billing period.
+                There&apos;s no need to cancel. Our service only requires a
+                one-time registration. If you don&apos;t renew after it expires,
+                you won&apos;t be charged again.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
@@ -115,10 +114,9 @@ export function FAQ() {
                 How do I update my information?
               </AccordionTrigger>
               <AccordionContent>
-                You can update your information at any time by signing into your
-                account, navigating to your profile, and clicking
-                &quot;Edit.&quot; All changes will be reflected immediately on
-                your digital business card.
+                If you want to update your personal or account information,
+                simply sign in to your account, go to Settings, make your
+                changes, and click &quot;Save Changes&quot;.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="tech-3">
@@ -126,9 +124,10 @@ export function FAQ() {
                 Can I track who views my digital business card?
               </AccordionTrigger>
               <AccordionContent>
-                Yes, premium and enterprise plans include analytics that show
-                you how many times your card has been viewed, which links were
-                clicked, and other engagement metrics.
+                Yes, basic and professional plans include analytics. With the
+                basic plan, you can see Total Views, Total Clicks, and
+                Click-Through Rate. The professional plan also includes
+                additional insights with visual charts.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
