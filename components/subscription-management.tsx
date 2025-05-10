@@ -136,33 +136,32 @@ export function SubscriptionManagement() {
                   <Button
                     className="w-full"
                     onClick={() =>
-                      handleSwitchPlan(plan.id as "basic" | "professional")
+                      handleSwitchPlan(
+                        plan.id as "free" | "basic" | "professional",
+                      )
                     }
                     disabled={isLoading[plan.id]}
                   >
-                    {isLoading[plan.id] && (
+                    {isLoading[plan.id] ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      "Switch to This Plan"
                     )}
-                    Switch to This Plan
-                  </Button>
-                ) : plan.id !== "free" ? (
-                  <Button
-                    className="w-full"
-                    onClick={() => handleSubscribe(plan.priceId, plan.id)}
-                    disabled={isLoading[plan.id]}
-                  >
-                    {isLoading[plan.id] && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Upgrade
                   </Button>
                 ) : (
-                  <Button
-                    className="w-full"
-                    onClick={() => handleSwitchPlan("free")}
-                  >
-                    Switch to This Plan
-                  </Button>
+                  plan.id !== "free" && (
+                    <Button
+                      className="w-full"
+                      onClick={() => handleSubscribe(plan.priceId, plan.id)}
+                      disabled={isLoading[plan.id]}
+                    >
+                      {isLoading[plan.id] ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        "Upgrade"
+                      )}
+                    </Button>
+                  )
                 )}
               </div>
             </CardFooter>
