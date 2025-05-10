@@ -37,8 +37,6 @@ export function CreateCardSkeleton() {
         </div>
       </div>
 
-      <Skeleton className="h-14 w-full rounded-md" />
-
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="space-y-6 xl:col-span-2">
           <div className="grid grid-cols-3 gap-2">
@@ -47,16 +45,50 @@ export function CreateCardSkeleton() {
             <Skeleton className="h-10 rounded-md" />
           </div>
 
-          <div className="space-y-4 pt-4">
-            {[...Array(7)].map((_, i) => (
-              <Skeleton key={i} className="h-10 w-full rounded-md" />
-            ))}
-          </div>
+          <Card className="rounded-lg">
+            <CardContent>
+              <Skeleton className="mb-3 h-5 w-28" />
+
+              <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="flex flex-col items-center space-y-3">
+                    <Skeleton className="h-4 w-24" />
+                    <div className="flex flex-col items-center gap-2">
+                      <Skeleton
+                        className={`${
+                          i === 0
+                            ? "h-20 w-20 rounded-md"
+                            : i === 1
+                              ? "h-20 w-20 rounded-full"
+                              : "h-20 w-40 rounded-md"
+                        }`}
+                      />
+                      <Skeleton className="h-4 w-20" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mb-6 space-y-3">
+                <Skeleton className="h-5 w-20" />
+                <div className="flex flex-wrap gap-3">
+                  {[...Array(23)].map((_, i) => (
+                    <Skeleton key={i} className="h-12 w-12 rounded-md" />
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Skeleton className="h-5 w-20" />
+                <Skeleton className="h-10 w-full rounded-md" />
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="hidden xl:block">
           <div className="sticky top-[3.75rem] space-y-4">
-            <Skeleton className="h-[320px] w-full rounded-xl" />
+            <Skeleton className="h-115 w-full rounded-xl" />
           </div>
         </div>
       </div>

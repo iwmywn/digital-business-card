@@ -18,6 +18,7 @@ import type { Card as CardType } from "@/lib/definitions";
 import { useCard } from "@/lib/hooks";
 import { Loading } from "@/components/loading";
 import { personalInfoSchema } from "@/schemas";
+import { CreateCardSkeleton } from "@/components/skeletons";
 
 export function EditCard({ card }: { card: CardType }) {
   const router = useRouter();
@@ -32,7 +33,7 @@ export function EditCard({ card }: { card: CardType }) {
   );
   const [links, setLinks] = useState<SerializableLinkType[]>(card.links);
   const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
-  const { cardData, mutate, cards } = useCard();
+  const { cardData, mutate, cards, isCardLoading } = useCard();
 
   async function handleUpdateCard() {
     if (isSubmitting) return;
@@ -101,6 +102,8 @@ export function EditCard({ card }: { card: CardType }) {
   const handleLinksUpdate = useCallback((data: SerializableLinkType[]) => {
     setLinks(data);
   }, []);
+
+  if (isCardLoading) return <CreateCardSkeleton />;
 
   return (
     <div className="space-y-6">
