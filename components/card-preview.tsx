@@ -4,15 +4,17 @@ import type React from "react";
 import Image from "next/image";
 import type { CardDesignValues } from "@/components/card-design";
 import type { PersonalInfoValues } from "@/components/personal-info";
-import type { LinkType } from "@/components/icons";
+import type { SerializableLinkType } from "@/components/icons";
 import { QrCode, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { nunito, inter, roboto, montserrat, openSans } from "@/app/fonts";
+import { linkTypes } from "@/components/icons";
+import { getColorClass, getFontClass } from "@/lib/utils";
+import { Separator } from "@/components/separator";
 
 interface CardPreviewProps {
   cardDesign: CardDesignValues;
   personalInfo: PersonalInfoValues;
-  links: LinkType[];
+  links: SerializableLinkType[];
   size?: "small" | "large";
 }
 
@@ -22,55 +24,9 @@ export function CardPreview({
   links,
   size = "large",
 }: CardPreviewProps) {
-  const getColorClass = (color: string): string => {
-    const colorMap: Record<string, string> = {
-      gradient: "bg-gradient-to-r from-pink-400 via-red-400 to-yellow-400",
-      red: "bg-red-400",
-      orange: "bg-orange-400",
-      amber: "bg-amber-400",
-      yellow: "bg-yellow-400",
-      lime: "bg-lime-400",
-      green: "bg-green-400",
-      emerald: "bg-emerald-400",
-      teal: "bg-teal-400",
-      cyan: "bg-cyan-400",
-      sky: "bg-sky-400",
-      blue: "bg-blue-400",
-      indigo: "bg-indigo-400",
-      violet: "bg-violet-400",
-      purple: "bg-purple-400",
-      fuchsia: "bg-fuchsia-400",
-      pink: "bg-pink-400",
-      rose: "bg-rose-400",
-      slate: "bg-slate-400",
-      gray: "bg-gray-400",
-      zinc: "bg-zinc-400",
-      neutral: "bg-neutral-400",
-      stone: "bg-stone-400",
-    };
-
-    return colorMap[color] || "bg-gray-500";
-  };
-
   const isSmall = size === "small";
   const colorClass = getColorClass(cardDesign.cardColor);
-
-  const getFontClass = (fontFamily: string): React.CSSProperties => {
-    const fontMap: Record<string, typeof inter> = {
-      inter: inter,
-      roboto: roboto,
-      nunito: nunito,
-      montserrat: montserrat,
-      opensans: openSans,
-    };
-
-    return {
-      fontFamily:
-        fontMap[fontFamily]?.style?.fontFamily || inter.style.fontFamily,
-    };
-  };
-
-  const fontStyle = getFontClass(cardDesign.fontFamily);
+  const fontClass = getFontClass(cardDesign.fontFamily);
 
   const getImageUrl = (type: "logo" | "profile" | "cover") => {
     const transform = cardDesign.imageTransforms?.[type];
@@ -83,11 +39,19 @@ export function CardPreview({
     return cardDesign.coverImage;
   };
 
+  const getIconComponent = (linkType: string) => {
+    const foundLinkType = linkTypes.find((lt) => lt.type === linkType);
+    if (foundLinkType) {
+      const IconComponent = foundLinkType.icon;
+      return <IconComponent className="h-4 w-4" />;
+    }
+    return null;
+  };
+
   return (
     <div className="mx-auto w-full max-w-md">
       <div
-        className="overflow-hidden rounded-xl border border-gray-200 shadow-lg"
-        style={fontStyle}
+        className={`overflow-hidden rounded-xl border border-gray-200 shadow-lg ${fontClass && fontClass}`}
       >
         <div className={`relative ${colorClass}`}>
           {cardDesign.coverImage ? (
@@ -102,7 +66,7 @@ export function CardPreview({
               </div>
 
               {cardDesign.logoImage && (
-                <div className="absolute bottom-4 left-4 h-16 w-16 overflow-hidden rounded-lg bg-white p-1 shadow-md">
+                <div className="absolute right-4 bottom-4 h-16 w-16 overflow-hidden rounded-lg bg-white p-1 shadow-md">
                   <div className="relative h-full w-full">
                     <Image
                       src={getImageUrl("logo") || "/placeholder.svg"}
@@ -118,7 +82,7 @@ export function CardPreview({
             <div
               className={`flex h-32 items-center justify-center p-6 text-white`}
             >
-              {cardDesign.logoImage ? (
+              {cardDesign.logoImage && (
                 <div className="h-20 w-20 overflow-hidden rounded-lg bg-white p-1 shadow-md">
                   <div className="relative h-full w-full">
                     <Image
@@ -129,10 +93,6 @@ export function CardPreview({
                     />
                   </div>
                 </div>
-              ) : (
-                <h2 className="text-center text-2xl font-bold">
-                  {personalInfo.company || "Company Name"}
-                </h2>
               )}
             </div>
           )}
@@ -153,21 +113,21 @@ export function CardPreview({
               </div>
             )}
             <div className="space-y-1">
-              <h2 className="text-xl font-bold text-gray-900">
-                {personalInfo.fullName || "Your Name"}
-                {personalInfo.accreditations && (
-                  <span className="ml-2 text-sm font-normal text-gray-500">
-                    {personalInfo.accreditations}
-                  </span>
-                )}
+              <h2 className="font-bold">
+                <span className="text-xl text-black">
+                  {personalInfo.fullName || "Full Name"}
+                </span>
+                <span className="ml-2 text-sm text-gray-500">
+                  {personalInfo.accreditations || "Accreditations"}
+                </span>
               </h2>
-              <p className="font-medium text-gray-700">
-                {personalInfo.jobTitle || "Job Title"}
-                {personalInfo.department && (
-                  <span className="text-gray-500">
-                    , {personalInfo.department}
-                  </span>
-                )}
+              <p className="font-medium">
+                <span className="text-gray-700">
+                  {personalInfo.jobTitle || "Job Title"}
+                </span>
+                <span className="text-gray-500">
+                  , {personalInfo.department || "Department"}
+                </span>
               </p>
               <p className="text-sm text-gray-500">
                 {personalInfo.company || "Company Name"}
@@ -175,45 +135,41 @@ export function CardPreview({
             </div>
           </div>
 
-          {personalInfo.headline && (
-            <div className="border-t border-gray-100 pt-3">
-              <p className="text-gray-700 italic">{personalInfo.headline}</p>
-            </div>
-          )}
+          <Separator className="bg-black/15" />
 
-          {personalInfo.bio && (
-            <div className="border-t border-gray-100 pt-3">
-              <p className="text-sm text-gray-600">{personalInfo.bio}</p>
-            </div>
-          )}
+          <p className="text-gray-700 italic">
+            {personalInfo.headline ||
+              "A brief headline about who you are – your role, passion, or goal."}
+          </p>
+
+          <Separator className="bg-black/15" />
+
+          <p className="text-sm text-gray-600">
+            {personalInfo.bio ||
+              "Tell a little about yourself: your background, experience, or what makes you unique."}
+          </p>
+
+          <Separator className="bg-black/15" />
 
           {links.length > 0 && (
-            <div className="space-y-2 border-t border-gray-100 pt-3">
-              {links.map((link) => {
-                const IconComponent = link.icon;
-                return (
-                  <div
-                    key={link.id}
-                    className="flex items-center gap-3 text-sm"
-                  >
-                    <div
-                      className={`${colorClass} rounded-full p-2 text-white`}
-                    >
-                      <IconComponent className="h-4 w-4" />
-                    </div>
-                    <div className="w-full flex-1">
-                      <span className="font-medium text-gray-800">
-                        {link.label || link.type}
-                      </span>
-                      {link.value && (
-                        <p className="max-w-[85%] truncate text-gray-600">
-                          {link.value}
-                        </p>
-                      )}
-                    </div>
+            <div className="space-y-2">
+              {links.map((link) => (
+                <div key={link.id} className="flex items-center gap-3 text-sm">
+                  <div className={`${colorClass} rounded-full p-2 text-white`}>
+                    {getIconComponent(link.type)}
                   </div>
-                );
-              })}
+                  <div className="w-full flex-1">
+                    <span className="font-medium text-gray-800">
+                      {link.label || link.type}
+                    </span>
+                    {link.value && (
+                      <p className="max-w-[85%] truncate text-gray-600">
+                        {link.value}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>

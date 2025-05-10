@@ -2,11 +2,11 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
-import { Trash2, GripVertical, Plus } from "lucide-react";
+import { Trash2, GripVertical } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/separator";
 import {
   DndContext,
   closestCenter,
@@ -24,8 +24,14 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-
-import { linkTypes, categories, type LinkType } from "@/components/icons";
+import {
+  linkTypes,
+  categories,
+  type LinkType,
+  type SerializableLinkType,
+  toSerializableLink,
+} from "@/components/icons";
+import { toLinkType } from "@/components/icons";
 
 function SortableLink({
   link,
@@ -97,10 +103,12 @@ export function Links({
   onSave,
   initialLinks = [],
 }: {
-  onSave: (links: LinkType[]) => void;
-  initialLinks?: LinkType[];
+  onSave: (links: SerializableLinkType[]) => void;
+  initialLinks?: SerializableLinkType[];
 }) {
-  const [links, setLinks] = useState<LinkType[]>(initialLinks);
+  const [links, setLinks] = useState<LinkType[]>(() => {
+    return initialLinks.map((link) => toLinkType(link));
+  });
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -114,12 +122,9 @@ export function Links({
   );
 
   useEffect(() => {
-    const hasChanged = JSON.stringify(links) !== JSON.stringify(initialLinks);
-
-    if (hasChanged) {
-      onSave(links);
-    }
-  }, [links, onSave, initialLinks]);
+    const serializableLinks = links.map(toSerializableLink);
+    onSave(serializableLinks);
+  }, [links, onSave]);
 
   const addLink = (type: string, category: string, icon: React.ElementType) => {
     const newLink = {
@@ -218,7 +223,6 @@ export function Links({
                       <span className="text-center text-xs">
                         {linkType.type}
                       </span>
-                      <Plus className="absolute right-1 bottom-1 h-3 w-3" />
                     </Button>
                   );
                 })}

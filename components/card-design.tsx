@@ -14,15 +14,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { nunito, inter, roboto, montserrat, openSans } from "@/app/fonts";
 import { ImageEditor, type ImageTransform } from "@/components/image-editor";
+import { useUser } from "@/lib/hooks";
+import * as constants from "@/constants";
 
 export type CardDesignValues = {
   cardColor: string;
   fontFamily: string;
-  logoImage: string | null;
-  profileImage: string | null;
-  coverImage: string | null;
+  logoImage?: string;
+  profileImage?: string;
+  coverImage?: string;
   imageTransforms?: {
     logo?: ImageTransform;
     profile?: ImageTransform;
@@ -30,80 +31,52 @@ export type CardDesignValues = {
   };
 };
 
-const fontOptions = [
-  { value: "inter", label: "Inter", className: inter.className },
-  { value: "roboto", label: "Roboto", className: roboto.className },
-  { value: "nunito", label: "Nunito", className: nunito.className },
-  { value: "montserrat", label: "Montserrat", className: montserrat.className },
-  { value: "opensans", label: "Open Sans", className: openSans.className },
-];
-
-const colorOptions = [
-  {
-    value: "gradient",
-    label: "Gradient",
-    color: "bg-gradient-to-r from-pink-400 via-red-400 to-yellow-400",
-  },
-  { value: "red", label: "Red", color: "bg-red-400" },
-  { value: "orange", label: "Orange", color: "bg-orange-400" },
-  { value: "amber", label: "Amber", color: "bg-amber-400" },
-  { value: "yellow", label: "Yellow", color: "bg-yellow-400" },
-  { value: "lime", label: "Lime", color: "bg-lime-400" },
-  { value: "green", label: "Green", color: "bg-green-400" },
-  { value: "emerald", label: "Emerald", color: "bg-emerald-400" },
-  { value: "teal", label: "Teal", color: "bg-teal-400" },
-  { value: "cyan", label: "Cyan", color: "bg-cyan-400" },
-  { value: "sky", label: "Sky", color: "bg-sky-400" },
-  { value: "blue", label: "Blue", color: "bg-blue-400" },
-  { value: "indigo", label: "Indigo", color: "bg-indigo-400" },
-  { value: "violet", label: "Violet", color: "bg-violet-400" },
-  { value: "purple", label: "Purple", color: "bg-purple-400" },
-  { value: "fuchsia", label: "Fuchsia", color: "bg-fuchsia-400" },
-  { value: "pink", label: "Pink", color: "bg-pink-400" },
-  { value: "rose", label: "Rose", color: "bg-rose-400" },
-  { value: "slate", label: "Slate", color: "bg-slate-400" },
-  { value: "gray", label: "Gray", color: "bg-gray-400" },
-  { value: "zinc", label: "Zinc", color: "bg-zinc-400" },
-  { value: "neutral", label: "Neutral", color: "bg-neutral-400" },
-  { value: "stone", label: "Stone", color: "bg-stone-400" },
-];
-
 export function CardDesign({
   onSave,
   initialValues,
 }: {
   onSave: (data: CardDesignValues) => void;
-  initialValues?: CardDesignValues;
+  initialValues: CardDesignValues;
 }) {
-  const [logoImage, setLogoImage] = useState<string | null>(
-    initialValues?.logoImage || null,
+  const { currentPlan } = useUser();
+  const [logoImage, setLogoImage] = useState<string | undefined>(
+    initialValues?.logoImage,
   );
-  const [profileImage, setProfileImage] = useState<string | null>(
-    initialValues?.profileImage || null,
+  const [profileImage, setProfileImage] = useState<string | undefined>(
+    initialValues?.profileImage,
   );
-  const [coverImage, setCoverImage] = useState<string | null>(
-    initialValues?.coverImage || null,
+  const [coverImage, setCoverImage] = useState<string | undefined>(
+    initialValues?.coverImage,
   );
-  const [cardColor, setCardColor] = useState(initialValues?.cardColor || "red");
-  const [fontFamily, setFontFamily] = useState(
-    initialValues?.fontFamily || "inter",
+  const [cardColor, setCardColor] = useState<string>(initialValues?.cardColor);
+  const [fontFamily, setFontFamily] = useState<string>(
+    initialValues?.fontFamily,
   );
   const [imageTransforms, setImageTransforms] = useState<{
     logo?: ImageTransform;
     profile?: ImageTransform;
     cover?: ImageTransform;
   }>(initialValues?.imageTransforms || {});
-  const [isUploading, setIsUploading] = useState<{
-    logo?: boolean;
-    profile?: boolean;
-    cover?: boolean;
-  }>({});
 
-  const [imageEditorOpen, setImageEditorOpen] = useState(false);
+  const [imageEditorOpen, setImageEditorOpen] = useState<boolean>(false);
   const [currentImageType, setCurrentImageType] = useState<
     "logo" | "profile" | "cover" | null
   >(null);
   const [tempImage, setTempImage] = useState<string | null>(null);
+
+  const fontOptions =
+    currentPlan === "free"
+      ? constants.freeFontOptions
+      : currentPlan === "basic"
+        ? constants.basicFontOptions
+        : constants.allFontOptions;
+
+  const colorOptions =
+    currentPlan === "free"
+      ? constants.freeColorOptions
+      : currentPlan === "basic"
+        ? constants.basicColorOptions
+        : constants.allColorOptions;
 
   useEffect(() => {
     onSave({
@@ -159,8 +132,6 @@ export function CardDesign({
       return;
     }
 
-    setIsUploading((prev) => ({ ...prev, [type]: true }));
-
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result as string;
@@ -169,11 +140,9 @@ export function CardDesign({
       setTempImage(result);
       setImageEditorOpen(true);
 
-      setIsUploading((prev) => ({ ...prev, [type]: false }));
       fileInput.value = "";
     };
     reader.onerror = () => {
-      setIsUploading((prev) => ({ ...prev, [type]: false }));
       toast.error(`Failed to upload ${type} image`);
       fileInput.value = "";
     };
@@ -199,9 +168,9 @@ export function CardDesign({
   };
 
   const handleDeleteImage = (type: string) => {
-    if (type === "logo") setLogoImage(null);
-    if (type === "profile") setProfileImage(null);
-    if (type === "cover") setCoverImage(null);
+    if (type === "logo") setLogoImage(undefined);
+    if (type === "profile") setProfileImage(undefined);
+    if (type === "cover") setCoverImage(undefined);
 
     const newTransforms = { ...imageTransforms };
     delete newTransforms[type as keyof typeof newTransforms];
@@ -211,14 +180,6 @@ export function CardDesign({
       `${type.charAt(0).toUpperCase() + type.slice(1)} image removed`,
     );
     setImageEditorOpen(false);
-  };
-
-  const getImageContainerClass = (type: "logo" | "profile" | "cover") => {
-    if (type === "logo")
-      return "relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors";
-    if (type === "profile")
-      return "relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors";
-    return "relative flex h-20 w-40 items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors";
   };
 
   const getImageUrl = (type: "logo" | "profile" | "cover") => {
@@ -246,7 +207,7 @@ export function CardDesign({
             <Label className="text-sm">Company Logo</Label>
             <div className="flex flex-col items-center gap-2">
               <div
-                className={getImageContainerClass("logo")}
+                className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
                 onClick={() => handleImageClick("logo")}
               >
                 {logoImage ? (
@@ -273,15 +234,10 @@ export function CardDesign({
                 accept="image/*"
                 className="hidden"
                 onChange={(e) => handleImageUpload(e, "logo")}
-                disabled={isUploading.logo}
               />
-              {isUploading.logo ? (
-                <p className="text-muted-foreground text-xs">Uploading...</p>
-              ) : (
-                <p className="text-muted-foreground text-center text-xs">
-                  {logoImage ? "Click to edit" : "Square, 400x400px"}
-                </p>
-              )}
+              <p className="text-muted-foreground text-center text-xs">
+                {logoImage ? "Click to edit" : "Square, 400x400px"}
+              </p>
             </div>
           </div>
 
@@ -289,7 +245,7 @@ export function CardDesign({
             <Label className="text-sm">Profile Picture</Label>
             <div className="flex flex-col items-center gap-2">
               <div
-                className={getImageContainerClass("profile")}
+                className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
                 onClick={() => handleImageClick("profile")}
               >
                 {profileImage ? (
@@ -316,15 +272,10 @@ export function CardDesign({
                 accept="image/*"
                 className="hidden"
                 onChange={(e) => handleImageUpload(e, "profile")}
-                disabled={isUploading.profile}
               />
-              {isUploading.profile ? (
-                <p className="text-muted-foreground text-xs">Uploading...</p>
-              ) : (
-                <p className="text-muted-foreground text-center text-xs">
-                  {profileImage ? "Click to edit" : "Square, 400x400px"}
-                </p>
-              )}
+              <p className="text-muted-foreground text-center text-xs">
+                {profileImage ? "Click to edit" : "Square, 400x400px"}
+              </p>
             </div>
           </div>
 
@@ -332,7 +283,7 @@ export function CardDesign({
             <Label className="text-sm">Cover Photo</Label>
             <div className="flex flex-col items-center gap-2">
               <div
-                className={getImageContainerClass("cover")}
+                className="relative flex h-20 w-40 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
                 onClick={() => handleImageClick("cover")}
               >
                 {coverImage ? (
@@ -359,15 +310,10 @@ export function CardDesign({
                 accept="image/*"
                 className="hidden"
                 onChange={(e) => handleImageUpload(e, "cover")}
-                disabled={isUploading.cover}
               />
-              {isUploading.cover ? (
-                <p className="text-muted-foreground text-xs">Uploading...</p>
-              ) : (
-                <p className="text-muted-foreground text-center text-xs">
-                  {coverImage ? "Click to edit" : "800x400px, 2:1 ratio"}
-                </p>
-              )}
+              <p className="text-muted-foreground text-center text-xs">
+                {coverImage ? "Click to edit" : "800x400px, 2:1 ratio"}
+              </p>
             </div>
           </div>
         </div>

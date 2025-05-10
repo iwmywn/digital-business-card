@@ -1,9 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { Eye, MousePointerClick, BarChart3 } from "lucide-react";
+import { Eye, MousePointerClick, ChartColumnIncreasing } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-
 import {
   Card,
   CardContent,
@@ -27,41 +25,14 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
-
-const chartData = [
-  { date: "2024-04-01", views: 42, clicks: 12 },
-  { date: "2024-04-02", views: 38, clicks: 15 },
-  { date: "2024-04-03", views: 45, clicks: 18 },
-  { date: "2024-04-04", views: 39, clicks: 14 },
-  { date: "2024-04-05", views: 47, clicks: 20 },
-  { date: "2024-04-06", views: 30, clicks: 10 },
-  { date: "2024-04-07", views: 25, clicks: 8 },
-  { date: "2024-04-08", views: 55, clicks: 22 },
-  { date: "2024-04-09", views: 60, clicks: 25 },
-  { date: "2024-04-10", views: 58, clicks: 23 },
-  { date: "2024-04-11", views: 65, clicks: 28 },
-  { date: "2024-04-12", views: 70, clicks: 30 },
-  { date: "2024-04-13", views: 68, clicks: 27 },
-  { date: "2024-04-14", views: 72, clicks: 32 },
-  { date: "2024-04-15", views: 75, clicks: 35 },
-  { date: "2024-04-16", views: 80, clicks: 38 },
-  { date: "2024-04-17", views: 82, clicks: 40 },
-  { date: "2024-04-18", views: 85, clicks: 42 },
-  { date: "2024-04-19", views: 88, clicks: 45 },
-  { date: "2024-04-20", views: 90, clicks: 48 },
-  { date: "2024-04-21", views: 92, clicks: 50 },
-  { date: "2024-04-22", views: 95, clicks: 52 },
-  { date: "2024-04-23", views: 98, clicks: 55 },
-  { date: "2024-04-24", views: 100, clicks: 58 },
-  { date: "2024-04-25", views: 105, clicks: 60 },
-  { date: "2024-04-26", views: 110, clicks: 62 },
-  { date: "2024-04-27", views: 115, clicks: 65 },
-  { date: "2024-04-28", views: 120, clicks: 68 },
-  { date: "2024-04-29", views: 125, clicks: 70 },
-  { date: "2024-04-30", views: 130, clicks: 72 },
-  { date: "2024-05-01", views: 145, clicks: 90 },
-  { date: "2024-05-02", views: 167, clicks: 113 },
-];
+import { Card as CardType } from "@/lib/definitions";
+import { useEffect, useState } from "react";
+import { useCard, useUser } from "@/lib/hooks";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { AnalyticsSkeleton } from "@/components/skeletons";
+import { toast } from "sonner";
+import { NotFoundUI } from "@/components/not-found-ui";
 
 const chartConfig = {
   views: {
@@ -75,36 +46,141 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function Analytics() {
-  const [dateRange, setDateRange] = React.useState("7days");
-  const [selectedCard, setSelectedCard] = React.useState("all");
+  const [dateRange, setDateRange] = useState<string>("7days");
+  const [selectedCard, setSelectedCard] = useState<string>("all");
+  const [analyticsData, setAnalyticsData] = useState<
+    {
+      date: string;
+      views: number;
+      clicks: number;
+    }[]
+  >([]);
+  const [totalViews, setTotalViews] = useState<number>(0);
+  const [totalClicks, setTotalClicks] = useState<number>(0);
+  const [clickThroughRate, setClickThroughRate] = useState<number>(0);
+  const [viewsChange, setViewsChange] = useState<number>(0);
+  const [clicksChange, setClicksChange] = useState<number>(0);
+  const [ctrChange, setCtrChange] = useState<number>(0);
+  const { currentPlan, isUserLoading, isUserError } = useUser();
+  const { cards, isCardLoading, isCardError } = useCard();
 
-  const filteredData = React.useMemo(() => {
-    if (dateRange === "alltime") {
-      return chartData;
+  useEffect(() => {
+    if (cards.length === 0) return;
+
+    const filteredCards =
+      selectedCard === "all"
+        ? cards
+        : cards.filter((card) => card._id === selectedCard);
+
+    let views = 0;
+    let clicks = 0;
+
+    filteredCards.forEach((card) => {
+      views += card.views || 0;
+      clicks += card.clicks || 0;
+    });
+
+    setTotalViews(views);
+    setTotalClicks(clicks);
+    setClickThroughRate(views > 0 ? Math.round((clicks / views) * 100) : 0);
+
+    setViewsChange(18.5);
+    setClicksChange(24.2);
+    setCtrChange(4.8);
+
+    if (currentPlan === "professional") {
+      generateChartData(filteredCards, dateRange);
+    }
+  }, [cards, dateRange, selectedCard, currentPlan]);
+
+  const generateChartData = (cards: CardType[], range: string) => {
+    if (cards.length === 0) {
+      setAnalyticsData([]);
+      return;
     }
 
-    const lastDataDate = chartData[chartData.length - 1].date;
-    const referenceDate = new Date(lastDataDate);
+    const now = new Date();
+    const startDate = new Date();
 
-    let daysToSubtract = 30;
-    if (dateRange === "24hours") daysToSubtract = 1;
-    else if (dateRange === "7days") daysToSubtract = 7;
+    if (range === "24hours") {
+      startDate.setDate(now.getDate() - 1);
+    } else if (range === "7days") {
+      startDate.setDate(now.getDate() - 7);
+    } else if (range === "30days") {
+      startDate.setDate(now.getDate() - 30);
+    } else {
+      startDate.setDate(now.getDate() - 90);
+    }
 
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    const startDateStr = startDate.toISOString().split("T")[0];
+    const dateRange: string[] = [];
+    const currentDate = new Date(startDate);
 
-    return chartData.filter((item) => item.date >= startDateStr);
-  }, [dateRange]);
+    while (currentDate <= now) {
+      dateRange.push(currentDate.toISOString().split("T")[0]);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
 
-  const totalViews = filteredData.reduce((sum, item) => sum + item.views, 0);
-  const totalClicks = filteredData.reduce((sum, item) => sum + item.clicks, 0);
-  const clickThroughRate =
-    totalViews > 0 ? Math.round((totalClicks / totalViews) * 100) : 0;
+    const data = dateRange.map((date) => ({
+      date,
+      views: 0,
+      clicks: 0,
+    }));
 
-  const viewsChange = 18.5;
-  const clicksChange = 24.2;
-  const ctrChange = 4.8;
+    cards.forEach((card) => {
+      (card.viewHistory || []).forEach(
+        (view: { date: Date; count: number }) => {
+          const viewDate = new Date(view.date).toISOString().split("T")[0];
+          if (dateRange.includes(viewDate)) {
+            const dataPoint = data.find((d) => d.date === viewDate);
+            if (dataPoint) {
+              dataPoint.views += view.count || 1;
+            }
+          }
+        },
+      );
+
+      (card.clickHistory || []).forEach(
+        (click: { date: Date; count: number }) => {
+          const clickDate = new Date(click.date).toISOString().split("T")[0];
+          if (dateRange.includes(clickDate)) {
+            const dataPoint = data.find((d) => d.date === clickDate);
+            if (dataPoint) {
+              dataPoint.clicks += click.count || 1;
+            }
+          }
+        },
+      );
+    });
+
+    setAnalyticsData(data);
+  };
+
+  useEffect(() => {
+    if (isUserError) toast.error(isUserError);
+    if (
+      isCardError &&
+      !isCardError.includes("You've reached the maximum number of cards")
+    )
+      toast.error(isCardError);
+  }, [isUserError, isCardError]);
+
+  if (isUserLoading || isCardLoading) {
+    return <AnalyticsSkeleton />;
+  }
+
+  if (currentPlan === "free") {
+    return (
+      <NotFoundUI
+        icon={<ChartColumnIncreasing />}
+        title="UNLOCK ANALYTICS"
+        message="Upgrade to our Basic or Professional plan to access analytics for your
+          digital business cards."
+        linkHref="/subscription"
+        linkLabel="Go to subscription"
+        className="min-h-[calc(100vh-4.83rem)]"
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -114,7 +190,7 @@ export function Analytics() {
             Analytics Dashboard
           </h2>
           <p className="text-muted-foreground text-sm">
-            Track the performance of your digital business cards.
+            Track the performance of your digital business cards
           </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
@@ -124,10 +200,11 @@ export function Analytics() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Cards</SelectItem>
-              <SelectItem value="professional">Professional Card</SelectItem>
-              <SelectItem value="creative">Creative Portfolio</SelectItem>
-              <SelectItem value="networking">Networking Event</SelectItem>
-              <SelectItem value="speaker">Conference Speaker</SelectItem>
+              {cards.map((card) => (
+                <SelectItem key={card._id} value={card._id}>
+                  {card.personalInfo.fullName}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -152,9 +229,7 @@ export function Analytics() {
             <Eye className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {totalViews.toLocaleString()}
-            </div>
+            <div className="text-2xl font-bold">{totalViews}</div>
             <p
               className={cn(
                 "text-xs",
@@ -173,9 +248,7 @@ export function Analytics() {
             <MousePointerClick className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {totalClicks.toLocaleString()}
-            </div>
+            <div className="text-2xl font-bold">{totalClicks}</div>
             <p
               className={cn(
                 "text-xs",
@@ -193,7 +266,7 @@ export function Analytics() {
             <CardTitle className="text-sm font-medium">
               Click-Through Rate
             </CardTitle>
-            <BarChart3 className="text-muted-foreground h-4 w-4" />
+            <ChartColumnIncreasing className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{clickThroughRate}%</div>
@@ -210,93 +283,113 @@ export function Analytics() {
         </Card>
       </div>
 
-      <Card className="rounded-lg">
-        <CardHeader>
-          <CardTitle>Card Performance</CardTitle>
-          <CardDescription>
-            Showing views and clicks for the selected time period
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-          <ChartContainer
-            config={chartConfig}
-            className="aspect-auto h-[250px] w-full"
-          >
-            <AreaChart data={filteredData}>
-              <defs>
-                <linearGradient id="fillViews" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--color-views)"
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--color-views)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-                <linearGradient id="fillClicks" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--color-clicks)"
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--color-clicks)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-              </defs>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                minTickGap={32}
-                tickFormatter={(value) => {
-                  const date = new Date(value);
-                  return date.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  });
-                }}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={
-                  <ChartTooltipContent
-                    labelFormatter={(value) => {
-                      return new Date(value).toLocaleDateString("en-US", {
+      {currentPlan !== "free" && (
+        <Card className="rounded-lg">
+          <CardHeader>
+            <CardTitle>Card Performance</CardTitle>
+            <CardDescription>
+              Showing views and clicks for the selected time period
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {currentPlan === "basic" ? (
+              <div className="flex h-[250px] flex-col items-center justify-center gap-2 text-center">
+                <div className="bg-secondary rounded-full p-3">
+                  <ChartColumnIncreasing />
+                </div>
+                <h2 className="text-lg font-semibold">UNLOCK ANALYTICS</h2>
+                <p>
+                  Upgrade to our Professional plan to access detailed analytics
+                  for your digital business cards.
+                </p>
+                <Button asChild>
+                  <Link href="/subscription" className="mt-2">
+                    Go to subscription
+                  </Link>
+                </Button>
+              </div>
+            ) : (
+              <ChartContainer
+                config={chartConfig}
+                className="aspect-auto h-[250px] w-full"
+              >
+                <AreaChart data={analyticsData}>
+                  <defs>
+                    <linearGradient id="fillViews" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="5%"
+                        stopColor="var(--color-views)"
+                        stopOpacity={0.8}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor="var(--color-views)"
+                        stopOpacity={0.1}
+                      />
+                    </linearGradient>
+                    <linearGradient id="fillClicks" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="5%"
+                        stopColor="var(--color-clicks)"
+                        stopOpacity={0.8}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor="var(--color-clicks)"
+                        stopOpacity={0.1}
+                      />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                    dataKey="date"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                    minTickGap={32}
+                    tickFormatter={(value) => {
+                      const date = new Date(value);
+                      return date.toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
                       });
                     }}
-                    indicator="dot"
                   />
-                }
-              />
-              <Area
-                dataKey="clicks"
-                type="natural"
-                fill="url(#fillClicks)"
-                stroke="var(--color-clicks)"
-                stackId="a"
-              />
-              <Area
-                dataKey="views"
-                type="natural"
-                fill="url(#fillViews)"
-                stroke="var(--color-views)"
-                stackId="a"
-              />
-              <ChartLegend content={<ChartLegendContent />} />
-            </AreaChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
+                  <ChartTooltip
+                    cursor={false}
+                    content={
+                      <ChartTooltipContent
+                        labelFormatter={(value) => {
+                          return new Date(value).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                          });
+                        }}
+                        indicator="dot"
+                      />
+                    }
+                  />
+                  <Area
+                    dataKey="clicks"
+                    type="natural"
+                    fill="url(#fillClicks)"
+                    stroke="var(--color-clicks)"
+                    stackId="a"
+                  />
+                  <Area
+                    dataKey="views"
+                    type="natural"
+                    fill="url(#fillViews)"
+                    stroke="var(--color-views)"
+                    stackId="a"
+                  />
+                  <ChartLegend content={<ChartLegendContent />} />
+                </AreaChart>
+              </ChartContainer>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

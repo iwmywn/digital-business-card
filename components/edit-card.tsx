@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 import { CardDesign, type CardDesignValues } from "@/components/card-design";
 import {
   PersonalInfo,
@@ -16,36 +14,25 @@ import { Links } from "@/components/links";
 import { CardPreview } from "@/components/card-preview";
 import { saveCard } from "@/actions/card";
 import { SerializableLinkType } from "@/components/icons";
+import { Card as CardType } from "@/lib/definitions";
 import { useCard } from "@/lib/hooks";
-import { CreateCardSkeleton } from "@/components/skeletons";
 import { Loading } from "@/components/loading";
-import * as constants from "@/constants";
 
-export function CreateCard() {
+export function EditCard({ card }: { card: CardType }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<string>("design");
   const [previewMode, setPreviewMode] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [cardDesign, setCardDesign] = useState<CardDesignValues>({
-    cardColor: constants.defaultColor,
-    fontFamily: constants.defaultFont,
-    logoImage: undefined,
-    profileImage: undefined,
-    coverImage: undefined,
-  });
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>({
-    fullName: "",
-    jobTitle: "",
-    department: "",
-    company: "",
-    accreditations: "",
-    headline: "",
-    bio: "",
-  });
-  const [links, setLinks] = useState<SerializableLinkType[]>([]);
-  const { cardData, cards, isCardLoading, isCardError, mutate } = useCard();
+  const [cardDesign, setCardDesign] = useState<CardDesignValues>(
+    card.cardDesign,
+  );
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>(
+    card.personalInfo,
+  );
+  const [links, setLinks] = useState<SerializableLinkType[]>(card.links);
+  const { cardData, mutate, cards } = useCard();
 
-  async function handleCreateCard() {
+  async function handleUpdateCard() {
     if (isSubmitting) return;
 
     if (!personalInfo.fullName) {
@@ -55,37 +42,31 @@ export function CreateCard() {
     }
 
     setIsSubmitting(true);
-    const { success, error } = await saveCard({
-      cardDesign,
-      personalInfo,
-      links,
-    });
+    const { success, error } = await saveCard(
+      {
+        cardDesign,
+        personalInfo,
+        links,
+      },
+      card._id,
+    );
 
     if (error || !success) {
       toast.error(error);
     } else {
       mutate({
         ...cardData,
-        cards: [
-          ...cards,
-          {
-            _id: "temp",
-            userId: "temp",
-            slug: "temp",
-            cardDesign: cardDesign,
-            personalInfo: personalInfo,
-            links: links,
-            isPublic: true,
-            views: 0,
-            clicks: 0,
-            viewHistory: [],
-            clickHistory: [],
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            editable: true,
-            message: undefined,
-          },
-        ],
+        cards: cards.map((c) =>
+          c._id === card._id
+            ? {
+                ...c,
+                cardDesign: cardDesign,
+                personalInfo: personalInfo,
+                links: links,
+                updatedAt: new Date(),
+              }
+            : c,
+        ),
       });
       toast.success(success);
       router.push("/management");
@@ -106,44 +87,32 @@ export function CreateCard() {
     setLinks(data);
   }, []);
 
-  if (isCardLoading) return <CreateCardSkeleton />;
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
-            {previewMode ? "Card Preview" : "Create Card"}
+            {previewMode ? "Card Preview" : "Edit Card"}
           </h2>
           <p className="text-muted-foreground text-sm">
             {previewMode
               ? "Preview how your digital business card will look"
-              : "Design your digital business card"}
+              : "Update your digital business card design"}
           </p>
         </div>
         <div className="flex items-center justify-end gap-2">
           <Button onClick={() => setPreviewMode(!previewMode)}>
             {previewMode ? "Back to Editor" : "Preview Card"}
           </Button>
-          {!isCardError && (
-            <Button
-              onClick={handleCreateCard}
-              disabled={isSubmitting}
-              className="bg-primary"
-            >
-              {isSubmitting ? <Loading /> : "Create Card"}
-            </Button>
-          )}
+          <Button
+            onClick={handleUpdateCard}
+            disabled={isSubmitting}
+            className="bg-primary"
+          >
+            {isSubmitting ? <Loading /> : "Save Changes"}
+          </Button>
         </div>
       </div>
-
-      {isCardError && (
-        <Alert variant="destructive">
-          <AlertCircle />
-          <AlertTitle>Card Limit Reached</AlertTitle>
-          <AlertDescription>{isCardError}</AlertDescription>
-        </Alert>
-      )}
 
       {previewMode ? (
         <div className="flex justify-center">

@@ -1,6 +1,12 @@
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar } from "@/components/ui/avatar";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 export function UserSkeleton() {
   return (
@@ -14,6 +20,124 @@ export function UserSkeleton() {
       </div>
       <Skeleton className="ml-auto h-4 w-4" />
     </SidebarMenuButton>
+  );
+}
+
+export function CreateCardSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-2">
+          <Skeleton className="h-6 w-48" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <div className="flex items-center justify-end gap-2">
+          <Skeleton className="h-9 w-32 rounded-md" />
+          <Skeleton className="h-9 w-32 rounded-md" />
+        </div>
+      </div>
+
+      <Skeleton className="h-14 w-full rounded-md" />
+
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <div className="space-y-6 xl:col-span-2">
+          <div className="grid grid-cols-3 gap-2">
+            <Skeleton className="h-10 rounded-md" />
+            <Skeleton className="h-10 rounded-md" />
+            <Skeleton className="h-10 rounded-md" />
+          </div>
+
+          <div className="space-y-4 pt-4">
+            {[...Array(7)].map((_, i) => (
+              <Skeleton key={i} className="h-10 w-full rounded-md" />
+            ))}
+          </div>
+        </div>
+
+        <div className="hidden xl:block">
+          <div className="sticky top-[3.75rem] space-y-4">
+            <Skeleton className="h-[320px] w-full rounded-xl" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function CardManagementSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <Skeleton className="h-10 w-40 rounded-md" />
+      </div>
+
+      <div className="flex items-center">
+        <Skeleton className="h-10 w-full rounded-md sm:w-96" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {[...Array(6)].map((_, i) => (
+          <Card key={i} className="overflow-hidden rounded-lg">
+            <div className="h-32">
+              <Skeleton className="h-full w-full" />
+            </div>
+            <CardHeader>
+              <Skeleton className="h-6 w-3/4" />
+              <Skeleton className="h-4 w-1/2" />
+            </CardHeader>
+            <CardFooter>
+              <Skeleton className="h-8 w-full" />
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function AnalyticsSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Skeleton className="h-10 w-[180px] rounded-md" />
+          <Skeleton className="h-10 w-[180px] rounded-md" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {[...Array(3)].map((_, i) => (
+          <Card className="rounded-lg" key={i}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-4 rounded-full" />
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Skeleton className="h-8 w-24" />
+              <Skeleton className="h-3 w-32" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Card className="rounded-lg">
+        <CardHeader>
+          <Skeleton className="h-5 w-40" />
+          <Skeleton className="mt-1 h-4 w-72" />
+        </CardHeader>
+        <CardContent className="pt-4 sm:pt-6">
+          <Skeleton className="h-[250px] w-full rounded-md" />
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
@@ -38,7 +162,7 @@ export function SubscriptionPlansSkeleton() {
         <Skeleton className="h-6 w-40" />
         <Skeleton className="h-4 w-32" />
         <div className="space-y-2">
-          {[...Array(3)].map((_, i) => (
+          {[...Array(4)].map((_, i) => (
             <Skeleton key={i} className="h-4 w-1/2" />
           ))}
         </div>
@@ -53,7 +177,7 @@ export function SubscriptionPlansSkeleton() {
             <Skeleton className="h-6 w-24" />
             <Skeleton className="h-4 w-32" />
             <div className="space-y-2">
-              {[...Array(3)].map((_, j) => (
+              {[...Array(6)].map((_, j) => (
                 <Skeleton key={j} className="h-3 w-3/4" />
               ))}
             </div>

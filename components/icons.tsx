@@ -1,5 +1,4 @@
-import type React from "react";
-import { Mail, Phone, Globe, Link2, MapPin } from "lucide-react";
+import { Mail, Phone, Globe, Link2, MapPin, Ghost } from "lucide-react";
 
 import {
   siX,
@@ -23,13 +22,14 @@ import {
   siCalendly,
   type SimpleIcon,
 } from "simple-icons";
+import type { ElementType } from "react";
 
-export interface SimpleIconProps {
+interface SimpleIconProps {
   className?: string;
   icon: SimpleIcon;
 }
 
-export interface IconComponentProps {
+interface IconComponentProps {
   className?: string;
 }
 
@@ -56,9 +56,33 @@ export type LinkType = {
   type: string;
   value: string;
   category: string;
-  icon: React.ElementType;
+  icon: ElementType;
   label?: string;
 };
+
+export type SerializableLinkType = {
+  id: string;
+  type: string;
+  value: string;
+  category: string;
+  label?: string;
+};
+
+export function toSerializableLink(link: LinkType): SerializableLinkType {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const { icon, ...rest } = link;
+  /* eslint-enable @typescript-eslint/no-unused-vars */
+  return rest;
+}
+
+export function toLinkType(link: SerializableLinkType): LinkType {
+  const linkType = linkTypes.find((lt) => lt.type === link.type);
+  return {
+    ...link,
+    icon: linkType?.icon || Ghost,
+    category: link.category || "General",
+  };
+}
 
 export const linkTypes = [
   // General

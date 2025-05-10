@@ -1,13 +1,14 @@
 import useSWR from "swr";
-import { updatePlanIfExpired } from "@/actions/user";
-import type { PaymentHistory } from "@/lib/definitions";
+import { getSubscriptionPlans } from "@/actions/user";
+import type { Card, PaymentHistory } from "@/lib/definitions";
 import { me } from "@/actions/auth";
+import { getCards } from "@/actions/card";
 
 // const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export function useUser() {
-  const { data, isLoading } = useSWR<{
-    name?: string;
+  const { data, isLoading, mutate } = useSWR<{
+    fullName?: string;
     email?: string;
     avatar?: string;
     currentPlan?: string;
@@ -16,19 +17,23 @@ export function useUser() {
     keepPreviousData: true,
   });
 
-  const name = data?.name;
+  const userData = data;
+  const fullName = data?.fullName;
   const email = data?.email;
   const avatar = data?.avatar;
   const currentPlan = data?.currentPlan;
-  const isError = data?.error || null;
+  const isUserError = data?.error || null;
+  const isUserLoading = isLoading;
 
   return {
-    name,
+    userData,
+    fullName,
     email,
     avatar,
     currentPlan,
-    isLoading,
-    isError,
+    isUserLoading,
+    isUserError,
+    mutate,
   };
 }
 
@@ -44,7 +49,7 @@ export function useSubscription() {
       expiresAt: Date | null;
     };
     paymentHistory?: PaymentHistory[];
-  }>("plan-status", updatePlanIfExpired, { keepPreviousData: true });
+  }>("subscription-plans", getSubscriptionPlans, { keepPreviousData: true });
 
   const basic = data?.basic || { hasAccess: false, expiresAt: null };
   const professional = data?.professional || {
@@ -52,13 +57,28 @@ export function useSubscription() {
     expiresAt: null,
   };
   const paymentHistory = data?.paymentHistory || [];
-  const isError = data?.error || null;
+  const isSubscriptionError = data?.error || null;
+  const isSubScriptionLoading = isLoading;
 
   return {
     basic,
     professional,
-    isLoading,
-    isError,
+    isSubScriptionLoading,
+    isSubscriptionError,
     paymentHistory,
   };
+}
+
+export function useCard() {
+  const { data, isLoading, mutate } = useSWR<{
+    error?: string;
+    cards?: (Card & { editable: boolean; message?: string })[];
+  }>("cards", getCards, { keepPreviousData: true });
+
+  const cardData = data;
+  const cards = data?.cards || [];
+  const isCardError = data?.error;
+  const isCardLoading = isLoading;
+
+  return { cardData, isCardLoading, isCardError, cards, mutate };
 }

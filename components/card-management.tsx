@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Edit,
   Trash2,
@@ -11,12 +11,11 @@ import {
   Eye,
   Download,
   Search,
+  Lock,
 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -51,82 +50,51 @@ import {
   siSnapchat,
 } from "simple-icons";
 import Link from "next/link";
-
-const mockCards = [
-  {
-    id: "1",
-    name: "Professional Card",
-    image: "/placeholder.svg?height=100&width=200",
-    primaryColor: "#ff4d4d",
-    secondaryColor: "#333333",
-    views: 245,
-    lastUpdated: "2023-12-15T10:30:00Z",
-    isPublic: true,
-    slug: "john-doe-professional",
-  },
-  {
-    id: "2",
-    name: "Creative Portfolio",
-    image: "/placeholder.svg?height=100&width=200",
-    primaryColor: "#4d79ff",
-    secondaryColor: "#222222",
-    views: 187,
-    lastUpdated: "2024-01-05T14:20:00Z",
-    isPublic: true,
-    slug: "john-doe-creative",
-  },
-  {
-    id: "3",
-    name: "Networking Event",
-    image: "/placeholder.svg?height=100&width=200",
-    primaryColor: "#50c878",
-    secondaryColor: "#2a2a2a",
-    views: 92,
-    lastUpdated: "2024-02-10T09:15:00Z",
-    isPublic: false,
-    slug: "john-doe-networking",
-  },
-  {
-    id: "4",
-    name: "Conference Speaker",
-    image: "/placeholder.svg?height=100&width=200",
-    primaryColor: "#9370db",
-    secondaryColor: "#282828",
-    views: 156,
-    lastUpdated: "2024-03-01T16:45:00Z",
-    isPublic: true,
-    slug: "john-doe-speaker",
-  },
-];
+import { deleteCard } from "@/actions/card";
+import QRCode from "qrcode";
+import { Card as CardType } from "@/lib/definitions";
+import { getColorClass } from "@/lib/utils";
+import { CardManagementSkeleton } from "@/components/skeletons";
+import { useCard } from "@/lib/hooks";
+import { NotFoundUI } from "@/components/not-found-ui";
+import { Loading } from "@/components/loading";
 
 export function CardManagement() {
-  const [cards, setCards] = useState(mockCards);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCard, setSelectedCard] = useState<
-    (typeof mockCards)[0] | null
-  >(null);
-  const [isQrDialogOpen, setIsQrDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
-
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedCard, setSelectedCard] = useState<CardType | null>(null);
+  const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState<boolean>(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const { cardData, cards, isCardLoading, isCardError, mutate } = useCard();
   const filteredCards = cards.filter((card) =>
-    card.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    card.personalInfo.fullName
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase()),
   );
 
-  function handleDeleteCard(id: string) {
-    setCards(cards.filter((card) => card.id !== id));
-    setIsDeleteDialogOpen(false);
-    toast.success("Card deleted successfully");
+  async function handleDeleteCard(id: string) {
+    setIsDeleting(true);
+    const { error } = await deleteCard(id);
+    if (error) {
+      toast.error(error);
+    } else {
+      mutate({ ...cardData, cards: cards.filter((card) => card._id !== id) });
+      setIsDeleteDialogOpen(false);
+      toast.success("Card deleted.");
+    }
+    setIsDeleting(false);
   }
 
   function handleCopyLink(slug: string) {
-    const link = `https://eznect.com/card/${slug}`;
+    const link = `${process.env.NEXT_PUBLIC_URL}/card/${slug}`;
     navigator.clipboard.writeText(link);
-    toast.success("Link copied to clipboard");
+    toast.success("Link copied to clipboard.");
   }
 
-  function formatDate(dateString: string) {
-    const date = new Date(dateString);
+  function formatDate(dateParam: Date) {
+    const date = new Date(dateParam);
     return new Intl.DateTimeFormat("en-US", {
       year: "numeric",
       month: "short",
@@ -134,16 +102,72 @@ export function CardManagement() {
     }).format(date);
   }
 
+  async function generateQRCode(slug: string) {
+    try {
+      const url = `${process.env.NEXT_PUBLIC_URL}/card/${slug}`;
+      const qrDataUrl = await QRCode.toDataURL(url, {
+        margin: 1,
+        width: 200,
+        color: {
+          dark: "#000000",
+          light: "#ffffff",
+        },
+      });
+      setQrCodeUrl(qrDataUrl);
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+      toast.error("Failed to generate QR code! Please try again later.");
+    }
+  }
+
+  function handleQrCodeClick(card: CardType) {
+    setSelectedCard(card);
+    generateQRCode(card.slug);
+    setIsQrDialogOpen(true);
+  }
+
+  function downloadQRCode() {
+    if (!qrCodeUrl) return;
+
+    const link = document.createElement("a");
+    link.href = qrCodeUrl;
+    link.download = `${selectedCard?.slug || "card"}-qrcode.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const getImageUrl = (card: CardType, type: "logo" | "profile" | "cover") => {
+    const transform = card.cardDesign.imageTransforms?.[type];
+    if (transform?.croppedImageUrl) {
+      return transform.croppedImageUrl;
+    }
+
+    if (type === "logo") return card.cardDesign.logoImage;
+    if (type === "profile") return card.cardDesign.profileImage;
+    return card.cardDesign.coverImage;
+  };
+
+  useEffect(() => {
+    if (
+      isCardError &&
+      !isCardError.includes("You've reached the maximum number of cards")
+    )
+      toast.error(isCardError);
+  }, [isCardError]);
+
+  if (isCardLoading) return <CardManagementSkeleton />;
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Manage Cards</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Card Management</h2>
           <p className="text-muted-foreground text-sm">
-            View and manage your digital business cards.
+            View and manage your digital business cards
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="bg-primary">
           <Link href="/create">Create New Card</Link>
         </Button>
       </div>
@@ -161,34 +185,44 @@ export function CardManagement() {
       </div>
 
       {filteredCards.length === 0 ? (
-        <Card className="rounded-lg">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <div className="bg-muted rounded-full p-3">
-              <Search className="text-muted-foreground h-6 w-6" />
-            </div>
-            <h3 className="mt-4 text-lg font-medium">No cards found</h3>
-            <p className="text-muted-foreground mt-2 text-center text-sm">
-              We couldn&apos;t find any cards matching your search. Try a
-              different search term.
-            </p>
-          </CardContent>
-        </Card>
+        <NotFoundUI
+          icon={<Search />}
+          title="NO CARDS FOUND"
+          message={
+            cards.length === 0
+              ? "You haven't created any cards yet. Create your first card to get started."
+              : "We couldn't find any cards matching your search. Try a different search term."
+          }
+          className="border border-dashed"
+        />
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredCards.map((card) => (
-            <Card key={card.id} className="overflow-hidden rounded-lg">
+            <Card key={card._id} className="overflow-hidden rounded-lg">
               <div
                 className="relative h-32"
-                style={{ backgroundColor: card.secondaryColor }}
+                style={{
+                  backgroundColor: getColorClass(card.cardDesign.cardColor),
+                }}
               >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div
-                    className="flex h-16 w-16 items-center justify-center rounded-full"
-                    style={{ backgroundColor: card.primaryColor }}
-                  >
-                    <span className="text-xl font-bold text-white">
-                      {card.name.charAt(0)}
-                    </span>
+                <div
+                  className={`absolute inset-0 ${getColorClass(card.cardDesign.cardColor)}`}
+                >
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {card.cardDesign.profileImage && (
+                      <div className="h-16 w-16 overflow-hidden rounded-full bg-white p-1">
+                        <div className="relative h-full w-full">
+                          <Image
+                            src={
+                              getImageUrl(card, "profile") || "/placeholder.svg"
+                            }
+                            alt="Profile"
+                            fill
+                            style={{ objectFit: "cover" }}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="absolute top-2 right-2">
@@ -206,9 +240,27 @@ export function CardManagement() {
                       <DropdownMenuLabel>Card Actions</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
-                        <Link href={`/edit-card/${card.id}`}>
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit Card
+                        <Link
+                          href={
+                            card.editable
+                              ? `/edit/${card._id}`
+                              : "/subscription"
+                          }
+                          className={
+                            !card.editable
+                              ? "cursor-not-allowed opacity-50"
+                              : ""
+                          }
+                          onClick={(e) => {
+                            if (!card.editable) {
+                              e.preventDefault();
+                              toast.error(card.message);
+                            }
+                          }}
+                        >
+                          {!card.editable && <Lock className="mr-2 h-4 w-4" />}
+                          {card.editable && <Edit className="mr-2 h-4 w-4" />}
+                          {card.editable ? "Edit Card" : "Upgrade to Edit"}
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
@@ -217,12 +269,7 @@ export function CardManagement() {
                           View Card
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setSelectedCard(card);
-                          setIsQrDialogOpen(true);
-                        }}
-                      >
+                      <DropdownMenuItem onClick={() => handleQrCodeClick(card)}>
                         <QrCode className="mr-2 h-4 w-4" />
                         Show QR Code
                       </DropdownMenuItem>
@@ -252,7 +299,7 @@ export function CardManagement() {
               </div>
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                  <span className="truncate">{card.name}</span>
+                  <span className="truncate">{card.personalInfo.fullName}</span>
                   {!card.isPublic && (
                     <span className="bg-muted rounded-full px-2 py-1 text-xs">
                       Private
@@ -260,36 +307,15 @@ export function CardManagement() {
                   )}
                 </CardTitle>
                 <CardDescription>
-                  Last updated: {formatDate(card.lastUpdated)}
+                  Last updated: {formatDate(card.updatedAt)}
                 </CardDescription>
               </CardHeader>
               <CardFooter className="flex justify-between">
                 <div className="text-muted-foreground text-sm">
                   {card.views} views
                 </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setSelectedCard(card);
-                      setIsQrDialogOpen(true);
-                    }}
-                  >
-                    <QrCode className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleCopyLink(card.slug)}
-                  >
-                    <Copy className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link href={`/edit-card/${card.id}`}>
-                      <Edit className="h-4 w-4" />
-                    </Link>
-                  </Button>
+                <div className="text-muted-foreground text-sm">
+                  {card.clicks} clicks
                 </div>
               </CardFooter>
             </Card>
@@ -308,15 +334,22 @@ export function CardManagement() {
           </DialogHeader>
           <div className="flex flex-col items-center justify-center p-4">
             <div className="rounded-lg bg-white p-4">
-              <Image
-                src="/placeholder.svg?height=200&width=200&text=QR+Code"
-                alt="QR Code"
-                width={192}
-                height={192}
-              />
+              {qrCodeUrl ? (
+                <Image
+                  src={qrCodeUrl || "/placeholder.svg"}
+                  alt="QR Code"
+                  width={192}
+                  height={192}
+                />
+              ) : (
+                <div className="flex h-48 w-48 items-center justify-center">
+                  <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
+                </div>
+              )}
             </div>
             <p className="text-muted-foreground mt-4 text-center text-sm">
-              {selectedCard && `https://eznect.com/card/${selectedCard.slug}`}
+              {selectedCard &&
+                `${process.env.NEXT_PUBLIC_URL}/card/${selectedCard.slug}`}
             </p>
           </div>
           <DialogFooter className="flex flex-col gap-2 sm:flex-row">
@@ -328,7 +361,11 @@ export function CardManagement() {
               <Copy className="mr-2 h-4 w-4" />
               Copy Link
             </Button>
-            <Button className="bg-red-500 hover:bg-red-600 sm:flex-1">
+            <Button
+              className="bg-primary sm:flex-1"
+              onClick={downloadQRCode}
+              disabled={!qrCodeUrl}
+            >
               <Download className="mr-2 h-4 w-4" />
               Download QR Code
             </Button>
@@ -348,21 +385,22 @@ export function CardManagement() {
           </DialogHeader>
           <div className="flex items-center space-x-4 py-4">
             <div
-              className="flex h-16 w-16 items-center justify-center rounded-full"
-              style={{
-                backgroundColor: selectedCard?.primaryColor || "#ff4d4d",
-                color: "white",
-              }}
+              className={`flex h-16 w-16 items-center justify-center rounded-full ${
+                selectedCard?.cardDesign.cardColor === "gradient"
+                  ? "bg-gradient-to-r from-pink-400 via-red-400 to-yellow-400"
+                  : getColorClass(selectedCard?.cardDesign.cardColor || "red")
+              }`}
             >
-              <span className="text-xl font-bold">
-                {selectedCard?.name.charAt(0) || "C"}
+              <span className="text-xl font-bold text-white">
+                {selectedCard?.personalInfo.fullName.charAt(0) || "C"}
               </span>
             </div>
             <div>
-              <h4 className="text-sm font-medium">{selectedCard?.name}</h4>
+              <h4 className="text-sm font-medium">
+                {selectedCard?.personalInfo.fullName}
+              </h4>
               <p className="text-muted-foreground text-sm">
-                Created on{" "}
-                {selectedCard && formatDate(selectedCard.lastUpdated)}
+                Created on {selectedCard && formatDate(selectedCard.createdAt)}
               </p>
             </div>
           </div>
@@ -375,9 +413,10 @@ export function CardManagement() {
             </Button>
             <Button
               variant="destructive"
-              onClick={() => handleDeleteCard(selectedCard?.id || "")}
+              onClick={() => handleDeleteCard(selectedCard?._id || "")}
+              disabled={isDeleting}
             >
-              Delete Card
+              {isDeleting ? <Loading /> : "Delete Card"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -398,14 +437,14 @@ export function CardManagement() {
                 <Input
                   value={
                     selectedCard
-                      ? `https://eznect.com/card/${selectedCard.slug}`
+                      ? `${process.env.NEXT_PUBLIC_URL}/card/${selectedCard.slug}`
                       : ""
                   }
                   readOnly
                   className="pr-20"
                 />
                 <Button
-                  className="absolute top-0 right-0 h-full rounded-l-none bg-red-500 hover:bg-red-600"
+                  className="bg-primary absolute top-0 right-0 h-full rounded-l-none"
                   onClick={() => handleCopyLink(selectedCard?.slug || "")}
                 >
                   Copy
