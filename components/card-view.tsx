@@ -214,49 +214,56 @@ export function CardView({ card }: { card: CardType }) {
             </div>
           </div>
 
-          <Separator className="bg-black/15" />
-
           {card.personalInfo.headline && (
-            <p className="text-gray-700 italic">{card.personalInfo.headline}</p>
+            <>
+              <Separator className="bg-black/15" />
+              <p className="text-gray-700 italic">
+                {card.personalInfo.headline}
+              </p>
+            </>
           )}
-
-          <Separator className="bg-black/15" />
 
           {card.personalInfo.bio && (
-            <p className="text-sm text-gray-600">{card.personalInfo.bio}</p>
+            <>
+              <Separator className="bg-black/15" />
+              <p className="text-sm text-gray-600">{card.personalInfo.bio}</p>
+            </>
           )}
 
-          <Separator className="bg-black/15" />
-
           {card.links && card.links.length > 0 && (
-            <div className="space-y-2">
-              {card.links.map((link: SerializableLinkType) => (
-                <button
-                  key={link.id}
-                  className="flex w-full items-center gap-3 text-sm"
-                  onClick={() => handleLinkClick(link)}
-                  disabled={isLoading[link.id]}
-                >
-                  <div className={`${colorClass} rounded-full p-2 text-white`}>
-                    {isLoading[link.id] ? (
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                    ) : (
-                      getIconComponent(link.type)
-                    )}
-                  </div>
-                  <div className="w-full flex-1 text-left">
-                    <span className="font-medium text-gray-800">
-                      {link.label || link.type}
-                    </span>
-                    {link.value && (
-                      <p className="max-w-[85%] truncate text-gray-600">
-                        {link.value}
-                      </p>
-                    )}
-                  </div>
-                </button>
-              ))}
-            </div>
+            <>
+              <Separator className="bg-black/15" />
+              <div className="space-y-2">
+                {card.links.map((link: SerializableLinkType) => (
+                  <button
+                    key={link.id}
+                    className="flex w-full items-center gap-3 text-sm"
+                    onClick={() => handleLinkClick(link)}
+                    disabled={isLoading[link.id]}
+                  >
+                    <div
+                      className={`${colorClass} rounded-full p-2 text-white`}
+                    >
+                      {isLoading[link.id] ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                      ) : (
+                        getIconComponent(link.type)
+                      )}
+                    </div>
+                    <div className="w-full flex-1 text-left">
+                      <span className="font-medium text-gray-800">
+                        {link.label || link.type}
+                      </span>
+                      {link.value && (
+                        <p className="max-w-[85%] truncate text-gray-600">
+                          {link.value}
+                        </p>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </>
           )}
         </div>
 

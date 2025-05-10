@@ -149,28 +149,34 @@ export function CardPreview({
               "Tell a little about yourself: your background, experience, or what makes you unique."}
           </p>
 
-          <Separator className="bg-black/15" />
-
           {links.length > 0 && (
-            <div className="space-y-2">
-              {links.map((link) => (
-                <div key={link.id} className="flex items-center gap-3 text-sm">
-                  <div className={`${colorClass} rounded-full p-2 text-white`}>
-                    {getIconComponent(link.type)}
+            <>
+              <Separator className="bg-black/15" />
+              <div className="space-y-2">
+                {links.map((link) => (
+                  <div
+                    key={link.id}
+                    className="flex items-center gap-3 text-sm"
+                  >
+                    <div
+                      className={`${colorClass} rounded-full p-2 text-white`}
+                    >
+                      {getIconComponent(link.type)}
+                    </div>
+                    <div className="w-full flex-1">
+                      <span className="font-medium text-gray-800">
+                        {link.label || link.type}
+                      </span>
+                      {link.value && (
+                        <p className="max-w-[85%] truncate text-gray-600">
+                          {link.value}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className="w-full flex-1">
-                    <span className="font-medium text-gray-800">
-                      {link.label || link.type}
-                    </span>
-                    {link.value && (
-                      <p className="max-w-[85%] truncate text-gray-600">
-                        {link.value}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
 

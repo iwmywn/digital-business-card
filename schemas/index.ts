@@ -144,10 +144,12 @@ const personalInfoSchema = z.object({
   fullName: z
     .string()
     .min(2, { message: "Full name must be at least 2 characters." }),
-  jobTitle: z.string().optional(),
-  department: z.string().optional(),
-  company: z.string().optional(),
-  accreditations: z.string().optional(),
+  jobTitle: z.string().min(1, { message: "Job title is required." }),
+  department: z.string().min(1, { message: "Department is required." }),
+  company: z.string().min(1, { message: "Company is required." }),
+  accreditations: z
+    .string()
+    .min(1, { message: "Accreditations are required." }),
   headline: z
     .string()
     .max(100, { message: "Headline must not exceed 100 characters." })

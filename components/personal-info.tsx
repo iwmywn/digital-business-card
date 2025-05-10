@@ -202,7 +202,7 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Digital marketing specialist with 5+ years of experience"
+                      placeholder="Digital marketing specialist with 5+ years of experience."
                       {...field}
                       value={field.value || ""}
                     />
