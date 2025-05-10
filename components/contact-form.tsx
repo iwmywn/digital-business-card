@@ -157,7 +157,7 @@ export function ContactForm() {
                   )}
                 />
               </div>
-              <div className="pointer-events-auto! space-y-2">
+              <div className="space-y-2">
                 <FormField
                   control={form.control}
                   name="phone"

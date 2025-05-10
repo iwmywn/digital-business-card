@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,11 +15,12 @@ import {
 import { Links } from "@/components/links";
 import { CardPreview } from "@/components/card-preview";
 import { saveCard } from "@/actions/card";
-import { SerializableLinkType } from "@/components/icons";
+import type { SerializableLinkType } from "@/components/icons";
 import { useCard } from "@/lib/hooks";
 import { CreateCardSkeleton } from "@/components/skeletons";
 import { Loading } from "@/components/loading";
 import * as constants from "@/constants";
+import { personalInfoSchema } from "@/schemas";
 
 export function CreateCard() {
   const router = useRouter();
@@ -43,14 +44,28 @@ export function CreateCard() {
     bio: "",
   });
   const [links, setLinks] = useState<SerializableLinkType[]>([]);
+  const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
   const { cardData, cards, isCardLoading, isCardError, mutate } = useCard();
 
   async function handleCreateCard() {
     if (isSubmitting) return;
 
-    if (!personalInfo.fullName) {
-      toast.error("Full name is required");
+    const parsedCredentials = personalInfoSchema.safeParse(personalInfo);
+
+    if (!parsedCredentials.success) {
       setActiveTab("personal");
+      setTimeout(async () => {
+        await personalInfoRef.current?.validate();
+      }, 0);
+      return;
+    }
+
+    const emptyLinks = links.filter((link) => !link.value.trim());
+    if (emptyLinks.length > 0) {
+      toast.error(
+        "Please provide values for all your links or remove empty ones!",
+      );
+      setActiveTab("links");
       return;
     }
 
@@ -179,6 +194,7 @@ export function CreateCard() {
                 <PersonalInfo
                   onSave={handlePersonalInfoUpdate}
                   initialValues={personalInfo}
+                  ref={personalInfoRef}
                 />
               </TabsContent>
 

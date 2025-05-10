@@ -25,7 +25,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
-import { Card as CardType } from "@/lib/definitions";
+import type { Card as CardType } from "@/lib/definitions";
 import { useEffect, useState } from "react";
 import { useCard, useUser } from "@/lib/hooks";
 import Link from "next/link";

@@ -19,7 +19,7 @@ const signUpSchema = z
   .object({
     fullName: z
       .string()
-      .min(2, { message: "Name must be at least 2 characters long." }),
+      .min(2, { message: "Full name must be at least 2 characters long." }),
     email: baseEmailSchema,
     phone: z.string().min(10, { message: "Phone number must be valid." }),
     password: basePasswordSchema,
@@ -61,6 +61,7 @@ const contactSchema = z.object({
     .min(10, { message: "Message must be at least 10 characters." }),
 });
 
+//todo :rename name to fullname
 const publicProfileSchema = z.object({
   name: z
     .string()
@@ -93,6 +94,7 @@ const publicProfileSchema = z.object({
   }),
 });
 
+// todo: add username to db
 const settingsSchema = z
   .object({
     username: z
@@ -141,7 +143,7 @@ const notificationsSchema = z.object({
 const personalInfoSchema = z.object({
   fullName: z
     .string()
-    .min(2, { message: "Name must be at least 2 characters." }),
+    .min(2, { message: "Full name must be at least 2 characters." }),
   jobTitle: z.string().optional(),
   department: z.string().optional(),
   company: z.string().optional(),

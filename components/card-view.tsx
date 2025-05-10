@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import QRCode from "qrcode";
 import { linkTypes, SerializableLinkType } from "@/components/icons";
-import { Card as CardType } from "@/lib/definitions";
+import type { Card as CardType } from "@/lib/definitions";
 import { getColorClass, getFontClass } from "@/lib/utils";
 import { Separator } from "@/components/separator";
 

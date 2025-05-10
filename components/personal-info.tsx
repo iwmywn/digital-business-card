@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { forwardRef, Ref, useEffect, useImperativeHandle } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -28,15 +28,19 @@ import { personalInfoSchema } from "@/schemas";
 
 export type PersonalInfoValues = z.infer<typeof personalInfoSchema>;
 
-export function PersonalInfo({
-  onSave,
-  initialValues,
-}: {
-  onSave: (data: PersonalInfoValues) => void;
-  initialValues?: Partial<PersonalInfoValues>;
-}) {
+export const PersonalInfo = forwardRef(function PersonalInfo(
+  {
+    onSave,
+    initialValues,
+  }: {
+    onSave: (data: PersonalInfoValues) => void;
+    initialValues?: Partial<PersonalInfoValues>;
+  },
+  ref: Ref<{ validate: () => Promise<boolean> }>,
+) {
   const form = useForm<PersonalInfoValues>({
     resolver: zodResolver(personalInfoSchema),
+    mode: "onChange",
     defaultValues: {
       fullName: initialValues?.fullName || "",
       jobTitle: initialValues?.jobTitle || "",
@@ -49,6 +53,10 @@ export function PersonalInfo({
   });
 
   const formValues = form.watch();
+
+  useImperativeHandle(ref, () => ({
+    validate: () => form.trigger(),
+  }));
 
   useEffect(() => {
     const hasChanged =
@@ -71,87 +79,95 @@ export function PersonalInfo({
         <Form {...form}>
           <form className="space-y-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="fullName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      Full Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="John Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="fullName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        Full Name
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="John Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-              <FormField
-                control={form.control}
-                name="jobTitle"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      <Briefcase className="h-4 w-4" />
-                      Job Title
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Marketing Director"
-                        {...field}
-                        value={field.value || ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="jobTitle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Briefcase className="h-4 w-4" />
+                        Job Title
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Marketing Director"
+                          {...field}
+                          value={field.value || ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="department"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      <Users className="h-4 w-4" />
-                      Department
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Marketing"
-                        {...field}
-                        value={field.value || ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="department"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Users className="h-4 w-4" />
+                        Department
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Marketing"
+                          {...field}
+                          value={field.value || ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-              <FormField
-                control={form.control}
-                name="company"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      <Building className="h-4 w-4" />
-                      Company Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Acme Inc."
-                        {...field}
-                        value={field.value || ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="company"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Building className="h-4 w-4" />
+                        Company Name
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Acme Inc."
+                          {...field}
+                          value={field.value || ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <FormField
@@ -222,4 +238,4 @@ export function PersonalInfo({
       </CardContent>
     </Card>
   );
-}
+});

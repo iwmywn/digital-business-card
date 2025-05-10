@@ -52,7 +52,7 @@ import {
 import Link from "next/link";
 import { deleteCard } from "@/actions/card";
 import QRCode from "qrcode";
-import { Card as CardType } from "@/lib/definitions";
+import type { Card as CardType } from "@/lib/definitions";
 import { getColorClass } from "@/lib/utils";
 import { CardManagementSkeleton } from "@/components/skeletons";
 import { useCard } from "@/lib/hooks";
