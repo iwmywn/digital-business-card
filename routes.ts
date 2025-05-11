@@ -6,14 +6,14 @@ const privateRoute = "/private";
 const ignoredRoutes = ["/opengraph-image.png", "/images/"];
 const ogRoute = "/opengraph-image.png";
 const protectedRoutes = [
-  "/analytics",
-  "/create",
-  "/faq",
   "/home",
+  "/create",
   "/management",
+  "/analytics",
   "/subscription",
-  "/privacy",
+  "/faq",
   "/terms",
+  "/privacy",
   "/settings",
 ];
 

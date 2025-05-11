@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import * as routes from "@/routes";
 import { siteConfig } from "@/lib/config";
 import { NextURL } from "next/dist/server/web/next-url";
-import { session, sevenDays } from "@/lib/session";
+import { session } from "@/lib/session";
 
 function redirectIfProtectedRoute(path: string, nextUrl: NextURL) {
   if (routes.protectedRoutes.some((route) => path.startsWith(route))) {
@@ -97,7 +97,7 @@ export async function middleware(req: NextRequest) {
 
   const expiresIn = new Date(expires).getTime() - Date.now();
 
-  if (expiresIn < sevenDays * 1000) {
+  if (expiresIn < 24 * 60 * 60 * 1000) {
     await session.user.update();
   }
 

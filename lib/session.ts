@@ -79,4 +79,4 @@ const session = {
   },
 };
 
-export { sevenDays, session };
+export { session };
