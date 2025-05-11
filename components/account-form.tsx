@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { accountSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { PasswordInput } from "@/components/ui/password-input";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 type SettingsFormValues = z.infer<typeof accountSchema>;
 
@@ -32,6 +33,7 @@ export function AccountForm() {
     resolver: zodResolver(accountSchema),
     defaultValues: {
       username: "iwmywn",
+      phone: "",
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
@@ -69,6 +71,24 @@ export function AccountForm() {
                   <FormDescription>
                     This is your public display name. It can be your real name
                     or a pseudonym.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel htmlFor="phone">Phone Number</FormLabel>
+                  <FormControl>
+                    <PhoneInput {...field} defaultCountry="VN" />
+                  </FormControl>
+                  <FormDescription>
+                    This number may appear on your public profile, or stay
+                    private depending on your settings.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

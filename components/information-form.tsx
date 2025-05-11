@@ -30,7 +30,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { PhoneInput } from "@/components/ui/phone-input";
 import { FormButton } from "@/components/form-button";
 import {
   Popover,
@@ -56,12 +55,10 @@ export function InformationForm() {
     resolver: zodResolver(publicProfileSchema),
     defaultValues: {
       fullName: "Hoàng Anh Tuấn",
-      email: "public@nextmail.com",
       bio: "Software engineer with strong skills in full-stack development, cloud computing, and system design.",
       jobTitle: "Software Engineer",
       company: "NextTech Solutions",
       website: "https://iwmywn.github.io",
-      phone: "+84921255645",
       gender: "male",
       dateOfBirth: new Date(2003, 7, 24),
     },
@@ -148,28 +145,6 @@ export function InformationForm() {
                 <div className="space-y-2">
                   <FormField
                     control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel htmlFor="email">Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="email"
-                            placeholder="Your email"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <FormField
-                    control={form.control}
                     name="gender"
                     render={({ field }) => (
                       <FormItem>
@@ -199,7 +174,9 @@ export function InformationForm() {
                     )}
                   />
                 </div>
+              </div>
 
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <FormField
                     control={form.control}
@@ -247,9 +224,7 @@ export function InformationForm() {
                     )}
                   />
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <FormField
                     control={form.control}
@@ -269,7 +244,9 @@ export function InformationForm() {
                     )}
                   />
                 </div>
+              </div>
 
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <FormField
                     control={form.control}
@@ -289,9 +266,7 @@ export function InformationForm() {
                     )}
                   />
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <FormField
                     control={form.control}
@@ -304,26 +279,6 @@ export function InformationForm() {
                             id="website"
                             placeholder="https://iwmywn.github.io"
                             {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem className="grid gap-2">
-                        <FormLabel htmlFor="phone">Phone Number</FormLabel>
-                        <FormControl>
-                          <PhoneInput
-                            id="phone"
-                            {...field}
-                            defaultCountry="VN"
                           />
                         </FormControl>
                         <FormMessage />
