@@ -394,7 +394,17 @@ export function PaymentReceiptDialogSkeleton() {
   );
 }
 
-export function ProfileSkeleton() {
+export function SettingsSkeleton() {
+  return (
+    <div className="space-y-2">
+      <InformationSkeleton />
+      <AccountSkeleton />
+      <NotificationPreferencesSkeleton />
+    </div>
+  );
+}
+
+function InformationSkeleton() {
   return (
     <Card className="rounded-lg">
       <CardHeader>
@@ -440,7 +450,7 @@ export function ProfileSkeleton() {
   );
 }
 
-export function AccountSkeleton() {
+function AccountSkeleton() {
   return (
     <Card className="rounded-lg">
       <CardHeader>
@@ -490,7 +500,7 @@ export function AccountSkeleton() {
   );
 }
 
-export function NotificationPreferencesSkeleton() {
+function NotificationPreferencesSkeleton() {
   return (
     <Card className="rounded-lg">
       <CardHeader>
