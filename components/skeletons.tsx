@@ -4,8 +4,10 @@ import { Avatar } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
   Table,
@@ -389,5 +391,133 @@ export function PaymentReceiptDialogSkeleton() {
         </CardFooter>
       </Card>
     </>
+  );
+}
+
+export function ProfileSkeleton() {
+  return (
+    <Card className="rounded-lg">
+      <CardHeader>
+        <CardTitle>
+          <Skeleton className="h-8 w-48" />
+        </CardTitle>
+        <CardDescription>
+          <Skeleton className="h-4 w-64" />
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+          <div className="flex flex-col items-center gap-2">
+            <Skeleton className="h-24 w-24 rounded-full" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+
+          <div className="w-full space-y-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+
+            <Skeleton className="h-24 w-full" />
+
+            <div className="flex flex-row-reverse">
+              <Skeleton className="h-10 w-32 rounded-md" />
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function AccountSkeleton() {
+  return (
+    <Card className="rounded-lg">
+      <CardHeader>
+        <CardTitle>
+          <Skeleton className="h-8 w-48" />
+        </CardTitle>
+        <CardDescription>
+          <Skeleton className="h-4 w-64" />
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="space-y-4">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-10 w-full" />
+
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-10 w-full" />
+
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-10 w-full" />
+
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-36" />
+            <Skeleton className="h-4 w-64" />
+          </div>
+
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-10 w-full" />
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          </div>
+
+          <div className="flex flex-row-reverse">
+            <Skeleton className="h-10 w-36" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function NotificationPreferencesSkeleton() {
+  return (
+    <Card className="rounded-lg">
+      <CardHeader>
+        <CardTitle>
+          <Skeleton className="h-8 w-48" />
+        </CardTitle>
+        <CardDescription>
+          <Skeleton className="h-4 w-64" />
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={i}
+            className="flex flex-row items-start space-x-3 rounded-md border p-4"
+          >
+            <Skeleton className="h-5 w-5 rounded-sm" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-3 w-64" />
+            </div>
+          </div>
+        ))}
+        <div className="flex flex-row-reverse">
+          <Skeleton className="h-10 w-36" />
+        </div>
+      </CardContent>
+    </Card>
   );
 }

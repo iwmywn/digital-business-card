@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { InformationForm } from "@/components/information-form";
-import { AccountForm } from "@/components/account-form";
-import { Notifications } from "@/components/notifications";
+import { Settings } from "@/components/settings";
 
 export const metadata: Metadata = {
   title: "Account Settings",
@@ -10,13 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function page() {
-  return (
-    <>
-      <div className="space-y-2">
-        <InformationForm />
-        <AccountForm />
-        <Notifications />
-      </div>
-    </>
-  );
+  return <Settings />;
 }
