@@ -7,6 +7,20 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export function UserSkeleton() {
   return (
@@ -218,5 +232,162 @@ export function SubscriptionPlansSkeleton() {
         ))}
       </div>
     </div>
+  );
+}
+
+export function PaymentReceiptDialogSkeleton() {
+  return (
+    <>
+      <DialogHeader>
+        <DialogTitle className="flex items-center gap-2 text-2xl">
+          <Skeleton className="h-8 w-40" />
+          <Skeleton className="h-6 w-20 rounded-full" />
+        </DialogTitle>
+        <DialogDescription asChild>
+          <div>
+            <Skeleton className="h-4 w-64" />
+          </div>
+        </DialogDescription>
+      </DialogHeader>
+
+      <Card className="rounded-lg text-sm">
+        <CardHeader>
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-52" />
+            <Skeleton className="h-4 w-40" />
+          </div>
+        </CardHeader>
+
+        <CardContent className="space-y-6">
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-40" />
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>
+                    <Skeleton className="h-4 w-16" />
+                  </TableHead>
+                  <TableHead className="text-right">
+                    <Skeleton className="ml-auto h-4 w-24" />
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <Skeleton className="h-4 w-24" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Skeleton className="ml-auto h-4 w-36" />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-40" />
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>
+                    <Skeleton className="h-4 w-16" />
+                  </TableHead>
+                  <TableHead className="text-right">
+                    <Skeleton className="ml-auto h-4 w-24" />
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="mt-1 h-4 w-24" />
+                  </TableCell>
+                  <TableCell className="space-y-1 text-right">
+                    <Skeleton className="ml-auto h-4 w-32" />
+                    <Skeleton className="ml-auto h-4 w-20" />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-40" />
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>
+                    <Skeleton className="h-4 w-16" />
+                  </TableHead>
+                  <TableHead className="text-right">
+                    <Skeleton className="ml-auto h-4 w-24" />
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <Skeleton className="h-4 w-36" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Skeleton className="ml-auto h-4 w-16" />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-40" />
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[50%]">
+                    <Skeleton className="h-4 w-16" />
+                  </TableHead>
+                  <TableHead className="text-center">
+                    <Skeleton className="mx-auto h-4 w-16" />
+                  </TableHead>
+                  <TableHead className="text-right">
+                    <Skeleton className="ml-auto h-4 w-16" />
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <Skeleton className="h-4 w-32" />
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Skeleton className="mx-auto h-4 w-6" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Skeleton className="ml-auto h-4 w-12" />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell />
+                  <TableCell className="text-center">
+                    <Skeleton className="mx-auto h-4 w-16" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Skeleton className="ml-auto h-4 w-16" />
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </div>
+        </CardContent>
+
+        <CardFooter className="flex flex-col items-start gap-2 text-xs text-gray-500">
+          <Skeleton className="h-3 w-64" />
+          <Skeleton className="h-3 w-40" />
+        </CardFooter>
+      </Card>
+    </>
   );
 }

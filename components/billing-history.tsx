@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { format } from "date-fns";
-import { Loader2, Receipt, Search } from "lucide-react";
+import { Receipt, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,17 +21,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { PaymentReceipt } from "@/components/payment-receipt";
+import { PaymentReceiptDialog } from "@/components/payment-receipt-dialog";
 import { getPaymentHistoryDetails } from "@/actions/user";
 import { toast } from "sonner";
-import { ReceiptData } from "@/components/payment-receipt";
+import { ReceiptData } from "@/components/payment-receipt-dialog";
 import { useSubscription } from "@/lib/hooks";
 import { NotFoundUI } from "@/components/not-found-ui";
 
@@ -166,26 +159,12 @@ export function BillingHistory() {
         </CardContent>
       </Card>
 
-      <Dialog
-        open={selectedPayment !== null}
-        onOpenChange={(open) => !open && setSelectedPayment(null)}
-      >
-        <DialogContent className="max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">Payment Receipt</DialogTitle>
-            <DialogDescription>
-              Details of your subscription payment
-            </DialogDescription>
-          </DialogHeader>
-          {isReceiptLoading ? (
-            <div className="flex h-64 items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-            </div>
-          ) : (
-            receiptData && <PaymentReceipt receiptData={receiptData} />
-          )}
-        </DialogContent>
-      </Dialog>
+      <PaymentReceiptDialog
+        selectedPayment={selectedPayment}
+        setSelectedPayment={setSelectedPayment}
+        isReceiptLoading={isReceiptLoading}
+        receiptData={receiptData}
+      />
     </>
   );
 }
