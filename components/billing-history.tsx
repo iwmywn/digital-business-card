@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { PaymentReceiptDialog } from "@/components/payment-receipt-dialog";
-import { getPaymentHistoryDetails } from "@/actions/user";
+import { getPaymentHistoryDetails } from "@/actions/plan";
 import { toast } from "sonner";
 import { ReceiptData } from "@/components/payment-receipt-dialog";
 import { useSubscription } from "@/lib/hooks";

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { createCheckoutSession } from "@/actions/stripe";
-import { switchToPlan } from "@/actions/user";
+import { switchToPlan } from "@/actions/plan";
 import { subscriptionPlans } from "@/constants";
 import { useSubscription, useUser } from "@/lib/hooks";
 import { toast } from "sonner";

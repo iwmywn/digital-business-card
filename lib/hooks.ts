@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { getSubscriptionPlans } from "@/actions/user";
+import { getSubscriptionPlans } from "@/actions/plan";
 import type { Card, PaymentHistory } from "@/lib/definitions";
 import { me } from "@/actions/auth";
 import { getCards } from "@/actions/card";
