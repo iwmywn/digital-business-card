@@ -3,10 +3,10 @@ import {
   Open_Sans,
   Montserrat,
   Inter,
-  Oswald,
+  Saira,
   Raleway,
-  Nunito,
   Playfair_Display,
+  Nunito,
   Lora,
   Quicksand,
   Yanone_Kaffeesatz,
@@ -14,11 +14,11 @@ import {
   Bitter,
   Crimson_Pro,
   Space_Grotesk,
-  Saira,
+  Oswald,
   Yrsa,
   REM,
-  League_Spartan,
   Signika,
+  League_Spartan,
 } from "next/font/google";
 
 const roboto = Roboto({
@@ -81,6 +81,10 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin", "vietnamese"],
 });
 
+const oswald = Oswald({
+  subsets: ["latin", "vietnamese"],
+});
+
 const yrsa = Yrsa({
   subsets: ["latin", "vietnamese"],
 });
@@ -97,15 +101,12 @@ const leagueSpartan = League_Spartan({
   subsets: ["latin", "vietnamese"],
 });
 
-const oswald = Oswald({
-  subsets: ["latin", "vietnamese"],
-});
-
 export {
   roboto,
   openSans,
   montserrat,
   inter,
+  saira,
   raleway,
   playfairDisplay,
   nunito,
@@ -116,10 +117,9 @@ export {
   bitter,
   crimsonPro,
   spaceGrotesk,
-  saira,
+  oswald,
   yrsa,
   rem,
   signika,
   leagueSpartan,
-  oswald,
 };

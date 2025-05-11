@@ -1,10 +1,10 @@
 import * as fonts from "@/app/fonts";
 
-const cloudinaryName = "duobwq5xg";
+const cloudinaryName = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
 const baseImgUrl = `https://res.cloudinary.com/${cloudinaryName}/image/upload`;
 
-const basicId = "price_1RKWrNGLhvibmNX6gVIdO8tm";
-const professionalId = "price_1RKWqsGLhvibmNX6JwNErxrI";
+const basicId = process.env.NEXT_PUBIC_BASIC_ID;
+const professionalId = process.env.NEXT_PUBLIC_PROFESSION_ID;
 
 const maxFreeCards = 1;
 const maxBasicCards = 5;
