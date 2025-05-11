@@ -45,7 +45,7 @@ const subscriptionPlans = [
       "Access advanced analytics with detailed insights",
       "Unlock the full theme library",
       "Use all available fonts",
-      "Connect a custom domain (card & profile)",
+      "Connect a custom card domain",
       "Receive priority customer support",
       "Remove all platform branding",
     ],

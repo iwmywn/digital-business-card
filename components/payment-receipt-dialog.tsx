@@ -107,7 +107,7 @@ export function PaymentReceiptDialog({
             receiptData && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2 text-2xl">
+                  <DialogTitle className="flex items-center gap-2 text-2xl max-sm:justify-center">
                     Payment Receipt
                     <Badge
                       className={`capitalize ${getStatusColor(receiptData.paymentIntent.status)}`}
