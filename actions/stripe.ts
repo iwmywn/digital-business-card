@@ -3,15 +3,22 @@
 import Stripe from "stripe";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
-import * as constants from "@/constants";
 import { processSuccessfulPayment } from "./stripe-utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-04-30.basil",
 });
 
-export async function createCheckoutSession(priceId: string) {
+export async function createCheckoutSession(priceId: string, planId: string) {
   try {
+    if (!priceId) {
+      return { error: "Invalid price ID!" };
+    }
+
+    if (!planId) {
+      return { error: "Invalid plan ID!" };
+    }
+
     const { isSignedIn, userId } = await session.user.get();
 
     if (!isSignedIn || !userId) {
@@ -27,17 +34,6 @@ export async function createCheckoutSession(priceId: string) {
     }
 
     const url = process.env.NEXT_PUBLIC_URL;
-
-    let planId: "basic" | "professional" | undefined;
-    if (priceId === constants.basicId) {
-      planId = "basic";
-    } else if (priceId === constants.professionalId) {
-      planId = "professional";
-    }
-
-    if (!planId) {
-      return { error: "Invalid price ID" };
-    }
 
     const sessionOptions: Stripe.Checkout.SessionCreateParams = {
       customer: existingUser.stripeCustomerId,

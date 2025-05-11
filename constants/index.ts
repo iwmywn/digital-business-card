@@ -34,7 +34,7 @@ const subscriptionPlans = [
       "Choose from 7 unique fonts",
     ],
     popular: false,
-    priceId: basicId,
+    priceId: basicId || "",
   },
   {
     id: "professional",
@@ -50,7 +50,7 @@ const subscriptionPlans = [
       "Remove all platform branding",
     ],
     popular: true,
-    priceId: professionalId,
+    priceId: professionalId || "",
   },
 ];
 

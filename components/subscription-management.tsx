@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Loader2, Sparkles } from "lucide-react";
+import { CheckCircle2, Sparkles } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -17,6 +17,7 @@ import { subscriptionPlans } from "@/constants";
 import { useSubscription, useUser } from "@/lib/hooks";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Loading } from "@/components/loading";
 
 export function SubscriptionManagement() {
   const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
@@ -27,7 +28,7 @@ export function SubscriptionManagement() {
   async function handleSubscribe(priceId: string, planId: string) {
     setIsLoading((prev) => ({ ...prev, [planId]: true }));
 
-    const { error, url } = await createCheckoutSession(priceId);
+    const { error, url } = await createCheckoutSession(priceId, planId);
 
     if (error || !url) {
       toast.error(error);
@@ -142,11 +143,7 @@ export function SubscriptionManagement() {
                     }
                     disabled={isLoading[plan.id]}
                   >
-                    {isLoading[plan.id] ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      "Switch to This Plan"
-                    )}
+                    {isLoading[plan.id] ? <Loading /> : "Switch to this plan"}
                   </Button>
                 ) : (
                   plan.id !== "free" && (
@@ -155,11 +152,7 @@ export function SubscriptionManagement() {
                       onClick={() => handleSubscribe(plan.priceId, plan.id)}
                       disabled={isLoading[plan.id]}
                     >
-                      {isLoading[plan.id] ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        "Upgrade"
-                      )}
+                      {isLoading[plan.id] ? <Loading /> : "Upgrade"}
                     </Button>
                   )
                 )}
