@@ -14,7 +14,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -56,7 +55,7 @@ export function InformationForm() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(publicProfileSchema),
     defaultValues: {
-      name: "Hoàng Anh Tuấn",
+      fullName: "Hoàng Anh Tuấn",
       email: "public@nextmail.com",
       bio: "Software engineer with strong skills in full-stack development, cloud computing, and system design.",
       jobTitle: "Software Engineer",
@@ -129,12 +128,16 @@ export function InformationForm() {
                 <div className="space-y-2">
                   <FormField
                     control={form.control}
-                    name="name"
+                    name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Full Name</FormLabel>
+                        <FormLabel htmlFor="fullName">Full Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your name" {...field} />
+                          <Input
+                            id="fullName"
+                            placeholder="Your name"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -148,9 +151,13 @@ export function InformationForm() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel htmlFor="email">Email</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your email" {...field} />
+                          <Input
+                            id="email"
+                            placeholder="Your email"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -166,13 +173,13 @@ export function InformationForm() {
                     name="gender"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Gender</FormLabel>
+                        <FormLabel htmlFor="gender">Gender</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="w-full">
+                            <SelectTrigger id="gender" className="w-full">
                               <SelectValue placeholder="Select gender" />
                             </SelectTrigger>
                           </FormControl>
@@ -199,11 +206,14 @@ export function InformationForm() {
                     name="dateOfBirth"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel>Date Of Birth</FormLabel>
+                        <FormLabel htmlFor="dateOfBirth">
+                          Date Of Birth
+                        </FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
                               <Button
+                                id="dateOfBirth"
                                 variant={"outline"}
                                 className={cn(
                                   "truncate pl-3 text-left font-normal",
@@ -246,9 +256,13 @@ export function InformationForm() {
                     name="jobTitle"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Job Title</FormLabel>
+                        <FormLabel htmlFor="jobTitle">Job Title</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your job title" {...field} />
+                          <Input
+                            id="jobTitle"
+                            placeholder="Your job title"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -262,9 +276,13 @@ export function InformationForm() {
                     name="company"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Company</FormLabel>
+                        <FormLabel htmlFor="company">Company</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your company" {...field} />
+                          <Input
+                            id="company"
+                            placeholder="Your company"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -280,9 +298,10 @@ export function InformationForm() {
                     name="website"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Website</FormLabel>
+                        <FormLabel htmlFor="website">Website</FormLabel>
                         <FormControl>
                           <Input
+                            id="website"
                             placeholder="https://iwmywn.github.io"
                             {...field}
                           />
@@ -301,7 +320,11 @@ export function InformationForm() {
                       <FormItem className="grid gap-2">
                         <FormLabel htmlFor="phone">Phone Number</FormLabel>
                         <FormControl>
-                          <PhoneInput {...field} defaultCountry="VN" />
+                          <PhoneInput
+                            id="phone"
+                            {...field}
+                            defaultCountry="VN"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -315,18 +338,15 @@ export function InformationForm() {
                 name="bio"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bio</FormLabel>
+                    <FormLabel htmlFor="bio">Bio</FormLabel>
                     <FormControl>
                       <Textarea
+                        id="bio"
                         placeholder="Tell us a little bit about yourself"
                         className="resize-none"
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
-                      Brief description for your profile. Maximum 160
-                      characters.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

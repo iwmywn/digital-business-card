@@ -21,15 +21,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { settingsSchema } from "@/schemas";
+import { accountSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { PasswordInput } from "@/components/ui/password-input";
 
-type SettingsFormValues = z.infer<typeof settingsSchema>;
+type SettingsFormValues = z.infer<typeof accountSchema>;
 
 export function AccountForm() {
   const form = useForm<SettingsFormValues>({
-    resolver: zodResolver(settingsSchema),
+    resolver: zodResolver(accountSchema),
     defaultValues: {
       username: "iwmywn",
       currentPassword: "",
@@ -76,8 +76,9 @@ export function AccountForm() {
             />
 
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel htmlFor="email">Email</FormLabel>
               <Input
+                id="email"
                 placeholder="Email"
                 type="email"
                 readOnly

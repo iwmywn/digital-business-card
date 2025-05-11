@@ -52,7 +52,7 @@ const emailSchema = z.object({
 const contactSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required." }),
   lastName: z.string().min(1, { message: "Last name is required." }),
-  companyName: z.string().min(1, { message: "Company name is required." }),
+  company: z.string().min(1, { message: "Company name is required." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
   phone: z.string().optional(),
   department: z.string().min(1, { message: "Please select a department." }),
@@ -63,9 +63,9 @@ const contactSchema = z.object({
 
 //todo :rename name to fullname
 const publicProfileSchema = z.object({
-  name: z
+  fullName: z
     .string()
-    .min(2, { message: "Name must be at least 2 characters long." })
+    .min(2, { message: "Full name must be at least 2 characters long." })
     .optional(),
   email: z
     .string()
@@ -95,7 +95,7 @@ const publicProfileSchema = z.object({
 });
 
 // todo: add username to db
-const settingsSchema = z
+const accountSchema = z
   .object({
     username: z
       .string()
@@ -168,7 +168,7 @@ export {
   tokenSchema,
   contactSchema,
   publicProfileSchema,
-  settingsSchema,
+  accountSchema,
   notificationsSchema,
   personalInfoSchema,
 };
