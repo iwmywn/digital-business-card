@@ -40,17 +40,18 @@ export async function saveCard(
       return { error: "Unauthorized!" };
     }
 
-    if (cardData.cardDesign.imageTransforms?.logo) {
-      cardData.cardDesign.imageTransforms.logo.croppedImageUrl = undefined;
+    const updatedCardDesign = { ...cardData.cardDesign };
+
+    if (updatedCardDesign.imageTransforms?.logo) {
+      updatedCardDesign.imageTransforms.logo.croppedImageUrl = undefined;
     }
-    if (cardData.cardDesign.imageTransforms?.cover) {
-      cardData.cardDesign.imageTransforms.cover.croppedImageUrl = undefined;
+    if (updatedCardDesign.imageTransforms?.cover) {
+      updatedCardDesign.imageTransforms.cover.croppedImageUrl = undefined;
     }
-    if (cardData.cardDesign.imageTransforms?.profile) {
-      cardData.cardDesign.imageTransforms.profile.croppedImageUrl = undefined;
+    if (updatedCardDesign.imageTransforms?.profile) {
+      updatedCardDesign.imageTransforms.profile.croppedImageUrl = undefined;
     }
 
-    const updatedCardDesign = { ...cardData.cardDesign };
     const imageKeys: ImageKey[] = ["logoImage", "profileImage", "coverImage"];
 
     for (const key of imageKeys) {
