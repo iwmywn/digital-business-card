@@ -130,9 +130,6 @@ const basicColorOptions = [
   { value: "lime", label: "Lime", color: "bg-lime-400" },
   { value: "green", label: "Green", color: "bg-green-400" },
   { value: "emerald", label: "Emerald", color: "bg-emerald-400" },
-];
-const allColorOptions = [
-  ...basicColorOptions,
   { value: "teal", label: "Teal", color: "bg-teal-400" },
   { value: "cyan", label: "Cyan", color: "bg-cyan-400" },
   { value: "sky", label: "Sky", color: "bg-sky-400" },
@@ -143,10 +140,109 @@ const allColorOptions = [
   { value: "fuchsia", label: "Fuchsia", color: "bg-fuchsia-400" },
   { value: "pink", label: "Pink", color: "bg-pink-400" },
   { value: "rose", label: "Rose", color: "bg-rose-400" },
+];
+const allColorOptions = [
+  ...basicColorOptions,
   {
-    value: "gradient",
-    label: "Gradient",
+    value: "ice",
+    label: "Ice",
+    color: "bg-gradient-to-r from-cyan-100 via-blue-200 to-indigo-200",
+  },
+  {
+    value: "arctic",
+    label: "Arctic",
+    color: "bg-gradient-to-r from-blue-100 via-cyan-200 to-teal-300",
+  },
+  {
+    value: "mojito",
+    label: "Mojito",
+    color: "bg-gradient-to-r from-green-300 via-lime-400 to-yellow-300",
+  },
+  {
+    value: "mint",
+    label: "Mint",
+    color: "bg-gradient-to-r from-green-300 via-teal-400 to-emerald-500",
+  },
+  {
+    value: "forest",
+    label: "Forest",
+    color: "bg-gradient-to-r from-lime-400 via-emerald-500 to-green-600",
+  },
+  {
+    value: "aqua",
+    label: "Aqua",
+    color: "bg-gradient-to-r from-teal-300 via-cyan-400 to-sky-500",
+  },
+  {
+    value: "ocean",
+    label: "Ocean",
+    color: "bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500",
+  },
+  {
+    value: "aurora",
+    label: "Aurora",
+    color: "bg-gradient-to-r from-green-300 via-blue-500 to-purple-600",
+  },
+  {
+    value: "cottonCandy",
+    label: "Cotton Candy",
+    color: "bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300",
+  },
+  {
+    value: "bubblegum",
+    label: "Bubblegum",
+    color: "bg-gradient-to-r from-pink-200 via-pink-400 to-pink-600",
+  },
+  {
+    value: "dusk",
+    label: "Dusk",
+    color: "bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500",
+  },
+  {
+    value: "rainbow",
+    label: "Rainbow",
+    color:
+      "bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400",
+  },
+  {
+    value: "sunset",
+    label: "Sunset",
+    color: "bg-gradient-to-r from-rose-400 via-red-400 to-orange-400",
+  },
+  {
+    value: "flamingo",
+    label: "Flamingo",
     color: "bg-gradient-to-r from-pink-400 via-red-400 to-yellow-400",
+  },
+  {
+    value: "fire",
+    label: "Fire",
+    color: "bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500",
+  },
+  {
+    value: "lava",
+    label: "Lava",
+    color: "bg-gradient-to-r from-red-600 via-orange-600 to-yellow-500",
+  },
+  {
+    value: "berry",
+    label: "Berry",
+    color: "bg-gradient-to-r from-purple-700 via-pink-600 to-red-500",
+  },
+  {
+    value: "twilight",
+    label: "Twilight",
+    color: "bg-gradient-to-r from-violet-500 via-indigo-500 to-blue-500",
+  },
+  {
+    value: "nebula",
+    label: "Nebula",
+    color: "bg-gradient-to-r from-purple-800 via-indigo-700 to-blue-600",
+  },
+  {
+    value: "space",
+    label: "Space",
+    color: "bg-gradient-to-r from-gray-800 via-purple-900 to-indigo-900",
   },
 ];
 

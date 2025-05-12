@@ -336,7 +336,7 @@ export function CardDesign({
             {colorOptions.map((color) => (
               <button
                 key={color.value}
-                className={`h-12 w-12 cursor-pointer rounded-md border-2 transition-all ${color.color} ${cardColor === color.value ? "scale-110 ring-2 ring-black ring-offset-2" : "border-transparent hover:scale-105"} `}
+                className={`h-12 w-12 cursor-pointer rounded-md border-2 transition-all ${color.color} ${cardColor === color.value ? "scale-110 ring-2 ring-black ring-offset-2" : "hover:ring-primary border-transparent hover:ring-2"} `}
                 onClick={() => setCardColor(color.value)}
                 title={color.label}
                 type="button"
