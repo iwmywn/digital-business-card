@@ -148,7 +148,7 @@ export function BillingHistory() {
                           handleViewReceipt(payment.paymentIntentId)
                         }
                       >
-                        View Receipt
+                        View receipt
                       </Button>
                     </TableCell>
                   </TableRow>

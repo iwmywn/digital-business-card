@@ -131,7 +131,7 @@ export function SubscriptionManagement() {
 
                 {isCurrentPlan ? (
                   <Button className="w-full" disabled>
-                    Current Plan
+                    Current plan
                   </Button>
                 ) : isAccessible ? (
                   <Button

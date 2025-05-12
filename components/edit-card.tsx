@@ -121,14 +121,10 @@ export function EditCard({ card }: { card: CardType }) {
         </div>
         <div className="flex items-center justify-end gap-2">
           <Button onClick={() => setPreviewMode(!previewMode)}>
-            {previewMode ? "Back to Editor" : "Preview Card"}
+            {previewMode ? "Back to editor" : "Preview card"}
           </Button>
-          <Button
-            onClick={handleUpdateCard}
-            disabled={isSubmitting}
-            className="bg-primary"
-          >
-            {isSubmitting ? <Loading /> : "Save Changes"}
+          <Button onClick={handleUpdateCard} disabled={isSubmitting}>
+            {isSubmitting ? <Loading /> : "Save changes"}
           </Button>
         </div>
       </div>

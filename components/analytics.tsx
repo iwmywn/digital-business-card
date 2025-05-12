@@ -28,8 +28,6 @@ import { cn } from "@/lib/utils";
 import type { Card as CardType } from "@/lib/definitions";
 import { useEffect, useState } from "react";
 import { useCard, useUser } from "@/lib/hooks";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { AnalyticsSkeleton } from "@/components/skeletons";
 import { toast } from "sonner";
 import { NotFoundUI } from "@/components/not-found-ui";
@@ -182,6 +180,19 @@ export function Analytics() {
     );
   }
 
+  if (cards.length === 0) {
+    return (
+      <NotFoundUI
+        icon={<ChartColumnIncreasing />}
+        title="NO CARDS YET"
+        message="Create a digital business card to start tracking your analytics."
+        linkHref="/create"
+        linkLabel="Create your first card"
+        className="min-h-[calc(100vh-4.83rem)]"
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -293,21 +304,15 @@ export function Analytics() {
           </CardHeader>
           <CardContent>
             {currentPlan === "basic" ? (
-              <div className="flex h-[250px] flex-col items-center justify-center gap-2 text-center">
-                <div className="bg-secondary rounded-full p-3">
-                  <ChartColumnIncreasing />
-                </div>
-                <h2 className="text-lg font-semibold">UNLOCK ANALYTICS</h2>
-                <p>
-                  Upgrade to our professional plan to access detailed analytics
-                  for your digital business cards.
-                </p>
-                <Button asChild>
-                  <Link href="/subscription" className="mt-2">
-                    Go to subscription
-                  </Link>
-                </Button>
-              </div>
+              <NotFoundUI
+                icon={<ChartColumnIncreasing />}
+                title="UNLOCK ANALYTICS"
+                message="Upgrade to our professional plan to access detailed analytics
+                  for your digital business cards."
+                linkHref="/subscription"
+                linkLabel="Go to subscription"
+                className="h-[250px]"
+              />
             ) : (
               <ChartContainer
                 config={chartConfig}

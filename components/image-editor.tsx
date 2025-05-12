@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Cropper from "react-easy-crop";
+import { Loading } from "@/components/loading";
 
 export type ImageTransform = {
   scale: number;
@@ -265,10 +266,7 @@ export function ImageEditor({
                 </Button>
                 <Button onClick={saveImage} disabled={isProcessing}>
                   {isProcessing ? (
-                    <>
-                      <span className="mr-2 animate-spin">⏳</span>
-                      Processing...
-                    </>
+                    <Loading />
                   ) : (
                     <>
                       <Check className="mr-2 h-4 w-4" />

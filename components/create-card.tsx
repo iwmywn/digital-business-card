@@ -139,15 +139,11 @@ export function CreateCard() {
         </div>
         <div className="flex items-center justify-end gap-2">
           <Button onClick={() => setPreviewMode(!previewMode)}>
-            {previewMode ? "Back to Editor" : "Preview Card"}
+            {previewMode ? "Back to editor" : "Preview card"}
           </Button>
           {!isCardError && (
-            <Button
-              onClick={handleCreateCard}
-              disabled={isSubmitting}
-              className="bg-primary"
-            >
-              {isSubmitting ? <Loading /> : "Create Card"}
+            <Button onClick={handleCreateCard} disabled={isSubmitting}>
+              {isSubmitting ? <Loading /> : "Create card"}
             </Button>
           )}
         </div>

@@ -1,6 +1,6 @@
 import * as fonts from "@/app/fonts";
 
-const basicId = process.env.NEXT_PUBIC_BASIC_ID;
+const basicId = process.env.NEXT_PUBLIC_BASIC_ID;
 const professionalId = process.env.NEXT_PUBLIC_PROFESSION_ID;
 
 const maxFreeCards = 1;

@@ -23,7 +23,7 @@ function PaymentStatusUI({
       <h2 className="text-lg font-semibold">{title}</h2>
       <p>{message}</p>
       <Button asChild>
-        <Link href="/subscription">Return to Subscription</Link>
+        <Link href="/subscription">Return to subscription</Link>
       </Button>
     </div>
   );

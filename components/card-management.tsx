@@ -177,7 +177,7 @@ export function CardManagement() {
           </p>
         </div>
         <Button asChild className="bg-primary">
-          <Link href="/create">Create New Card</Link>
+          <Link href="/create">Create new card</Link>
         </Button>
       </div>
 
@@ -403,7 +403,7 @@ export function CardManagement() {
               onClick={() => handleCopyLink(selectedCard?.slug || "")}
             >
               <Copy className="mr-2 h-4 w-4" />
-              Copy Link
+              Copy link
             </Button>
             <Button
               className="bg-primary sm:flex-1"
@@ -411,7 +411,7 @@ export function CardManagement() {
               disabled={!qrCodeUrl}
             >
               <Download className="mr-2 h-4 w-4" />
-              Download QR Code
+              Download QR code
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -459,7 +459,7 @@ export function CardManagement() {
               onClick={() => handleDeleteCard(selectedCard?._id || "")}
               disabled={isDeleting}
             >
-              {isDeleting ? <Loading /> : "Delete Card"}
+              {isDeleting ? <Loading /> : "Delete card"}
             </Button>
           </DialogFooter>
         </DialogContent>
