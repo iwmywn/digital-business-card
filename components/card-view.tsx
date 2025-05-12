@@ -14,10 +14,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import QRCode from "qrcode";
-import { linkTypes, SerializableLinkType } from "@/components/icons";
+import { linkTypes, type SerializableLinkType } from "@/components/icons";
 import type { Card as CardType } from "@/lib/definitions";
 import { getColorClass, getFontClass } from "@/lib/utils";
 import { Separator } from "@/components/separator";
+import { getCloudinaryUrl } from "@/lib/utils";
 
 export function CardView({ card }: { card: CardType }) {
   const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false);
@@ -33,17 +34,6 @@ export function CardView({ card }: { card: CardType }) {
       return <IconComponent className="h-5 w-5" />;
     }
     return null;
-  };
-
-  const getImageUrl = (type: "logo" | "profile" | "cover") => {
-    const transform = card.cardDesign.imageTransforms?.[type];
-    if (transform?.croppedImageUrl) {
-      return transform.croppedImageUrl;
-    }
-
-    if (type === "logo") return card.cardDesign.logoImage;
-    if (type === "profile") return card.cardDesign.profileImage;
-    return card.cardDesign.coverImage;
   };
 
   async function handleLinkClick(link: SerializableLinkType) {
@@ -124,14 +114,17 @@ export function CardView({ card }: { card: CardType }) {
   return (
     <div className="mx-auto max-w-md px-4 py-8">
       <div
-        className={`overflow-hidden rounded-xl border border-gray-200 shadow-lg ${fontClass && fontClass}`}
+        className={`overflow-hidden rounded-xl border border-gray-200 shadow-lg ${fontClass}`}
       >
         <div className={`relative ${colorClass}`}>
           {card.cardDesign.coverImage ? (
             <div className="relative h-48 w-full overflow-hidden">
               <div className="relative h-full w-full">
                 <Image
-                  src={getImageUrl("cover") || "/placeholder.svg"}
+                  src={getCloudinaryUrl(
+                    card.cardDesign.coverImage,
+                    card.cardDesign.imageTransforms?.cover,
+                  )}
                   alt="Cover"
                   fill
                   style={{ objectFit: "cover" }}
@@ -142,7 +135,10 @@ export function CardView({ card }: { card: CardType }) {
                 <div className="absolute right-4 bottom-4 h-16 w-16 overflow-hidden rounded-lg bg-white p-1 shadow-md">
                   <div className="relative h-full w-full">
                     <Image
-                      src={getImageUrl("logo") || "/placeholder.svg"}
+                      src={getCloudinaryUrl(
+                        card.cardDesign.logoImage,
+                        card.cardDesign.imageTransforms?.logo,
+                      )}
                       alt="Logo"
                       fill
                       style={{ objectFit: "cover" }}
@@ -159,7 +155,10 @@ export function CardView({ card }: { card: CardType }) {
                 <div className="h-20 w-20 overflow-hidden rounded-lg bg-white p-1 shadow-md">
                   <div className="relative h-full w-full">
                     <Image
-                      src={getImageUrl("logo") || "/placeholder.svg"}
+                      src={getCloudinaryUrl(
+                        card.cardDesign.logoImage,
+                        card.cardDesign.imageTransforms?.logo,
+                      )}
                       alt="Logo"
                       fill
                       style={{ objectFit: "cover" }}
@@ -177,7 +176,10 @@ export function CardView({ card }: { card: CardType }) {
               <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
                 <div className="relative h-full w-full">
                   <Image
-                    src={getImageUrl("profile") || "/placeholder.svg"}
+                    src={getCloudinaryUrl(
+                      card.cardDesign.profileImage,
+                      card.cardDesign.imageTransforms?.profile,
+                    )}
                     alt="Profile"
                     fill
                     style={{ objectFit: "cover" }}

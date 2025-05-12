@@ -70,6 +70,7 @@ export function CreateCard() {
     }
 
     setIsSubmitting(true);
+
     const { success, error } = await saveCard({
       cardDesign,
       personalInfo,
@@ -87,9 +88,9 @@ export function CreateCard() {
             _id: "temp",
             userId: "temp",
             slug: "temp",
-            cardDesign: cardDesign,
-            personalInfo: personalInfo,
-            links: links,
+            cardDesign,
+            personalInfo,
+            links,
             isPublic: true,
             views: 0,
             clicks: 0,

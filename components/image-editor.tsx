@@ -133,7 +133,7 @@ export function ImageEditor({
 
   const getAspectRatio = () => {
     if (imageType === "cover") {
-      return 3 / 2;
+      return 2 / 1;
     } else if (imageType === "logo" || imageType === "profile") {
       return 1;
     }

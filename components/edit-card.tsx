@@ -58,6 +58,7 @@ export function EditCard({ card }: { card: CardType }) {
     }
 
     setIsSubmitting(true);
+
     const { success, error } = await saveCard(
       {
         cardDesign,

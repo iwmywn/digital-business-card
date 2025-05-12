@@ -12,6 +12,7 @@ import {
   Download,
   Search,
   Lock,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,7 +54,7 @@ import Link from "next/link";
 import { deleteCard } from "@/actions/card";
 import QRCode from "qrcode";
 import type { Card as CardType } from "@/lib/definitions";
-import { getColorClass } from "@/lib/utils";
+import { getCloudinaryUrl, getColorClass, getFontClass } from "@/lib/utils";
 import { CardManagementSkeleton } from "@/components/skeletons";
 import { useCard } from "@/lib/hooks";
 import { NotFoundUI } from "@/components/not-found-ui";
@@ -95,11 +96,14 @@ export function CardManagement() {
 
   function formatDate(dateParam: Date) {
     const date = new Date(dateParam);
-    return new Intl.DateTimeFormat("en-US", {
+    return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
-      month: "short",
+      month: "long",
       day: "numeric",
-    }).format(date);
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
   }
 
   async function generateQRCode(slug: string) {
@@ -137,15 +141,20 @@ export function CardManagement() {
     document.body.removeChild(link);
   }
 
-  const getImageUrl = (card: CardType, type: "logo" | "profile" | "cover") => {
+  const getImageUrl = (
+    card: CardType | null,
+    type: "logo" | "profile" | "cover",
+  ) => {
+    if (!card) return "/placeholder.svg";
     const transform = card.cardDesign.imageTransforms?.[type];
-    if (transform?.croppedImageUrl) {
-      return transform.croppedImageUrl;
-    }
 
-    if (type === "logo") return card.cardDesign.logoImage;
-    if (type === "profile") return card.cardDesign.profileImage;
-    return card.cardDesign.coverImage;
+    let imageUrl;
+
+    if (type === "logo") imageUrl = card.cardDesign.logoImage;
+    if (type === "profile") imageUrl = card.cardDesign.profileImage;
+    if (type === "cover") imageUrl = card.cardDesign.coverImage;
+
+    return getCloudinaryUrl(imageUrl, transform);
   };
 
   useEffect(() => {
@@ -198,25 +207,30 @@ export function CardManagement() {
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredCards.map((card) => (
-            <Card key={card._id} className="overflow-hidden rounded-lg">
+            <Card
+              key={card._id}
+              className={`hover:border-primary overflow-hidden rounded-lg pt-0 hover:border-1 ${getFontClass(card.cardDesign.fontFamily)}`}
+            >
               <div
-                className="relative h-32"
-                style={{
-                  backgroundColor: getColorClass(card.cardDesign.cardColor),
-                }}
+                className={`relative aspect-2/1 ${getColorClass(card.cardDesign.cardColor)}`}
               >
-                <div
-                  className={`absolute inset-0 ${getColorClass(card.cardDesign.cardColor)}`}
-                >
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {card.cardDesign.profileImage && (
-                      <div className="h-16 w-16 overflow-hidden rounded-full bg-white p-1">
+                {card.cardDesign.coverImage ? (
+                  <div className="relative h-full w-full overflow-hidden">
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={getImageUrl(card, "cover")}
+                        alt="Cover"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+
+                    {card.cardDesign.logoImage && (
+                      <div className="absolute right-4 bottom-4 h-12 w-12 overflow-hidden rounded-lg shadow-md">
                         <div className="relative h-full w-full">
                           <Image
-                            src={
-                              getImageUrl(card, "profile") || "/placeholder.svg"
-                            }
-                            alt="Profile"
+                            src={getImageUrl(card, "logo")}
+                            alt="Logo"
                             fill
                             style={{ objectFit: "cover" }}
                           />
@@ -224,99 +238,129 @@ export function CardManagement() {
                       </div>
                     )}
                   </div>
-                </div>
-                <div className="absolute top-2 right-2">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-white hover:bg-white/20"
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Card Actions</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link
-                          href={
-                            card.editable
-                              ? `/edit/${card._id}`
-                              : "/subscription"
-                          }
-                          className={
-                            !card.editable
-                              ? "cursor-not-allowed opacity-50"
-                              : ""
-                          }
-                          onClick={(e) => {
-                            if (!card.editable) {
-                              e.preventDefault();
-                              toast.error(card.message);
-                            }
-                          }}
-                        >
-                          {!card.editable && <Lock className="mr-2 h-4 w-4" />}
-                          {card.editable && <Edit className="mr-2 h-4 w-4" />}
-                          {card.editable ? "Edit Card" : "Upgrade to Edit"}
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href={`/card/${card.slug}`} target="_blank">
-                          <Eye className="mr-2 h-4 w-4" />
-                          View Card
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleQrCodeClick(card)}>
-                        <QrCode className="mr-2 h-4 w-4" />
-                        Show QR Code
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setSelectedCard(card);
-                          setIsShareDialogOpen(true);
-                        }}
-                      >
-                        <Share2 className="mr-2 h-4 w-4" />
-                        Share Card
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setSelectedCard(card);
-                          setIsDeleteDialogOpen(true);
-                        }}
-                        className="text-destructive focus:text-destructive"
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete Card
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+                ) : (
+                  <div
+                    className={`flex h-full items-center justify-center p-6 text-white`}
+                  >
+                    {card.cardDesign.logoImage && (
+                      <div className="h-16 w-16 overflow-hidden rounded-lg shadow-md">
+                        <div className="relative h-full w-full">
+                          <Image
+                            src={getImageUrl(card, "logo")}
+                            alt="Logo"
+                            fill
+                            style={{ objectFit: "cover" }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <span className="truncate">{card.personalInfo.fullName}</span>
-                  {!card.isPublic && (
-                    <span className="bg-muted rounded-full px-2 py-1 text-xs">
-                      Private
-                    </span>
-                  )}
-                </CardTitle>
-                <CardDescription>
-                  Last updated: {formatDate(card.updatedAt)}
-                </CardDescription>
+                <div className="relative flex items-center gap-4">
+                  <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-full shadow-md">
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={getImageUrl(card, "profile")}
+                        alt="Profile"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <span className="truncate">
+                        {card.personalInfo.fullName}
+                      </span>
+                      {card.isPublic ? <Globe size={14} /> : <Lock size={14} />}
+                    </CardTitle>
+                    <CardDescription>
+                      {card.views} views
+                      <span className="mx-1.5">•</span>
+                      {card.clicks} clicks
+                    </CardDescription>
+                  </div>
+                  <div className="absolute top-0 right-0">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-primary hover:bg-primary/5"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Card Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link
+                            href={
+                              card.editable
+                                ? `/edit/${card._id}`
+                                : "/subscription"
+                            }
+                            className={
+                              !card.editable
+                                ? "cursor-not-allowed opacity-50"
+                                : ""
+                            }
+                            onClick={(e) => {
+                              if (!card.editable) {
+                                e.preventDefault();
+                                toast.error(card.message);
+                              }
+                            }}
+                          >
+                            {!card.editable && (
+                              <Lock className="mr-2 h-4 w-4" />
+                            )}
+                            {card.editable && <Edit className="mr-2 h-4 w-4" />}
+                            {card.editable ? "Edit Card" : "Upgrade to Edit"}
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/card/${card.slug}`} target="_blank">
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Card
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleQrCodeClick(card)}
+                        >
+                          <QrCode className="mr-2 h-4 w-4" />
+                          Show QR Code
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedCard(card);
+                            setIsShareDialogOpen(true);
+                          }}
+                        >
+                          <Share2 className="mr-2 h-4 w-4" />
+                          Share Card
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedCard(card);
+                            setIsDeleteDialogOpen(true);
+                          }}
+                          className="text-destructive focus:text-destructive"
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete Card
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
               </CardHeader>
-              <CardFooter className="flex justify-between">
-                <div className="text-muted-foreground text-sm">
-                  {card.views} views
-                </div>
-                <div className="text-muted-foreground text-sm">
-                  {card.clicks} clicks
-                </div>
+              <CardFooter className="text-muted-foreground text-sm">
+                Last updated: {formatDate(card.updatedAt)}
               </CardFooter>
             </Card>
           ))}
@@ -384,16 +428,15 @@ export function CardManagement() {
             </DialogDescription>
           </DialogHeader>
           <div className="flex items-center space-x-4 py-4">
-            <div
-              className={`flex h-16 w-16 items-center justify-center rounded-full ${
-                selectedCard?.cardDesign.cardColor === "gradient"
-                  ? "bg-gradient-to-r from-pink-400 via-red-400 to-yellow-400"
-                  : getColorClass(selectedCard?.cardDesign.cardColor || "red")
-              }`}
-            >
-              <span className="text-xl font-bold text-white">
-                {selectedCard?.personalInfo.fullName.charAt(0) || "C"}
-              </span>
+            <div className="h-16 w-16 overflow-hidden rounded-full bg-white shadow-md">
+              <div className="relative h-full w-full">
+                <Image
+                  src={getImageUrl(selectedCard, "profile")}
+                  alt="Profile"
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
             </div>
             <div>
               <h4 className="text-sm font-medium">

@@ -10,6 +10,8 @@ import type { PersonalInfoValues } from "@/components/personal-info";
 import type { SerializableLinkType } from "@/components/icons";
 import { Card } from "@/lib/definitions";
 import * as constants from "@/constants";
+import { uploadToCloudinary } from "@/lib/cloudinary";
+import { extractCloudinaryPath } from "@/lib/utils";
 
 function generateSlug(): string {
   const timePart = Date.now().toString(36);
@@ -22,6 +24,7 @@ function generateSlug(): string {
   return `${timePart}${randomPart}`;
 }
 
+type ImageKey = "logoImage" | "profileImage" | "coverImage";
 export async function saveCard(
   cardData: {
     cardDesign: CardDesignValues;
@@ -35,6 +38,43 @@ export async function saveCard(
 
     if (!isSignedIn || !userId) {
       return { error: "Unauthorized!" };
+    }
+
+    if (cardData.cardDesign.imageTransforms?.logo) {
+      cardData.cardDesign.imageTransforms.logo.croppedImageUrl = undefined;
+    }
+    if (cardData.cardDesign.imageTransforms?.cover) {
+      cardData.cardDesign.imageTransforms.cover.croppedImageUrl = undefined;
+    }
+    if (cardData.cardDesign.imageTransforms?.profile) {
+      cardData.cardDesign.imageTransforms.profile.croppedImageUrl = undefined;
+    }
+
+    const updatedCardDesign = { ...cardData.cardDesign };
+    const imageKeys: ImageKey[] = ["logoImage", "profileImage", "coverImage"];
+
+    for (const key of imageKeys) {
+      const image = cardData.cardDesign[key];
+      console.log("save card image: ", image, image?.startsWith("https://"));
+      const folder = `business-cards/${key.replace("Image", "")}`;
+
+      if (!image) continue;
+
+      if (image.startsWith("data:")) {
+        const { path, error } = await uploadToCloudinary(image, folder);
+        if (error || !path) {
+          return { error };
+        } else {
+          updatedCardDesign[key] = path;
+        }
+      } else if (image.startsWith("https://")) {
+        const { path, error } = extractCloudinaryPath(image);
+        if (error || !path) {
+          return { error: error };
+        } else {
+          updatedCardDesign[key] = path;
+        }
+      }
     }
 
     const cardCollection = await getCardCollection();
@@ -55,7 +95,7 @@ export async function saveCard(
         { _id: new ObjectId(cardId) },
         {
           $set: {
-            cardDesign: cardData.cardDesign,
+            cardDesign: updatedCardDesign,
             personalInfo: cardData.personalInfo,
             links: cardData.links,
             updatedAt: new Date(),
@@ -72,7 +112,7 @@ export async function saveCard(
       const result = await cardCollection.insertOne({
         userId,
         slug,
-        cardDesign: cardData.cardDesign,
+        cardDesign: updatedCardDesign,
         personalInfo: cardData.personalInfo,
         links: cardData.links,
         isPublic: true,

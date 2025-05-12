@@ -1,0 +1,75 @@
+"use server";
+
+import { extractCloudinaryPath } from "@/lib/utils";
+
+export async function uploadToCloudinary(
+  imageData: string,
+  folder = "business-cards",
+): Promise<
+  | {
+      path: string;
+      error?: undefined;
+    }
+  | {
+      error: string;
+      path?: undefined;
+    }
+> {
+  try {
+    const cloudinaryName = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
+    const cloudinaryKey = process.env.NEXT_PUBLIC_CLOUDINARY;
+    const cloudinarySecret = process.env.CLOUDINARY_SECRET_KEY;
+
+    if (!cloudinaryName || !cloudinaryKey || !cloudinarySecret) {
+      return { error: "Cloudinary credentials are not properly configured!" };
+    }
+
+    const base64Data = imageData.includes("base64,")
+      ? imageData.split("base64,")[1]
+      : imageData;
+
+    const timestamp = Math.round(new Date().getTime() / 1000);
+
+    const signature = await generateSignature(
+      `folder=${folder}&timestamp=${timestamp}${cloudinarySecret}`,
+    );
+
+    const formData = new FormData();
+    formData.append("file", `data:image/jpeg;base64,${base64Data}`);
+    formData.append("api_key", cloudinaryKey);
+    formData.append("timestamp", timestamp.toString());
+    formData.append("signature", signature);
+    formData.append("folder", folder);
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudinaryName}/image/upload`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error("Cloudinary upload failed: ", error);
+      return { error: "Cloudinary upload failed!" };
+    }
+
+    const data = await response.json();
+    return extractCloudinaryPath(data.secure_url);
+  } catch (error) {
+    console.error("Error uploading to cloudinary: ", error);
+    return {
+      error: "Failed to uploda to clouddinary! Please try again later.",
+    };
+  }
+}
+
+async function generateSignature(string: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(string);
+  const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}

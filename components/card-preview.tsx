@@ -1,6 +1,5 @@
 "use client";
 
-import type React from "react";
 import Image from "next/image";
 import type { CardDesignValues } from "@/components/card-design";
 import type { PersonalInfoValues } from "@/components/personal-info";
@@ -10,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { linkTypes } from "@/components/icons";
 import { getColorClass, getFontClass } from "@/lib/utils";
 import { Separator } from "@/components/separator";
+import { getCloudinaryUrl } from "@/lib/utils";
 
 interface CardPreviewProps {
   cardDesign: CardDesignValues;
@@ -30,13 +30,16 @@ export function CardPreview({
 
   const getImageUrl = (type: "logo" | "profile" | "cover") => {
     const transform = cardDesign.imageTransforms?.[type];
+
     if (transform?.croppedImageUrl) {
-      return transform.croppedImageUrl;
+      return transform?.croppedImageUrl || "/placeholder.svg";
     }
 
-    if (type === "logo") return cardDesign.logoImage;
-    if (type === "profile") return cardDesign.profileImage;
-    return cardDesign.coverImage;
+    if (type === "logo")
+      return getCloudinaryUrl(cardDesign.logoImage, transform);
+    if (type === "profile")
+      return getCloudinaryUrl(cardDesign.profileImage, transform);
+    return getCloudinaryUrl(cardDesign.coverImage, transform);
   };
 
   const getIconComponent = (linkType: string) => {
@@ -51,14 +54,14 @@ export function CardPreview({
   return (
     <div className="mx-auto w-full max-w-md">
       <div
-        className={`overflow-hidden rounded-xl border border-gray-200 shadow-lg ${fontClass && fontClass}`}
+        className={`overflow-hidden rounded-xl border border-gray-200 shadow-lg ${fontClass}`}
       >
         <div className={`relative ${colorClass}`}>
           {cardDesign.coverImage ? (
             <div className="relative h-48 w-full overflow-hidden">
               <div className="relative h-full w-full">
                 <Image
-                  src={getImageUrl("cover") || "/placeholder.svg"}
+                  src={getImageUrl("cover")}
                   alt="Cover"
                   fill
                   style={{ objectFit: "cover" }}
@@ -66,10 +69,10 @@ export function CardPreview({
               </div>
 
               {cardDesign.logoImage && (
-                <div className="absolute right-4 bottom-4 h-16 w-16 overflow-hidden rounded-lg bg-white p-1 shadow-md">
+                <div className="absolute right-4 bottom-4 h-16 w-16 overflow-hidden rounded-lg shadow-md">
                   <div className="relative h-full w-full">
                     <Image
-                      src={getImageUrl("logo") || "/placeholder.svg"}
+                      src={getImageUrl("logo")}
                       alt="Logo"
                       fill
                       style={{ objectFit: "cover" }}
@@ -83,10 +86,10 @@ export function CardPreview({
               className={`flex h-32 items-center justify-center p-6 text-white`}
             >
               {cardDesign.logoImage && (
-                <div className="h-20 w-20 overflow-hidden rounded-lg bg-white p-1 shadow-md">
+                <div className="h-20 w-20 overflow-hidden rounded-lg shadow-md">
                   <div className="relative h-full w-full">
                     <Image
-                      src={getImageUrl("logo") || "/placeholder.svg"}
+                      src={getImageUrl("logo")}
                       alt="Logo"
                       fill
                       style={{ objectFit: "cover" }}
@@ -104,7 +107,7 @@ export function CardPreview({
               <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
                 <div className="relative h-full w-full">
                   <Image
-                    src={getImageUrl("profile") || "/placeholder.svg"}
+                    src={getImageUrl("profile")}
                     alt="Profile"
                     fill
                     style={{ objectFit: "cover" }}

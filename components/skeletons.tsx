@@ -129,8 +129,8 @@ export function CardManagementSkeleton() {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {[...Array(6)].map((_, i) => (
-          <Card key={i} className="overflow-hidden rounded-lg">
-            <div className="h-32">
+          <Card key={i} className="overflow-hidden rounded-lg pt-0">
+            <div className="h-52">
               <Skeleton className="h-full w-full" />
             </div>
             <CardHeader>

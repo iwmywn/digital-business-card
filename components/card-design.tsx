@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { ImageEditor, type ImageTransform } from "@/components/image-editor";
 import { useUser } from "@/lib/hooks";
 import * as constants from "@/constants";
+import { getCloudinaryUrl } from "@/lib/utils";
 
 export type CardDesignValues = {
   cardColor: string;
@@ -98,12 +99,18 @@ export function CardDesign({
   ]);
 
   const handleImageClick = (type: "logo" | "profile" | "cover") => {
-    let currentImage = null;
+    let currentImage;
     if (type === "logo") currentImage = logoImage;
     if (type === "profile") currentImage = profileImage;
     if (type === "cover") currentImage = coverImage;
 
     if (currentImage) {
+      if (
+        !currentImage.startsWith("data:") &&
+        !currentImage.startsWith("https://")
+      ) {
+        currentImage = getCloudinaryUrl(currentImage);
+      }
       setCurrentImageType(type);
       setTempImage(currentImage);
       setImageEditorOpen(true);
@@ -184,13 +191,18 @@ export function CardDesign({
 
   const getImageUrl = (type: "logo" | "profile" | "cover") => {
     const transform = imageTransforms[type];
+
     if (transform?.croppedImageUrl) {
-      return transform.croppedImageUrl;
+      return transform?.croppedImageUrl || "/placeholder.svg";
     }
 
-    if (type === "logo") return logoImage;
-    if (type === "profile") return profileImage;
-    return coverImage;
+    let imageUrl;
+
+    if (type === "logo") imageUrl = logoImage;
+    if (type === "profile") imageUrl = profileImage;
+    if (type === "cover") imageUrl = coverImage;
+
+    return getCloudinaryUrl(imageUrl, transform);
   };
 
   const selectedFont =
@@ -213,7 +225,7 @@ export function CardDesign({
                 {logoImage ? (
                   <div className="relative h-full w-full">
                     <Image
-                      src={getImageUrl("logo") || "/placeholder.svg"}
+                      src={getImageUrl("logo")}
                       alt="Company logo"
                       fill
                       style={{ objectFit: "cover" }}
@@ -251,7 +263,7 @@ export function CardDesign({
                 {profileImage ? (
                   <div className="relative h-full w-full">
                     <Image
-                      src={getImageUrl("profile") || "/placeholder.svg"}
+                      src={getImageUrl("profile")}
                       alt="Profile picture"
                       fill
                       style={{ objectFit: "cover" }}
@@ -289,7 +301,7 @@ export function CardDesign({
                 {coverImage ? (
                   <div className="relative h-full w-full">
                     <Image
-                      src={getImageUrl("cover") || "/placeholder.svg"}
+                      src={getImageUrl("cover")}
                       alt="Cover photo"
                       fill
                       style={{ objectFit: "cover" }}

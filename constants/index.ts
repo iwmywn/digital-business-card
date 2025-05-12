@@ -1,8 +1,5 @@
 import * as fonts from "@/app/fonts";
 
-const cloudinaryName = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
-const baseImgUrl = `https://res.cloudinary.com/${cloudinaryName}/image/upload`;
-
 const basicId = process.env.NEXT_PUBIC_BASIC_ID;
 const professionalId = process.env.NEXT_PUBLIC_PROFESSION_ID;
 
@@ -154,9 +151,7 @@ const allColorOptions = [
 ];
 
 export {
-  baseImgUrl,
   subscriptionPlans,
-  cloudinaryName,
   basicId,
   professionalId,
   freeFontOptions,
