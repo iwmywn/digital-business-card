@@ -54,7 +54,7 @@ export function CardPreview({
   return (
     <div className="mx-auto w-full max-w-md">
       <div
-        className={`overflow-hidden rounded-xl border border-gray-200 shadow-lg ${fontClass}`}
+        className={`border-primary/80 overflow-hidden rounded-xl border shadow-lg ${fontClass}`}
       >
         <div className={`relative ${colorClass}`}>
           {cardDesign.coverImage ? (

@@ -112,9 +112,9 @@ export function CardView({ card }: { card: CardType }) {
   }
 
   return (
-    <div className="mx-auto max-w-md px-4 py-8">
+    <div className="mx-auto w-full max-w-md px-4 py-8">
       <div
-        className={`overflow-hidden rounded-xl border border-gray-200 shadow-lg ${fontClass}`}
+        className={`border-primary/80 overflow-hidden rounded-xl border shadow-lg ${fontClass}`}
       >
         <div className={`relative ${colorClass}`}>
           {card.cardDesign.coverImage ? (

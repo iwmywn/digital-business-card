@@ -165,32 +165,27 @@ export function PaymentReceiptDialog({
                         <TableHeader>
                           <TableRow>
                             <TableHead>Address</TableHead>
-                            <TableHead className="text-right">
-                              Location
-                            </TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           <TableRow>
-                            <TableCell>
-                              <div>
-                                {receiptData.customer.address.line1}
-                                {receiptData.customer.address.line2 && (
-                                  <div>
-                                    {receiptData.customer.address.line2}
-                                  </div>
-                                )}
-                              </div>
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <div>
-                                {receiptData.customer.address.city},{" "}
-                                {receiptData.customer.address.state}{" "}
-                                {receiptData.customer.address.postal_code}
-                                <div>
-                                  {receiptData.customer.address.country}
-                                </div>
-                              </div>
+                            <TableCell className="whitespace-normal">
+                              <span>
+                                {receiptData.customer.address.line1},{" "}
+                              </span>
+                              <span>
+                                {receiptData.customer.address.line2},{" "}
+                              </span>
+                              <span>{receiptData.customer.address.city}, </span>
+                              <span>
+                                {receiptData.customer.address.state},{" "}
+                              </span>
+                              <span>
+                                {receiptData.customer.address.postal_code},{" "}
+                              </span>
+                              <span>
+                                {receiptData.customer.address.country}
+                              </span>
                             </TableCell>
                           </TableRow>
                         </TableBody>
