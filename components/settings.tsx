@@ -2,7 +2,7 @@
 
 import { InformationForm } from "@/components/information-form";
 import { AccountForm } from "@/components/account-form";
-import { Notifications } from "@/components/notifications";
+import { NotificationSettings } from "@/components/notification-settings";
 import { useUser } from "@/lib/hooks";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -23,7 +23,7 @@ export function Settings() {
     <div className="space-y-2">
       <InformationForm />
       <AccountForm />
-      <Notifications />
+      <NotificationSettings />
     </div>
   );
 }

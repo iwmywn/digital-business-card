@@ -21,22 +21,24 @@ import {
 } from "@/components/ui/form";
 import { toast } from "sonner";
 import { FormButton } from "@/components/form-button";
-import { notificationsSchema } from "@/schemas";
+import { notificationSettingsSchema } from "@/schemas";
 
-type NotificationFormValues = z.infer<typeof notificationsSchema>;
+type NotificationSettingsFormValues = z.infer<
+  typeof notificationSettingsSchema
+>;
 
-export function Notifications() {
-  const form = useForm<NotificationFormValues>({
-    resolver: zodResolver(notificationsSchema),
+export function NotificationSettings() {
+  const form = useForm<NotificationSettingsFormValues>({
+    resolver: zodResolver(notificationSettingsSchema),
     defaultValues: {
-      emailNotifications: true,
-      cardViewNotifications: true,
-      marketingEmails: false,
-      securityAlerts: true,
+      email: true,
+      cardView: true,
+      marketing: false,
+      security: true,
     },
   });
 
-  function onNotificationSubmit(values: NotificationFormValues) {
+  function onNotificationSubmit(values: NotificationSettingsFormValues) {
     toast.success("Notification preferences updated");
     console.log(values);
   }
@@ -57,7 +59,7 @@ export function Notifications() {
           >
             <FormField
               control={form.control}
-              name="emailNotifications"
+              name="email"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4">
                   <FormControl>
@@ -80,7 +82,7 @@ export function Notifications() {
 
             <FormField
               control={form.control}
-              name="cardViewNotifications"
+              name="cardView"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4">
                   <FormControl>
@@ -104,7 +106,7 @@ export function Notifications() {
 
             <FormField
               control={form.control}
-              name="marketingEmails"
+              name="marketing"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4">
                   <FormControl>
@@ -127,7 +129,7 @@ export function Notifications() {
 
             <FormField
               control={form.control}
-              name="securityAlerts"
+              name="security"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4">
                   <FormControl>

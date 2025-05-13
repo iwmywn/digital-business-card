@@ -127,11 +127,11 @@ const accountSchema = z
     },
   );
 
-const notificationsSchema = z.object({
-  emailNotifications: z.boolean(),
-  cardViewNotifications: z.boolean(),
-  marketingEmails: z.boolean(),
-  securityAlerts: z.boolean(),
+const notificationSettingsSchema = z.object({
+  email: z.boolean(),
+  cardView: z.boolean(),
+  marketing: z.boolean(),
+  security: z.boolean(),
 });
 
 const personalInfoSchema = z.object({
@@ -163,6 +163,6 @@ export {
   contactSchema,
   publicProfileSchema,
   accountSchema,
-  notificationsSchema,
+  notificationSettingsSchema,
   personalInfoSchema,
 };
