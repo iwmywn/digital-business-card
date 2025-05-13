@@ -55,12 +55,12 @@ export function InformationForm() {
     resolver: zodResolver(publicProfileSchema),
     defaultValues: {
       fullName: "Hoàng Anh Tuấn",
-      bio: "Software engineer with strong skills in full-stack development, cloud computing, and system design.",
+      gender: "male",
+      dateOfBirth: new Date(2003, 7, 24),
       jobTitle: "Software Engineer",
       company: "NextTech Solutions",
       website: "https://iwmywn.github.io",
-      gender: "male",
-      dateOfBirth: new Date(2003, 7, 24),
+      bio: "Software engineer with strong skills in full-stack development, cloud computing, and system design.",
     },
   });
 

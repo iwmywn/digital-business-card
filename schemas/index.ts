@@ -66,10 +66,8 @@ const publicProfileSchema = z.object({
     .string()
     .min(2, { message: "Full name must be at least 2 characters long." })
     .optional(),
-  bio: z
-    .string()
-    .max(160, { message: "Bio must not exceed 160 characters." })
-    .optional(),
+  gender: z.string().optional(),
+  dateOfBirth: z.date().optional(),
   jobTitle: z
     .string()
     .min(2, { message: "Job title must be at least 2 characters long." })
@@ -79,18 +77,18 @@ const publicProfileSchema = z.object({
     .min(2, { message: "Company name must be at least 2 characters long." })
     .optional(),
   website: z.string().url({ message: "Please enter a valid URL." }).optional(),
-
-  gender: z.string().optional(),
-  dateOfBirth: z.date({
-    required_error: "A date of birth is required.",
-  }),
+  bio: z
+    .string()
+    .max(160, { message: "Bio must not exceed 160 characters." })
+    .optional(),
 });
 
 const accountSchema = z
   .object({
     username: z
       .string()
-      .min(2, { message: "Username must be at least 2 characters long." }),
+      .min(2, { message: "Username must be at least 2 characters long." })
+      .optional(),
     phone: z
       .string()
       .min(10, { message: "Phone number must be valid." })
