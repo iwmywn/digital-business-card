@@ -29,6 +29,10 @@ const other = [
     title: "Edit card",
     url: "/edit",
   },
+  {
+    title: "Notifications",
+    url: "/notifications",
+  },
 ];
 
 export function Header() {
