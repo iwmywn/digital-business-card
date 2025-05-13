@@ -84,9 +84,7 @@ export function SubscriptionManagement() {
         return (
           <Card
             key={plan.id}
-            className={`relative min-w-[17.5rem] flex-1 overflow-hidden transition-all duration-200 hover:shadow-md ${
-              plan.popular && "border-primary/30"
-            } ${isCurrentPlan && "ring-primary ring-2"}`}
+            className={`relative min-w-[17.5rem] flex-1 overflow-hidden shadow-sm transition-all duration-200 ${isCurrentPlan ? "ring-primary ring-1 ring-offset-1" : "hover:ring-primary hover:ring-1 hover:ring-offset-1"}`}
           >
             {plan.popular && (
               <div className="absolute top-0 right-0">

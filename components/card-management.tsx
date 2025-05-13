@@ -203,7 +203,7 @@ export function CardManagement() {
           {filteredCards.map((card) => (
             <Card
               key={card._id}
-              className={`hover:border-primary overflow-hidden rounded-lg pt-0 hover:border-1 ${getFontClass(card.cardDesign.fontFamily)}`}
+              className={`hover:ring-primary overflow-hidden rounded-lg pt-0 shadow-sm hover:ring-1 hover:ring-offset-1 ${getFontClass(card.cardDesign.fontFamily)}`}
             >
               <div
                 className={`relative aspect-2/1 ${getColorClass(card.cardDesign.cardColor)}`}
