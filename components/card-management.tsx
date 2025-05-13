@@ -15,13 +15,7 @@ import {
   Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -276,11 +270,6 @@ export function CardManagement() {
                       </span>
                       {card.isPublic ? <Globe size={14} /> : <Lock size={14} />}
                     </CardTitle>
-                    <CardDescription>
-                      {card.views} views
-                      <span className="mx-1.5">•</span>
-                      {card.clicks} clicks
-                    </CardDescription>
                   </div>
                   <div className="absolute top-0 right-0">
                     <DropdownMenu>
@@ -359,7 +348,7 @@ export function CardManagement() {
                   </div>
                 </div>
               </CardHeader>
-              <CardFooter className="text-muted-foreground text-sm">
+              <CardFooter className="text-muted-foreground text-xs">
                 Last updated: {formatDate(card.updatedAt)}
               </CardFooter>
             </Card>

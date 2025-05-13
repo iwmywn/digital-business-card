@@ -1,6 +1,10 @@
 "use client";
 
-import { Eye, MousePointerClick, ChartColumnIncreasing } from "lucide-react";
+import {
+  Eye,
+  MousePointerClick,
+  CodeIcon as ChartColumnIncreasing,
+} from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
@@ -70,21 +74,107 @@ export function Analytics() {
         ? cards
         : cards.filter((card) => card._id === selectedCard);
 
-    let views = 0;
-    let clicks = 0;
+    const calculatePercentageChanges = () => {
+      if (filteredCards.length === 0) {
+        setViewsChange(0);
+        setClicksChange(0);
+        setCtrChange(0);
+        return;
+      }
 
-    filteredCards.forEach((card) => {
-      views += card.views || 0;
-      clicks += card.clicks || 0;
-    });
+      const now = new Date();
+      const currentPeriodStart = new Date();
+      const previousPeriodStart = new Date();
 
-    setTotalViews(views);
-    setTotalClicks(clicks);
-    setClickThroughRate(views > 0 ? Math.round((clicks / views) * 100) : 0);
+      if (dateRange === "24hours") {
+        currentPeriodStart.setDate(now.getDate() - 1);
+        previousPeriodStart.setDate(now.getDate() - 2);
+      } else if (dateRange === "7days") {
+        currentPeriodStart.setDate(now.getDate() - 7);
+        previousPeriodStart.setDate(now.getDate() - 14);
+      } else if (dateRange === "30days") {
+        currentPeriodStart.setDate(now.getDate() - 30);
+        previousPeriodStart.setDate(now.getDate() - 60);
+      } else {
+        currentPeriodStart.setDate(filteredCards[0].createdAt.getDate());
 
-    setViewsChange(18.5);
-    setClicksChange(24.2);
-    setCtrChange(4.8);
+        const currentPeriodLength =
+          now.getTime() - currentPeriodStart.getTime();
+        previousPeriodStart.setTime(
+          currentPeriodStart.getTime() - currentPeriodLength,
+        );
+      }
+
+      let currentViews = 0;
+      let currentClicks = 0;
+      let previousViews = 0;
+      let previousClicks = 0;
+
+      filteredCards.forEach((card) => {
+        (card.viewHistory || []).forEach(
+          (view: { date: Date; count: number }) => {
+            const viewDate = new Date(view.date);
+            if (viewDate >= currentPeriodStart && viewDate <= now) {
+              currentViews += view.count;
+            } else if (
+              viewDate >= previousPeriodStart &&
+              viewDate < currentPeriodStart
+            ) {
+              previousViews += view.count;
+            }
+          },
+        );
+
+        (card.clickHistory || []).forEach(
+          (click: { date: Date; count: number }) => {
+            const clickDate = new Date(click.date);
+            if (clickDate >= currentPeriodStart && clickDate <= now) {
+              currentClicks += click.count;
+            } else if (
+              clickDate >= previousPeriodStart &&
+              clickDate < currentPeriodStart
+            ) {
+              previousClicks += click.count;
+            }
+          },
+        );
+      });
+
+      const viewsChangePercent =
+        previousViews === 0
+          ? currentViews > 0
+            ? 100
+            : 0
+          : ((currentViews - previousViews) / previousViews) * 100;
+
+      const clicksChangePercent =
+        previousClicks === 0
+          ? currentClicks > 0
+            ? 100
+            : 0
+          : ((currentClicks - previousClicks) / previousClicks) * 100;
+
+      const currentCTR =
+        currentViews === 0 ? 0 : (currentClicks / currentViews) * 100;
+      const previousCTR =
+        previousViews === 0 ? 0 : (previousClicks / previousViews) * 100;
+
+      const ctrChangePercent =
+        previousCTR === 0
+          ? currentCTR > 0
+            ? 100
+            : 0
+          : ((currentCTR - previousCTR) / previousCTR) * 100;
+
+      setTotalViews(currentViews);
+      setTotalClicks(currentClicks);
+      setClickThroughRate(Math.round(currentCTR));
+      setViewsChange(Number.parseFloat(viewsChangePercent.toFixed(1)));
+      setClicksChange(Number.parseFloat(clicksChangePercent.toFixed(1)));
+      setCtrChange(Number.parseFloat(ctrChangePercent.toFixed(1)));
+    };
+
+    calculatePercentageChanges();
 
     if (currentPlan === "professional") {
       generateChartData(filteredCards, dateRange);
@@ -107,7 +197,7 @@ export function Analytics() {
     } else if (range === "30days") {
       startDate.setDate(now.getDate() - 30);
     } else {
-      startDate.setDate(now.getDate() - 90);
+      startDate.setDate(cards[0].createdAt.getDate());
     }
 
     const dateRange: string[] = [];
@@ -136,7 +226,6 @@ export function Analytics() {
           }
         },
       );
-
       (card.clickHistory || []).forEach(
         (click: { date: Date; count: number }) => {
           const clickDate = new Date(click.date).toISOString().split("T")[0];

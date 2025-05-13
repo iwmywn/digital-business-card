@@ -41,7 +41,7 @@ export async function uploadToCloudinary(
     formData.append("signature", signature);
     formData.append("folder", folder);
 
-    const response = await fetch(
+    const res = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudinaryName}/image/upload`,
       {
         method: "POST",
@@ -49,13 +49,13 @@ export async function uploadToCloudinary(
       },
     );
 
-    if (!response.ok) {
-      const error = await response.text();
+    if (!res.ok) {
+      const error = await res.text();
       console.error("Cloudinary upload failed: ", error);
       return { error: "Cloudinary upload failed!" };
     }
 
-    const data = await response.json();
+    const data = await res.json();
     return extractCloudinaryPath(data.secure_url);
   } catch (error) {
     console.error("Error uploading to cloudinary: ", error);

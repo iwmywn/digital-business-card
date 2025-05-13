@@ -8,7 +8,7 @@ import { randomBytes } from "crypto";
 import type { CardDesignValues } from "@/components/card-design";
 import type { PersonalInfoValues } from "@/components/personal-info";
 import type { SerializableLinkType } from "@/components/icons";
-import { Card } from "@/lib/definitions";
+import type { Card } from "@/lib/definitions";
 import * as constants from "@/constants";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { extractCloudinaryPath } from "@/lib/utils";
@@ -176,19 +176,6 @@ export async function getCardBySlug(slug: string) {
       return { error: "Card not found!" };
     }
 
-    await cardCollection.updateOne(
-      { _id: card._id },
-      {
-        $inc: { views: 1 },
-        $push: {
-          viewHistory: {
-            date: new Date(),
-            count: 1,
-          },
-        },
-      },
-    );
-
     return {
       card: {
         ...card,
@@ -233,24 +220,124 @@ export async function deleteCard(cardId: string) {
 export async function trackCardClick(cardId: string) {
   try {
     const cardCollection = await getCardCollection();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    await cardCollection.updateOne(
-      { _id: new ObjectId(cardId) },
-      {
-        $inc: { clicks: 1 },
-        $push: {
-          clickHistory: {
-            date: new Date(),
-            count: 1,
+    const card = await cardCollection.findOne({
+      _id: new ObjectId(cardId),
+      "clickHistory.date": {
+        $gte: today,
+        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+      },
+    });
+
+    if (
+      card &&
+      card.clickHistory &&
+      card.clickHistory.some((entry: { date: Date; count: number }) => {
+        const entryDate = new Date(entry.date);
+        return (
+          entryDate >= today &&
+          entryDate < new Date(today.getTime() + 24 * 60 * 60 * 1000)
+        );
+      })
+    ) {
+      await cardCollection.updateOne(
+        {
+          _id: new ObjectId(cardId),
+          "clickHistory.date": {
+            $gte: today,
+            $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
           },
         },
-      },
-    );
+        {
+          $inc: {
+            clicks: 1,
+            "clickHistory.$.count": 1,
+          },
+        },
+      );
+    } else {
+      await cardCollection.updateOne(
+        { _id: new ObjectId(cardId) },
+        {
+          $inc: { clicks: 1 },
+          $push: {
+            clickHistory: {
+              date: today,
+              count: 1,
+            },
+          },
+        },
+      );
+    }
 
     return { error: undefined };
   } catch (error) {
     console.error("Error tracking click:", error);
     return { error: "Failed to track click! Please try again later." };
+  }
+}
+
+export async function trackCardView(cardId: string) {
+  try {
+    const cardCollection = await getCardCollection();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const card = await cardCollection.findOne({
+      _id: new ObjectId(cardId),
+      "viewHistory.date": {
+        $gte: today,
+        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+      },
+    });
+
+    if (
+      card &&
+      card.viewHistory &&
+      card.viewHistory.some((entry: { date: Date; count: number }) => {
+        const entryDate = new Date(entry.date);
+        return (
+          entryDate >= today &&
+          entryDate < new Date(today.getTime() + 24 * 60 * 60 * 1000)
+        );
+      })
+    ) {
+      await cardCollection.updateOne(
+        {
+          _id: new ObjectId(cardId),
+          "viewHistory.date": {
+            $gte: today,
+            $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+          },
+        },
+        {
+          $inc: {
+            views: 1,
+            "viewHistory.$.count": 1,
+          },
+        },
+      );
+    } else {
+      await cardCollection.updateOne(
+        { _id: new ObjectId(cardId) },
+        {
+          $inc: { views: 1 },
+          $push: {
+            viewHistory: {
+              date: today,
+              count: 1,
+            },
+          },
+        },
+      );
+    }
+
+    return { error: undefined };
+  } catch (error) {
+    console.error("Error tracking view:", error);
+    return { error: "Failed to track view! Please try again later." };
   }
 }
 
