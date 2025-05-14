@@ -25,7 +25,7 @@ import { PaymentReceiptDialog } from "@/components/payment-receipt-dialog";
 import { getPaymentHistoryDetails } from "@/actions/plan";
 import { toast } from "sonner";
 import { ReceiptData } from "@/components/payment-receipt-dialog";
-import { useSubscription } from "@/lib/hooks";
+import { useSubscription } from "@/lib/swr";
 import { NotFoundUI } from "@/components/not-found-ui";
 
 export function BillingHistory() {

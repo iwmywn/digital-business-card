@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { createCheckoutSession } from "@/actions/stripe";
 import { switchToPlan } from "@/actions/plan";
 import { subscriptionPlans } from "@/constants";
-import { useSubscription, useUser } from "@/lib/hooks";
+import { useSubscription, useUser } from "@/lib/swr";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Loading } from "@/components/loading";
@@ -22,7 +22,7 @@ import { Loading } from "@/components/loading";
 export function SubscriptionManagement() {
   const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
   const { basic, professional } = useSubscription();
-  const { userData, currentPlan, mutate } = useUser();
+  const { userResponse, user, mutate } = useUser();
   const router = useRouter();
 
   async function handleSubscribe(priceId: string, planId: string) {
@@ -46,7 +46,12 @@ export function SubscriptionManagement() {
     if (error) {
       toast.error(error);
     } else {
-      mutate({ ...userData, currentPlan: planId });
+      if (userResponse?.user) {
+        mutate({
+          ...userResponse,
+          user: { ...userResponse.user, currentPlan: planId },
+        });
+      }
     }
     setIsLoading((prev) => ({ ...prev, [planId]: false }));
   }
@@ -66,7 +71,7 @@ export function SubscriptionManagement() {
   return (
     <div className="flex flex-wrap gap-6">
       {subscriptionPlans.map((plan) => {
-        const isCurrentPlan = currentPlan === plan.id;
+        const isCurrentPlan = user?.currentPlan === plan.id;
         const isAccessible =
           plan.id === "basic"
             ? basic.hasAccess

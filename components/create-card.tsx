@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,7 +16,7 @@ import { Links } from "@/components/links";
 import { CardPreview } from "@/components/card-preview";
 import { saveCard } from "@/actions/card";
 import type { SerializableLinkType } from "@/components/icons";
-import { useCard } from "@/lib/hooks";
+import { useCard } from "@/lib/swr";
 import { CreateCardSkeleton } from "@/components/skeletons";
 import { Loading } from "@/components/loading";
 import * as constants from "@/constants";
@@ -122,7 +122,11 @@ export function CreateCard() {
     setLinks(data);
   }, []);
 
-  if (isCardLoading) return <CreateCardSkeleton />;
+  useEffect(() => {
+    if (isCardError) toast.error(isCardError);
+  }, [isCardError]);
+
+  if (isCardLoading || isCardError) return <CreateCardSkeleton />;
 
   return (
     <div className="space-y-6">

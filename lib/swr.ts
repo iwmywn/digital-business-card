@@ -1,36 +1,33 @@
 import useSWR from "swr";
 import { getSubscriptionPlans } from "@/actions/plan";
-import type { Card, PaymentHistory } from "@/lib/definitions";
+import type { Card, PaymentHistory, User } from "@/lib/definitions";
 import { me } from "@/actions/auth";
 import { getCards } from "@/actions/card";
 
 // const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export function useUser() {
-  const { data, isLoading, mutate } = useSWR<{
-    fullName?: string;
-    email?: string;
-    avatar?: string;
-    currentPlan?: string;
-    error?: string;
-  }>("me", me, {
+  const { data, isLoading, mutate } = useSWR<
+    | {
+        error: string;
+        user?: undefined;
+      }
+    | {
+        user: User;
+        error?: undefined;
+      }
+  >("me", me, {
     keepPreviousData: true,
   });
 
-  const userData = data;
-  const fullName = data?.fullName;
-  const email = data?.email;
-  const avatar = data?.avatar;
-  const currentPlan = data?.currentPlan;
-  const isUserError = data?.error || null;
+  const userResponse = data;
+  const user = data?.user;
+  const isUserError = data?.error;
   const isUserLoading = isLoading;
 
   return {
-    userData,
-    fullName,
-    email,
-    avatar,
-    currentPlan,
+    userResponse,
+    user,
     isUserLoading,
     isUserError,
     mutate,

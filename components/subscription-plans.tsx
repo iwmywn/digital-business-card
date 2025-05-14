@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSubscription } from "@/lib/hooks";
+import { useSubscription } from "@/lib/swr";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { CurrentPlan } from "@/components/current-plan";
@@ -20,7 +20,7 @@ export function SubscriptionPlans() {
     if (isSubscriptionError) toast.error(isSubscriptionError);
   }, [isSubscriptionError]);
 
-  if (isSubScriptionLoading) {
+  if (isSubScriptionLoading || isSubscriptionError) {
     return <SubscriptionPlansSkeleton />;
   }
 

@@ -11,6 +11,7 @@ import {
   getUserCollection,
 } from "@/lib/collections";
 import { getAvatars, getUserByEmail, getUserById } from "@/lib/data";
+import { User } from "@/lib/definitions";
 import { sendEmail } from "@/lib/email";
 import { verifyRecaptchaToken } from "@/lib/recaptcha";
 import { session } from "@/lib/session";
@@ -60,16 +61,35 @@ export async function signUp(
     const result = await (
       await getUserCollection()
     ).insertOne({
-      fullName,
+      username: undefined,
       email,
       phone,
       password: hashedPassword,
       emailVerified: false,
-      avatar: `${avatar}`,
       verificationToken,
       resendVerification: 1,
       stripeCustomerId: customer.customerId,
+      profile: {
+        avatar,
+        fullName,
+        gender: undefined,
+        dateOfBirth: undefined,
+        jobTitle: undefined,
+        company: undefined,
+        website: undefined,
+        bio: undefined,
+        imageTransform: undefined,
+      },
+      notificationSettings: {
+        email: true,
+        cardView: true,
+        marketing: true,
+        security: true,
+      },
       currentPlan: "free",
+      planExpiresAt: undefined,
+      purchasedPlans: [],
+      paymentHistory: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -328,14 +348,9 @@ export async function me() {
 
     if (!existingUser) return { error: "User not found!" };
 
-    const { fullName, email, avatar, currentPlan } = existingUser;
+    const user = { ...existingUser, _id: existingUser._id.toString() } as User;
 
-    return {
-      fullName,
-      email,
-      avatar,
-      currentPlan,
-    };
+    return { user };
   } catch (error) {
     console.error("Error fetching me: ", error);
     return { error: "Failed to fetch me! Please try again later." };

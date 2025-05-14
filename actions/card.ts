@@ -56,7 +56,7 @@ export async function saveCard(
 
     for (const key of imageKeys) {
       const image = cardData.cardDesign[key];
-      const folder = `business-cards/${key.replace("Image", "")}`;
+      const folder = key.replace("Image", "");
 
       if (!image) continue;
 

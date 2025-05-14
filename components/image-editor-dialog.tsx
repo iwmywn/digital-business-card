@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useState, useCallback } from "react";
-import { Trash2, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -27,17 +26,17 @@ export type ImageTransform = {
   };
   naturalWidth?: number;
   naturalHeight?: number;
-  croppedImageUrl?: string;
+  croppedImageUrl?: string | null;
 };
 
 interface ImageEditorProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  imageType: "logo" | "profile" | "cover" | null;
+  imageType?: "logo" | "profile" | "cover";
   imageUrl: string | null;
   initialTransform?: ImageTransform;
-  onSave: (imageType: string, transform: ImageTransform) => void;
-  onDelete: (imageType: string) => void;
+  onSave: (transform: ImageTransform, imageType?: string) => void;
+  onDelete: (imageType?: string) => void;
 }
 
 const createImage = (url: string): Promise<HTMLImageElement> =>
@@ -87,7 +86,7 @@ async function getCroppedImg(
   });
 }
 
-export function ImageEditor({
+export function ImageEditorDialog({
   open,
   onOpenChange,
   imageType,
@@ -177,15 +176,18 @@ export function ImageEditor({
     try {
       const croppedImageUrl = await getCroppedImg(imageUrl, croppedAreaPixels);
 
-      onSave(imageType, {
-        scale: zoom,
-        positionX: crop.x,
-        positionY: crop.y,
-        croppedAreaPixels: croppedAreaPixels,
-        naturalWidth: naturalSize.width,
-        naturalHeight: naturalSize.height,
-        croppedImageUrl: croppedImageUrl || undefined,
-      });
+      onSave(
+        {
+          scale: zoom,
+          positionX: crop.x,
+          positionY: crop.y,
+          croppedAreaPixels: croppedAreaPixels,
+          naturalWidth: naturalSize.width,
+          naturalHeight: naturalSize.height,
+          croppedImageUrl: croppedImageUrl || undefined,
+        },
+        imageType,
+      );
     } catch (error) {
       console.error("Error generating cropped image:", error);
     } finally {
@@ -255,24 +257,15 @@ export function ImageEditor({
 
             <div className="flex justify-between pt-2">
               <Button variant="outline" onClick={deleteImage}>
-                <Trash2 className="mr-2 h-4 w-4" />
                 Delete
               </Button>
 
               <div className="flex gap-2">
                 <Button variant="outline" onClick={() => onOpenChange(false)}>
-                  <X className="mr-2 h-4 w-4" />
                   Cancel
                 </Button>
                 <Button onClick={saveImage} disabled={isProcessing}>
-                  {isProcessing ? (
-                    <Loading />
-                  ) : (
-                    <>
-                      <Check className="mr-2 h-4 w-4" />
-                      Apply
-                    </>
-                  )}
+                  {isProcessing ? <Loading /> : "Apply"}
                 </Button>
               </div>
             </div>

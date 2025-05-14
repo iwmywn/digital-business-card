@@ -2,6 +2,7 @@ import type { ObjectId } from "mongodb";
 import type { SerializableLinkType } from "@/components/icons";
 import { PersonalInfoValues } from "@/components/personal-info";
 import { CardDesignValues } from "@/components/card-design";
+import { ImageTransform } from "@/components/image-editor-dialog";
 
 type BasePrivateToken<T> = {
   _id: T;
@@ -15,22 +16,19 @@ type BaseAvatar<T> = {
 
 type BaseUser<T> = {
   _id: T;
-  fullName: string;
+  username?: string;
   email: string;
   phone: string;
   password: string;
   emailVerified: boolean;
-  avatar: string;
   verificationToken: string;
   resendVerification: number;
   stripeCustomerId?: string;
+  profile: Profile;
+  notificationSettings: NotificationSettings;
   currentPlan: "free" | "basic" | "professional";
   planExpiresAt?: Date;
-  purchasedPlans?: {
-    planId: "basic" | "professional";
-    purchasedAt: Date;
-    expiresAt: Date;
-  }[];
+  purchasedPlans?: PurchasedPlans[];
   paymentHistory?: PaymentHistory[];
   createdAt: Date;
   updatedAt: Date;
@@ -58,6 +56,31 @@ type BaseCard<T> = {
   updatedAt: Date;
 };
 
+type Profile = {
+  avatar?: string;
+  fullName: string;
+  gender?: string;
+  dateOfBirth?: Date | null;
+  jobTitle?: string;
+  company?: string;
+  website?: string;
+  bio?: string;
+  imageTransform?: ImageTransform;
+};
+
+type NotificationSettings = {
+  email: boolean;
+  cardView: boolean;
+  marketing: boolean;
+  security: boolean;
+};
+
+type PurchasedPlans = {
+  planId: "basic" | "professional";
+  purchasedAt: Date;
+  expiresAt: Date;
+};
+
 type PaymentHistory = {
   paymentIntentId: string;
   amount: number;
@@ -78,4 +101,4 @@ export type DBUser = BaseUser<ObjectId>;
 export type Card = BaseCard<string>;
 export type DBCard = BaseCard<ObjectId>;
 
-export type { PaymentHistory };
+export type { PaymentHistory, Profile, NotificationSettings };

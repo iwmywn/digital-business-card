@@ -9,12 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { subscriptionPlans } from "@/constants";
-import { useUser } from "@/lib/hooks";
+import { useUser } from "@/lib/swr";
 
 export function CurrentPlan() {
-  const { currentPlan } = useUser();
+  const { user } = useUser();
   const selectedPlan =
-    subscriptionPlans.find((plan) => plan.id === currentPlan) ||
+    subscriptionPlans.find((plan) => plan.id === user?.currentPlan) ||
     subscriptionPlans[0];
 
   return (

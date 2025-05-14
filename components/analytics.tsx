@@ -31,7 +31,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { Card as CardType } from "@/lib/definitions";
 import { useEffect, useState } from "react";
-import { useCard, useUser } from "@/lib/hooks";
+import { useCard, useUser } from "@/lib/swr";
 import { AnalyticsSkeleton } from "@/components/skeletons";
 import { toast } from "sonner";
 import { NotFoundUI } from "@/components/not-found-ui";
@@ -63,7 +63,7 @@ export function Analytics() {
   const [viewsChange, setViewsChange] = useState<number>(0);
   const [clicksChange, setClicksChange] = useState<number>(0);
   const [ctrChange, setCtrChange] = useState<number>(0);
-  const { currentPlan, isUserLoading, isUserError } = useUser();
+  const { user, isUserLoading, isUserError } = useUser();
   const { cards, isCardLoading, isCardError } = useCard();
 
   useEffect(() => {
@@ -176,10 +176,10 @@ export function Analytics() {
 
     calculatePercentageChanges();
 
-    if (currentPlan === "professional") {
+    if (user?.currentPlan === "professional") {
       generateChartData(filteredCards, dateRange);
     }
-  }, [cards, dateRange, selectedCard, currentPlan]);
+  }, [cards, dateRange, selectedCard, user?.currentPlan]);
 
   const generateChartData = (cards: CardType[], range: string) => {
     if (cards.length === 0) {
@@ -251,11 +251,11 @@ export function Analytics() {
       toast.error(isCardError);
   }, [isUserError, isCardError]);
 
-  if (isUserLoading || isCardLoading) {
+  if (isUserLoading || isCardLoading || isUserError || isCardError) {
     return <AnalyticsSkeleton />;
   }
 
-  if (currentPlan === "free") {
+  if (user?.currentPlan === "free") {
     return (
       <NotFoundUI
         icon={<ChartColumnIncreasing />}
@@ -383,107 +383,105 @@ export function Analytics() {
         </Card>
       </div>
 
-      {currentPlan !== "free" && (
-        <Card className="rounded-lg">
-          <CardHeader>
-            <CardTitle>Card Performance</CardTitle>
-            <CardDescription>
-              Showing views and clicks for the selected time period
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {currentPlan === "basic" ? (
-              <NotFoundUI
-                icon={<ChartColumnIncreasing />}
-                title="UNLOCK ANALYTICS"
-                message="Upgrade to our professional plan to access detailed analytics
+      <Card className="rounded-lg">
+        <CardHeader>
+          <CardTitle>Card Performance</CardTitle>
+          <CardDescription>
+            Showing views and clicks for the selected time period
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {user?.currentPlan === "basic" ? (
+            <NotFoundUI
+              icon={<ChartColumnIncreasing />}
+              title="UNLOCK ANALYTICS"
+              message="Upgrade to our professional plan to access detailed analytics
                   for your digital business cards."
-                linkHref="/subscription"
-                linkLabel="Go to subscription"
-                className="h-[250px]"
-              />
-            ) : (
-              <ChartContainer
-                config={chartConfig}
-                className="aspect-auto h-[250px] w-full"
-              >
-                <AreaChart data={analyticsData}>
-                  <defs>
-                    <linearGradient id="fillViews" x1="0" y1="0" x2="0" y2="1">
-                      <stop
-                        offset="5%"
-                        stopColor="var(--color-views)"
-                        stopOpacity={0.8}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor="var(--color-views)"
-                        stopOpacity={0.1}
-                      />
-                    </linearGradient>
-                    <linearGradient id="fillClicks" x1="0" y1="0" x2="0" y2="1">
-                      <stop
-                        offset="5%"
-                        stopColor="var(--color-clicks)"
-                        stopOpacity={0.8}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor="var(--color-clicks)"
-                        stopOpacity={0.1}
-                      />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid vertical={false} />
-                  <XAxis
-                    dataKey="date"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    minTickGap={32}
-                    tickFormatter={(value) => {
-                      const date = new Date(value);
-                      return date.toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      });
-                    }}
-                  />
-                  <ChartTooltip
-                    cursor={false}
-                    content={
-                      <ChartTooltipContent
-                        labelFormatter={(value) => {
-                          return new Date(value).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                          });
-                        }}
-                        indicator="dot"
-                      />
-                    }
-                  />
-                  <Area
-                    dataKey="clicks"
-                    type="natural"
-                    fill="url(#fillClicks)"
-                    stroke="var(--color-clicks)"
-                    stackId="a"
-                  />
-                  <Area
-                    dataKey="views"
-                    type="natural"
-                    fill="url(#fillViews)"
-                    stroke="var(--color-views)"
-                    stackId="a"
-                  />
-                  <ChartLegend content={<ChartLegendContent />} />
-                </AreaChart>
-              </ChartContainer>
-            )}
-          </CardContent>
-        </Card>
-      )}
+              linkHref="/subscription"
+              linkLabel="Go to subscription"
+              className="h-[250px]"
+            />
+          ) : (
+            <ChartContainer
+              config={chartConfig}
+              className="aspect-auto h-[250px] w-full"
+            >
+              <AreaChart data={analyticsData}>
+                <defs>
+                  <linearGradient id="fillViews" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-views)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-views)"
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                  <linearGradient id="fillClicks" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-clicks)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-clicks)"
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="date"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  minTickGap={32}
+                  tickFormatter={(value) => {
+                    const date = new Date(value);
+                    return date.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    });
+                  }}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={
+                    <ChartTooltipContent
+                      labelFormatter={(value) => {
+                        return new Date(value).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        });
+                      }}
+                      indicator="dot"
+                    />
+                  }
+                />
+                <Area
+                  dataKey="clicks"
+                  type="natural"
+                  fill="url(#fillClicks)"
+                  stroke="var(--color-clicks)"
+                  stackId="a"
+                />
+                <Area
+                  dataKey="views"
+                  type="natural"
+                  fill="url(#fillViews)"
+                  stroke="var(--color-views)"
+                  stackId="a"
+                />
+                <ChartLegend content={<ChartLegendContent />} />
+              </AreaChart>
+            </ChartContainer>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import {
   Card,
   CardContent,
@@ -22,25 +22,33 @@ import {
 import { toast } from "sonner";
 import { FormButton } from "@/components/form-button";
 import { notificationSettingsSchema } from "@/schemas";
+import { updateNotificationSettings } from "@/actions/setting";
+import { useUser } from "@/lib/swr";
 
-type NotificationSettingsFormValues = z.infer<
+export type NotificationSettingsFormValues = z.infer<
   typeof notificationSettingsSchema
 >;
 
 export function NotificationSettings() {
+  const { user } = useUser();
   const form = useForm<NotificationSettingsFormValues>({
     resolver: zodResolver(notificationSettingsSchema),
     defaultValues: {
-      email: true,
-      cardView: true,
-      marketing: false,
-      security: true,
+      email: user?.notificationSettings?.email,
+      cardView: user?.notificationSettings?.cardView,
+      marketing: user?.notificationSettings?.marketing,
+      security: user?.notificationSettings?.security,
     },
   });
 
-  function onNotificationSubmit(values: NotificationSettingsFormValues) {
-    toast.success("Notification preferences updated");
-    console.log(values);
+  async function onNotificationSubmit(values: NotificationSettingsFormValues) {
+    const { success, error } = await updateNotificationSettings(values);
+
+    if (error || !success) {
+      toast.error(error);
+    } else {
+      toast.success(success);
+    }
   }
 
   return (

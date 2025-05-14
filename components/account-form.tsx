@@ -25,25 +25,89 @@ import { accountSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { PasswordInput } from "@/components/ui/password-input";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { useUser } from "@/lib/swr";
+import { useEffect, useState } from "react";
+import { CheckCircle, XCircle } from "lucide-react";
+import { checkUsername, updateAccount } from "@/actions/setting";
+import { useDebounce } from "@/hooks/use-debounce";
+import { Loading } from "@/components/loading";
 
-type SettingsFormValues = z.infer<typeof accountSchema>;
+export type SettingsFormValues = z.infer<typeof accountSchema>;
 
 export function AccountForm() {
+  const { user } = useUser();
+
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(accountSchema),
     defaultValues: {
-      username: "iwmywn",
-      phone: "",
+      username: user?.username,
+      phone: user?.phone,
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
     },
   });
+  const [isChecking, setIsChecking] = useState<boolean>(false);
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState<
+    boolean | null
+  >(null);
+  const debouncedUsername = useDebounce(form.watch("username"), 500);
 
-  function onAccountSubmit(data: SettingsFormValues) {
-    toast.success("Account settings updated successfully");
-    console.log(data);
+  async function onSubmit(values: SettingsFormValues) {
+    const { success, error } = await updateAccount(values);
+
+    if (error || !success) {
+      toast.error(error);
+    } else {
+      toast.success(success);
+    }
   }
+
+  useEffect(() => {
+    const username = debouncedUsername?.trim();
+
+    if (!username) {
+      setIsUsernameAvailable(null);
+      form.clearErrors("username");
+      return;
+    }
+
+    const result = z.string().min(6).safeParse(username);
+
+    if (!result.success) {
+      form.setError("username", {
+        type: "manual",
+        message: "Username must be at least 6 characters long.",
+      });
+      setIsUsernameAvailable(false);
+      return;
+    }
+
+    setIsChecking(true);
+    checkUsername(username)
+      .then((res) => {
+        if (res?.error) {
+          form.setError("username", {
+            type: "manual",
+            message: res.error,
+          });
+          setIsUsernameAvailable(false);
+        } else {
+          form.clearErrors("username");
+          setIsUsernameAvailable(true);
+        }
+      })
+      .catch(() => {
+        form.setError("username", {
+          type: "manual",
+          message: "Something went wrong! Please try again.",
+        });
+        setIsUsernameAvailable(null);
+      })
+      .finally(() => {
+        setIsChecking(false);
+      });
+  }, [debouncedUsername, form]);
 
   return (
     <Card className="rounded-lg">
@@ -55,19 +119,34 @@ export function AccountForm() {
       </CardHeader>
       <CardContent className="space-y-6">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onAccountSubmit)}
-            className="space-y-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="username"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel htmlFor="username">Username</FormLabel>
-                  <FormControl>
-                    <Input id="username" placeholder="Username" {...field} />
-                  </FormControl>
+                  <div className="relative">
+                    <FormControl>
+                      <Input
+                        id="username"
+                        placeholder="Username"
+                        autoComplete="off"
+                        {...field}
+                      />
+                    </FormControl>
+
+                    <div className="absolute top-2.5 right-2.5">
+                      {isChecking ? (
+                        <Loading className="border-primary border-t-primary-foreground/10" />
+                      ) : isUsernameAvailable === true ? (
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                      ) : isUsernameAvailable === false ? (
+                        <XCircle className="h-4 w-4 text-red-500" />
+                      ) : null}
+                    </div>
+                  </div>
+
                   <FormDescription>
                     This is your public display name. It can be your real name
                     or a pseudonym.
@@ -84,7 +163,7 @@ export function AccountForm() {
                 <FormItem className="grid gap-2">
                   <FormLabel htmlFor="phone">Phone Number</FormLabel>
                   <FormControl>
-                    <PhoneInput {...field} defaultCountry="VN" />
+                    <PhoneInput id="phone" {...field} defaultCountry="VN" />
                   </FormControl>
                   <FormDescription>
                     This number may appear on your public profile, or stay
@@ -129,7 +208,7 @@ export function AccountForm() {
                     <PasswordInput
                       id="currentPassword"
                       placeholder="********"
-                      autoComplete="current-password"
+                      autoComplete="off"
                       {...field}
                     />
                   </FormControl>

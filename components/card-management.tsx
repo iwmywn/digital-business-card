@@ -50,7 +50,7 @@ import QRCode from "qrcode";
 import type { Card as CardType } from "@/lib/definitions";
 import { getCloudinaryUrl, getColorClass, getFontClass } from "@/lib/utils";
 import { CardManagementSkeleton } from "@/components/skeletons";
-import { useCard } from "@/lib/hooks";
+import { useCard } from "@/lib/swr";
 import { NotFoundUI } from "@/components/not-found-ui";
 import { Loading } from "@/components/loading";
 
@@ -159,7 +159,7 @@ export function CardManagement() {
       toast.error(isCardError);
   }, [isCardError]);
 
-  if (isCardLoading) return <CardManagementSkeleton />;
+  if (isCardLoading || isCardError) return <CardManagementSkeleton />;
 
   return (
     <div className="space-y-6">

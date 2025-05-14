@@ -31,7 +31,7 @@ export async function uploadToCloudinary(
     const timestamp = Math.round(new Date().getTime() / 1000);
 
     const signature = await generateSignature(
-      `folder=${folder}&timestamp=${timestamp}${cloudinarySecret}`,
+      `folder=digital-business-card/${folder}&timestamp=${timestamp}${cloudinarySecret}`,
     );
 
     const formData = new FormData();
@@ -39,7 +39,7 @@ export async function uploadToCloudinary(
     formData.append("api_key", cloudinaryKey);
     formData.append("timestamp", timestamp.toString());
     formData.append("signature", signature);
-    formData.append("folder", folder);
+    formData.append("folder", `digital-business-card/${folder}`);
 
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudinaryName}/image/upload`,

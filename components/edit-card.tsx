@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,7 +15,7 @@ import { CardPreview } from "@/components/card-preview";
 import { saveCard } from "@/actions/card";
 import type { SerializableLinkType } from "@/components/icons";
 import type { Card as CardType } from "@/lib/definitions";
-import { useCard } from "@/lib/hooks";
+import { useCard } from "@/lib/swr";
 import { Loading } from "@/components/loading";
 import { personalInfoSchema } from "@/schemas";
 import { CreateCardSkeleton } from "@/components/skeletons";
@@ -33,7 +33,7 @@ export function EditCard({ card }: { card: CardType }) {
   );
   const [links, setLinks] = useState<SerializableLinkType[]>(card.links);
   const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
-  const { cardData, mutate, cards, isCardLoading } = useCard();
+  const { cardData, mutate, cards, isCardLoading, isCardError } = useCard();
 
   async function handleUpdateCard() {
     if (isSubmitting) return;
@@ -104,7 +104,11 @@ export function EditCard({ card }: { card: CardType }) {
     setLinks(data);
   }, []);
 
-  if (isCardLoading) return <CreateCardSkeleton />;
+  useEffect(() => {
+    if (isCardError) toast.error(isCardError);
+  }, [isCardError]);
+
+  if (isCardLoading || isCardError) return <CreateCardSkeleton />;
 
   return (
     <div className="space-y-6">

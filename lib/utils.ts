@@ -1,7 +1,7 @@
 import { allColorOptions, allFontOptions } from "@/constants";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { type ImageTransform } from "@/components/image-editor";
+import { type ImageTransform } from "@/components/image-editor-dialog";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

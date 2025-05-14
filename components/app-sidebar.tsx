@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import Image from "next/image";
-import { useUser } from "@/lib/hooks";
+import { useUser } from "@/lib/swr";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -71,7 +71,7 @@ export const nav = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { currentPlan, isUserLoading, isUserError } = useUser();
+  const { user, isUserLoading, isUserError } = useUser();
 
   useEffect(() => {
     if (isUserError) toast.error(isUserError);
@@ -102,7 +102,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <Skeleton className="h-3 w-24" />
                   ) : (
                     <span className="truncate text-xs capitalize">
-                      {currentPlan}
+                      {user?.currentPlan}
                     </span>
                   )}
                 </div>

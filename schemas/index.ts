@@ -21,7 +21,9 @@ const signUpSchema = z
       .string()
       .min(2, { message: "Full name must be at least 2 characters long." }),
     email: baseEmailSchema,
-    phone: z.string().min(10, { message: "Phone number must be valid." }),
+    phone: z
+      .string()
+      .regex(/^\+?[1-9][0-9]{7,14}$/, "Phone number must be valid."),
     password: basePasswordSchema,
     confirmPassword: z.string(),
   })
@@ -54,76 +56,162 @@ const contactSchema = z.object({
   lastName: z.string().min(1, { message: "Last name is required." }),
   company: z.string().min(1, { message: "Company name is required." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
-  phone: z.string().optional(),
+  phone: z
+    .string()
+    .regex(/^\+?[1-9][0-9]{7,14}$/, "Phone number must be valid.")
+    .optional(),
   department: z.string().min(1, { message: "Please select a department." }),
   message: z
     .string()
     .min(10, { message: "Message must be at least 10 characters." }),
 });
 
-const publicProfileSchema = z.object({
-  fullName: z
-    .string()
-    .min(2, { message: "Full name must be at least 2 characters long." })
-    .optional(),
-  gender: z.string().optional(),
-  dateOfBirth: z.date().optional(),
-  jobTitle: z
-    .string()
-    .min(2, { message: "Job title must be at least 2 characters long." })
-    .optional(),
-  company: z
-    .string()
-    .min(2, { message: "Company name must be at least 2 characters long." })
-    .optional(),
-  website: z.string().url({ message: "Please enter a valid URL." }).optional(),
-  bio: z
-    .string()
-    .max(160, { message: "Bio must not exceed 160 characters." })
-    .optional(),
-});
+const publicProfileSchema = z
+  .object({
+    fullName: z
+      .string()
+      .min(2, { message: "Full name must be at least 2 characters long." }),
+    avatar: z.string().optional(),
+    gender: z.string().optional(),
+    dateOfBirth: z.date().nullable().optional(),
+    jobTitle: z.string().optional(),
+    company: z.string().optional(),
+    website: z.string().optional(),
+    bio: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    const { gender, dateOfBirth, jobTitle, company, website, bio } = data;
+
+    if (
+      gender &&
+      !["male", "female", "non-binary", "prefer-not-to-say"].includes(
+        gender.toLowerCase(),
+      )
+    ) {
+      ctx.addIssue({
+        path: ["gender"],
+        message:
+          "Gender must be one of 'male', 'female', 'non-binary or 'prefer-not-to-say'.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    if (dateOfBirth) {
+      const today = new Date();
+      let age = today.getFullYear() - dateOfBirth.getFullYear();
+      const monthDifference = today.getMonth() - dateOfBirth.getMonth();
+      if (
+        monthDifference < 0 ||
+        (monthDifference === 0 && today.getDate() < dateOfBirth.getDate())
+      ) {
+        age--;
+      }
+
+      if (age < 18) {
+        ctx.addIssue({
+          path: ["dateOfBirth"],
+          message: "You must be at least 18 years old.",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    }
+
+    if (jobTitle && jobTitle.length > 100) {
+      ctx.addIssue({
+        path: ["jobTitle"],
+        message: "Job title must not exceed 100 characters.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    if (company && company.length > 100) {
+      ctx.addIssue({
+        path: ["company"],
+        message: "Company name must not exceed 100 characters.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    if (website && !/^https?:\/\/[^\s]+$/.test(website)) {
+      ctx.addIssue({
+        path: ["website"],
+        message: "Website must be a valid URL.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    if (bio && bio.length > 160) {
+      ctx.addIssue({
+        path: ["bio"],
+        message: "Bio must not exceed 160 characters.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+  });
 
 const accountSchema = z
   .object({
-    username: z
-      .string()
-      .min(2, { message: "Username must be at least 2 characters long." })
-      .optional(),
-    phone: z
-      .string()
-      .min(10, { message: "Phone number must be valid." })
-      .optional(),
+    username: z.string().optional(),
+    phone: z.string().optional(),
     currentPassword: z.string().optional(),
-    newPassword: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long." })
-      .optional(),
+    newPassword: z.string().optional(),
     confirmPassword: z.string().optional(),
   })
-  .refine(
-    (data) => {
-      if (data.newPassword && !data.currentPassword) {
-        return false;
+  .superRefine((data, ctx) => {
+    const { username, phone, currentPassword, newPassword, confirmPassword } =
+      data;
+
+    if (username && username.length < 6) {
+      ctx.addIssue({
+        path: ["username"],
+        message: "Username must be at least 6 characters long.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    if (phone && !/^\+?[1-9][0-9]{7,14}$/.test(phone)) {
+      ctx.addIssue({
+        path: ["phone"],
+        message: "Phone number must be valid.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    const isChangingPassword =
+      currentPassword || newPassword || confirmPassword;
+
+    if (isChangingPassword) {
+      if (!currentPassword) {
+        ctx.addIssue({
+          path: ["currentPassword"],
+          message: "Current password is required.",
+          code: z.ZodIssueCode.custom,
+        });
       }
-      return true;
-    },
-    {
-      message: "Current password is required to set a new password.",
-      path: ["currentPassword"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.newPassword && data.newPassword !== data.confirmPassword) {
-        return false;
+
+      if (!newPassword || newPassword.length < 8) {
+        ctx.addIssue({
+          path: ["newPassword"],
+          message: "New password must be at least 8 characters long.",
+          code: z.ZodIssueCode.custom,
+        });
       }
-      return true;
-    },
-    {
-      message: "Passwords do not match.",
-      path: ["confirmPassword"],
-    },
-  );
+
+      if (!confirmPassword) {
+        ctx.addIssue({
+          path: ["confirmPassword"],
+          message: "Please confirm your new password.",
+          code: z.ZodIssueCode.custom,
+        });
+      } else if (newPassword !== confirmPassword) {
+        ctx.addIssue({
+          path: ["confirmPassword"],
+          message: "Passwords do not match.",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    }
+  });
 
 const notificationSettingsSchema = z.object({
   email: z.boolean(),
