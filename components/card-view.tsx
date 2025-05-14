@@ -222,7 +222,7 @@ export function CardView({ card }: { card: CardType }) {
           {card.personalInfo.headline && (
             <>
               <Separator className="bg-black/15" />
-              <p className="text-gray-700 italic">
+              <p className="break-all text-gray-700 italic">
                 {card.personalInfo.headline}
               </p>
             </>
@@ -231,7 +231,9 @@ export function CardView({ card }: { card: CardType }) {
           {card.personalInfo.bio && (
             <>
               <Separator className="bg-black/15" />
-              <p className="text-sm text-gray-600">{card.personalInfo.bio}</p>
+              <p className="text-sm break-all text-gray-600">
+                {card.personalInfo.bio}
+              </p>
             </>
           )}
 

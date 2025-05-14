@@ -140,14 +140,14 @@ export function CardPreview({
 
           <Separator className="bg-black/15" />
 
-          <p className="text-gray-700 italic">
+          <p className="break-all text-gray-700 italic">
             {personalInfo.headline ||
               "A brief headline about who you are – your role, passion, or goal."}
           </p>
 
           <Separator className="bg-black/15" />
 
-          <p className="text-sm text-gray-600">
+          <p className="text-sm break-all text-gray-600">
             {personalInfo.bio ||
               "Tell a little about yourself: your background, experience, or what makes you unique."}
           </p>
