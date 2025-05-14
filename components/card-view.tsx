@@ -19,6 +19,7 @@ import type { Card as CardType } from "@/lib/definitions";
 import { getColorClass, getFontClass } from "@/lib/utils";
 import { Separator } from "@/components/separator";
 import { getCloudinaryUrl } from "@/lib/utils";
+import { Loading } from "@/components/loading";
 
 export function CardView({ card }: { card: CardType }) {
   const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false);
@@ -187,16 +188,18 @@ export function CardView({ card }: { card: CardType }) {
                 </div>
               </div>
             )}
-            <div className="space-y-1">
-              <h2 className="font-bold text-black">
-                <span className="text-xl">{card.personalInfo.fullName}</span>
+            <div className="w-full space-y-1">
+              <h2 className="font-bold break-all">
+                <span className="text-xl text-nowrap text-black">
+                  {card.personalInfo.fullName}
+                </span>
                 {card.personalInfo.accreditations && (
                   <span className="ml-2 text-sm text-gray-500">
                     {card.personalInfo.accreditations}
                   </span>
                 )}
               </h2>
-              <p className="font-medium">
+              <p className="font-medium break-all">
                 {card.personalInfo.jobTitle && (
                   <span className="text-gray-700">
                     {card.personalInfo.jobTitle}
@@ -209,7 +212,7 @@ export function CardView({ card }: { card: CardType }) {
                 )}
               </p>
               {card.personalInfo.company && (
-                <p className="text-sm text-gray-500">
+                <p className="text-sm break-all text-gray-500">
                   {card.personalInfo.company}
                 </p>
               )}
@@ -247,17 +250,17 @@ export function CardView({ card }: { card: CardType }) {
                       className={`${colorClass} rounded-full p-2 text-white`}
                     >
                       {isLoading[link.id] ? (
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                        <Loading />
                       ) : (
                         getIconComponent(link.type)
                       )}
                     </div>
-                    <div className="w-full flex-1 text-left">
+                    <div className="w-[calc(100%-2.75rem)] flex-1 text-left">
                       <span className="font-medium text-gray-800">
                         {link.label || link.type}
                       </span>
                       {link.value && (
-                        <p className="max-w-[85%] truncate text-gray-600">
+                        <p className="max-w-full truncate text-gray-600">
                           {link.value}
                         </p>
                       )}

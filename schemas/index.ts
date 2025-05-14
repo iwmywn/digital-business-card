@@ -116,10 +116,10 @@ const publicProfileSchema = z
       }
     }
 
-    if (jobTitle && jobTitle.length > 100) {
+    if (jobTitle && jobTitle.length > 50) {
       ctx.addIssue({
         path: ["jobTitle"],
-        message: "Job title must not exceed 100 characters.",
+        message: "Job title must not exceed 50 characters.",
         code: z.ZodIssueCode.custom,
       });
     }
@@ -220,25 +220,70 @@ const notificationSettingsSchema = z.object({
   security: z.boolean(),
 });
 
-const personalInfoSchema = z.object({
-  fullName: z
-    .string()
-    .min(2, { message: "Full name must be at least 2 characters." }),
-  jobTitle: z.string().min(1, { message: "Job title is required." }),
-  department: z.string().min(1, { message: "Department is required." }),
-  company: z.string().min(1, { message: "Company is required." }),
-  accreditations: z
-    .string()
-    .min(1, { message: "Accreditations are required." }),
-  headline: z
-    .string()
-    .max(100, { message: "Headline must not exceed 100 characters." })
-    .optional(),
-  bio: z
-    .string()
-    .max(160, { message: "Bio must not exceed 160 characters." })
-    .optional(),
-});
+const personalInfoSchema = z
+  .object({
+    fullName: z
+      .string()
+      .min(2, { message: "Full name must be at least 2 characters long." }),
+    jobTitle: z.string().optional(),
+    department: z.string().optional(),
+    company: z.string().optional(),
+    accreditations: z.string().optional(),
+    headline: z.string().optional(),
+    bio: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    const { jobTitle, department, company, accreditations, headline, bio } =
+      data;
+
+    if (jobTitle && jobTitle.length > 50) {
+      ctx.addIssue({
+        path: ["jobTitle"],
+        message: "Job title must not exceed 50 characters.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    if (department && department.length > 50) {
+      ctx.addIssue({
+        path: ["department"],
+        message: "Department must not exceed 50 characters.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    if (company && company.length > 100) {
+      ctx.addIssue({
+        path: ["company"],
+        message: "Company must not exceed 100 characters.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    if (accreditations && accreditations.length > 50) {
+      ctx.addIssue({
+        path: ["accreditations"],
+        message: "Accreditations must not exceed 50 characters.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    if (headline && headline.length > 100) {
+      ctx.addIssue({
+        path: ["headline"],
+        message: "Headline must not exceed 100 characters.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    if (bio && bio.length > 160) {
+      ctx.addIssue({
+        path: ["bio"],
+        message: "Bio must not exceed 160 characters.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+  });
 
 export {
   signUpSchema,

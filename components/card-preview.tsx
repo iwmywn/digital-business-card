@@ -115,16 +115,16 @@ export function CardPreview({
                 </div>
               </div>
             )}
-            <div className="space-y-1">
-              <h2 className="font-bold">
-                <span className="text-xl text-black">
+            <div className="w-full space-y-1">
+              <h2 className="font-bold break-all">
+                <span className="text-xl text-nowrap text-black">
                   {personalInfo.fullName || "Full Name"}
                 </span>
                 <span className="ml-2 text-sm text-gray-500">
                   {personalInfo.accreditations || "Accreditations"}
                 </span>
               </h2>
-              <p className="font-medium">
+              <p className="font-medium break-all">
                 <span className="text-gray-700">
                   {personalInfo.jobTitle || "Job Title"}
                 </span>
@@ -132,7 +132,7 @@ export function CardPreview({
                   , {personalInfo.department || "Department"}
                 </span>
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm break-all text-gray-500">
                 {personalInfo.company || "Company Name"}
               </p>
             </div>
@@ -166,12 +166,12 @@ export function CardPreview({
                     >
                       {getIconComponent(link.type)}
                     </div>
-                    <div className="w-full flex-1">
+                    <div className="w-[calc(100%-2.75rem)] flex-1">
                       <span className="font-medium text-gray-800">
                         {link.label || link.type}
                       </span>
                       {link.value && (
-                        <p className="max-w-[85%] truncate text-gray-600">
+                        <p className="max-w-full truncate text-gray-600">
                           {link.value}
                         </p>
                       )}
