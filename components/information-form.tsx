@@ -36,7 +36,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon, ImageIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
+import { CalendarComponent } from "@/components/calendar";
 import { Button } from "@/components/ui/button";
 import { cn, getCloudinaryUrl } from "@/lib/utils";
 import { format } from "date-fns";
@@ -52,6 +52,7 @@ import Image from "next/image";
 export type ProfileFormValues = z.infer<typeof publicProfileSchema>;
 
 export function InformationForm() {
+  const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [imageEditorOpen, setImageEditorOpen] = useState<boolean>(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
   const { user, userResponse, mutate } = useUser();
@@ -288,7 +289,10 @@ export function InformationForm() {
                           <FormLabel htmlFor="dateOfBirth">
                             Date Of Birth
                           </FormLabel>
-                          <Popover>
+                          <Popover
+                            open={showCalendar}
+                            onOpenChange={setShowCalendar}
+                          >
                             <PopoverTrigger asChild>
                               <FormControl>
                                 <Button
@@ -309,13 +313,16 @@ export function InformationForm() {
                               </FormControl>
                             </PopoverTrigger>
                             <PopoverContent
-                              className="w-auto p-0"
+                              className="w-auto p-2"
                               align="start"
                             >
-                              <Calendar
+                              <CalendarComponent
                                 mode="single"
                                 selected={field.value ?? undefined}
-                                onSelect={field.onChange}
+                                onSelect={(day) => {
+                                  field.onChange(day);
+                                  setShowCalendar(false);
+                                }}
                                 disabled={(date) =>
                                   date > new Date() ||
                                   date < new Date("1900-01-01")

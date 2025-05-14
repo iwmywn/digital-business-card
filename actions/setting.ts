@@ -198,7 +198,14 @@ export async function updateAccount(values: SettingsFormValues) {
       await getUserCollection()
     ).updateOne(
       { _id: new ObjectId(userId) },
-      { $set: { username, phone, hashedPassword, updatedAt: new Date() } },
+      {
+        $set: {
+          username,
+          phone,
+          password: hashedPassword,
+          updatedAt: new Date(),
+        },
+      },
     );
 
     if (!result.acknowledged) {

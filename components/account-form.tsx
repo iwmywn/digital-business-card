@@ -166,8 +166,7 @@ export function AccountForm() {
                     <PhoneInput id="phone" {...field} defaultCountry="VN" />
                   </FormControl>
                   <FormDescription>
-                    This number may appear on your public profile, or stay
-                    private depending on your settings.
+                    This number is private and will not be displayed publicly.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
