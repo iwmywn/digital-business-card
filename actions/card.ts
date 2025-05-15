@@ -26,11 +26,10 @@ function generateSlug(): string {
 
 type ImageKey = "logoImage" | "profileImage" | "coverImage";
 export async function saveCard(
-  cardData: {
-    cardDesign: CardDesignValues;
-    personalInfo: PersonalInfoValues;
-    links: SerializableLinkType[];
-  },
+  cardDesign: CardDesignValues,
+  personalInfo: PersonalInfoValues,
+  links: SerializableLinkType[],
+  isPublic: boolean,
   cardId?: string,
 ) {
   try {
@@ -40,22 +39,22 @@ export async function saveCard(
       return { error: "Unauthorized!" };
     }
 
-    const updatedCardDesign = { ...cardData.cardDesign };
+    const updatedCardDesign = { ...cardDesign };
 
     if (updatedCardDesign.imageTransforms?.logo) {
-      updatedCardDesign.imageTransforms.logo.croppedImageUrl = undefined;
+      updatedCardDesign.imageTransforms.logo.croppedImageUrl = null;
     }
     if (updatedCardDesign.imageTransforms?.cover) {
-      updatedCardDesign.imageTransforms.cover.croppedImageUrl = undefined;
+      updatedCardDesign.imageTransforms.cover.croppedImageUrl = null;
     }
     if (updatedCardDesign.imageTransforms?.profile) {
-      updatedCardDesign.imageTransforms.profile.croppedImageUrl = undefined;
+      updatedCardDesign.imageTransforms.profile.croppedImageUrl = null;
     }
 
     const imageKeys: ImageKey[] = ["logoImage", "profileImage", "coverImage"];
 
     for (const key of imageKeys) {
-      const image = cardData.cardDesign[key];
+      const image = cardDesign[key];
       const folder = key.replace("Image", "");
 
       if (!image) continue;
@@ -96,8 +95,9 @@ export async function saveCard(
         {
           $set: {
             cardDesign: updatedCardDesign,
-            personalInfo: cardData.personalInfo,
-            links: cardData.links,
+            personalInfo,
+            links,
+            isPublic,
             updatedAt: new Date(),
           },
         },
@@ -113,9 +113,9 @@ export async function saveCard(
         userId,
         slug,
         cardDesign: updatedCardDesign,
-        personalInfo: cardData.personalInfo,
-        links: cardData.links,
-        isPublic: true,
+        personalInfo,
+        links,
+        isPublic,
         views: 0,
         clicks: 0,
         viewHistory: [],

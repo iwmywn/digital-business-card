@@ -31,6 +31,7 @@ export function EditCard({ card }: { card: CardType }) {
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>(
     card.personalInfo,
   );
+  const [isPublic, setIsPublic] = useState<boolean>(card.isPublic);
   const [links, setLinks] = useState<SerializableLinkType[]>(card.links);
   const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
   const { cardData, mutate, cards, isCardLoading, isCardError } = useCard();
@@ -60,11 +61,10 @@ export function EditCard({ card }: { card: CardType }) {
     setIsSubmitting(true);
 
     const { success, error } = await saveCard(
-      {
-        cardDesign,
-        personalInfo,
-        links,
-      },
+      cardDesign,
+      personalInfo,
+      links,
+      isPublic,
       card._id,
     );
 
@@ -77,9 +77,10 @@ export function EditCard({ card }: { card: CardType }) {
           c._id === card._id
             ? {
                 ...c,
-                cardDesign: cardDesign,
-                personalInfo: personalInfo,
-                links: links,
+                cardDesign,
+                personalInfo,
+                links,
+                isPublic,
                 updatedAt: new Date(),
               }
             : c,
@@ -124,6 +125,9 @@ export function EditCard({ card }: { card: CardType }) {
           </p>
         </div>
         <div className="flex items-center justify-end gap-2">
+          <Button onClick={() => setIsPublic(!isPublic)}>
+            {isPublic ? "Public" : "Private"}
+          </Button>
           <Button onClick={() => setPreviewMode(!previewMode)}>
             {previewMode ? "Back to editor" : "Preview card"}
           </Button>

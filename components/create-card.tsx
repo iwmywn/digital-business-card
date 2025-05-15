@@ -46,6 +46,7 @@ export function CreateCard() {
   const [links, setLinks] = useState<SerializableLinkType[]>([]);
   const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
   const { cardData, cards, isCardLoading, isCardError, mutate } = useCard();
+  const [isPublic, setIsPublic] = useState<boolean>(true);
 
   async function handleCreateCard() {
     if (isSubmitting) return;
@@ -71,11 +72,12 @@ export function CreateCard() {
 
     setIsSubmitting(true);
 
-    const { success, error } = await saveCard({
+    const { success, error } = await saveCard(
       cardDesign,
       personalInfo,
       links,
-    });
+      isPublic,
+    );
 
     if (error || !success) {
       toast.error(error);
@@ -91,7 +93,7 @@ export function CreateCard() {
             cardDesign,
             personalInfo,
             links,
-            isPublic: true,
+            isPublic,
             views: 0,
             clicks: 0,
             viewHistory: [],
@@ -142,6 +144,9 @@ export function CreateCard() {
           </p>
         </div>
         <div className="flex items-center justify-end gap-2">
+          <Button onClick={() => setIsPublic(!isPublic)}>
+            {isPublic ? "Public" : "Private"}
+          </Button>
           <Button onClick={() => setPreviewMode(!previewMode)}>
             {previewMode ? "Back to editor" : "Preview card"}
           </Button>
