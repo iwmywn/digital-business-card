@@ -6,7 +6,7 @@ import { Trash2, GripVertical } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/separator";
+import { Separator } from "@/components/ui/separator";
 import {
   DndContext,
   closestCenter,

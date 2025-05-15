@@ -17,7 +17,7 @@ import QRCode from "qrcode";
 import { linkTypes, type SerializableLinkType } from "@/components/icons";
 import type { Card as CardType } from "@/lib/definitions";
 import { getColorClass, getFontClass } from "@/lib/utils";
-import { Separator } from "@/components/separator";
+import { Separator } from "@/components/ui/separator";
 import { getCloudinaryUrl } from "@/lib/utils";
 import { Loading } from "@/components/loading";
 

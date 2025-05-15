@@ -8,7 +8,7 @@ import { QrCode, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { linkTypes } from "@/components/icons";
 import { getColorClass, getFontClass } from "@/lib/utils";
-import { Separator } from "@/components/separator";
+import { Separator } from "@/components/ui/separator";
 import { getCloudinaryUrl } from "@/lib/utils";
 
 interface CardPreviewProps {

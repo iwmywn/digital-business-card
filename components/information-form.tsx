@@ -36,7 +36,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon, ImageIcon } from "lucide-react";
-import { CalendarComponent } from "@/components/calendar";
+import { CalendarComponent } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { cn, getCloudinaryUrl } from "@/lib/utils";
 import { format } from "date-fns";
