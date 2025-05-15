@@ -18,6 +18,7 @@ import { useSubscription, useUser } from "@/lib/swr";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Loading } from "@/components/loading";
+import { formatDate } from "@/lib/utils";
 
 export function SubscriptionManagement() {
   const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
@@ -55,18 +56,6 @@ export function SubscriptionManagement() {
     }
     setIsLoading((prev) => ({ ...prev, [planId]: false }));
   }
-
-  const formatExpirationDate = (date: Date | null) => {
-    if (!date) return "";
-    return new Date(date).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
-  };
 
   return (
     <div className="flex flex-wrap gap-6">
@@ -125,7 +114,7 @@ export function SubscriptionManagement() {
               <div className="w-full">
                 {isAccessible && expirationDate && (
                   <div className="bg-muted mb-4 rounded-md p-2 text-center text-xs">
-                    You have access until {formatExpirationDate(expirationDate)}
+                    You have access until {formatDate(expirationDate, true)}
                   </div>
                 )}
 

@@ -102,6 +102,7 @@ export function CreateCard() {
             updatedAt: new Date(),
             editable: true,
             message: undefined,
+            dynamicSlug: "temp",
           },
         ],
       });

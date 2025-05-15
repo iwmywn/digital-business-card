@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { format } from "date-fns";
 import { Receipt, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +26,7 @@ import { toast } from "sonner";
 import { ReceiptData } from "@/components/payment-receipt-dialog";
 import { useSubscription } from "@/lib/swr";
 import { NotFoundUI } from "@/components/not-found-ui";
+import { formatDate } from "@/lib/utils";
 
 export function BillingHistory() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -59,10 +59,6 @@ export function BillingHistory() {
     }
 
     setIsReceiptLoading(false);
-  };
-
-  const formatDate = (date: Date) => {
-    return format(new Date(date), "MMM dd, yyyy");
   };
 
   const getStatusColor = (status: string) => {

@@ -69,7 +69,11 @@ export function useSubscription() {
 export function useCard() {
   const { data, isLoading, mutate } = useSWR<{
     error?: string;
-    cards?: (Card & { editable: boolean; message?: string })[];
+    cards?: (Card & {
+      editable: boolean;
+      message?: string;
+      dynamicSlug: string;
+    })[];
   }>("cards", getCards, { keepPreviousData: true });
 
   const cardData = data;

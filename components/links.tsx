@@ -89,13 +89,8 @@ function SortableLink({
           className="flex-grow"
         />
       </div>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => removeLink(link.id)}
-        className="text-red-500 hover:bg-red-50 hover:text-red-600"
-      >
-        <Trash2 className="h-4 w-4" />
+      <Button variant="ghost" size="icon" onClick={() => removeLink(link.id)}>
+        <Trash2 className="text-destructive focus:text-destructive h-4 w-4" />
       </Button>
     </div>
   );

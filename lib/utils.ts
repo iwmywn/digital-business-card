@@ -2,6 +2,8 @@ import { allColorOptions, allFontOptions } from "@/constants";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { type ImageTransform } from "@/components/image-editor-dialog";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -55,4 +57,19 @@ export function isSameDate(
   if (date1 === undefined || date2 === undefined) return true;
 
   return date1.getTime() === date2.getTime();
+}
+
+export function formatDate(
+  date: Date | string,
+  withTime: boolean = false,
+): string {
+  return withTime
+    ? format(new Date(date), "MMMM d, yyyy 'at' h:mm:ss a")
+    : format(new Date(date), "MMMM d, yyyy");
+}
+
+export function handleCopyLink(slug: string) {
+  const link = `${process.env.NEXT_PUBLIC_URL}/card/${slug}`;
+  navigator.clipboard.writeText(link);
+  toast.success("Link copied to clipboard.");
 }

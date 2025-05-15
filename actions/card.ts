@@ -4,7 +4,6 @@ import { ObjectId } from "mongodb";
 import { getCardCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
-import { randomBytes } from "crypto";
 import type { CardDesignValues } from "@/components/card-design";
 import type { PersonalInfoValues } from "@/components/personal-info";
 import type { SerializableLinkType } from "@/components/icons";
@@ -12,17 +11,6 @@ import type { Card } from "@/lib/definitions";
 import * as constants from "@/constants";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { extractCloudinaryPath } from "@/lib/utils";
-
-function generateSlug(): string {
-  const timePart = Date.now().toString(36);
-  const randomPart = randomBytes(10)
-    .toString("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-
-  return `${timePart}${randomPart}`;
-}
 
 type ImageKey = "logoImage" | "profileImage" | "coverImage";
 export async function saveCard(
@@ -107,11 +95,9 @@ export async function saveCard(
         return { error: "Card update failed! Try again later." };
     } else {
       const now = new Date();
-      const slug = generateSlug();
 
       const result = await cardCollection.insertOne({
         userId,
-        slug,
         cardDesign: updatedCardDesign,
         personalInfo,
         links,
@@ -138,42 +124,35 @@ export async function saveCard(
   }
 }
 
-export async function getCardById(cardId: string) {
-  try {
-    const { isSignedIn, userId } = await session.user.get();
-
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
-    }
-    const cardCollection = await getCardCollection();
-    const card = await cardCollection.findOne({
-      _id: new ObjectId(cardId),
-      userId,
-    });
-
-    if (!card) {
-      return { error: "Card not found!" };
-    }
-
-    return {
-      card: {
-        ...card,
-        _id: card._id.toString(),
-      } as Card,
-    };
-  } catch (error) {
-    console.error("Error getting card by id:", error);
-    return { error: "Failed to get card by id! Please try again later." };
-  }
-}
-
 export async function getCardBySlug(slug: string) {
   try {
-    const cardCollection = await getCardCollection();
-    const card = await cardCollection.findOne({ slug });
+    const isValidObjectId =
+      ObjectId.isValid(slug) && new ObjectId(slug).toString() === slug;
+    const query = isValidObjectId ? { _id: new ObjectId(slug) } : { slug };
+    const card = await (await getCardCollection()).findOne(query);
 
     if (!card) {
       return { error: "Card not found!" };
+    }
+
+    const existingUser = await getUserById(card.userId);
+
+    if (!existingUser) return { error: "User not found!" };
+
+    const { currentPlan } = existingUser;
+    const now = new Date();
+    const validProfessionalPlan = existingUser.purchasedPlans?.find(
+      (plan) =>
+        currentPlan === plan.planId &&
+        plan.planId === "professional" &&
+        new Date(plan.expiresAt) > now,
+    );
+
+    if (!validProfessionalPlan && !isValidObjectId) {
+      return {
+        error:
+          "Access denied. Upgrade to Professional plan to access via slug.",
+      };
     }
 
     return {
@@ -373,14 +352,25 @@ export async function getCards() {
       const message = editable
         ? undefined
         : `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s).`;
+      let { slug: dynamicSlug } = card;
+
+      dynamicSlug =
+        dynamicSlug && currentPlan === "professional"
+          ? dynamicSlug
+          : card._id.toString();
 
       return {
         ...card,
         _id: card._id.toString(),
         editable,
         message,
+        dynamicSlug,
       };
-    }) as (Card & { editable: boolean; message?: string })[];
+    }) as (Card & {
+      editable: boolean;
+      message?: string;
+      dynamicSlug: string;
+    })[];
 
     if (cardCount >= maxCards) {
       return {

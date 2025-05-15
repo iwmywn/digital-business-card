@@ -1,6 +1,5 @@
 "use client";
 
-import { format } from "date-fns";
 import { CreditCard, FileText, MapPin, User } from "lucide-react";
 import {
   Card,
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { SetStateAction } from "react";
 import { PaymentReceiptDialogSkeleton } from "@/components/skeletons";
+import { formatDate } from "@/lib/utils";
 
 export interface ReceiptData {
   paymentIntent: {
@@ -77,10 +77,6 @@ export function PaymentReceiptDialog({
   isReceiptLoading,
   receiptData,
 }: PaymentReceiptProps) {
-  const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "MMMM dd, yyyy 'at' h:mm a");
-  };
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case "succeeded":
@@ -127,7 +123,8 @@ export function PaymentReceiptDialog({
                         Transaction ID: {receiptData.paymentIntent.id.slice(3)}
                       </p>
                       <p>
-                        Date: {formatDate(receiptData.paymentIntent.created)}
+                        Date:{" "}
+                        {formatDate(receiptData.paymentIntent.created, true)}
                       </p>
                     </div>
                   </CardHeader>

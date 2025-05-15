@@ -37,7 +37,7 @@ type BaseUser<T> = {
 type BaseCard<T> = {
   _id: T;
   userId: string;
-  slug: string;
+  slug?: string;
   cardDesign: CardDesignValues;
   personalInfo: PersonalInfoValues;
   links: SerializableLinkType[];

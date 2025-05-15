@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { EditCard } from "@/components/edit-card";
-import { getCardById } from "@/actions/card";
+import { getCardBySlug } from "@/actions/card";
 import NotFound from "@/app/not-found";
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const param = await params;
-  const { card, error } = await getCardById(param.id);
+  const { card, error } = await getCardBySlug(param.slug);
 
   if (error || !card) {
     return {
@@ -27,10 +27,10 @@ export async function generateMetadata({
 export default async function page({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
   const param = await params;
-  const { card, error } = await getCardById(param.id);
+  const { card, error } = await getCardBySlug(param.slug);
 
   if (error || !card) {
     return <NotFound className="min-h-[calc(100vh-4.83rem)]" />;
