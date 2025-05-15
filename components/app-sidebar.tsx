@@ -98,7 +98,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">EZNECT</span>
-                  {isUserLoading || isUserError ? (
+                  {isUserLoading ? (
                     <Skeleton className="h-3 w-24" />
                   ) : (
                     <span className="truncate text-xs capitalize">

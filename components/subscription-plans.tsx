@@ -20,7 +20,7 @@ export function SubscriptionPlans() {
     if (isSubscriptionError) toast.error(isSubscriptionError);
   }, [isSubscriptionError]);
 
-  if (isSubScriptionLoading || isSubscriptionError) {
+  if (isSubScriptionLoading) {
     return <SubscriptionPlansSkeleton />;
   }
 

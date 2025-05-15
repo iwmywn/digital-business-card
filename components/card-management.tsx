@@ -159,7 +159,7 @@ export function CardManagement() {
       toast.error(isCardError);
   }, [isCardError]);
 
-  if (isCardLoading || isCardError) return <CardManagementSkeleton />;
+  if (isCardLoading) return <CardManagementSkeleton />;
 
   return (
     <div className="space-y-6">

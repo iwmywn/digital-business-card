@@ -251,7 +251,7 @@ export function Analytics() {
       toast.error(isCardError);
   }, [isUserError, isCardError]);
 
-  if (isUserLoading || isCardLoading || isUserError || isCardError) {
+  if (isUserLoading || isCardLoading) {
     return <AnalyticsSkeleton />;
   }
 

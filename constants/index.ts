@@ -7,49 +7,9 @@ const maxFreeCards = 1;
 const maxBasicCards = 5;
 const maxProfessionalCards = 10;
 
-const subscriptionPlans = [
-  {
-    id: "free",
-    name: "Free",
-    price: 0,
-    features: [
-      "Create 1 digital business card",
-      "Access standard themes",
-      "Choose from 3 standard fonts",
-    ],
-    popular: false,
-    priceId: "",
-  },
-  {
-    id: "basic",
-    name: "Basic",
-    price: 9.99,
-    features: [
-      "Create up to 5 digital business cards",
-      "View basic analytics on card performance",
-      "Unlock additional themes",
-      "Choose from 7 unique fonts",
-    ],
-    popular: false,
-    priceId: basicId || "",
-  },
-  {
-    id: "professional",
-    name: "Professional",
-    price: 19.99,
-    features: [
-      "Create up to 10 digital business cards",
-      "Access advanced analytics with detailed insights",
-      "Unlock the full theme library",
-      "Use all available fonts",
-      "Connect a custom card domain",
-      "Receive priority customer support",
-      "Remove all platform branding",
-    ],
-    popular: true,
-    priceId: professionalId || "",
-  },
-];
+const maxFreeLinks = 5;
+const maxBasicLinks = 15;
+const maxProfessionalLinks = 30;
 
 const defaultFont = "roboto";
 const freeFontOptions = [
@@ -246,6 +206,53 @@ const allColorOptions = [
   },
 ];
 
+const subscriptionPlans = [
+  {
+    id: "free",
+    name: "Free",
+    price: 0,
+    features: [
+      `Create ${maxFreeCards} digital business card`,
+      "Access standard themes",
+      `Choose from ${freeFontOptions.length} standard fonts`,
+      `Add up to ${maxFreeLinks} links`,
+    ],
+    popular: false,
+    priceId: "",
+  },
+  {
+    id: "basic",
+    name: "Basic",
+    price: 9.99,
+    features: [
+      `Create up to ${maxBasicCards} digital business cards`,
+      "Unlock additional themes",
+      `Choose from ${basicFontOptions.length} unique fonts`,
+      `Add up to ${maxBasicLinks} links`,
+      "View basic analytics on card performance",
+    ],
+    popular: false,
+    priceId: basicId || "",
+  },
+  {
+    id: "professional",
+    name: "Professional",
+    price: 19.99,
+    features: [
+      `Create up to ${maxProfessionalCards} digital business cards`,
+      "Unlock the full theme library",
+      "Use all available fonts",
+      `Add up to ${maxProfessionalLinks} links`,
+      "Access advanced analytics with detailed insights",
+      "Connect a custom card domain",
+      "Receive priority customer support",
+      "Remove all platform branding",
+    ],
+    popular: true,
+    priceId: professionalId || "",
+  },
+];
+
 export {
   subscriptionPlans,
   basicId,
@@ -261,4 +268,7 @@ export {
   maxProfessionalCards,
   defaultFont,
   defaultColor,
+  maxFreeLinks,
+  maxBasicLinks,
+  maxProfessionalLinks,
 };

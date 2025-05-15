@@ -125,10 +125,14 @@ export function CreateCard() {
   }, []);
 
   useEffect(() => {
-    if (isCardError) toast.error(isCardError);
+    if (
+      isCardError &&
+      !isCardError.includes("You've reached the maximum number of cards")
+    )
+      toast.error(isCardError);
   }, [isCardError]);
 
-  if (isCardLoading || isCardError) return <CreateCardSkeleton />;
+  if (isCardLoading) return <CreateCardSkeleton />;
 
   return (
     <div className="space-y-6">

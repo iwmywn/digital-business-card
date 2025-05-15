@@ -1,6 +1,5 @@
 "use client";
 
-import type React from "react";
 import { useState, useEffect } from "react";
 import { Trash2, GripVertical } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,6 +31,9 @@ import {
   toSerializableLink,
 } from "@/components/icons";
 import { toLinkType } from "@/components/icons";
+import * as constants from "@/constants";
+import { useUser } from "@/lib/swr";
+import { toast } from "sonner";
 
 function SortableLink({
   link,
@@ -99,6 +101,12 @@ function SortableLink({
   );
 }
 
+const maxLinksByPlan: Record<string, number> = {
+  free: constants.maxFreeLinks,
+  basic: constants.maxBasicLinks,
+  professional: constants.maxProfessionalLinks,
+};
+
 export function Links({
   onSave,
   initialLinks = [],
@@ -109,6 +117,9 @@ export function Links({
   const [links, setLinks] = useState<LinkType[]>(() => {
     return initialLinks.map((link) => toLinkType(link));
   });
+  const { user } = useUser();
+  const currentPlan = user?.currentPlan || "free";
+  const maxLinks = maxLinksByPlan[currentPlan];
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -127,6 +138,11 @@ export function Links({
   }, [links, onSave]);
 
   const addLink = (type: string, category: string, icon: React.ElementType) => {
+    if (links.length >= maxLinks) {
+      toast.warning(`Your current plan allows up to ${maxLinks} links.`);
+      return;
+    }
+
     const newLink = {
       id: Date.now().toString(),
       type,

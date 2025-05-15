@@ -15,7 +15,7 @@ export function Settings() {
     if (isUserError) toast.error(isUserError);
   }, [isUserError]);
 
-  if (isUserLoading || isUserError) {
+  if (isUserLoading) {
     return <SettingsSkeleton />;
   }
 
