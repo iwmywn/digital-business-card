@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -119,7 +118,7 @@ export function ImageEditorDialog({
   );
   const [isProcessing, setIsProcessing] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (open && initialTransform) {
       setCrop({ x: initialTransform.positionX, y: initialTransform.positionY });
       setZoom(initialTransform.scale);
@@ -140,7 +139,7 @@ export function ImageEditorDialog({
     return 1;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (imageUrl && open) {
       const img = new Image();
       img.crossOrigin = "anonymous";
