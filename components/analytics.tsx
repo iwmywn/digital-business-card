@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Eye,
-  MousePointerClick,
-  CodeIcon as ChartColumnIncreasing,
-} from "lucide-react";
+import { Eye, MousePointerClick, ChartColumnIncreasing } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
@@ -286,9 +282,7 @@ export function Analytics() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            Analytics Dashboard
-          </h2>
+          <h2 className="text-2xl font-semibold">Analytics Dashboard</h2>
           <p className="text-muted-foreground text-sm">
             Track the performance of your digital business cards
           </p>

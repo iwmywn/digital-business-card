@@ -138,7 +138,7 @@ export function CreateCard() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">
+          <h2 className="text-2xl font-semibold">
             {previewMode ? "Card Preview" : "Create Card"}
           </h2>
           <p className="text-muted-foreground text-sm">

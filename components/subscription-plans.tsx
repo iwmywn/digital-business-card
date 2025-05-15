@@ -27,9 +27,7 @@ export function SubscriptionPlans() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">
-          Subscription Plans
-        </h2>
+        <h2 className="text-2xl font-semibold">Subscription Plans</h2>
         <p className="text-muted-foreground text-sm">
           Manage your subscription plans and billing history
         </p>

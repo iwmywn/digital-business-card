@@ -139,7 +139,9 @@ export function Links({
 
   const addLink = (type: string, category: string, icon: React.ElementType) => {
     if (links.length >= maxLinks) {
-      toast.warning(`Your current plan allows up to ${maxLinks} links.`);
+      toast.warning(
+        `Your ${user?.currentPlan} plan allows up to ${maxLinks} links.`,
+      );
       return;
     }
 
@@ -184,7 +186,7 @@ export function Links({
       <CardContent className="space-y-6">
         {links.length > 0 && (
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Your Links</h3>
+            <h3 className="mb-0 text-lg font-medium">Your Links</h3>
             <p className="text-muted-foreground text-sm">
               Drag to reorder how links appear on your card
             </p>

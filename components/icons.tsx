@@ -21,6 +21,21 @@ import {
   siVenmo,
   siCalendly,
   type SimpleIcon,
+  siPinterest,
+  siReddit,
+  siTumblr,
+  siQuora,
+  siWechat,
+  siLine,
+  siMessenger,
+  siNotion,
+  siMedium,
+  siSlack,
+  siDribbble,
+  siFigma,
+  siPatreon,
+  siBuymeacoffee,
+  siKofi,
 } from "simple-icons";
 import type { ElementType } from "react";
 
@@ -163,6 +178,34 @@ export const linkTypes = [
     ),
     category: "Social",
   },
+  {
+    type: "Pinterest",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siPinterest} {...props} />
+    ),
+    category: "Social",
+  },
+  {
+    type: "Reddit",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siReddit} {...props} />
+    ),
+    category: "Social",
+  },
+  {
+    type: "Tumblr",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siTumblr} {...props} />
+    ),
+    category: "Social",
+  },
+  {
+    type: "Quora",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siQuora} {...props} />
+    ),
+    category: "Social",
+  },
 
   // Messaging
   {
@@ -193,6 +236,27 @@ export const linkTypes = [
     ),
     category: "Messaging",
   },
+  {
+    type: "WeChat",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siWechat} {...props} />
+    ),
+    category: "Messaging",
+  },
+  {
+    type: "Line",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siLine} {...props} />
+    ),
+    category: "Messaging",
+  },
+  {
+    type: "Messenger",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siMessenger} {...props} />
+    ),
+    category: "Messaging",
+  },
 
   // Business
   {
@@ -206,6 +270,41 @@ export const linkTypes = [
     type: "Calendly",
     icon: (props: IconComponentProps) => (
       <SimpleIconComponent icon={siCalendly} {...props} />
+    ),
+    category: "Business",
+  },
+  {
+    type: "Medium",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siMedium} {...props} />
+    ),
+    category: "Business",
+  },
+  {
+    type: "Notion",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siNotion} {...props} />
+    ),
+    category: "Business",
+  },
+  {
+    type: "Slack",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siSlack} {...props} />
+    ),
+    category: "Business",
+  },
+  {
+    type: "Dribbble",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siDribbble} {...props} />
+    ),
+    category: "Business",
+  },
+  {
+    type: "Figma",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siFigma} {...props} />
     ),
     category: "Business",
   },
@@ -229,6 +328,27 @@ export const linkTypes = [
     type: "CashApp",
     icon: (props: IconComponentProps) => (
       <SimpleIconComponent icon={siCashapp} {...props} />
+    ),
+    category: "Payment",
+  },
+  {
+    type: "Patreon",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siPatreon} {...props} />
+    ),
+    category: "Payment",
+  },
+  {
+    type: "BuyMeACoffee",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siBuymeacoffee} {...props} />
+    ),
+    category: "Payment",
+  },
+  {
+    type: "Ko-fi",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siKofi} {...props} />
     ),
     category: "Payment",
   },
