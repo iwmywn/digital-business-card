@@ -34,9 +34,17 @@ export async function updateProfile(
       return { error: "Invalid data provided!" };
     }
 
-    const { fullName, gender, dateOfBirth, jobTitle, company, website, bio } =
-      parsedCredentials.data;
-    let { avatar } = parsedCredentials.data;
+    const {
+      avatar,
+      fullName,
+      gender,
+      dateOfBirth,
+      jobTitle,
+      company,
+      website,
+      bio,
+    } = parsedCredentials.data;
+    const updatedProfile = { ...parsedCredentials.data };
 
     if (avatar) {
       if (avatar.startsWith("data:")) {
@@ -44,14 +52,14 @@ export async function updateProfile(
         if (error || !path) {
           return { error };
         } else {
-          avatar = path;
+          updatedProfile.avatar = path;
         }
       } else if (avatar.startsWith("https://")) {
         const { path, error } = extractCloudinaryPath(avatar);
         if (error || !path) {
           return { error: error };
         } else {
-          avatar = path;
+          updatedProfile.avatar = path;
         }
       }
     }
@@ -91,7 +99,7 @@ export async function updateProfile(
       {
         $set: {
           profile: {
-            ...parsedCredentials.data,
+            ...updatedProfile,
             imageTransform: updatedImageTransform as ImageTransform | undefined,
           },
           updatedAt: new Date(),

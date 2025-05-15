@@ -372,7 +372,7 @@ export async function getCards() {
       const editable = index < maxCards;
       const message = editable
         ? undefined
-        : `Your ${currentPlan} plan only allows editing the first ${maxCards} cards.`;
+        : `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s).`;
 
       return {
         ...card,

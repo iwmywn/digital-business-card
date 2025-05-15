@@ -319,7 +319,7 @@ export function CardView({ card }: { card: CardType }) {
                 />
               ) : (
                 <div className="flex h-48 w-48 items-center justify-center">
-                  <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
+                  <Loading className="h-8 w-8" />
                 </div>
               )}
             </div>

@@ -256,7 +256,7 @@ export function Analytics() {
       <NotFoundUI
         icon={<ChartColumnIncreasing />}
         title="UNLOCK ANALYTICS"
-        message="Upgrade to our Basic or Professional plan to access analytics for your
+        message="Upgrade to our basic or professional plan to access analytics for your
           digital business cards."
         linkHref="/subscription"
         linkLabel="Go to subscription"
