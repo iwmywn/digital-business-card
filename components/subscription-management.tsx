@@ -125,10 +125,7 @@ export function SubscriptionManagement() {
               <div className="w-full">
                 {isAccessible && expirationDate && (
                   <div className="bg-muted mb-4 rounded-md p-2 text-center text-xs">
-                    You have access until{" "}
-                    <span className="font-medium">
-                      {formatExpirationDate(expirationDate)}
-                    </span>
+                    You have access until {formatExpirationDate(expirationDate)}
                   </div>
                 )}
 

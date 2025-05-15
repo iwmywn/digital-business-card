@@ -44,3 +44,15 @@ export function extractCloudinaryPath(cloudinaryUrl: string) {
   }
   return { error: "Invalid secure URL structure!" };
 }
+
+export function isSameDate(
+  date1: Date | null | undefined,
+  date2: Date | null | undefined,
+): boolean {
+  if (date1 === null && date2 === null) return true;
+  if (date1 === undefined && date2 === undefined) return true;
+  if (date1 === null || date2 === null) return false;
+  if (date1 === undefined || date2 === undefined) return true;
+
+  return date1.getTime() === date2.getTime();
+}
