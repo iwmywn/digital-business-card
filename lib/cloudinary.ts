@@ -1,6 +1,6 @@
 "use server";
 
-import { extractCloudinaryPath } from "@/lib/utils";
+import { checkEnv, extractCloudinaryPath } from "@/lib/utils";
 
 export async function uploadToCloudinary(
   imageData: string,
@@ -16,13 +16,11 @@ export async function uploadToCloudinary(
     }
 > {
   try {
-    const cloudinaryName = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
-    const cloudinaryKey = process.env.NEXT_PUBLIC_CLOUDINARY;
-    const cloudinarySecret = process.env.CLOUDINARY_SECRET_KEY;
-
-    if (!cloudinaryName || !cloudinaryKey || !cloudinarySecret) {
-      return { error: "Cloudinary credentials are not properly configured!" };
-    }
+    const { cloudinaryName, cloudinaryKey, cloudinarySecret } = checkEnv({
+      cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
+      cloudinaryKey: process.env.NEXT_PUBLIC_CLOUDINARY,
+      cloudinarySecret: process.env.CLOUDINARY_SECRET_KEY,
+    });
 
     const base64Data = imageData.includes("base64,")
       ? imageData.split("base64,")[1]

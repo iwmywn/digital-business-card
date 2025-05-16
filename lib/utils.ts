@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { type ImageTransform } from "@/components/image-editor-dialog";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import type { Image } from "@/components/card-design";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -19,10 +20,8 @@ export function getFontClass(value: string) {
   );
 }
 
-export function getCloudinaryUrl(path?: string, transform?: ImageTransform) {
+export function getCloudinaryUrl(path?: Image, transform?: ImageTransform) {
   if (!path) return "/placeholder.svg";
-
-  const cloudinaryName = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
 
   if (transform && transform.croppedAreaPixels) {
     const cropParams = [
@@ -33,10 +32,10 @@ export function getCloudinaryUrl(path?: string, transform?: ImageTransform) {
       "c_crop",
     ];
     const transformation = cropParams.join(",");
-    return `https://res.cloudinary.com/${cloudinaryName}/image/upload/${transformation}/${path}`;
+    return `https://res.cloudinary.com/${path[0]}/image/upload/${transformation}/${path[1]}`;
   }
 
-  return `https://res.cloudinary.com/${cloudinaryName}/image/upload/${path}`;
+  return `https://res.cloudinary.com/${path[0]}/image/upload/${path[1]}`;
 }
 
 export function extractCloudinaryPath(cloudinaryUrl: string) {
@@ -72,4 +71,25 @@ export function handleCopyLink(slug: string) {
   const link = `${process.env.NEXT_PUBLIC_URL}/card/${slug}`;
   navigator.clipboard.writeText(link);
   toast.success("Link copied to clipboard.");
+}
+
+export function checkEnv(vars: Record<string, string | undefined>) {
+  const missingVars: string[] = [];
+
+  const result: Record<string, string> = {};
+
+  for (const [key, value] of Object.entries(vars)) {
+    if (value) {
+      result[key] = value;
+    } else {
+      toast.error(`Missing environment variable: ${key}`);
+      missingVars.push(key);
+    }
+  }
+
+  if (missingVars.length > 0) {
+    throw new Error(`Missing environment variables: ${missingVars.join(", ")}`);
+  }
+
+  return result;
 }

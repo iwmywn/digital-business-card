@@ -47,19 +47,19 @@ export async function updateProfile(
     const updatedProfile = { ...parsedCredentials.data };
 
     if (avatar) {
-      if (avatar.startsWith("data:")) {
-        const { path, error } = await uploadToCloudinary(avatar, "avatar");
+      if (avatar[1].startsWith("data:")) {
+        const { path, error } = await uploadToCloudinary(avatar[1], "avatar");
         if (error || !path) {
           return { error };
         } else {
-          updatedProfile.avatar = path;
+          updatedProfile.avatar = [avatar[0], path];
         }
-      } else if (avatar.startsWith("https://")) {
-        const { path, error } = extractCloudinaryPath(avatar);
+      } else if (avatar[1].startsWith("https://")) {
+        const { path, error } = extractCloudinaryPath(avatar[1]);
         if (error || !path) {
           return { error: error };
         } else {
-          updatedProfile.avatar = path;
+          updatedProfile.avatar = [avatar[0], path];
         }
       }
     }

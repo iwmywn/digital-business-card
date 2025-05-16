@@ -1,8 +1,8 @@
 import type { ObjectId } from "mongodb";
 import type { SerializableLinkType } from "@/components/icons";
-import { PersonalInfoValues } from "@/components/personal-info";
-import { CardDesignValues } from "@/components/card-design";
-import { ImageTransform } from "@/components/image-editor-dialog";
+import type { PersonalInfoValues } from "@/components/personal-info";
+import type { CardDesignValues, Image } from "@/components/card-design";
+import type { ImageTransform } from "@/components/image-editor-dialog";
 
 type BasePrivateToken<T> = {
   _id: T;
@@ -57,7 +57,7 @@ type BaseCard<T> = {
 };
 
 type Profile = {
-  avatar?: string;
+  avatar?: Image;
   fullName: string;
   gender?: string;
   dateOfBirth?: Date | null;

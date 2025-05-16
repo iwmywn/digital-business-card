@@ -38,7 +38,7 @@ import {
 import { CalendarIcon, ImageIcon } from "lucide-react";
 import { CalendarComponent } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { cn, getCloudinaryUrl } from "@/lib/utils";
+import { checkEnv, cn, getCloudinaryUrl } from "@/lib/utils";
 import { format } from "date-fns";
 import { publicProfileSchema } from "@/schemas";
 import { updateProfile } from "@/actions/setting";
@@ -48,6 +48,7 @@ import {
 } from "@/components/image-editor-dialog";
 import { useUser } from "@/lib/swr";
 import Image from "next/image";
+import type { Image as ImageType } from "@/components/card-design";
 
 export type ProfileFormValues = z.infer<typeof publicProfileSchema>;
 
@@ -56,7 +57,7 @@ export function InformationForm() {
   const [imageEditorOpen, setImageEditorOpen] = useState<boolean>(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
   const { user, userResponse, mutate } = useUser();
-  const [profileImage, setProfileImage] = useState<string | undefined>(
+  const [profileImage, setProfileImage] = useState<ImageType | undefined>(
     user?.profile?.avatar,
   );
   const [imageTransform, setImageTransform] = useState<
@@ -99,16 +100,8 @@ export function InformationForm() {
   }
 
   const handleImageClick = () => {
-    let currentImage = profileImage;
-
-    if (currentImage) {
-      if (
-        !currentImage.startsWith("data:") &&
-        !currentImage.startsWith("https://")
-      ) {
-        currentImage = getCloudinaryUrl(currentImage);
-      }
-      setTempImage(currentImage);
+    if (profileImage) {
+      setTempImage(profileImage[1]);
       setImageEditorOpen(true);
     } else {
       document.getElementById("avatar")?.click();
@@ -151,7 +144,11 @@ export function InformationForm() {
   const handleSaveImage = (transform: ImageTransform) => {
     if (!tempImage) return;
 
-    setProfileImage(tempImage);
+    const { cloudinaryName } = checkEnv({
+      cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
+    });
+
+    setProfileImage([cloudinaryName, tempImage]);
     setImageTransform(transform);
 
     toast.success("Avatar image updated.");

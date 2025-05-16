@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dialog";
 import Cropper from "react-easy-crop";
 import { Loading } from "@/components/loading";
+import { getCloudinaryUrl } from "@/lib/utils";
+import { checkEnv } from "@/lib/utils";
 
 export type ImageTransform = {
   scale: number;
@@ -94,6 +96,20 @@ export function ImageEditorDialog({
   onSave,
   onDelete,
 }: ImageEditorProps) {
+  const { cloudinaryName } = checkEnv({
+    cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
+  });
+  const processedImageUrl = useMemo(() => {
+    if (
+      imageUrl &&
+      !imageUrl.startsWith("data:") &&
+      !imageUrl.startsWith("https://")
+    ) {
+      return getCloudinaryUrl([cloudinaryName, imageUrl]);
+    }
+    return imageUrl;
+  }, [imageUrl, cloudinaryName]);
+
   const [crop, setCrop] = useState({
     x: initialTransform?.positionX || 0,
     y: initialTransform?.positionY || 0,
@@ -128,19 +144,16 @@ export function ImageEditorDialog({
       setZoom(1);
       setCroppedAreaPixels(null);
     }
-  }, [open, initialTransform, imageUrl]);
+  }, [open, initialTransform]);
 
   const getAspectRatio = () => {
-    if (imageType === "cover") {
-      return 2 / 1;
-    } else if (imageType === "logo" || imageType === "profile") {
-      return 1;
-    }
+    if (imageType === "cover") return 2 / 1;
+    if (imageType === "logo" || imageType === "profile") return 1;
     return 1;
   };
 
   useEffect(() => {
-    if (imageUrl && open) {
+    if (processedImageUrl && open) {
       const img = new Image();
       img.crossOrigin = "anonymous";
       img.onload = () => {
@@ -149,9 +162,9 @@ export function ImageEditorDialog({
           height: img.naturalHeight,
         });
       };
-      img.src = imageUrl;
+      img.src = processedImageUrl;
     }
-  }, [imageUrl, open]);
+  }, [processedImageUrl, open]);
 
   interface Area {
     x: number;
@@ -168,19 +181,22 @@ export function ImageEditorDialog({
   );
 
   const saveImage = async () => {
-    if (!imageType || !croppedAreaPixels || !naturalSize || !imageUrl) return;
+    if (!imageType || !croppedAreaPixels || !naturalSize || !processedImageUrl)
+      return;
 
     setIsProcessing(true);
-
     try {
-      const croppedImageUrl = await getCroppedImg(imageUrl, croppedAreaPixels);
+      const croppedImageUrl = await getCroppedImg(
+        processedImageUrl,
+        croppedAreaPixels,
+      );
 
       onSave(
         {
           scale: zoom,
           positionX: crop.x,
           positionY: crop.y,
-          croppedAreaPixels: croppedAreaPixels,
+          croppedAreaPixels,
           naturalWidth: naturalSize.width,
           naturalHeight: naturalSize.height,
           croppedImageUrl: croppedImageUrl || undefined,
@@ -200,10 +216,7 @@ export function ImageEditorDialog({
   };
 
   const getCropShape = () => {
-    if (imageType === "profile") {
-      return "round";
-    }
-    return "rect";
+    return imageType === "profile" ? "round" : "rect";
   };
 
   return (
@@ -219,10 +232,10 @@ export function ImageEditorDialog({
 
         <div className="flex flex-col items-center space-y-4">
           <div className="relative h-64 w-full overflow-hidden rounded-md border">
-            {imageUrl && (
+            {processedImageUrl && (
               <div className="relative h-full w-full">
                 <Cropper
-                  image={imageUrl}
+                  image={processedImageUrl}
                   crop={crop}
                   zoom={zoom}
                   aspect={getAspectRatio()}
@@ -258,7 +271,6 @@ export function ImageEditorDialog({
               <Button variant="outline" onClick={deleteImage}>
                 Delete
               </Button>
-
               <div className="flex gap-2">
                 <Button variant="outline" onClick={() => onOpenChange(false)}>
                   Cancel

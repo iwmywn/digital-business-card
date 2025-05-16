@@ -20,19 +20,23 @@ import {
 import { useUser } from "@/lib/swr";
 import * as constants from "@/constants";
 import { getCloudinaryUrl } from "@/lib/utils";
+import { checkEnv } from "@/lib/utils";
 
-export type CardDesignValues = {
+// ['cloudinary image name', 'image path']
+export type Image = [string, string];
+
+export interface CardDesignValues {
   cardColor: string;
   fontFamily: string;
-  logoImage?: string;
-  profileImage?: string;
-  coverImage?: string;
+  logoImage?: Image;
+  profileImage?: Image;
+  coverImage?: Image;
   imageTransforms?: {
     logo?: ImageTransform;
     profile?: ImageTransform;
     cover?: ImageTransform;
   };
-};
+}
 
 export function CardDesign({
   onSave,
@@ -42,13 +46,13 @@ export function CardDesign({
   initialValues: CardDesignValues;
 }) {
   const { user } = useUser();
-  const [logoImage, setLogoImage] = useState<string | undefined>(
+  const [logoImage, setLogoImage] = useState<Image | undefined>(
     initialValues?.logoImage,
   );
-  const [profileImage, setProfileImage] = useState<string | undefined>(
+  const [profileImage, setProfileImage] = useState<Image | undefined>(
     initialValues?.profileImage,
   );
-  const [coverImage, setCoverImage] = useState<string | undefined>(
+  const [coverImage, setCoverImage] = useState<Image | undefined>(
     initialValues?.coverImage,
   );
   const [cardColor, setCardColor] = useState<string>(initialValues?.cardColor);
@@ -107,14 +111,8 @@ export function CardDesign({
     if (type === "cover") currentImage = coverImage;
 
     if (currentImage) {
-      if (
-        !currentImage.startsWith("data:") &&
-        !currentImage.startsWith("https://")
-      ) {
-        currentImage = getCloudinaryUrl(currentImage);
-      }
       setCurrentImageType(type);
-      setTempImage(currentImage);
+      setTempImage(currentImage[1]);
       setImageEditorOpen(true);
     } else {
       document.getElementById(`${type}-image`)?.click();
@@ -161,9 +159,12 @@ export function CardDesign({
   const handleSaveImage = (transform: ImageTransform, type?: string) => {
     if (!tempImage || !type) return;
 
-    if (type === "logo") setLogoImage(tempImage);
-    if (type === "profile") setProfileImage(tempImage);
-    if (type === "cover") setCoverImage(tempImage);
+    const { cloudinaryName } = checkEnv({
+      cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
+    });
+    if (type === "logo") setLogoImage([cloudinaryName, tempImage]);
+    if (type === "profile") setProfileImage([cloudinaryName, tempImage]);
+    if (type === "cover") setCoverImage([cloudinaryName, tempImage]);
 
     setImageTransforms((prev) => ({
       ...prev,

@@ -47,19 +47,19 @@ export async function saveCard(
 
       if (!image) continue;
 
-      if (image.startsWith("data:")) {
-        const { path, error } = await uploadToCloudinary(image, folder);
+      if (image[1].startsWith("data:")) {
+        const { path, error } = await uploadToCloudinary(image[1], folder);
         if (error || !path) {
           return { error };
         } else {
-          updatedCardDesign[key] = path;
+          updatedCardDesign[key] = [image[0], path];
         }
-      } else if (image.startsWith("https://")) {
-        const { path, error } = extractCloudinaryPath(image);
+      } else if (image[1].startsWith("https://")) {
+        const { path, error } = extractCloudinaryPath(image[1]);
         if (error || !path) {
           return { error: error };
         } else {
-          updatedCardDesign[key] = path;
+          updatedCardDesign[key] = [image[0], path];
         }
       }
     }
