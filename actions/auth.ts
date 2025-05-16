@@ -36,11 +36,11 @@ export async function signUp(
 
     if (!verify) return { error: "Captcha challenge failed!" };
 
-    const parsedCredentials = signUpSchema.safeParse(values);
+    const parsedValues = signUpSchema.safeParse(values);
 
-    if (!parsedCredentials.success) return { error: "Invalid field!" };
+    if (!parsedValues.success) return { error: "Invalid data provided!" };
 
-    const { fullName, email, phone, password } = parsedCredentials.data;
+    const { fullName, email, phone, password } = parsedValues.data;
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) return { error: "Email already signed up!" };
@@ -108,11 +108,11 @@ export async function signUp(
 
 export async function signIn(values: SignInFormValues) {
   try {
-    const parsedCredentials = signInSchema.safeParse(values);
+    const parsedValues = signInSchema.safeParse(values);
 
-    if (!parsedCredentials.success) return { error: "Invalid field!" };
+    if (!parsedValues.success) return { error: "Invalid data provided!" };
 
-    const { email, password } = parsedCredentials.data;
+    const { email, password } = parsedValues.data;
     const existingUser = await getUserByEmail(email);
 
     if (!existingUser) return { error: "Email or password is incorrect!" };
@@ -149,11 +149,11 @@ export async function forgotPassword(
 
     if (!verify) return { error: "Captcha challenge failed!" };
 
-    const parsedCredentials = emailSchema.safeParse(values);
+    const parsedValues = emailSchema.safeParse(values);
 
-    if (!parsedCredentials.success) return { error: "Invalid field!" };
+    if (!parsedValues.success) return { error: "Invalid data provided!" };
 
-    const { email } = parsedCredentials.data;
+    const { email } = parsedValues.data;
     const existingUser = await getUserByEmail(email);
 
     if (!existingUser)
@@ -204,15 +204,15 @@ export async function resetPassword(
   token: string | undefined,
 ) {
   try {
-    const parsedCredentials = resetPasswordSchema.safeParse(values);
+    const parsedValues = resetPasswordSchema.safeParse(values);
 
-    if (!parsedCredentials.success) return { error: "Invalid field!" };
+    if (!parsedValues.success) return { error: "Invalid data provided!" };
 
-    const { password } = parsedCredentials.data;
+    const { password } = parsedValues.data;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    if (!token || !email) return { error: "Invalid field!" };
+    if (!token || !email) return { error: "Invalid data provided!" };
 
     const user = await (
       await getUserCollection()
@@ -251,7 +251,7 @@ export async function verifyEmail(
   token: string | undefined,
 ) {
   try {
-    if (!token || !email) return { error: "Invalid field!" };
+    if (!token || !email) return { error: "Invalid data provided!" };
 
     const user = await (
       await getUserCollection()
@@ -304,11 +304,11 @@ export async function signInPrivate(
 
     if (!verify) return { error: "Captcha challenge failed!" };
 
-    const parsedCredentials = tokenSchema.safeParse(values);
+    const parsedValues = tokenSchema.safeParse(values);
 
-    if (!parsedCredentials.success) return { error: "Invalid field!" };
+    if (!parsedValues.success) return { error: "Invalid data provided!" };
 
-    const { token } = parsedCredentials.data;
+    const { token } = parsedValues.data;
 
     const privateTokenCollection = await getPrivateTokenCollection();
     const existingToken = await privateTokenCollection.findOne({

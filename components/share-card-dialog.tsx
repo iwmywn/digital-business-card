@@ -34,7 +34,7 @@ export function ShareCardDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Share Card</DialogTitle>
           <DialogDescription>

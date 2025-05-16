@@ -76,10 +76,10 @@ export function useCard() {
     })[];
   }>("cards", getCards, { keepPreviousData: true });
 
-  const cardData = data;
+  const cardResponse = data;
   const cards = data?.cards || [];
   const isCardError = data?.error;
   const isCardLoading = isLoading;
 
-  return { cardData, isCardLoading, isCardError, cards, mutate };
+  return { cardResponse, isCardLoading, isCardError, cards, mutate };
 }

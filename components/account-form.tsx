@@ -72,13 +72,18 @@ export function AccountForm() {
       return;
     }
 
-    const result = z.string().min(6).safeParse(username);
+    const parsedValue = accountSchema.safeParse({ username });
 
-    if (!result.success) {
+    if (!parsedValue.success) {
+      const errorMessages = parsedValue.error.errors
+        .map((err) => err.message)
+        .join(" ");
+
       form.setError("username", {
         type: "manual",
-        message: "Username must be at least 6 characters long.",
+        message: errorMessages,
       });
+
       setIsUsernameAvailable(false);
       return;
     }
@@ -117,7 +122,7 @@ export function AccountForm() {
           Update your username and change your password
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField

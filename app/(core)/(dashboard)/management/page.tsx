@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { CardManagement } from "@/components/card-management";
 
 export const metadata: Metadata = {
-  title: "Card management",
+  title: "Card Management",
   description: "View and manage your digital business cards.",
 };
 

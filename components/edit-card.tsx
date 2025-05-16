@@ -34,14 +34,14 @@ export function EditCard({ card }: { card: CardType }) {
   const [isPublic, setIsPublic] = useState<boolean>(card.isPublic);
   const [links, setLinks] = useState<SerializableLinkType[]>(card.links);
   const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
-  const { cardData, mutate, cards, isCardLoading, isCardError } = useCard();
+  const { cardResponse, mutate, cards, isCardLoading, isCardError } = useCard();
 
   async function handleUpdateCard() {
     if (isSubmitting) return;
 
-    const parsedCredentials = personalInfoSchema.safeParse(personalInfo);
+    const parsedValues = personalInfoSchema.safeParse(personalInfo);
 
-    if (!parsedCredentials.success) {
+    if (!parsedValues.success) {
       setActiveTab("personal");
       setTimeout(async () => {
         await personalInfoRef.current?.validate();
@@ -72,7 +72,7 @@ export function EditCard({ card }: { card: CardType }) {
       toast.error(error);
     } else {
       mutate({
-        ...cardData,
+        ...cardResponse,
         cards: cards.map((c) =>
           c._id === card._id
             ? {

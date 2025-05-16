@@ -11,6 +11,8 @@ import type { Card } from "@/lib/definitions";
 import * as constants from "@/constants";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { extractCloudinaryPath } from "@/lib/utils";
+import { DomainFormValues } from "@/components/custom-domain-dialog";
+import { cardDomainSchema } from "@/schemas";
 
 type ImageKey = "logoImage" | "profileImage" | "coverImage";
 export async function saveCard(
@@ -202,7 +204,7 @@ export async function deleteCard(cardId: string) {
 
     await cardCollection.deleteOne({ _id: new ObjectId(cardId) });
 
-    return { error: undefined };
+    return { success: "Card deleted." };
   } catch (error) {
     console.error("Error deleting card:", error);
     return { error: "Failed to delete card! Please try again later." };
@@ -330,6 +332,91 @@ export async function trackCardView(cardId: string) {
   } catch (error) {
     console.error("Error tracking view:", error);
     return { error: "Failed to track view! Please try again later." };
+  }
+}
+
+export async function checkDomain(domain: string, cardId: string) {
+  try {
+    const { isSignedIn, userId } = await session.user.get();
+
+    if (!isSignedIn || !userId) {
+      return { error: "Unauthorized!" };
+    }
+
+    const existingCard = await (
+      await getCardCollection()
+    ).findOne({
+      slug: domain,
+      _id: { $ne: new ObjectId(cardId) },
+    });
+
+    if (existingCard) {
+      return { error: `Domain '${domain}' is not available!` };
+    }
+
+    return { error: undefined };
+  } catch (error) {
+    console.error("Error checking domain:", error);
+    return { error: "Failed to check domain! Please try again later." };
+  }
+}
+
+export async function saveDomain(values: DomainFormValues, cardId: string) {
+  try {
+    const { isSignedIn, userId } = await session.user.get();
+
+    if (!isSignedIn || !userId) {
+      return { error: "Unauthorized!" };
+    }
+
+    const parsedValues = cardDomainSchema.safeParse(values);
+
+    if (!parsedValues.success) {
+      return { error: "Invalid data provided!" };
+    }
+
+    const { domain } = parsedValues.data;
+    const cardCollection = await getCardCollection();
+    const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
+
+    if (!card) {
+      return { error: "Card not found!" };
+    }
+
+    if (domain) {
+      const { error } = await checkDomain(domain, cardId);
+
+      if (error) {
+        return { error: error };
+      }
+    }
+
+    const isSame = domain === card.slug;
+
+    if (isSame) {
+      return { success: "No change was made." };
+    }
+
+    const result = await cardCollection.updateOne(
+      { _id: new ObjectId(cardId) },
+      {
+        $set: {
+          slug: domain,
+        },
+      },
+    );
+
+    if (!result.acknowledged) {
+      return {
+        error:
+          "An error occurred while updating the domain! Please try again later.",
+      };
+    }
+
+    return { success: "Your domain has been changed." };
+  } catch (error) {
+    console.error("Error updating domain:", error);
+    return { error: "Failed to update domain! Please try again later." };
   }
 }
 

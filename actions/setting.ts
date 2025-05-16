@@ -28,9 +28,9 @@ export async function updateProfile(
       return { error: "Unauthorized!" };
     }
 
-    const parsedCredentials = publicProfileSchema.safeParse(values);
+    const parsedValues = publicProfileSchema.safeParse(values);
 
-    if (!parsedCredentials.success) {
+    if (!parsedValues.success) {
       return { error: "Invalid data provided!" };
     }
 
@@ -43,8 +43,8 @@ export async function updateProfile(
       company,
       website,
       bio,
-    } = parsedCredentials.data;
-    const updatedProfile = { ...parsedCredentials.data };
+    } = parsedValues.data;
+    const updatedProfile = { ...parsedValues.data };
 
     if (avatar) {
       if (avatar[1].startsWith("data:")) {

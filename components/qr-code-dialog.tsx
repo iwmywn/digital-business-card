@@ -69,7 +69,7 @@ export function QRCodeDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Card QR Code</DialogTitle>
             <DialogDescription>

@@ -45,15 +45,15 @@ export function CreateCard() {
   });
   const [links, setLinks] = useState<SerializableLinkType[]>([]);
   const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
-  const { cardData, cards, isCardLoading, isCardError, mutate } = useCard();
+  const { cardResponse, cards, isCardLoading, isCardError, mutate } = useCard();
   const [isPublic, setIsPublic] = useState<boolean>(true);
 
   async function handleCreateCard() {
     if (isSubmitting) return;
 
-    const parsedCredentials = personalInfoSchema.safeParse(personalInfo);
+    const parsedValues = personalInfoSchema.safeParse(personalInfo);
 
-    if (!parsedCredentials.success) {
+    if (!parsedValues.success) {
       setActiveTab("personal");
       setTimeout(async () => {
         await personalInfoRef.current?.validate();
@@ -83,7 +83,7 @@ export function CreateCard() {
       toast.error(error);
     } else {
       mutate({
-        ...cardData,
+        ...cardResponse,
         cards: [
           ...cards,
           {

@@ -11,6 +11,7 @@ import {
   Lock,
   Globe,
   QrCode,
+  Pencil,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,12 +30,13 @@ import Link from "next/link";
 import type { Card as CardType } from "@/lib/definitions";
 import { getCloudinaryUrl, getColorClass, getFontClass } from "@/lib/utils";
 import { CardManagementSkeleton } from "@/components/skeletons";
-import { useCard } from "@/lib/swr";
+import { useCard, useUser } from "@/lib/swr";
 import { NotFoundUI } from "@/components/not-found-ui";
 import { QRCodeDialog } from "@/components/qr-code-dialog";
 import { ShareCardDialog } from "@/components/share-card-dialog";
 import { DeleteCardDialog } from "@/components/delete-card-dialog";
 import { formatDate } from "@/lib/utils";
+import { CustomDomainDialog } from "@/components/custom-domain-dialog";
 
 export function getImageUrl(
   card: CardType | null,
@@ -65,6 +67,8 @@ export function CardManagement() {
   const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false);
   const [isShareDialogOpen, setIsShareDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [isDomainDialogOpen, setIsDomainDialogOpen] = useState<boolean>(false);
+  const { user, isUserLoading, isUserError } = useUser();
   const { cards, isCardLoading, isCardError } = useCard();
   const filteredCards = cards.filter((card) =>
     card.personalInfo.fullName
@@ -78,9 +82,10 @@ export function CardManagement() {
       !isCardError.includes("You've reached the maximum number of cards")
     )
       toast.error(isCardError);
-  }, [isCardError]);
+    if (isUserError) toast.error(isUserError);
+  }, [isCardError, isUserError]);
 
-  if (isCardLoading) return <CardManagementSkeleton />;
+  if (isCardLoading || isUserLoading) return <CardManagementSkeleton />;
 
   return (
     <div className="space-y-6">
@@ -207,30 +212,45 @@ export function CardManagement() {
                         <DropdownMenuLabel>Card Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
-                          <Link
-                            href={
-                              card.editable
-                                ? `/edit/${card.dynamicSlug}`
-                                : "/subscription"
-                            }
-                            className={
-                              !card.editable
-                                ? "cursor-not-allowed opacity-50"
-                                : ""
-                            }
-                            onClick={(e) => {
-                              if (!card.editable) {
-                                e.preventDefault();
-                                toast.error(card.message);
-                              }
-                            }}
-                          >
-                            {!card.editable && (
+                          {card.editable ? (
+                            <Link href={`/edit/${card.dynamicSlug}`}>
+                              <Edit className="mr-2 h-4 w-4" />
+                              Edit card
+                            </Link>
+                          ) : (
+                            <div
+                              className="cursor-not-allowed opacity-50"
+                              onClick={() => toast.error(card.message)}
+                            >
                               <Lock className="mr-2 h-4 w-4" />
-                            )}
-                            {card.editable && <Edit className="mr-2 h-4 w-4" />}
-                            {card.editable ? "Edit Card" : "Upgrade to Edit"}
-                          </Link>
+                              Upgrade to edit
+                            </div>
+                          )}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          {user?.currentPlan === "professional" ? (
+                            <div
+                              onClick={() => {
+                                setSelectedCard(card);
+                                setIsDomainDialogOpen(true);
+                              }}
+                            >
+                              <Pencil className="mr-2 h-4 w-4" />
+                              Custom domain
+                            </div>
+                          ) : (
+                            <div
+                              className="cursor-not-allowed opacity-50"
+                              onClick={() =>
+                                toast.error(
+                                  "Upgrade to our professional plan to customize this card domain.",
+                                )
+                              }
+                            >
+                              <Lock className="mr-2 h-4 w-4" />
+                              Upgrade to custom
+                            </div>
+                          )}
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <Link
@@ -238,7 +258,7 @@ export function CardManagement() {
                             target="_blank"
                           >
                             <Eye className="mr-2 h-4 w-4" />
-                            View Card
+                            View card
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -248,7 +268,7 @@ export function CardManagement() {
                           }}
                         >
                           <QrCode className="mr-2 h-4 w-4" />
-                          Show QR Code
+                          Show QR code
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => {
@@ -257,7 +277,7 @@ export function CardManagement() {
                           }}
                         >
                           <Share2 className="mr-2 h-4 w-4" />
-                          Share Card
+                          Share card
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
@@ -267,7 +287,7 @@ export function CardManagement() {
                           }}
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
-                          Delete Card
+                          Delete card
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -283,7 +303,17 @@ export function CardManagement() {
       )}
 
       {selectedCard && (
+        <CustomDomainDialog
+          key={selectedCard._id + "CustomDomainDialog"}
+          card={selectedCard}
+          open={isDomainDialogOpen}
+          setOpen={(val) => setIsDomainDialogOpen(val)}
+        />
+      )}
+
+      {selectedCard && (
         <QRCodeDialog
+          key={selectedCard._id + "QRCodeDialog"}
           card={selectedCard}
           open={isQrDialogOpen}
           setOpen={(val) => setIsQrDialogOpen(val)}
@@ -292,6 +322,7 @@ export function CardManagement() {
 
       {selectedCard && (
         <ShareCardDialog
+          key={selectedCard._id + "ShareCardDialog"}
           card={selectedCard}
           open={isShareDialogOpen}
           setOpen={(val) => setIsShareDialogOpen(val)}
@@ -300,6 +331,7 @@ export function CardManagement() {
 
       {selectedCard && (
         <DeleteCardDialog
+          key={selectedCard._id + "DeleteCardDialog"}
           card={selectedCard}
           open={isDeleteDialogOpen}
           setOpen={(val) => setIsDeleteDialogOpen(val)}

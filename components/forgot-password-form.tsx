@@ -76,7 +76,7 @@ export function ForgotPasswordForm() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-4">
                 <FormField
                   control={form.control}
