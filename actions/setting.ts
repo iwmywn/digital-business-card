@@ -66,7 +66,10 @@ export async function updateProfile(
 
     const updatedImageTransform = { ...imageTransform };
 
-    if (updatedImageTransform) {
+    if (
+      updatedImageTransform &&
+      Object.keys(updatedImageTransform).length > 0
+    ) {
       updatedImageTransform.croppedImageUrl = null;
     }
 
@@ -76,8 +79,10 @@ export async function updateProfile(
     }
 
     const { profile } = existingUser;
+
     const isSame =
-      avatar === profile.avatar &&
+      updatedProfile.avatar?.[0] === profile.avatar?.[0] &&
+      updatedProfile.avatar?.[1] === profile.avatar?.[1] &&
       fullName === profile.fullName &&
       gender === profile.gender &&
       isSameDate(dateOfBirth, profile.dateOfBirth) &&

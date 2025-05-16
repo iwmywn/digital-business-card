@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -171,6 +171,11 @@ export function InformationForm() {
 
     return getCloudinaryUrl(profileImage, imageTransform);
   };
+
+  useEffect(() => {
+    setProfileImage(user?.profile?.avatar);
+    setImageTransform(user?.profile?.imageTransform);
+  }, [user]);
 
   return (
     <>

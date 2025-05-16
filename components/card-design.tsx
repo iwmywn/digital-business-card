@@ -162,6 +162,7 @@ export function CardDesign({
     const { cloudinaryName } = checkEnv({
       cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
     });
+
     if (type === "logo") setLogoImage([cloudinaryName, tempImage]);
     if (type === "profile") setProfileImage([cloudinaryName, tempImage]);
     if (type === "cover") setCoverImage([cloudinaryName, tempImage]);

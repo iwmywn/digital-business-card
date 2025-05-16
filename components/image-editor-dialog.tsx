@@ -111,16 +111,16 @@ export function ImageEditorDialog({
   }, [imageUrl, cloudinaryName]);
 
   const [crop, setCrop] = useState({
-    x: initialTransform?.positionX || 0,
-    y: initialTransform?.positionY || 0,
+    x: initialTransform?.positionX ?? 0,
+    y: initialTransform?.positionY ?? 0,
   });
-  const [zoom, setZoom] = useState(initialTransform?.scale || 1);
+  const [zoom, setZoom] = useState(initialTransform?.scale ?? 1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
     x: number;
     y: number;
     width: number;
     height: number;
-  } | null>(initialTransform?.croppedAreaPixels || null);
+  } | null>(initialTransform?.croppedAreaPixels ?? null);
   const [naturalSize, setNaturalSize] = useState<{
     width: number;
     height: number;
@@ -136,9 +136,12 @@ export function ImageEditorDialog({
 
   useEffect(() => {
     if (open && initialTransform) {
-      setCrop({ x: initialTransform.positionX, y: initialTransform.positionY });
-      setZoom(initialTransform.scale);
-      setCroppedAreaPixels(initialTransform.croppedAreaPixels || null);
+      setCrop({
+        x: initialTransform.positionX ?? 0,
+        y: initialTransform.positionY ?? 0,
+      });
+      setZoom(initialTransform.scale ?? 1);
+      setCroppedAreaPixels(initialTransform.croppedAreaPixels ?? null);
     } else if (open) {
       setCrop({ x: 0, y: 0 });
       setZoom(1);
