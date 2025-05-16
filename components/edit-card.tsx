@@ -119,13 +119,13 @@ export function EditCard({ card }: { card: CardType }) {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">
+          <h2 className="text-xl font-semibold">
             {previewMode ? "Card Preview" : "Edit Card"}
           </h2>
           <p className="text-muted-foreground text-sm">
             {previewMode
-              ? "Preview how your digital business card will look"
-              : "Update your digital business card design"}
+              ? "Preview how your digital business card will look."
+              : "Update your digital business card design."}
           </p>
         </div>
         <div className="flex items-center justify-end gap-2">

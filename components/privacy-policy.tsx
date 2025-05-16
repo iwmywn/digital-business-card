@@ -11,12 +11,12 @@ export function PrivacyPolicy() {
   return (
     <Card className="rounded-lg">
       <CardHeader>
-        <CardTitle className="text-2xl">Privacy Policy</CardTitle>
-        <CardDescription>Last updated: April 29, 2025</CardDescription>
+        <CardTitle className="text-xl">Privacy Policy</CardTitle>
+        <CardDescription>Last updated: April 29, 2025.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 text-sm">
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             1. Information We Collect
           </h3>
           <p className="text-muted-foreground mb-4">
@@ -27,20 +27,20 @@ export function PrivacyPolicy() {
             <li>
               Personal information you provide when registering for an account,
               such as your name, email address, phone number, and profile
-              picture
+              picture.
             </li>
             <li>
               Information you choose to include on your digital business card,
               such as job title, company name, social media profiles, and other
-              contact details
+              contact details.
             </li>
             <li>
               Usage data, including how you interact with our service, the
-              features you use, and the time spent on the platform
+              features you use, and the time spent on the platform.
             </li>
             <li>
               Device information, such as your IP address, browser type,
-              operating system, and device identifiers
+              operating system, and device identifiers.
             </li>
           </ul>
         </section>
@@ -48,34 +48,34 @@ export function PrivacyPolicy() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             2. How We Use Your Information
           </h3>
           <p className="text-muted-foreground mb-4">
             We use the information we collect for various purposes, including:
           </p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2">
-            <li>Providing, maintaining, and improving our service</li>
-            <li>Processing transactions and managing your account</li>
+            <li>Providing, maintaining, and improving our service.</li>
+            <li>Processing transactions and managing your account.</li>
             <li>
               Sending you technical notices, updates, security alerts, and
-              support messages
+              support messages.
             </li>
             <li>
               Responding to your comments, questions, and customer service
-              requests
+              requests.
             </li>
             <li>
               Monitoring and analyzing trends, usage, and activities in
-              connection with our service
+              connection with our service.
             </li>
             <li>
               Personalizing your experience and delivering content relevant to
-              your interests
+              your interests.
             </li>
             <li>
               Detecting, investigating, and preventing fraudulent transactions
-              and other illegal activities
+              and other illegal activities.
             </li>
           </ul>
         </section>
@@ -83,26 +83,26 @@ export function PrivacyPolicy() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             3. Information Sharing and Disclosure
           </h3>
           <p className="text-muted-foreground mb-4">
             We may share your information in the following circumstances:
           </p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2">
-            <li>With service providers who perform services on our behalf</li>
+            <li>With service providers who perform services on our behalf.</li>
             <li>
               To comply with legal obligations, such as responding to a subpoena
-              or court order
+              or court order.
             </li>
             <li>
-              To protect the rights, property, or safety of our users or others
+              To protect the rights, property, or safety of our users or others.
             </li>
             <li>
               In connection with a business transaction, such as a merger, sale
-              of assets, or acquisition
+              of assets, or acquisition.
             </li>
-            <li>With your consent or at your direction</li>
+            <li>With your consent or at your direction.</li>
           </ul>
           <p className="text-muted-foreground mt-4">
             We do not sell your personal information to third parties.
@@ -112,7 +112,7 @@ export function PrivacyPolicy() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             4. Cookies and Tracking Technologies
           </h3>
           <p className="text-muted-foreground mb-4">
@@ -131,7 +131,7 @@ export function PrivacyPolicy() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">5. Data Security</h3>
+          <h3 className="mb-2 text-base font-medium">5. Data Security</h3>
           <p className="text-muted-foreground">
             We implement appropriate technical and organizational measures to
             protect the security of your personal information. However, please
@@ -145,7 +145,7 @@ export function PrivacyPolicy() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             6. Your Rights and Choices
           </h3>
           <p className="text-muted-foreground mb-4">
@@ -154,17 +154,17 @@ export function PrivacyPolicy() {
           </p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2">
             <li>
-              Accessing, correcting, or deleting your personal information
+              Accessing, correcting, or deleting your personal information.
             </li>
             <li>
               Withdrawing your consent at any time, where we rely on consent to
-              process your information
+              process your information.
             </li>
             <li>
-              Requesting restriction of processing of your personal information
+              Requesting restriction of processing of your personal information.
             </li>
-            <li>Requesting transfer of your personal information</li>
-            <li>Opting out of certain data sharing with partners</li>
+            <li>Requesting transfer of your personal information.</li>
+            <li>Opting out of certain data sharing with partners.</li>
           </ul>
           <p className="text-muted-foreground mt-4">
             To exercise these rights, please contact us using the information
@@ -175,7 +175,7 @@ export function PrivacyPolicy() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             7. Children&apos;s Privacy
           </h3>
           <p className="text-muted-foreground">
@@ -190,7 +190,7 @@ export function PrivacyPolicy() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             8. International Data Transfers
           </h3>
           <p className="text-muted-foreground">
@@ -206,7 +206,7 @@ export function PrivacyPolicy() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             9. Changes to This Privacy Policy
           </h3>
           <p className="text-muted-foreground">
@@ -220,17 +220,17 @@ export function PrivacyPolicy() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">10. Contact Us</h3>
+          <h3 className="mb-2 text-base font-medium">10. Contact Us</h3>
           <p className="text-muted-foreground mb-4">
             If you have any questions about this Privacy Policy, please contact
             us:
           </p>
           <ul className="text-muted-foreground list-inside list-disc space-y-2">
-            <li>By email: itsmethu2408@gmail.com</li>
-            <li>By visiting the contact page on our website</li>
+            <li>By email: itsmethu2408@gmail.com.</li>
+            <li>By visiting the contact page on our website.</li>
             <li>
               By mail: Digital Business Card, Inc., 123 Main Street, Suite 100,
-              Anytown, CA 12345
+              Anytown, CA 12345.
             </li>
           </ul>
         </section>

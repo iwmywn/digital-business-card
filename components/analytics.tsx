@@ -282,9 +282,9 @@ export function Analytics() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">Analytics Dashboard</h2>
+          <h2 className="text-xl font-semibold">Analytics Dashboard</h2>
           <p className="text-muted-foreground text-sm">
-            Track the performance of your digital business cards
+            Track the performance of your digital business cards.
           </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
@@ -323,7 +323,7 @@ export function Analytics() {
             <Eye className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalViews}</div>
+            <div className="text-xl font-bold">{totalViews}</div>
             <p
               className={cn(
                 "text-xs",
@@ -346,7 +346,7 @@ export function Analytics() {
             <MousePointerClick className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalClicks}</div>
+            <div className="text-xl font-bold">{totalClicks}</div>
             <p
               className={cn(
                 "text-xs",
@@ -393,7 +393,7 @@ export function Analytics() {
         <CardHeader>
           <CardTitle>Card Performance</CardTitle>
           <CardDescription>
-            Showing views and clicks for the selected time period
+            Showing views and clicks for the selected time period.
           </CardDescription>
         </CardHeader>
         <CardContent>

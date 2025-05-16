@@ -53,7 +53,7 @@ export function DeleteCardDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete Card</DialogTitle>
+          <DialogTitle className="text-xl">Delete Card</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete this card? This action cannot be
             undone.

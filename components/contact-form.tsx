@@ -7,6 +7,7 @@ import { z } from "zod";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -84,7 +85,11 @@ export function ContactForm() {
         onWheel={(e) => e.stopPropagation()}
       >
         <DialogHeader>
-          <DialogTitle className="text-2xl">Contact Us</DialogTitle>
+          <DialogTitle className="text-xl">Contact Us</DialogTitle>
+          <DialogDescription>
+            We&apos;d love to hear from you. Please fill out the form below and
+            our team will get in touch with you as soon as possible.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

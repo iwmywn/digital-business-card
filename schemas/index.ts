@@ -107,10 +107,10 @@ const publicProfileSchema = z
         age--;
       }
 
-      if (age < 18) {
+      if (age < 14) {
         ctx.addIssue({
           path: ["dateOfBirth"],
-          message: "You must be at least 18 years old.",
+          message: "You must be at least 14 years old.",
           code: z.ZodIssueCode.custom,
         });
       }

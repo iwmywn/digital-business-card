@@ -57,7 +57,7 @@ export function SignInForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Sign In</CardTitle>
+        <CardTitle className="text-xl">Sign In</CardTitle>
         <CardDescription>
           Enter your email and password to sign in to your account.
         </CardDescription>

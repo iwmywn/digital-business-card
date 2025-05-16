@@ -1,6 +1,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -51,7 +52,10 @@ export function ColorDialog() {
       </DialogTrigger>
       <DialogContent className="max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Color Palette & Tokens</DialogTitle>
+          <DialogTitle className="text-xl">Color Palette & Tokens</DialogTitle>
+          <DialogDescription>
+            Theme color tokens defined as CSS variables for consistent styling.
+          </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {colors.map((color) => (

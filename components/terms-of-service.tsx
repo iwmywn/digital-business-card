@@ -11,14 +11,12 @@ export function TermsOfService() {
   return (
     <Card className="rounded-lg">
       <CardHeader>
-        <CardTitle className="text-2xl">Terms of Service</CardTitle>
-        <CardDescription>Last updated: April 29, 2025</CardDescription>
+        <CardTitle className="text-xl">Terms of Service</CardTitle>
+        <CardDescription>Last updated: April 29, 2025.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 text-sm">
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
-            1. Acceptance of Terms
-          </h3>
+          <h3 className="mb-2 text-base font-medium">1. Acceptance of Terms</h3>
           <p className="text-muted-foreground">
             By accessing or using our digital business card service, you agree
             to be bound by these Terms of Service. If you do not agree to all
@@ -29,7 +27,7 @@ export function TermsOfService() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             2. Description of Service
           </h3>
           <p className="text-muted-foreground mb-4">
@@ -46,7 +44,7 @@ export function TermsOfService() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             3. Registration and Account
           </h3>
           <p className="text-muted-foreground mb-4">
@@ -65,7 +63,7 @@ export function TermsOfService() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">4. Payment Terms</h3>
+          <h3 className="mb-2 text-base font-medium">4. Payment Terms</h3>
           <p className="text-muted-foreground mb-4">
             Some aspects of our service require payment of fees. All fees are
             stated in U.S. dollars unless otherwise specified. You agree to pay
@@ -82,7 +80,7 @@ export function TermsOfService() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">5. User Content</h3>
+          <h3 className="mb-2 text-base font-medium">5. User Content</h3>
           <p className="text-muted-foreground">
             You retain all rights to any content you submit, post, or display on
             or through our service. By submitting, posting, or displaying
@@ -95,7 +93,7 @@ export function TermsOfService() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             6. Prohibited Activities
           </h3>
           <p className="text-muted-foreground mb-4">
@@ -105,29 +103,29 @@ export function TermsOfService() {
           <ul className="text-muted-foreground list-inside list-disc space-y-2">
             <li>
               Using the service for any illegal purpose or in violation of any
-              laws
+              laws.
             </li>
-            <li>Violating the intellectual property rights of others</li>
+            <li>Violating the intellectual property rights of others.</li>
             <li>
               Attempting to interfere with, compromise the system integrity or
               security, or decipher any transmissions to or from the servers
-              running the service
+              running the service.
             </li>
             <li>
               Taking any action that imposes an unreasonable or
-              disproportionately large load on our infrastructure
+              disproportionately large load on our infrastructure.
             </li>
             <li>
               Uploading invalid data, viruses, worms, or other software agents
-              through the service
+              through the service.
             </li>
             <li>
               Collecting or harvesting any personally identifiable information
-              from the service
+              from the service.
             </li>
             <li>
               Using the service for any commercial solicitation purposes without
-              our consent
+              our consent.
             </li>
           </ul>
         </section>
@@ -135,7 +133,7 @@ export function TermsOfService() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">7. Termination</h3>
+          <h3 className="mb-2 text-base font-medium">7. Termination</h3>
           <p className="text-muted-foreground">
             We may terminate or suspend your account and access to the service
             immediately, without prior notice or liability, for any reason,
@@ -147,7 +145,7 @@ export function TermsOfService() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             8. Disclaimer of Warranties
           </h3>
           <p className="text-muted-foreground">
@@ -162,7 +160,7 @@ export function TermsOfService() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
+          <h3 className="mb-2 text-base font-medium">
             9. Limitation of Liability
           </h3>
           <p className="text-muted-foreground">
@@ -177,9 +175,7 @@ export function TermsOfService() {
         <Separator />
 
         <section>
-          <h3 className="mb-2 text-[1.125rem] font-medium">
-            10. Changes to Terms
-          </h3>
+          <h3 className="mb-2 text-base font-medium">10. Changes to Terms</h3>
           <p className="text-muted-foreground">
             We reserve the right to modify these Terms of Service at any time.
             We will provide notice of any material changes through the service

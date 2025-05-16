@@ -22,7 +22,7 @@ export function CurrentPlan() {
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div>
-            <CardTitle className="text-xl font-bold">
+            <CardTitle className="text-lg font-semibold">
               {selectedPlan.name} Plan
             </CardTitle>
             <CardDescription className="mt-1">

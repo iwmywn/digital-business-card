@@ -16,15 +16,15 @@ export function FAQ() {
   return (
     <Card className="rounded-lg">
       <CardHeader>
-        <CardTitle className="text-2xl">Frequently Asked Questions</CardTitle>
+        <CardTitle className="text-xl">Frequently Asked Questions</CardTitle>
         <CardDescription>
           Find answers to common questions about our digital business card
-          service
+          service.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <section>
-          <h3 className="mb-4 text-lg font-medium">General Questions</h3>
+          <h3 className="mb-4 text-base font-medium">General Questions</h3>
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
               <AccordionTrigger>
@@ -62,7 +62,7 @@ export function FAQ() {
         </section>
 
         <section>
-          <h3 className="mb-4 text-lg font-medium">Account & Subscription</h3>
+          <h3 className="mb-4 text-base font-medium">Account & Subscription</h3>
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="account-1">
               <AccordionTrigger>How do I create an account?</AccordionTrigger>
@@ -96,7 +96,7 @@ export function FAQ() {
         </section>
 
         <section>
-          <h3 className="mb-4 text-lg font-medium">Technical Support</h3>
+          <h3 className="mb-4 text-base font-medium">Technical Support</h3>
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="tech-1">
               <AccordionTrigger>

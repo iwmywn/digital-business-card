@@ -103,7 +103,7 @@ export function PaymentReceiptDialog({
             receiptData && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2 text-2xl max-sm:justify-center">
+                  <DialogTitle className="flex items-center gap-2 text-xl max-sm:justify-center">
                     Payment Receipt
                     <Badge
                       className={`capitalize ${getStatusColor(receiptData.paymentIntent.status)}`}
@@ -112,7 +112,7 @@ export function PaymentReceiptDialog({
                     </Badge>
                   </DialogTitle>
                   <DialogDescription>
-                    Details of your subscription payment
+                    Details of your subscription payment.
                   </DialogDescription>
                 </DialogHeader>
 

@@ -36,7 +36,7 @@ export function ShareCardDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Share Card</DialogTitle>
+          <DialogTitle className="text-xl">Share Card</DialogTitle>
           <DialogDescription>
             Share your digital business card with others.
           </DialogDescription>

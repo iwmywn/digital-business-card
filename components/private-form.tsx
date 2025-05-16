@@ -77,7 +77,7 @@ export function PrivateForm() {
       )}
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Secure Access</CardTitle>
+          <CardTitle className="text-xl">Secure Access</CardTitle>
           <CardDescription>
             Please contact{" "}
             <FormLink

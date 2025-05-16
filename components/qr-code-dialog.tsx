@@ -71,7 +71,7 @@ export function QRCodeDialog({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Card QR Code</DialogTitle>
+            <DialogTitle className="text-xl">Card QR Code</DialogTitle>
             <DialogDescription>
               Scan this QR code to view the digital business card.
             </DialogDescription>

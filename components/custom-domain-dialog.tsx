@@ -135,11 +135,11 @@ export function CustomDomainDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Change Card Domain</DialogTitle>
+          <DialogTitle className="text-xl">Change Card Domain</DialogTitle>
           <DialogDescription>
             Customize the domain of your card (e.g.{" "}
             https://eznect.vercel.app/card/
-            <span className="text-foreground/85">your-custom-domain</span>)
+            <span className="text-foreground/85">your-custom-domain</span>).
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

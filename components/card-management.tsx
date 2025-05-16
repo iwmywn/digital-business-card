@@ -91,9 +91,9 @@ export function CardManagement() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">Card Management</h2>
+          <h2 className="text-xl font-semibold">Card Management</h2>
           <p className="text-muted-foreground text-sm">
-            View and manage your digital business cards
+            View and manage your digital business cards.
           </p>
         </div>
         <Button asChild className="bg-primary">

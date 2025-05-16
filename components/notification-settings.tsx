@@ -54,9 +54,9 @@ export function NotificationSettings() {
   return (
     <Card className="rounded-lg">
       <CardHeader>
-        <CardTitle className="text-2xl">Notification Preferences</CardTitle>
+        <CardTitle className="text-xl">Notification Preferences</CardTitle>
         <CardDescription>
-          Configure how and when you receive notifications
+          Configure how and when you receive notifications.
         </CardDescription>
       </CardHeader>
       <CardContent>

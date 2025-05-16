@@ -117,9 +117,9 @@ export function AccountForm() {
   return (
     <Card className="rounded-lg">
       <CardHeader>
-        <CardTitle className="text-2xl">Account</CardTitle>
+        <CardTitle className="text-xl">Account</CardTitle>
         <CardDescription>
-          Update your username and change your password
+          Update your username and change your password.
         </CardDescription>
       </CardHeader>
       <CardContent>

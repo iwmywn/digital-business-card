@@ -69,7 +69,7 @@ export function ForgotPasswordForm() {
       )}
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Forgot Password</CardTitle>
+          <CardTitle className="text-xl">Forgot Password</CardTitle>
           <CardDescription>
             Enter your email address to receive a password reset link.
           </CardDescription>

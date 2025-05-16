@@ -80,9 +80,9 @@ export function BillingHistory() {
         <CardHeader>
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <CardTitle>Billing History</CardTitle>
+              <CardTitle className="text-lg">Billing History</CardTitle>
               <CardDescription>
-                View your payment history and receipts
+                View your payment history and receipts.
               </CardDescription>
             </div>
             <div className="relative w-full sm:w-64">

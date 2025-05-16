@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -231,6 +232,10 @@ export function ImageEditorDialog({
               ? `Edit ${imageType.charAt(0).toUpperCase() + imageType.slice(1)} Image`
               : "Edit Image"}
           </DialogTitle>
+          <DialogDescription>
+            Adjust the position and scale of your image. You can crop and zoom
+            to better fit the design requirements.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col items-center space-y-4">
