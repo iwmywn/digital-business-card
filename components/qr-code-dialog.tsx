@@ -92,7 +92,7 @@ export function QRCodeDialog({
               )}
             </div>
             <p className="text-muted-foreground mt-4 text-center text-sm">
-              {process.env.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}
+              {process.env.NEXT_PUBLIC_URL}/card/{card.dynamicSlug}
             </p>
           </div>
           <DialogFooter className="flex flex-col gap-2 sm:flex-row">

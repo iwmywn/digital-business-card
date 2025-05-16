@@ -139,7 +139,13 @@ export async function getCardBySlug(slug: string) {
 
     if (!existingUser) return { error: "User not found!" };
 
+    let { slug: dynamicSlug } = card;
+
     const { currentPlan } = existingUser;
+    dynamicSlug =
+      dynamicSlug && currentPlan === "professional"
+        ? dynamicSlug
+        : card._id.toString();
     const now = new Date();
     const validProfessionalPlan = existingUser.purchasedPlans?.find(
       (plan) =>
@@ -159,7 +165,14 @@ export async function getCardBySlug(slug: string) {
       card: {
         ...card,
         _id: card._id.toString(),
-      } as Card,
+        editable: false,
+        message: "",
+        dynamicSlug,
+      } as Card & {
+        editable: boolean;
+        message?: string;
+        dynamicSlug: string;
+      },
     };
   } catch (error) {
     console.error("Error getting card slug:", error);

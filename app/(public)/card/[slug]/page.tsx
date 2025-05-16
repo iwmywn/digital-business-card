@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getCardBySlug } from "@/actions/card";
+import { getCardBySlug, trackCardView } from "@/actions/card";
 import { CardView } from "@/components/card-view";
 import NotFound from "@/app/not-found";
 
@@ -35,8 +35,10 @@ export default async function page({
   const { card, error } = await getCardBySlug(param.slug);
 
   if (error || !card) {
-    return <NotFound className="min-h-[calc(100vh-4.83rem)]" />;
+    return <NotFound />;
   }
+
+  await trackCardView(card?._id);
 
   return <CardView card={card} />;
 }

@@ -21,6 +21,7 @@ export function getFontClass(value: string) {
 }
 
 export function getCloudinaryUrl(path?: Image, transform?: ImageTransform) {
+  if (transform?.croppedImageUrl) return transform.croppedImageUrl;
   if (!path) return "/placeholder.svg";
 
   if (transform && transform.croppedAreaPixels) {

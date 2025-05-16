@@ -327,7 +327,11 @@ export function Analytics() {
             <p
               className={cn(
                 "text-xs",
-                viewsChange > 0 ? "text-green-500" : "text-red-500",
+                viewsChange > 0
+                  ? "text-green-500"
+                  : viewsChange < 0
+                    ? "text-red-500"
+                    : "text-blue-500",
               )}
             >
               {viewsChange > 0 ? "+" : ""}
@@ -346,7 +350,11 @@ export function Analytics() {
             <p
               className={cn(
                 "text-xs",
-                clicksChange > 0 ? "text-green-500" : "text-red-500",
+                clicksChange > 0
+                  ? "text-green-500"
+                  : clicksChange < 0
+                    ? "text-red-500"
+                    : "text-blue-500",
               )}
             >
               {clicksChange > 0 ? "+" : ""}
@@ -367,7 +375,11 @@ export function Analytics() {
             <p
               className={cn(
                 "text-xs",
-                ctrChange > 0 ? "text-green-500" : "text-red-500",
+                ctrChange > 0
+                  ? "text-green-500"
+                  : ctrChange < 0
+                    ? "text-red-500"
+                    : "text-blue-500",
               )}
             >
               {ctrChange > 0 ? "+" : ""}

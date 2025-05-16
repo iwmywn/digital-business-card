@@ -198,10 +198,6 @@ export function CardDesign({
   const getImageUrl = (type: "logo" | "profile" | "cover") => {
     const transform = imageTransforms[type];
 
-    if (transform?.croppedImageUrl) {
-      return transform?.croppedImageUrl || "/placeholder.svg";
-    }
-
     let imageUrl;
 
     if (type === "logo") imageUrl = logoImage;

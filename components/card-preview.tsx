@@ -31,15 +31,13 @@ export function CardPreview({
   const getImageUrl = (type: "logo" | "profile" | "cover") => {
     const transform = cardDesign.imageTransforms?.[type];
 
-    if (transform?.croppedImageUrl) {
-      return transform?.croppedImageUrl || "/placeholder.svg";
-    }
+    let imageUrl;
 
-    if (type === "logo")
-      return getCloudinaryUrl(cardDesign.logoImage, transform);
-    if (type === "profile")
-      return getCloudinaryUrl(cardDesign.profileImage, transform);
-    return getCloudinaryUrl(cardDesign.coverImage, transform);
+    if (type === "logo") imageUrl = cardDesign.logoImage;
+    if (type === "profile") imageUrl = cardDesign.profileImage;
+    if (type === "cover") imageUrl = cardDesign.coverImage;
+
+    return getCloudinaryUrl(imageUrl, transform);
   };
 
   const getIconComponent = (linkType: string) => {

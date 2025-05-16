@@ -6,24 +6,26 @@ import { trackCardClick } from "@/actions/card";
 import { toast } from "sonner";
 import { Share2, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import QRCode from "qrcode";
 import { linkTypes, type SerializableLinkType } from "@/components/icons";
 import type { Card as CardType } from "@/lib/definitions";
 import { getColorClass, getFontClass } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { getCloudinaryUrl } from "@/lib/utils";
 import { Loading } from "@/components/loading";
+import { QRCodeDialog } from "@/components/qr-code-dialog";
+import { ShareCardDialog } from "@/components/share-card-dialog";
 
-export function CardView({ card }: { card: CardType }) {
+export function CardView({
+  card,
+}: {
+  card: CardType & {
+    editable: boolean;
+    message?: string;
+    dynamicSlug: string;
+  };
+}) {
   const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false);
-  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
   const fontClass = getFontClass(card.cardDesign.fontFamily);
   const colorClass = getColorClass(card.cardDesign.cardColor);
@@ -64,53 +66,17 @@ export function CardView({ card }: { card: CardType }) {
     setIsLoading((prev) => ({ ...prev, [link.id]: false }));
   }
 
-  async function generateQRCode() {
-    try {
-      const url = `${process.env.NEXT_PUBLIC_URL}/card/${card.slug}`;
-      const qrDataUrl = await QRCode.toDataURL(url, {
-        margin: 1,
-        width: 200,
-        color: {
-          dark: "#000000",
-          light: "#ffffff",
-        },
-      });
-      setQrCodeUrl(qrDataUrl);
-    } catch (error) {
-      console.error("Error generating QR code:", error);
-      toast.error("Failed to generate QR code! Please try again later.");
-    }
-  }
+  const getImageUrl = (type: "logo" | "profile" | "cover") => {
+    const transform = card.cardDesign.imageTransforms?.[type];
 
-  function handleQrCodeClick() {
-    generateQRCode();
-    setIsQrDialogOpen(true);
-  }
+    let imageUrl;
 
-  function handleShareClick() {
-    if (navigator.share) {
-      navigator
-        .share({
-          title: `${card.personalInfo.fullName} - Digital Business Card`,
-          text:
-            card.personalInfo.headline ||
-            `Check out ${card.personalInfo.fullName}'s digital business card`,
-          url: `${process.env.NEXT_PUBLIC_URL}/card/${card.slug}`,
-        })
-        .catch((error) => {
-          console.error("Error sharing:", error);
-          handleCopyLink();
-        });
-    } else {
-      handleCopyLink();
-    }
-  }
+    if (type === "logo") imageUrl = card.cardDesign.logoImage;
+    if (type === "profile") imageUrl = card.cardDesign.profileImage;
+    if (type === "cover") imageUrl = card.cardDesign.coverImage;
 
-  function handleCopyLink() {
-    const link = `${process.env.NEXT_PUBLIC_URL}/card/${card.slug}`;
-    navigator.clipboard.writeText(link);
-    toast.success("Link copied to clipboard.");
-  }
+    return getCloudinaryUrl(imageUrl, transform);
+  };
 
   return (
     <div className="mx-auto w-full max-w-md px-4 py-8">
@@ -122,10 +88,7 @@ export function CardView({ card }: { card: CardType }) {
             <div className="relative h-48 w-full overflow-hidden">
               <div className="relative h-full w-full">
                 <Image
-                  src={getCloudinaryUrl(
-                    card.cardDesign.coverImage,
-                    card.cardDesign.imageTransforms?.cover,
-                  )}
+                  src={getImageUrl("cover")}
                   alt="Cover"
                   fill
                   style={{ objectFit: "cover" }}
@@ -136,10 +99,7 @@ export function CardView({ card }: { card: CardType }) {
                 <div className="absolute right-4 bottom-4 h-16 w-16 overflow-hidden rounded-lg bg-white p-1 shadow-md">
                   <div className="relative h-full w-full">
                     <Image
-                      src={getCloudinaryUrl(
-                        card.cardDesign.logoImage,
-                        card.cardDesign.imageTransforms?.logo,
-                      )}
+                      src={getImageUrl("logo")}
                       alt="Logo"
                       fill
                       style={{ objectFit: "cover" }}
@@ -156,10 +116,7 @@ export function CardView({ card }: { card: CardType }) {
                 <div className="h-20 w-20 overflow-hidden rounded-lg bg-white p-1 shadow-md">
                   <div className="relative h-full w-full">
                     <Image
-                      src={getCloudinaryUrl(
-                        card.cardDesign.logoImage,
-                        card.cardDesign.imageTransforms?.logo,
-                      )}
+                      src={getImageUrl("logo")}
                       alt="Logo"
                       fill
                       style={{ objectFit: "cover" }}
@@ -177,10 +134,7 @@ export function CardView({ card }: { card: CardType }) {
               <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
                 <div className="relative h-full w-full">
                   <Image
-                    src={getCloudinaryUrl(
-                      card.cardDesign.profileImage,
-                      card.cardDesign.imageTransforms?.profile,
-                    )}
+                    src={getImageUrl("profile")}
                     alt="Profile"
                     fill
                     style={{ objectFit: "cover" }}
@@ -283,7 +237,7 @@ export function CardView({ card }: { card: CardType }) {
               size="sm"
               variant="ghost"
               className="h-8 w-8 p-0 text-white hover:bg-white/20"
-              onClick={handleQrCodeClick}
+              onClick={() => setIsQrDialogOpen(true)}
             >
               <QrCode className="h-4 w-4" />
             </Button>
@@ -291,7 +245,7 @@ export function CardView({ card }: { card: CardType }) {
               size="sm"
               variant="ghost"
               className="h-8 w-8 p-0 text-white hover:bg-white/20"
-              onClick={handleShareClick}
+              onClick={() => setIsShareDialogOpen(true)}
             >
               <Share2 className="h-4 w-4" />
             </Button>
@@ -299,36 +253,17 @@ export function CardView({ card }: { card: CardType }) {
         </div>
       </div>
 
-      {/* QR Code Dialog */}
-      <Dialog open={isQrDialogOpen} onOpenChange={setIsQrDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Card QR Code</DialogTitle>
-            <DialogDescription>
-              Scan this QR code to view this digital business card.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex flex-col items-center justify-center p-4">
-            <div className="rounded-lg bg-white p-4">
-              {qrCodeUrl ? (
-                <Image
-                  src={qrCodeUrl || "/placeholder.svg"}
-                  alt="QR Code"
-                  width={192}
-                  height={192}
-                />
-              ) : (
-                <div className="flex h-48 w-48 items-center justify-center">
-                  <Loading className="h-8 w-8" />
-                </div>
-              )}
-            </div>
-            <p className="text-muted-foreground mt-4 text-center text-sm">
-              {`${process.env.NEXT_PUBLIC_URL}/card/${card.slug}`}
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <QRCodeDialog
+        card={card}
+        open={isQrDialogOpen}
+        setOpen={(val) => setIsQrDialogOpen(val)}
+      />
+
+      <ShareCardDialog
+        card={card}
+        open={isShareDialogOpen}
+        setOpen={(val) => setIsShareDialogOpen(val)}
+      />
     </div>
   );
 }

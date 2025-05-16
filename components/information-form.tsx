@@ -93,7 +93,10 @@ export function InformationForm() {
       if (userResponse?.user) {
         mutate({
           ...userResponse,
-          user: { ...userResponse?.user, profile: values },
+          user: {
+            ...userResponse?.user,
+            profile: { ...values, avatar: profileImage, imageTransform },
+          },
         });
       }
     }
@@ -186,7 +189,7 @@ export function InformationForm() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex w-20 flex-col items-center gap-2">
               <div
                 className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
                 onClick={() => handleImageClick()}
