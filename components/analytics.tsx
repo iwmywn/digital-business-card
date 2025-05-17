@@ -31,6 +31,7 @@ import { useCard, useUser } from "@/lib/swr";
 import { AnalyticsSkeleton } from "@/components/skeletons";
 import { toast } from "sonner";
 import { NotFoundUI } from "@/components/not-found-ui";
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 
 const chartConfig = {
   views: {
@@ -61,6 +62,7 @@ export function Analytics() {
   const [ctrChange, setCtrChange] = useState<number>(0);
   const { user, isUserLoading, isUserError } = useUser();
   const { cards, isCardLoading, isCardError } = useCard();
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
 
   useEffect(() => {
     if (cards.length === 0) return;
@@ -280,7 +282,10 @@ export function Analytics() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div
+        ref={registerRef}
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+      >
         <div>
           <h2 className="text-xl font-semibold">Analytics Dashboard</h2>
           <p className="text-muted-foreground text-sm">
@@ -316,7 +321,7 @@ export function Analytics() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div ref={registerRef} className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <Card className="rounded-lg">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Total Views</CardTitle>
@@ -371,7 +376,7 @@ export function Analytics() {
             <ChartColumnIncreasing className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{clickThroughRate}%</div>
+            <div className="text-xl font-bold">{clickThroughRate}%</div>
             <p
               className={cn(
                 "text-xs",
@@ -390,7 +395,7 @@ export function Analytics() {
       </div>
 
       <Card className="rounded-lg">
-        <CardHeader>
+        <CardHeader ref={registerRef}>
           <CardTitle>Card Performance</CardTitle>
           <CardDescription>
             Showing views and clicks for the selected time period.
@@ -405,12 +410,23 @@ export function Analytics() {
                   for your digital business cards."
               linkHref="/subscription"
               linkLabel="Go to subscription"
-              className="h-[250px]"
+              style={{
+                height:
+                  window.innerWidth < 768
+                    ? "250px"
+                    : `calc(100vh - ${calculatedHeight}px - 12.4375rem)`,
+              }}
             />
           ) : (
             <ChartContainer
               config={chartConfig}
-              className="aspect-auto h-[250px] w-full"
+              className="aspect-auto w-full"
+              style={{
+                height:
+                  window.innerWidth < 768
+                    ? "250px"
+                    : `calc(100vh - ${calculatedHeight}px - 12.4375rem)`,
+              }}
             >
               <AreaChart data={analyticsData}>
                 <defs>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, HTMLAttributes } from "react";
 import { Receipt, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,8 +27,16 @@ import { ReceiptData } from "@/components/payment-receipt-dialog";
 import { useSubscription } from "@/lib/swr";
 import { NotFoundUI } from "@/components/not-found-ui";
 import { formatDate } from "@/lib/utils";
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 
-export function BillingHistory() {
+interface BillingHistoryProps extends HTMLAttributes<HTMLDivElement> {
+  calculatedHeight: number;
+}
+
+export function BillingHistory({
+  calculatedHeight,
+  ...props
+}: BillingHistoryProps) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
   const [receiptData, setReceiptData] = useState<ReceiptData | null>(null);
@@ -44,6 +52,8 @@ export function BillingHistory() {
         payment.status.toLowerCase().includes(query),
     );
   }, [searchQuery, paymentHistory]);
+  const { registerRef, calculatedHeight: calculatedBillingHistoryHeight } =
+    useDynamicHeightAuto();
 
   const handleViewReceipt = async (paymentIntentId: string) => {
     setSelectedPayment(paymentIntentId);
@@ -76,8 +86,8 @@ export function BillingHistory() {
 
   return (
     <>
-      <Card className="rounded-lg">
-        <CardHeader>
+      <Card className="rounded-lg" {...props}>
+        <CardHeader ref={registerRef}>
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>
               <CardTitle className="text-lg">Billing History</CardTitle>
@@ -104,9 +114,15 @@ export function BillingHistory() {
               message={
                 paymentHistory.length === 0
                   ? "You haven't made any payments yet."
-                  : "No transactions match your search criteria."
+                  : "We couldn't find any transactions matching your search. Try a different search term."
               }
               className="border border-dashed"
+              style={{
+                minHeight:
+                  window.innerWidth < 768
+                    ? "250px"
+                    : `calc(100vh - ${calculatedHeight}px - ${calculatedBillingHistoryHeight}px - 13.9375rem)`,
+              }}
             />
           ) : (
             <Table>

@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 
-interface NotFoundUIProps {
+interface NotFoundUIProps extends HTMLAttributes<HTMLDivElement> {
   icon: ReactNode;
   title: string;
   message: string;
@@ -19,13 +19,15 @@ export function NotFoundUI({
   linkHref,
   linkLabel,
   className,
+  ...props
 }: NotFoundUIProps) {
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center gap-2 rounded-lg px-6 py-12 text-center md:px-16",
+        "flex flex-col items-center justify-center gap-2 rounded-lg px-6 text-center md:px-16",
         className,
       )}
+      {...props}
     >
       <div className="bg-secondary rounded-full p-3">{icon}</div>
       <h2 className="text-lg font-semibold">{title}</h2>

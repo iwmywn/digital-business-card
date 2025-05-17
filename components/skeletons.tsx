@@ -1,3 +1,5 @@
+"use client";
+
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar } from "@/components/ui/avatar";
@@ -23,6 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 
 export function UserSkeleton() {
   return (
@@ -148,9 +151,14 @@ export function CardManagementSkeleton() {
 }
 
 export function AnalyticsSkeleton() {
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div
+        ref={registerRef}
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+      >
         <div className="space-y-2">
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-4 w-64" />
@@ -161,7 +169,7 @@ export function AnalyticsSkeleton() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div ref={registerRef} className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {[...Array(3)].map((_, i) => (
           <Card className="rounded-lg" key={i}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -177,12 +185,20 @@ export function AnalyticsSkeleton() {
       </div>
 
       <Card className="rounded-lg">
-        <CardHeader>
+        <CardHeader ref={registerRef}>
           <Skeleton className="h-5 w-40" />
           <Skeleton className="h-4 w-72" />
         </CardHeader>
         <CardContent>
-          <Skeleton className="h-[250px] w-full rounded-md" />
+          <Skeleton
+            className="w-full rounded-md"
+            style={{
+              height:
+                typeof window !== "undefined" && window.innerWidth < 768
+                  ? "250px"
+                  : `calc(100vh - ${calculatedHeight}px - 12.4375rem)`,
+            }}
+          />
         </CardContent>
       </Card>
     </div>
@@ -190,14 +206,15 @@ export function AnalyticsSkeleton() {
 }
 
 export function SubscriptionPlansSkeleton() {
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
+      <div ref={registerRef} className="space-y-1">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-4 w-64" />
       </div>
 
-      <div className="flex items-start gap-4">
+      <div ref={registerRef} className="flex items-start gap-4">
         <Skeleton className="h-5 w-5 rounded-full" />
         <div className="w-full space-y-2">
           <Skeleton className="h-4 w-32" />
@@ -206,7 +223,7 @@ export function SubscriptionPlansSkeleton() {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div ref={registerRef} className="space-y-4">
         <Skeleton className="h-6 w-40" />
         <Skeleton className="h-4 w-32" />
         <div className="space-y-2">
@@ -220,7 +237,10 @@ export function SubscriptionPlansSkeleton() {
         {[...Array(3)].map((_, i) => (
           <div
             key={i}
-            className="min-w-[17.5rem] flex-1 space-y-4 rounded-lg border p-4 shadow-sm"
+            className="flex min-w-[17.5rem] flex-1 flex-col space-y-4 rounded-lg border p-4 shadow-sm"
+            style={{
+              minHeight: `calc(100vh - ${calculatedHeight}px - 9.4375rem)`,
+            }}
           >
             <Skeleton className="h-6 w-24" />
             <Skeleton className="h-4 w-32" />
@@ -229,7 +249,7 @@ export function SubscriptionPlansSkeleton() {
                 <Skeleton key={j} className="h-3 w-3/4" />
               ))}
             </div>
-            <Skeleton className="mt-4 h-9 w-full" />
+            <Skeleton className="mt-auto h-9 w-full" />
           </div>
         ))}
       </div>
@@ -241,7 +261,7 @@ export function PaymentReceiptDialogSkeleton() {
   return (
     <>
       <DialogHeader>
-        <DialogTitle className="flex items-center gap-2 text-2xl">
+        <DialogTitle className="flex items-center gap-2">
           <Skeleton className="h-8 w-40" />
           <Skeleton className="h-6 w-20 rounded-full" />
         </DialogTitle>

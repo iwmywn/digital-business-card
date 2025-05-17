@@ -11,10 +11,12 @@ import { CurrentPlan } from "@/components/current-plan";
 import { SubscriptionManagement } from "@/components/subscription-management";
 import { BillingHistory } from "@/components/billing-history";
 import { SubscriptionPlansSkeleton } from "@/components/skeletons";
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 
 export function SubscriptionPlans() {
   const { isSubScriptionLoading, isSubscriptionError } = useSubscription();
   const [activeTab, setActiveTab] = useState<string>("plans");
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
 
   useEffect(() => {
     if (isSubscriptionError) toast.error(isSubscriptionError);
@@ -26,14 +28,14 @@ export function SubscriptionPlans() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div ref={registerRef}>
         <h2 className="text-xl font-semibold">Subscription Plans</h2>
         <p className="text-muted-foreground text-sm">
           Manage your subscription plans and billing history.
         </p>
       </div>
 
-      <Alert>
+      <Alert ref={registerRef}>
         <ShieldCheck />
         <AlertTitle>Secure Payments</AlertTitle>
         <AlertDescription>
@@ -45,16 +47,21 @@ export function SubscriptionPlans() {
       </Alert>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList ref={registerRef} className="grid w-full grid-cols-2">
           <TabsTrigger value="plans">Subscription Plans</TabsTrigger>
           <TabsTrigger value="history">Billing History</TabsTrigger>
         </TabsList>
-        <TabsContent value="plans" className="space-y-6 pt-4">
+        <TabsContent value="plans" className="mt-4 space-y-6">
           <CurrentPlan />
           <SubscriptionManagement />
         </TabsContent>
-        <TabsContent value="history" className="pt-4">
-          <BillingHistory />
+        <TabsContent value="history" className="mt-4">
+          <BillingHistory
+            style={{
+              minHeight: `calc(100vh - ${calculatedHeight}px - 9.3125rem)`,
+            }}
+            calculatedHeight={calculatedHeight}
+          />
         </TabsContent>
       </Tabs>
     </div>

@@ -37,6 +37,7 @@ import { ShareCardDialog } from "@/components/share-card-dialog";
 import { DeleteCardDialog } from "@/components/delete-card-dialog";
 import { formatDate } from "@/lib/utils";
 import { CustomDomainDialog } from "@/components/custom-domain-dialog";
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 
 export function getImageUrl(
   card: CardType | null,
@@ -75,6 +76,7 @@ export function CardManagement() {
       .toLowerCase()
       .includes(searchQuery.toLowerCase()),
   );
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
 
   useEffect(() => {
     if (
@@ -89,7 +91,10 @@ export function CardManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div
+        ref={registerRef}
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+      >
         <div>
           <h2 className="text-xl font-semibold">Card Management</h2>
           <p className="text-muted-foreground text-sm">
@@ -101,7 +106,7 @@ export function CardManagement() {
         </Button>
       </div>
 
-      <div className="flex items-center">
+      <div ref={registerRef} className="flex items-center">
         <div className="relative flex-1">
           <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
           <Input
@@ -119,10 +124,13 @@ export function CardManagement() {
           title="NO CARDS FOUND"
           message={
             cards.length === 0
-              ? "You haven't created any cards yet. Create your first card to get started."
+              ? "You haven't created any cards yet."
               : "We couldn't find any cards matching your search. Try a different search term."
           }
           className="border border-dashed"
+          style={{
+            minHeight: `calc(100vh - ${calculatedHeight}px - 7.83rem)`,
+          }}
         />
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

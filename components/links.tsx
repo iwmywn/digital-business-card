@@ -212,7 +212,7 @@ export function Links({
           </div>
         )}
 
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <div key={category} className="space-y-4">
             <h3 className="text-base font-medium">{category}</h3>
 
@@ -241,7 +241,7 @@ export function Links({
                 })}
             </div>
 
-            <Separator />
+            {index < categories.length - 1 && <Separator />}
           </div>
         ))}
       </CardContent>
