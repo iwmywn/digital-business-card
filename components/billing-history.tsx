@@ -125,48 +125,55 @@ export function BillingHistory({
               }}
             />
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Transaction ID</TableHead>
-                  <TableHead>Plan</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredHistory.map((payment) => (
-                  <TableRow key={payment.paymentIntentId}>
-                    <TableCell>{formatDate(payment.createdAt)}</TableCell>
-                    <TableCell>{payment.paymentIntentId.slice(3)}</TableCell>
-                    <TableCell className="capitalize">
-                      {payment.planId} plan
-                    </TableCell>
-                    <TableCell>${payment.amount.toFixed(2)}</TableCell>
-                    <TableCell>
-                      <Badge
-                        className={`capitalize ${getStatusColor(payment.status)}`}
-                      >
-                        {payment.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          handleViewReceipt(payment.paymentIntentId)
-                        }
-                      >
-                        View receipt
-                      </Button>
-                    </TableCell>
+            <div
+              className="overflow-auto [&>div]:overflow-x-visible!"
+              style={{
+                height: `calc(100vh - ${calculatedHeight}px - ${calculatedBillingHistoryHeight}px - 13.9375rem)`,
+              }}
+            >
+              <Table>
+                <TableHeader>
+                  <TableRow className="[&_th]:bg-card [&_th]:sticky [&_th]:top-0">
+                    <TableHead>Date</TableHead>
+                    <TableHead>Transaction ID</TableHead>
+                    <TableHead>Plan</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filteredHistory.map((payment) => (
+                    <TableRow key={payment.paymentIntentId}>
+                      <TableCell>{formatDate(payment.createdAt)}</TableCell>
+                      <TableCell>{payment.paymentIntentId.slice(3)}</TableCell>
+                      <TableCell className="capitalize">
+                        {payment.planId} plan
+                      </TableCell>
+                      <TableCell>${payment.amount.toFixed(2)}</TableCell>
+                      <TableCell>
+                        <Badge
+                          className={`capitalize ${getStatusColor(payment.status)}`}
+                        >
+                          {payment.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            handleViewReceipt(payment.paymentIntentId)
+                          }
+                        >
+                          View receipt
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
