@@ -114,7 +114,7 @@ export function CardPreview({
               </div>
             )}
             <div className="w-full space-y-1">
-              <h2 className="font-bold break-all">
+              <h2 className="font-bold wrap-anywhere">
                 <span className="text-xl text-nowrap text-black">
                   {personalInfo.fullName || "Full Name"}
                 </span>
@@ -122,7 +122,7 @@ export function CardPreview({
                   {personalInfo.accreditations || "Accreditations"}
                 </span>
               </h2>
-              <p className="font-medium break-all">
+              <p className="font-medium wrap-anywhere">
                 <span className="text-gray-700">
                   {personalInfo.jobTitle || "Job Title"}
                 </span>
@@ -130,7 +130,7 @@ export function CardPreview({
                   , {personalInfo.department || "Department"}
                 </span>
               </p>
-              <p className="text-sm break-all text-gray-500">
+              <p className="text-sm wrap-anywhere text-gray-500">
                 {personalInfo.company || "Company Name"}
               </p>
             </div>
@@ -138,14 +138,14 @@ export function CardPreview({
 
           <Separator className="bg-black/15" />
 
-          <p className="break-all text-gray-700 italic">
+          <p className="wrap-anywhere text-gray-700 italic">
             {personalInfo.headline ||
               "A brief headline about who you are – your role, passion, or goal."}
           </p>
 
           <Separator className="bg-black/15" />
 
-          <p className="text-sm break-all text-gray-600">
+          <p className="text-sm wrap-anywhere text-gray-600">
             {personalInfo.bio ||
               "Tell a little about yourself: your background, experience, or what makes you unique."}
           </p>

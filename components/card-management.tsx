@@ -215,6 +215,7 @@ export function CardManagement() {
                           variant="ghost"
                           size="icon"
                           className="text-primary hover:bg-primary/5"
+                          title="Card Actions"
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>

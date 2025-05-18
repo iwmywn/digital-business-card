@@ -143,7 +143,7 @@ export function CardView({
               </div>
             )}
             <div className="w-full space-y-1">
-              <h2 className="font-bold break-all">
+              <h2 className="font-bold wrap-anywhere">
                 <span className="text-xl text-nowrap text-black">
                   {card.personalInfo.fullName}
                 </span>
@@ -153,7 +153,7 @@ export function CardView({
                   </span>
                 )}
               </h2>
-              <p className="font-medium break-all">
+              <p className="font-medium wrap-anywhere">
                 {card.personalInfo.jobTitle && (
                   <span className="text-gray-700">
                     {card.personalInfo.jobTitle}
@@ -166,7 +166,7 @@ export function CardView({
                 )}
               </p>
               {card.personalInfo.company && (
-                <p className="text-sm break-all text-gray-500">
+                <p className="text-sm wrap-anywhere text-gray-500">
                   {card.personalInfo.company}
                 </p>
               )}
@@ -176,7 +176,7 @@ export function CardView({
           {card.personalInfo.headline && (
             <>
               <Separator className="bg-black/15" />
-              <p className="break-all text-gray-700 italic">
+              <p className="wrap-anywhere text-gray-700 italic">
                 {card.personalInfo.headline}
               </p>
             </>
@@ -185,7 +185,7 @@ export function CardView({
           {card.personalInfo.bio && (
             <>
               <Separator className="bg-black/15" />
-              <p className="text-sm break-all text-gray-600">
+              <p className="text-sm wrap-anywhere text-gray-600">
                 {card.personalInfo.bio}
               </p>
             </>
