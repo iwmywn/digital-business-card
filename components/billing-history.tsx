@@ -88,7 +88,7 @@ export function BillingHistory({
     <>
       <Card className="rounded-lg" {...props}>
         <CardHeader ref={registerRef}>
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
             <div>
               <CardTitle className="text-lg">Billing History</CardTitle>
               <CardDescription>

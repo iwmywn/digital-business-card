@@ -45,14 +45,15 @@ export function UserSkeleton() {
 export function CreateCardSkeleton() {
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-2">
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-4 w-64" />
         </div>
         <div className="flex items-center justify-end gap-2">
+          <Skeleton className="h-9 w-24 rounded-md" />
           <Skeleton className="h-9 w-32 rounded-md" />
-          <Skeleton className="h-9 w-32 rounded-md" />
+          <Skeleton className="h-9 w-28 rounded-md" />
         </div>
       </div>
 
@@ -118,12 +119,12 @@ export function CreateCardSkeleton() {
 export function CardManagementSkeleton() {
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-2">
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-4 w-64" />
         </div>
-        <Skeleton className="h-10 w-40 rounded-md" />
+        <Skeleton className="h-10 w-full rounded-md sm:w-40" />
       </div>
 
       <div className="flex items-center">
@@ -157,7 +158,7 @@ export function AnalyticsSkeleton() {
     <div className="space-y-6">
       <div
         ref={registerRef}
-        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="space-y-2">
           <Skeleton className="h-8 w-48" />

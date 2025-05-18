@@ -20,7 +20,7 @@ export function Settings() {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-6">
       <InformationForm />
       <AccountForm />
       <NotificationSettings />

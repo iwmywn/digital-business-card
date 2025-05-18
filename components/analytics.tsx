@@ -284,7 +284,7 @@ export function Analytics() {
     <div className="space-y-6">
       <div
         ref={registerRef}
-        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
           <h2 className="text-xl font-semibold">Analytics Dashboard</h2>
