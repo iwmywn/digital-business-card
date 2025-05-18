@@ -169,21 +169,18 @@ export async function forgotPassword(
       };
 
     const verificationToken = nanoid();
+    const userCollection = await getUserCollection();
 
-    const result = await (
-      await getUserCollection()
-    ).updateOne(
-      { email: email },
-      {
-        $set: { verificationToken: verificationToken },
-        $inc: { resendVerification: 1 },
-      },
-    );
-
-    if (result.modifiedCount === 0)
-      return { error: "Request failed! Try again later." };
-
-    await sendEmail(email, verificationToken, "resetPassword");
+    await Promise.all([
+      userCollection.updateOne(
+        { email },
+        {
+          $set: { verificationToken, updatedAt: new Date() },
+          $inc: { resendVerification: 1 },
+        },
+      ),
+      sendEmail(email, verificationToken, "resetPassword"),
+    ]);
 
     return {
       success:
@@ -220,9 +217,9 @@ export async function resetPassword(
 
     if (!user) return { error: "Token expired!" };
 
-    const result = await (
-      await getUserCollection()
-    ).updateOne(
+    const userCollection = await getUserCollection();
+
+    await userCollection.updateOne(
       { email: email!, verificationToken: token! },
       {
         $set: {
@@ -233,11 +230,6 @@ export async function resetPassword(
         $unset: { verificationToken: "" },
       },
     );
-
-    if (result.matchedCount === 0) return { error: "Token expired!" };
-
-    if (result.modifiedCount === 0)
-      return { error: "Password update failed! Try again later." };
 
     return { success: "Your password has been changed.", error: undefined };
   } catch (error) {
@@ -259,9 +251,9 @@ export async function verifyEmail(
 
     if (!user) return { error: "Token expired or email already verified!" };
 
-    const userUpdateResult = await (
-      await getUserCollection()
-    ).updateOne(
+    const userCollection = await getUserCollection();
+
+    await userCollection.updateOne(
       { verificationToken: token! },
       {
         $set: {
@@ -272,9 +264,6 @@ export async function verifyEmail(
         $unset: { verificationToken: "" },
       },
     );
-
-    if (userUpdateResult.modifiedCount === 0)
-      return { error: "Email verification failed! Try again later." };
 
     return { success: "Email verified successfully.", error: undefined };
   } catch (error) {
@@ -312,19 +301,15 @@ export async function signInPrivate(
 
     const privateTokenCollection = await getPrivateTokenCollection();
     const existingToken = await privateTokenCollection.findOne({
-      token: token,
+      token,
     });
 
     if (!existingToken) return { error: "Token expired!" };
 
-    const [result] = await Promise.all([
-      privateTokenCollection.deleteOne({ token: token }),
+    await Promise.all([
+      privateTokenCollection.deleteOne({ token }),
       session.private.create(),
     ]);
-
-    if (!result.acknowledged) {
-      return { error: "Request failed! Try again later." };
-    }
 
     return {
       success: "You have 2 hours for this session.",

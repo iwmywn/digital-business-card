@@ -80,7 +80,7 @@ export async function saveCard(
         };
       }
 
-      const result = await cardCollection.updateOne(
+      await cardCollection.updateOne(
         { _id: new ObjectId(cardId) },
         {
           $set: {
@@ -92,9 +92,6 @@ export async function saveCard(
           },
         },
       );
-
-      if (result.modifiedCount === 0)
-        return { error: "Card update failed! Try again later." };
     } else {
       const now = new Date();
 
@@ -419,9 +416,9 @@ export async function checkSlug(slug: string, cardId: string) {
       return { error: "Unauthorized!" };
     }
 
-    const existingCard = await (
-      await getCardCollection()
-    ).findOne({
+    const cardCollection = await getCardCollection();
+
+    const existingCard = await cardCollection.findOne({
       slug,
       _id: { $ne: new ObjectId(cardId) },
     });
@@ -473,7 +470,7 @@ export async function updateSlug(values: SlugFormValues, cardId: string) {
       return { success: "No change was made." };
     }
 
-    const result = await cardCollection.updateOne(
+    await cardCollection.updateOne(
       { _id: new ObjectId(cardId) },
       {
         $set: {
@@ -482,13 +479,6 @@ export async function updateSlug(values: SlugFormValues, cardId: string) {
         },
       },
     );
-
-    if (!result.acknowledged) {
-      return {
-        error:
-          "An error occurred while updating the slug! Please try again later.",
-      };
-    }
 
     return { success: "Your slug has been changed." };
   } catch (error) {
@@ -505,19 +495,12 @@ export async function updateCardVisibility(cardId: string, isPublic: boolean) {
       return { error: "Unauthorized!" };
     }
 
-    const result = await (
-      await getCardCollection()
-    ).updateOne(
+    const cardCollection = await getCardCollection();
+
+    await cardCollection.updateOne(
       { _id: new ObjectId(cardId) },
       { $set: { isPublic, updatedAt: new Date() } },
     );
-
-    if (!result.acknowledged) {
-      return {
-        error:
-          "An error occurred while updating the card visibility! Please try again later.",
-      };
-    }
 
     return { success: "Your card visibility has been updated." };
   } catch (error) {

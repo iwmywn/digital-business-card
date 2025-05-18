@@ -97,9 +97,9 @@ export async function updateProfile(
       return { success: "No changes were made." };
     }
 
-    const result = await (
-      await getUserCollection()
-    ).updateOne(
+    const userCollection = await getUserCollection();
+
+    await userCollection.updateOne(
       { _id: new ObjectId(userId) },
       {
         $set: {
@@ -111,13 +111,6 @@ export async function updateProfile(
         },
       },
     );
-
-    if (!result.acknowledged) {
-      return {
-        error:
-          "An error occurred while updating the public account! Please try again later.",
-      };
-    }
 
     return { success: "Your profile has been changed." };
   } catch (error) {
@@ -134,16 +127,12 @@ export async function checkUsername(username: string) {
       return { error: "Unauthorized!" };
     }
 
-    const existingUser = await (
-      await getUserCollection()
-    ).findOne({
+    const userCollection = await getUserCollection();
+
+    await userCollection.findOne({
       username,
       _id: { $ne: new ObjectId(userId) },
     });
-
-    if (existingUser) {
-      return { error: `Username '${username}' is not available!` };
-    }
 
     return { error: undefined };
   } catch (error) {
@@ -207,9 +196,9 @@ export async function updateAccount(values: SettingsFormValues) {
       return { success: "No changes were made." };
     }
 
-    const result = await (
-      await getUserCollection()
-    ).updateOne(
+    const userCollection = await getUserCollection();
+
+    await userCollection.updateOne(
       { _id: new ObjectId(userId) },
       {
         $set: {
@@ -220,13 +209,6 @@ export async function updateAccount(values: SettingsFormValues) {
         },
       },
     );
-
-    if (!result.acknowledged) {
-      return {
-        error:
-          "An error occurred while updating the account! Please try again later.",
-      };
-    }
 
     return { success: "Your account has been changed." };
   } catch (error) {
@@ -270,9 +252,9 @@ export async function updateNotificationSettings(
       return { success: "No changes were made." };
     }
 
-    const result = await (
-      await getUserCollection()
-    ).updateOne(
+    const userCollection = await getUserCollection();
+
+    await userCollection.updateOne(
       { _id: new ObjectId(userId) },
       {
         $set: {
@@ -281,13 +263,6 @@ export async function updateNotificationSettings(
         },
       },
     );
-
-    if (!result.acknowledged) {
-      return {
-        error:
-          "An error occurred while updating the notification settings! Please try again later.",
-      };
-    }
 
     return { success: "Your settings have been changed." };
   } catch (error) {
