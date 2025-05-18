@@ -8,8 +8,8 @@ const maxBasicCards = 3;
 const maxProfessionalCards = 5;
 
 const maxFreeLinks = 10;
-const maxBasicLinks = 20;
-const maxProfessionalLinks = 40;
+const maxBasicLinks = 25;
+const maxProfessionalLinks = 45;
 
 const defaultFont = "roboto";
 const freeFontOptions = [
@@ -245,6 +245,7 @@ const subscriptionPlans = [
       `Add up to ${maxProfessionalLinks} links`,
       "Access advanced analytics with detailed insights",
       "Set a custom card link",
+      "Toggle public/private visibility for each card",
       "Receive priority customer support",
       "Remove all platform branding",
     ],

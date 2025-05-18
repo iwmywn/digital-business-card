@@ -27,7 +27,6 @@ import {
   siQuora,
   siWechat,
   siLine,
-  siMessenger,
   siNotion,
   siMedium,
   siSlack,
@@ -36,6 +35,12 @@ import {
   siPatreon,
   siBuymeacoffee,
   siKofi,
+  siGooglepay,
+  siApplepay,
+  siSamsungpay,
+  siStripe,
+  siXiaohongshu,
+  siViber,
 } from "simple-icons";
 import type { ElementType } from "react";
 
@@ -207,25 +212,9 @@ export const linkTypes = [
     category: "Social",
   },
   {
-    type: "LinkedIn",
+    type: "RedNote",
     icon: (props: IconComponentProps) => (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        className="lucide lucide-linkedin-icon lucide-linkedin"
-        {...props}
-      >
-        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-        <rect width="4" height="12" x="2" y="9" />
-        <circle cx="4" cy="4" r="2" />
-      </svg>
+      <SimpleIconComponent icon={siXiaohongshu} {...props} />
     ),
     category: "Social",
   },
@@ -274,9 +263,9 @@ export const linkTypes = [
     category: "Messaging",
   },
   {
-    type: "Messenger",
+    type: "Viber",
     icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siMessenger} {...props} />
+      <SimpleIconComponent icon={siViber} {...props} />
     ),
     category: "Messaging",
   },
@@ -331,6 +320,29 @@ export const linkTypes = [
     ),
     category: "Business",
   },
+  {
+    type: "LinkedIn",
+    icon: (props: IconComponentProps) => (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="lucide lucide-linkedin-icon lucide-linkedin"
+        {...props}
+      >
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+        <rect width="4" height="12" x="2" y="9" />
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+    ),
+    category: "Business",
+  },
 
   // Payment
   {
@@ -372,6 +384,34 @@ export const linkTypes = [
     type: "Ko-fi",
     icon: (props: IconComponentProps) => (
       <SimpleIconComponent icon={siKofi} {...props} />
+    ),
+    category: "Payment",
+  },
+  {
+    type: "Google Pay",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siGooglepay} {...props} />
+    ),
+    category: "Payment",
+  },
+  {
+    type: "Apple Pay",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siApplepay} {...props} />
+    ),
+    category: "Payment",
+  },
+  {
+    type: "Samsung Pay",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siSamsungpay} {...props} />
+    ),
+    category: "Payment",
+  },
+  {
+    type: "Stripe",
+    icon: (props: IconComponentProps) => (
+      <SimpleIconComponent icon={siStripe} {...props} />
     ),
     category: "Payment",
   },
