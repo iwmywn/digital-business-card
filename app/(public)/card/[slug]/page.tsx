@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getCardBySlug, trackCardView } from "@/actions/card";
+import { getCardToViewBySlug, trackCardView } from "@/actions/card";
 import { CardView } from "@/components/card-view";
 import NotFound from "@/app/not-found";
 
@@ -9,7 +9,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const param = await params;
-  const { card, error } = await getCardBySlug(param.slug);
+  const { card, error } = await getCardToViewBySlug(param.slug);
 
   if (error || !card) {
     return {
@@ -32,7 +32,7 @@ export default async function page({
   params: Promise<{ slug: string }>;
 }) {
   const param = await params;
-  const { card, error } = await getCardBySlug(param.slug);
+  const { card, error } = await getCardToViewBySlug(param.slug);
 
   if (error || !card) {
     return <NotFound />;

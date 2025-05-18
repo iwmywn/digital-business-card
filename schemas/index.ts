@@ -302,33 +302,33 @@ const personalInfoSchema = z
     }
   });
 
-const cardDomainSchema = z
+const cardSlugSchema = z
   .object({
-    domain: z.string().optional(),
+    slug: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    const { domain } = data;
+    const { slug } = data;
 
-    if (domain) {
-      const match = domain.match(/^[a-zA-Z0-9]+$/);
+    if (slug) {
+      const match = slug.match(/^[a-zA-Z0-9]+$/);
       if (!match) {
         ctx.addIssue({
-          path: ["domain"],
+          path: ["slug"],
           code: z.ZodIssueCode.custom,
-          message: "Domain contains invalid characters.",
+          message: "Card slug contains invalid characters.",
         });
       }
-      if (domain.length < 6) {
+      if (slug.length < 6) {
         ctx.addIssue({
-          path: ["domain"],
-          message: "Domain must be at least 6 characters long.",
+          path: ["slug"],
+          message: "Card slug must be at least 6 characters long.",
           code: z.ZodIssueCode.custom,
         });
       }
-      if (domain.length > 20) {
+      if (slug.length > 20) {
         ctx.addIssue({
-          path: ["domain"],
-          message: "Domain must be no more than 20 characters long.",
+          path: ["slug"],
+          message: "Card slug must be no more than 20 characters long.",
           code: z.ZodIssueCode.custom,
         });
       }
@@ -346,5 +346,5 @@ export {
   accountSchema,
   notificationSettingsSchema,
   personalInfoSchema,
-  cardDomainSchema,
+  cardSlugSchema,
 };

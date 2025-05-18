@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Loading } from "@/components/loading";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { cardDomainSchema } from "@/schemas";
+import { cardSlugSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,12 +25,12 @@ import {
 } from "@/components/ui/form";
 import { CheckCircle, XCircle } from "lucide-react";
 import { FormButton } from "@/components/form-button";
-import { checkDomain, saveDomain } from "@/actions/card";
+import { checkSlug, updateSlug } from "@/actions/card";
 import { useCard } from "@/lib/swr";
 
-export type DomainFormValues = z.infer<typeof cardDomainSchema>;
+export type SlugFormValues = z.infer<typeof cardSlugSchema>;
 
-export function CustomDomainDialog({
+export function CustomSlugDialog({
   card,
   open,
   setOpen,
@@ -43,21 +43,19 @@ export function CustomDomainDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const form = useForm<DomainFormValues>({
-    resolver: zodResolver(cardDomainSchema),
+  const form = useForm<SlugFormValues>({
+    resolver: zodResolver(cardSlugSchema),
     defaultValues: {
-      domain: card.dynamicSlug === card._id ? "" : card.dynamicSlug,
+      slug: card.dynamicSlug === card._id ? "" : card.dynamicSlug,
     },
   });
   const [isChecking, setIsChecking] = useState<boolean>(false);
-  const [isDomainAvailable, setIsDomainAvailable] = useState<boolean | null>(
-    null,
-  );
-  const debouncedDomain = useDebounce(form.watch("domain"), 500);
+  const [isSlugAvailable, setIsSlugAvailable] = useState<boolean | null>(null);
+  const debouncedSlug = useDebounce(form.watch("slug"), 500);
   const { cardResponse, mutate, cards } = useCard();
 
-  async function onSubmit(values: DomainFormValues) {
-    const { success, error } = await saveDomain(values, card._id);
+  async function onSubmit(values: SlugFormValues) {
+    const { success, error } = await updateSlug(values, card._id);
 
     if (error || !success) {
       toast.error(error);
@@ -68,8 +66,8 @@ export function CustomDomainDialog({
           c._id === card._id
             ? {
                 ...c,
-                slug: debouncedDomain,
-                dynamicSlug: debouncedDomain ?? c._id,
+                slug: debouncedSlug,
+                dynamicSlug: debouncedSlug ?? c._id,
                 updatedAt: new Date(),
               }
             : c,
@@ -81,80 +79,78 @@ export function CustomDomainDialog({
   }
 
   useEffect(() => {
-    const domain = debouncedDomain?.trim();
+    const slug = debouncedSlug?.trim();
 
-    if (!domain) {
-      setIsDomainAvailable(null);
-      form.clearErrors("domain");
+    if (!slug) {
+      setIsSlugAvailable(null);
+      form.clearErrors("slug");
       return;
     }
 
-    const parsedValue = cardDomainSchema.safeParse({ domain });
+    const parsedValue = cardSlugSchema.safeParse({ slug });
 
     if (!parsedValue.success) {
       const errorMessages = parsedValue.error.errors
         .map((err) => err.message)
         .join(" ");
 
-      form.setError("domain", {
+      form.setError("slug", {
         type: "manual",
         message: errorMessages,
       });
 
-      setIsDomainAvailable(false);
+      setIsSlugAvailable(false);
       return;
     }
 
     setIsChecking(true);
-    checkDomain(domain, card._id)
+    checkSlug(slug, card._id)
       .then((res) => {
         if (res?.error) {
-          form.setError("domain", {
+          form.setError("slug", {
             type: "manual",
             message: res.error,
           });
-          setIsDomainAvailable(false);
+          setIsSlugAvailable(false);
         } else {
-          form.clearErrors("domain");
-          setIsDomainAvailable(true);
+          form.clearErrors("slug");
+          setIsSlugAvailable(true);
         }
       })
       .catch(() => {
-        form.setError("domain", {
+        form.setError("slug", {
           type: "manual",
           message: "Something went wrong! Please try again.",
         });
-        setIsDomainAvailable(null);
+        setIsSlugAvailable(null);
       })
       .finally(() => {
         setIsChecking(false);
       });
-  }, [debouncedDomain, form, card._id]);
+  }, [debouncedSlug, form, card._id]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-xl">Change Card Domain</DialogTitle>
+          <DialogTitle className="text-xl">Customize Card Link</DialogTitle>
           <DialogDescription>
-            Customize the domain of your card (e.g.{" "}
-            https://eznect.vercel.app/card/
-            <span className="text-foreground/85">your-custom-domain</span>).
+            Choose a unique identifier for your card URL.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="domain"
+              name="slug"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="domain">Domain</FormLabel>
+                  <FormLabel htmlFor="slug">Card Slug</FormLabel>
                   <div className="relative">
                     <FormControl>
                       <Input
-                        id="domain"
-                        placeholder="Domain"
+                        id="slug"
+                        placeholder="e.g. iwmywn"
                         autoComplete="off"
                         {...field}
                       />
@@ -163,9 +159,9 @@ export function CustomDomainDialog({
                     <div className="absolute top-2.5 right-2.5">
                       {isChecking ? (
                         <Loading className="border-primary border-t-primary-foreground/10" />
-                      ) : isDomainAvailable === true ? (
+                      ) : isSlugAvailable === true ? (
                         <CheckCircle className="h-4 w-4 text-green-500" />
-                      ) : isDomainAvailable === false ? (
+                      ) : isSlugAvailable === false ? (
                         <XCircle className="h-4 w-4 text-red-500" />
                       ) : null}
                     </div>

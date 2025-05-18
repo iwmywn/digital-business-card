@@ -33,19 +33,22 @@ export function DeleteCardDialog({
   const { cardResponse, cards, mutate } = useCard();
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
-  async function handleDeleteCard(id: string) {
+  async function handleDeleteCard() {
     setIsDeleting(true);
-    const { success, error } = await deleteCard(id);
+
+    const { success, error } = await deleteCard(card._id);
+
     if (error || !success) {
       toast.error(error);
     } else {
       mutate({
         ...cardResponse,
-        cards: cards.filter((card) => card._id !== id),
+        cards: cards.filter((c) => c._id !== card._id),
       });
       setOpen(false);
       toast.success(success);
     }
+
     setIsDeleting(false);
   }
 
@@ -85,10 +88,14 @@ export function DeleteCardDialog({
           </Button>
           <Button
             variant="destructive"
-            onClick={() => handleDeleteCard(card._id)}
+            onClick={handleDeleteCard}
             disabled={isDeleting}
           >
-            {isDeleting ? <Loading /> : "Delete card"}
+            {isDeleting ? (
+              <Loading className="border-white border-t-black/10" />
+            ) : (
+              "Delete card"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

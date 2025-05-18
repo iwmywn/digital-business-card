@@ -1,7 +1,7 @@
 "use server";
 
 import { ObjectId } from "mongodb";
-import { getUserCollection } from "@/lib/collections";
+import { getCardCollection, getUserCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
 import { getPaymentDetails } from "@/actions/stripe";
@@ -20,19 +20,29 @@ export async function switchToPlan(planId: "free" | "basic" | "professional") {
     if (!existingUser) return { error: "User not found!" };
 
     const now = new Date();
-    const userCollection = await getUserCollection();
+    const [userCollection, cardCollection] = await Promise.all([
+      getUserCollection(),
+      getCardCollection(),
+    ]);
 
     if (planId === "free") {
-      await userCollection.updateOne(
-        { _id: new ObjectId(userId) },
-        {
-          $set: {
-            currentPlan: "free",
-            planExpiresAt: undefined,
-            updatedAt: now,
+      await Promise.all([
+        userCollection.updateOne(
+          { _id: new ObjectId(userId) },
+          {
+            $set: {
+              currentPlan: "free",
+              planExpiresAt: undefined,
+              updatedAt: now,
+            },
           },
-        },
-      );
+        ),
+        cardCollection.updateMany(
+          { userId },
+          { $set: { isPublic: true, updatedAt: now } },
+        ),
+      ]);
+
       return { error: undefined };
     }
 
@@ -42,6 +52,13 @@ export async function switchToPlan(planId: "free" | "basic" | "professional") {
 
     if (!validPlan) {
       return { error: "Plan not purchased or expired!" };
+    }
+
+    if (planId === "basic") {
+      cardCollection.updateMany(
+        { userId },
+        { $set: { isPublic: true, updatedAt: now } },
+      );
     }
 
     await userCollection.updateOne(
@@ -123,18 +140,27 @@ export async function getSubscriptionPlans() {
       const expirationDate = new Date(existingUser.planExpiresAt);
 
       if (now > expirationDate) {
-        const userCollection = await getUserCollection();
+        const [userCollection, cardCollection] = await Promise.all([
+          getUserCollection(),
+          getCardCollection(),
+        ]);
 
-        await userCollection.updateOne(
-          { _id: new ObjectId(existingUser._id) },
-          {
-            $set: {
-              currentPlan: "free",
-              planExpiresAt: undefined,
-              updatedAt: now,
+        await Promise.all([
+          userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            {
+              $set: {
+                currentPlan: "free",
+                planExpiresAt: undefined,
+                updatedAt: now,
+              },
             },
-          },
-        );
+          ),
+          cardCollection.updateMany(
+            { userId },
+            { $set: { isPublic: true, updatedAt: now } },
+          ),
+        ]);
 
         return {
           basic: {

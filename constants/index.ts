@@ -4,12 +4,12 @@ const basicId = process.env.NEXT_PUBLIC_BASIC_ID;
 const professionalId = process.env.NEXT_PUBLIC_PROFESSION_ID;
 
 const maxFreeCards = 1;
-const maxBasicCards = 5;
-const maxProfessionalCards = 10;
+const maxBasicCards = 3;
+const maxProfessionalCards = 5;
 
-const maxFreeLinks = 5;
-const maxBasicLinks = 15;
-const maxProfessionalLinks = 30;
+const maxFreeLinks = 10;
+const maxBasicLinks = 20;
+const maxProfessionalLinks = 40;
 
 const defaultFont = "roboto";
 const freeFontOptions = [
@@ -244,7 +244,7 @@ const subscriptionPlans = [
       "Use all available fonts",
       `Add up to ${maxProfessionalLinks} links`,
       "Access advanced analytics with detailed insights",
-      "Connect a custom card domain",
+      "Set a custom card link",
       "Receive priority customer support",
       "Remove all platform branding",
     ],

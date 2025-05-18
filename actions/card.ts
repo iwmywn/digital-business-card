@@ -11,8 +11,8 @@ import type { Card } from "@/lib/definitions";
 import * as constants from "@/constants";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { extractCloudinaryPath } from "@/lib/utils";
-import { DomainFormValues } from "@/components/custom-domain-dialog";
-import { cardDomainSchema } from "@/schemas";
+import { SlugFormValues } from "@/components/custom-slug-dialog";
+import { cardSlugSchema } from "@/schemas";
 
 type ImageKey = "logoImage" | "profileImage" | "coverImage";
 export async function saveCard(
@@ -126,7 +126,7 @@ export async function saveCard(
   }
 }
 
-export async function getCardBySlug(slug: string) {
+export async function getCardToEditBySlug(slug: string) {
   try {
     const isValidObjectId =
       ObjectId.isValid(slug) && new ObjectId(slug).toString() === slug;
@@ -137,17 +137,16 @@ export async function getCardBySlug(slug: string) {
       return { error: "Card not found!" };
     }
 
-    const existingUser = await getUserById(card.userId);
+    const [currentUser, existingUser] = await Promise.all([
+      session.user.get(),
+      getUserById(card.userId),
+    ]);
+    const isOwner =
+      currentUser?.isSignedIn && currentUser.userId === card.userId;
 
     if (!existingUser) return { error: "User not found!" };
 
-    let { slug: dynamicSlug } = card;
-
     const { currentPlan } = existingUser;
-    dynamicSlug =
-      dynamicSlug && currentPlan === "professional"
-        ? dynamicSlug
-        : card._id.toString();
     const now = new Date();
     const validProfessionalPlan = existingUser.purchasedPlans?.find(
       (plan) =>
@@ -156,11 +155,88 @@ export async function getCardBySlug(slug: string) {
         new Date(plan.expiresAt) > now,
     );
 
+    if (!isOwner) {
+      return { error: "Access denied! This card belongs to another user." };
+    }
+
     if (!validProfessionalPlan && !isValidObjectId) {
       return {
         error:
-          "Access denied. Upgrade to Professional plan to access via slug.",
+          "Access denied! Upgrade our professional plan to access via slug.",
       };
+    }
+
+    return {
+      card: {
+        ...card,
+        _id: card._id.toString(),
+      } as Card,
+    };
+  } catch (error) {
+    console.error("Error getting card slug:", error);
+    return { error: "Failed to get card slug! Please try again later." };
+  }
+}
+
+export async function getCardToViewBySlug(slug: string) {
+  try {
+    const isValidObjectId =
+      ObjectId.isValid(slug) && new ObjectId(slug).toString() === slug;
+    const query = isValidObjectId ? { _id: new ObjectId(slug) } : { slug };
+    const card = await (await getCardCollection()).findOne(query);
+
+    if (!card) {
+      return { error: "Card not found!" };
+    }
+
+    const [currentUser, existingUser] = await Promise.all([
+      session.user.get(),
+      getUserById(card.userId),
+    ]);
+    const isOwner =
+      currentUser?.isSignedIn && currentUser.userId === card.userId;
+
+    if (!existingUser) return { error: "User not found!" };
+
+    let { slug: dynamicSlug } = card;
+    const { currentPlan } = existingUser;
+    const now = new Date();
+    const validProfessionalPlan = existingUser.purchasedPlans?.find(
+      (plan) =>
+        currentPlan === plan.planId &&
+        plan.planId === "professional" &&
+        new Date(plan.expiresAt) > now,
+    );
+    dynamicSlug =
+      dynamicSlug && currentPlan === "professional"
+        ? dynamicSlug
+        : card._id.toString();
+
+    if (!validProfessionalPlan && !isValidObjectId) {
+      return {
+        error:
+          "Access denied! Upgrade our professional plan to access via slug.",
+      };
+    }
+
+    if (isOwner) {
+      return {
+        card: {
+          ...card,
+          _id: card._id.toString(),
+          editable: false,
+          message: "",
+          dynamicSlug,
+        } as Card & {
+          editable: boolean;
+          message?: string;
+          dynamicSlug: string;
+        },
+      };
+    }
+
+    if (validProfessionalPlan && !card.isPublic) {
+      return { error: "Access denied! This card is private." };
     }
 
     return {
@@ -335,7 +411,7 @@ export async function trackCardView(cardId: string) {
   }
 }
 
-export async function checkDomain(domain: string, cardId: string) {
+export async function checkSlug(slug: string, cardId: string) {
   try {
     const { isSignedIn, userId } = await session.user.get();
 
@@ -346,22 +422,22 @@ export async function checkDomain(domain: string, cardId: string) {
     const existingCard = await (
       await getCardCollection()
     ).findOne({
-      slug: domain,
+      slug,
       _id: { $ne: new ObjectId(cardId) },
     });
 
     if (existingCard) {
-      return { error: `Domain '${domain}' is not available!` };
+      return { error: `Slug '${slug}' is not available!` };
     }
 
     return { error: undefined };
   } catch (error) {
-    console.error("Error checking domain:", error);
-    return { error: "Failed to check domain! Please try again later." };
+    console.error("Error checking slug:", error);
+    return { error: "Failed to check slug! Please try again later." };
   }
 }
 
-export async function saveDomain(values: DomainFormValues, cardId: string) {
+export async function updateSlug(values: SlugFormValues, cardId: string) {
   try {
     const { isSignedIn, userId } = await session.user.get();
 
@@ -369,13 +445,13 @@ export async function saveDomain(values: DomainFormValues, cardId: string) {
       return { error: "Unauthorized!" };
     }
 
-    const parsedValues = cardDomainSchema.safeParse(values);
+    const parsedValues = cardSlugSchema.safeParse(values);
 
     if (!parsedValues.success) {
       return { error: "Invalid data provided!" };
     }
 
-    const { domain } = parsedValues.data;
+    const { slug } = parsedValues.data;
     const cardCollection = await getCardCollection();
     const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
 
@@ -383,15 +459,15 @@ export async function saveDomain(values: DomainFormValues, cardId: string) {
       return { error: "Card not found!" };
     }
 
-    if (domain) {
-      const { error } = await checkDomain(domain, cardId);
+    if (slug) {
+      const { error } = await checkSlug(slug, cardId);
 
       if (error) {
         return { error: error };
       }
     }
 
-    const isSame = domain === card.slug;
+    const isSame = slug === card.slug;
 
     if (isSame) {
       return { success: "No change was made." };
@@ -401,7 +477,8 @@ export async function saveDomain(values: DomainFormValues, cardId: string) {
       { _id: new ObjectId(cardId) },
       {
         $set: {
-          slug: domain,
+          slug,
+          updatedAt: new Date(),
         },
       },
     );
@@ -409,14 +486,45 @@ export async function saveDomain(values: DomainFormValues, cardId: string) {
     if (!result.acknowledged) {
       return {
         error:
-          "An error occurred while updating the domain! Please try again later.",
+          "An error occurred while updating the slug! Please try again later.",
       };
     }
 
-    return { success: "Your domain has been changed." };
+    return { success: "Your slug has been changed." };
   } catch (error) {
-    console.error("Error updating domain:", error);
-    return { error: "Failed to update domain! Please try again later." };
+    console.error("Error updating slug:", error);
+    return { error: "Failed to update slug! Please try again later." };
+  }
+}
+
+export async function updateCardVisibility(cardId: string, isPublic: boolean) {
+  try {
+    const { isSignedIn, userId } = await session.user.get();
+
+    if (!isSignedIn || !userId) {
+      return { error: "Unauthorized!" };
+    }
+
+    const result = await (
+      await getCardCollection()
+    ).updateOne(
+      { _id: new ObjectId(cardId) },
+      { $set: { isPublic, updatedAt: new Date() } },
+    );
+
+    if (!result.acknowledged) {
+      return {
+        error:
+          "An error occurred while updating the card visibility! Please try again later.",
+      };
+    }
+
+    return { success: "Your card visibility has been updated." };
+  } catch (error) {
+    console.error("Error updating card visibility:", error);
+    return {
+      error: "Failed to update card visibility! Please try again later.",
+    };
   }
 }
 
@@ -484,9 +592,9 @@ export async function getCards() {
       cards: enhancedCards,
     };
   } catch (error) {
-    console.error("Error checking card creation limits:", error);
+    console.error("Error getting card:", error);
     return {
-      error: "Failed to check card creation limits! Please try again later.",
+      error: "Failed to get card! Please try again later.",
     };
   }
 }

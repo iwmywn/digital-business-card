@@ -11,7 +11,7 @@ import {
   Lock,
   Globe,
   QrCode,
-  Pencil,
+  Link as LinkIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,8 +36,9 @@ import { QRCodeDialog } from "@/components/qr-code-dialog";
 import { ShareCardDialog } from "@/components/share-card-dialog";
 import { DeleteCardDialog } from "@/components/delete-card-dialog";
 import { formatDate } from "@/lib/utils";
-import { CustomDomainDialog } from "@/components/custom-domain-dialog";
+import { CustomSlugDialog } from "@/components/custom-slug-dialog";
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
+import { ChangeVisibilityDialog } from "@/components/change-visibility-dialog";
 
 export function getImageUrl(
   card: CardType | null,
@@ -68,7 +69,9 @@ export function CardManagement() {
   const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false);
   const [isShareDialogOpen, setIsShareDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-  const [isDomainDialogOpen, setIsDomainDialogOpen] = useState<boolean>(false);
+  const [isSlugDialogOpen, setIsSlugDialogOpen] = useState<boolean>(false);
+  const [isVisibilityDialogOpen, setIsVisibilityDialogOpen] =
+    useState<boolean>(false);
   const { user, isUserLoading, isUserError } = useUser();
   const { cards, isCardLoading, isCardError } = useCard();
   const filteredCards = cards.filter((card) =>
@@ -197,15 +200,15 @@ export function CardManagement() {
                       />
                     </div>
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <CardTitle className="flex items-center gap-2">
-                      <span className="truncate">
+                      <span className="max-w-[calc(100%-4.625rem)] truncate">
                         {card.personalInfo.fullName}
                       </span>
                       {card.isPublic ? <Globe size={14} /> : <Lock size={14} />}
                     </CardTitle>
                   </div>
-                  <div className="absolute top-0 right-0">
+                  <div className="absolute right-0">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
@@ -240,23 +243,57 @@ export function CardManagement() {
                             <div
                               onClick={() => {
                                 setSelectedCard(card);
-                                setIsDomainDialogOpen(true);
+                                setIsSlugDialogOpen(true);
                               }}
                             >
-                              <Pencil className="mr-2 h-4 w-4" />
-                              Custom domain
+                              <LinkIcon className="mr-2 h-4 w-4" />
+                              Customize link
                             </div>
                           ) : (
                             <div
                               className="cursor-not-allowed opacity-50"
                               onClick={() =>
                                 toast.error(
-                                  "Upgrade to our professional plan to customize this card domain.",
+                                  "Upgrade to our professional plan to customize this card link.",
                                 )
                               }
                             >
                               <Lock className="mr-2 h-4 w-4" />
-                              Upgrade to custom
+                              Upgrade to customize
+                            </div>
+                          )}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          {user?.currentPlan === "professional" ? (
+                            <div
+                              onClick={() => {
+                                setSelectedCard(card);
+                                setIsVisibilityDialogOpen(true);
+                              }}
+                            >
+                              {card.isPublic ? (
+                                <>
+                                  <Lock className="mr-2 h-4 w-4" />
+                                  Make private
+                                </>
+                              ) : (
+                                <>
+                                  <Globe className="mr-2 h-4 w-4" />
+                                  Make public
+                                </>
+                              )}
+                            </div>
+                          ) : (
+                            <div
+                              className="cursor-not-allowed opacity-50"
+                              onClick={() =>
+                                toast.error(
+                                  "Upgrade to our professional plan to change this card visibility.",
+                                )
+                              }
+                            >
+                              <Lock className="mr-2 h-4 w-4" />
+                              Upgrade to change visibility
                             </div>
                           )}
                         </DropdownMenuItem>
@@ -311,11 +348,20 @@ export function CardManagement() {
       )}
 
       {selectedCard && (
-        <CustomDomainDialog
-          key={selectedCard._id + "CustomDomainDialog"}
+        <CustomSlugDialog
+          key={selectedCard._id + "CustomSlugDialog"}
           card={selectedCard}
-          open={isDomainDialogOpen}
-          setOpen={(val) => setIsDomainDialogOpen(val)}
+          open={isSlugDialogOpen}
+          setOpen={(val) => setIsSlugDialogOpen(val)}
+        />
+      )}
+
+      {selectedCard && (
+        <ChangeVisibilityDialog
+          key={selectedCard._id + "VisibilityDialog"}
+          card={selectedCard}
+          open={isVisibilityDialogOpen}
+          setOpen={(val) => setIsVisibilityDialogOpen(val)}
         />
       )}
 

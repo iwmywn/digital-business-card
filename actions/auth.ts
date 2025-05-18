@@ -327,7 +327,7 @@ export async function signInPrivate(
     }
 
     return {
-      success: "You have 2 hours for this session. Redirecting...",
+      success: "You have 2 hours for this session.",
       error: undefined,
     };
   } catch (error) {

@@ -135,7 +135,7 @@ export function AccountForm() {
                     <FormControl>
                       <Input
                         id="username"
-                        placeholder="Username"
+                        placeholder="e.g. iwmywn"
                         autoComplete="off"
                         {...field}
                       />

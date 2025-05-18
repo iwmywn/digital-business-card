@@ -42,9 +42,7 @@ export function NavUser() {
       toast.error(error);
     } else {
       toast.success(success);
-      setTimeout(() => {
-        router.push("/signin");
-      }, 1000);
+      router.push("/signin");
     }
   }
 

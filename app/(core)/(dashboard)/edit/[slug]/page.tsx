@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { EditCard } from "@/components/edit-card";
-import { getCardBySlug } from "@/actions/card";
-import NotFound from "@/app/not-found";
+import { getCardToEditBySlug } from "@/actions/card";
+import { NotFoundUI } from "@/components/not-found-ui";
+import { Ghost } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -9,7 +10,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const param = await params;
-  const { card, error } = await getCardBySlug(param.slug);
+  const { card, error } = await getCardToEditBySlug(param.slug);
 
   if (error || !card) {
     return {
@@ -30,10 +31,19 @@ export default async function page({
   params: Promise<{ slug: string }>;
 }) {
   const param = await params;
-  const { card, error } = await getCardBySlug(param.slug);
+  const { card, error } = await getCardToEditBySlug(param.slug);
 
   if (error || !card) {
-    return <NotFound className="min-h-[calc(100vh-4.83rem)]" />;
+    return (
+      <NotFoundUI
+        icon={<Ghost />}
+        title="OOPS! AN ERROR OCCURRED"
+        message={error}
+        linkHref="/home"
+        linkLabel="Go home"
+        className="min-h-[calc(100vh-4.83rem)]"
+      />
+    );
   }
 
   return <EditCard card={card} />;

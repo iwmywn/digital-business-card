@@ -11,7 +11,6 @@ import Image from "next/image";
 import { toast } from "sonner";
 import QRCode from "qrcode";
 import { useCallback, useEffect, useState } from "react";
-import { Copy, Download } from "lucide-react";
 import { Loading } from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { handleCopyLink } from "@/lib/utils";
@@ -101,7 +100,6 @@ export function QRCodeDialog({
               className="sm:flex-1"
               onClick={() => handleCopyLink(card.dynamicSlug)}
             >
-              <Copy className="mr-2 h-4 w-4" />
               Copy link
             </Button>
             <Button
@@ -109,7 +107,6 @@ export function QRCodeDialog({
               onClick={downloadQRCode}
               disabled={!qrCodeUrl}
             >
-              <Download className="mr-2 h-4 w-4" />
               Download QR code
             </Button>
           </DialogFooter>

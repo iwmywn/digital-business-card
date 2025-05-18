@@ -58,9 +58,7 @@ export function PrivateForm() {
       const callbackUrl = searchParams.get("next") || "/signin";
 
       form.reset();
-      setTimeout(() => {
-        router.push(callbackUrl);
-      }, 3000);
+      router.push(callbackUrl);
     }
 
     setRecaptchaToken(null);

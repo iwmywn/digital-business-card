@@ -16,7 +16,7 @@ import { Links } from "@/components/links";
 import { CardPreview } from "@/components/card-preview";
 import { saveCard } from "@/actions/card";
 import type { SerializableLinkType } from "@/components/icons";
-import { useCard } from "@/lib/swr";
+import { useCard, useUser } from "@/lib/swr";
 import { CreateCardSkeleton } from "@/components/skeletons";
 import { Loading } from "@/components/loading";
 import * as constants from "@/constants";
@@ -46,6 +46,7 @@ export function CreateCard() {
   const [links, setLinks] = useState<SerializableLinkType[]>([]);
   const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
   const { cardResponse, cards, isCardLoading, isCardError, mutate } = useCard();
+  const { isUserError, isUserLoading, user } = useUser();
   const [isPublic, setIsPublic] = useState<boolean>(true);
 
   async function handleCreateCard() {
@@ -131,9 +132,12 @@ export function CreateCard() {
       !isCardError.includes("You've reached the maximum number of cards")
     )
       toast.error(isCardError);
-  }, [isCardError]);
+    if (isUserError) {
+      toast.error(isUserError);
+    }
+  }, [isCardError, isUserError]);
 
-  if (isCardLoading) return <CreateCardSkeleton />;
+  if (isCardLoading || isUserLoading) return <CreateCardSkeleton />;
 
   return (
     <div className="space-y-6">
@@ -149,9 +153,11 @@ export function CreateCard() {
           </p>
         </div>
         <div className="flex items-center justify-end gap-2">
-          <Button onClick={() => setIsPublic(!isPublic)}>
-            {isPublic ? "Public" : "Private"}
-          </Button>
+          {user?.currentPlan === "professional" && (
+            <Button onClick={() => setIsPublic(!isPublic)}>
+              {isPublic ? "Public" : "Private"}
+            </Button>
+          )}
           <Button onClick={() => setPreviewMode(!previewMode)}>
             {previewMode ? "Back to editor" : "Preview card"}
           </Button>
