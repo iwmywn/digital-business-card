@@ -39,6 +39,11 @@ import { formatDate } from "@/lib/utils";
 import { CustomSlugDialog } from "@/components/custom-slug-dialog";
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 import { ChangeVisibilityDialog } from "@/components/change-visibility-dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function getImageUrl(
   card: CardType | null,
@@ -205,21 +210,33 @@ export function CardManagement() {
                       <span className="max-w-[calc(100%-4.625rem)] truncate">
                         {card.personalInfo.fullName}
                       </span>
-                      {card.isPublic ? <Globe size={14} /> : <Lock size={14} />}
+                      <span title={card.isPublic ? "Public" : "Private"}>
+                        {card.isPublic ? (
+                          <Globe size={14} />
+                        ) : (
+                          <Lock size={14} />
+                        )}
+                      </span>
                     </CardTitle>
                   </div>
                   <div className="absolute right-0">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-primary hover:bg-primary/5"
-                          title="Card Actions"
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-primary hover:bg-primary/5"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" align="center">
+                          Card Actions
+                        </TooltipContent>
+                      </Tooltip>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Card Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
