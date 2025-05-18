@@ -94,7 +94,7 @@ export function Analytics() {
         currentPeriodStart.setDate(now.getDate() - 30);
         previousPeriodStart.setDate(now.getDate() - 60);
       } else {
-        currentPeriodStart.setDate(filteredCards[0].createdAt.getDate());
+        currentPeriodStart.setTime(filteredCards[0].createdAt.getTime());
 
         const currentPeriodLength =
           now.getTime() - currentPeriodStart.getTime();

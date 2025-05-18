@@ -245,7 +245,7 @@ const subscriptionPlans = [
       `Add up to ${maxProfessionalLinks} links`,
       "Access advanced analytics with detailed insights",
       "Set a custom card link",
-      "Toggle public/private visibility",
+      "Toggle card public/private visibility",
       "Receive priority customer support",
       "Remove all platform branding",
     ],
