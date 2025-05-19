@@ -50,10 +50,11 @@ export function CreateCardSkeleton() {
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-4 w-64" />
         </div>
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
           <Skeleton className="h-9 w-24 rounded-md" />
           <Skeleton className="h-9 w-32 rounded-md" />
           <Skeleton className="h-9 w-28 rounded-md" />
+          <Skeleton className="h-9 w-36 rounded-md" />
         </div>
       </div>
 
@@ -410,7 +411,7 @@ export function PaymentReceiptDialogSkeleton() {
 
 export function SettingsSkeleton() {
   return (
-    <div className="space-y-2">
+    <div className="space-y-6">
       <InformationSkeleton />
       <AccountSkeleton />
       <NotificationPreferencesSkeleton />

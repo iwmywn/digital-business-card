@@ -133,7 +133,7 @@ export function EditCard({ card }: { card: CardType }) {
               : "Update your digital business card design."}
           </p>
         </div>
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
           {user?.currentPlan === "professional" && (
             <Button onClick={() => setIsPublic(!isPublic)}>
               {isPublic ? "Public" : "Private"}

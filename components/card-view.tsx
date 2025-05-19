@@ -87,9 +87,9 @@ export function CardView({
           <div
             className={`ring-primary overflow-hidden rounded-xl shadow-sm ring-1 ring-offset-1 ${fontClass}`}
           >
-            <div className={`relative ${colorClass}`}>
+            <div className={`relative aspect-2/1 ${colorClass}`}>
               {card.cardDesign.coverImage ? (
-                <div className="relative h-48 w-full overflow-hidden">
+                <div className="relative h-full w-full overflow-hidden">
                   <div className="pointer-events-none relative h-full w-full select-none">
                     <Image
                       src={getImageUrl("cover")}
