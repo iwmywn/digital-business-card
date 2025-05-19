@@ -129,6 +129,14 @@ export function CustomSlugDialog({
       });
   }, [debouncedSlug, form, card._id]);
 
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        slug: card.dynamicSlug === card._id ? "" : card.dynamicSlug,
+      });
+    }
+  }, [open, card.dynamicSlug, card._id, form]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
