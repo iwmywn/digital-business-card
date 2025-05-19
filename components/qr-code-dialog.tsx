@@ -10,7 +10,7 @@ import { Card as CardType } from "@/lib/definitions";
 import Image from "next/image";
 import { toast } from "sonner";
 import QRCode from "qrcode";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Loading } from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { handleCopyLink } from "@/lib/utils";
@@ -30,34 +30,54 @@ export function QRCodeDialog({
 }) {
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 
-  const generateQRCode = useCallback(async () => {
-    try {
-      const url = `${process.env.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`;
-      const qrDataUrl = await QRCode.toDataURL(url, {
-        margin: 1,
-        width: 200,
-        color: {
-          dark: "#000000",
-          light: "#ffffff",
-        },
-      });
-      setQrCodeUrl(qrDataUrl);
-    } catch (error) {
-      console.error("Error generating QR code:", error);
-      toast.error("Failed to generate QR code! Please try again later.");
-    }
+  const cardUrl = useMemo(() => {
+    return `${process.env.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`;
   }, [card.dynamicSlug]);
 
-  function downloadQRCode() {
-    if (!qrCodeUrl) return;
+  const qrOptions = useMemo(
+    () => ({
+      margin: 1,
+      color: {
+        dark: "#000000",
+        light: "#ffffff",
+      },
+    }),
+    [],
+  );
 
-    const link = document.createElement("a");
-    link.href = qrCodeUrl;
-    link.download = `${card?.dynamicSlug || "card"}-qrcode.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  const generateQRCode = useCallback(async () => {
+    try {
+      const preview = await QRCode.toDataURL(cardUrl, {
+        ...qrOptions,
+        width: 200,
+      });
+      setQrCodeUrl(preview);
+    } catch (error) {
+      console.error("Error generating QR code for preview:", error);
+      toast.error(
+        "Failed to generate QR code for preview! Please try again later.",
+      );
+    }
+  }, [cardUrl, qrOptions]);
+
+  const downloadQRCode = async () => {
+    try {
+      const download = await QRCode.toDataURL(cardUrl, {
+        ...qrOptions,
+        width: 625,
+      });
+
+      const link = document.createElement("a");
+      link.href = download;
+      link.download = `${card.dynamicSlug}-qrcode.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error generating QR code for download:", error);
+      toast.error("Failed to download QR code! Please try again later.");
+    }
+  };
 
   useEffect(() => {
     if (open) {
@@ -81,8 +101,8 @@ export function QRCodeDialog({
                 <Image
                   src={qrCodeUrl || "/placeholder.svg"}
                   alt="QR Code"
-                  width={192}
-                  height={192}
+                  width={200}
+                  height={200}
                 />
               ) : (
                 <div className="flex h-48 w-48 items-center justify-center">

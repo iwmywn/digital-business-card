@@ -34,7 +34,7 @@ export function CardView({
     const foundLinkType = linkTypes.find((lt) => lt.type === linkType);
     if (foundLinkType) {
       const IconComponent = foundLinkType.icon;
-      return <IconComponent className="h-5 w-5" />;
+      return <IconComponent className="h-6 w-6" />;
     }
     return null;
   };
@@ -79,59 +79,46 @@ export function CardView({
   };
 
   return (
-    <div className="mx-auto w-full max-w-md px-4 py-8">
-      <div
-        className={`ring-primary overflow-hidden rounded-xl shadow-sm ring-1 ring-offset-1 ${fontClass}`}
-      >
-        <div className={`relative ${colorClass}`}>
-          {card.cardDesign.coverImage ? (
-            <div className="relative h-48 w-full overflow-hidden">
-              <div className="relative h-full w-full">
-                <Image
-                  src={getImageUrl("cover")}
-                  alt="Cover"
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
+    <div className="flex min-h-screen items-center justify-center p-8">
+      <div className="mx-auto w-full max-w-md">
+        <div
+          className={`ring-primary overflow-hidden rounded-xl shadow-sm ring-1 ring-offset-1 ${fontClass}`}
+        >
+          <div className={`relative ${colorClass}`}>
+            {card.cardDesign.coverImage ? (
+              <div className="relative h-48 w-full overflow-hidden">
+                <div className="relative h-full w-full">
+                  <Image
+                    src={getImageUrl("cover")}
+                    alt="Cover"
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
               </div>
-
-              {card.cardDesign.logoImage && (
-                <div className="absolute right-4 bottom-4 h-16 w-16 overflow-hidden rounded-lg bg-white p-1 shadow-md">
-                  <div className="relative h-full w-full">
-                    <Image
-                      src={getImageUrl("logo")}
-                      alt="Logo"
-                      fill
-                      style={{ objectFit: "cover" }}
-                    />
+            ) : (
+              <div
+                className={`flex h-32 items-center justify-center p-6 text-white`}
+              >
+                {card.cardDesign.logoImage && (
+                  <div className="h-20 w-20 overflow-hidden rounded-lg shadow-md">
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={getImageUrl("logo")}
+                        alt="Logo"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div
-              className={`flex h-32 items-center justify-center p-6 text-white`}
-            >
-              {card.cardDesign.logoImage && (
-                <div className="h-20 w-20 overflow-hidden rounded-lg bg-white p-1 shadow-md">
-                  <div className="relative h-full w-full">
-                    <Image
-                      src={getImageUrl("logo")}
-                      alt="Logo"
-                      fill
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+                )}
+              </div>
+            )}
+          </div>
 
-        <div className="space-y-4 bg-white p-6">
-          <div className="flex items-start gap-4">
+          <div className="relative space-y-4 bg-white p-6">
             {card.cardDesign.profileImage && (
-              <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
+              <div className="absolute top-[-3.125rem] left-6 h-25 w-25 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
                 <div className="relative h-full w-full">
                   <Image
                     src={getImageUrl("profile")}
@@ -142,128 +129,141 @@ export function CardView({
                 </div>
               </div>
             )}
+
+            {card.cardDesign.logoImage && (
+              <div className="absolute -top-8 right-6 h-16 w-16 overflow-hidden rounded-lg border-2 border-white shadow-md">
+                <div className="relative h-full w-full">
+                  <Image
+                    src={getImageUrl("logo")}
+                    alt="Logo"
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {card.cardDesign.profileImage && <div className="mt-10" />}
+
             <div className="w-full space-y-1">
-              <h2 className="font-bold wrap-anywhere">
-                <span className="text-xl text-nowrap text-black">
-                  {card.personalInfo.fullName}
-                </span>
-                {card.personalInfo.accreditations && (
-                  <span className="ml-2 text-sm text-gray-500">
-                    {card.personalInfo.accreditations}
-                  </span>
-                )}
+              <h2 className="text-[1.75rem] leading-snug font-bold wrap-anywhere text-black">
+                {card.personalInfo.fullName}
               </h2>
-              <p className="font-medium wrap-anywhere">
-                {card.personalInfo.jobTitle && (
-                  <span className="text-gray-700">
-                    {card.personalInfo.jobTitle}
-                  </span>
-                )}
-                {card.personalInfo.department && (
-                  <span className="text-gray-500">
-                    , {card.personalInfo.department}
-                  </span>
-                )}
-              </p>
+              {card.personalInfo.jobTitle && (
+                <p className="text-xl leading-tight font-semibold wrap-anywhere text-gray-800">
+                  {card.personalInfo.jobTitle}
+                </p>
+              )}
+              {card.personalInfo.department && (
+                <p className="text-lg leading-tight font-medium wrap-anywhere text-gray-700">
+                  {card.personalInfo.department}
+                </p>
+              )}
               {card.personalInfo.company && (
-                <p className="text-sm wrap-anywhere text-gray-500">
+                <p className="text-base wrap-anywhere text-gray-500">
                   {card.personalInfo.company}
                 </p>
               )}
+              {card.personalInfo.accreditations && (
+                <p className="text-base wrap-anywhere text-gray-400 italic">
+                  {card.personalInfo.accreditations}
+                </p>
+              )}
+            </div>
+
+            {card.personalInfo.headline && (
+              <>
+                <Separator className="bg-black/15" />
+                <p className="text-base leading-snug wrap-anywhere text-gray-700 italic">
+                  {card.personalInfo.headline}
+                </p>
+              </>
+            )}
+
+            {card.personalInfo.bio && (
+              <>
+                <Separator className="bg-black/15" />
+                <p className="text-base leading-relaxed wrap-anywhere text-gray-600">
+                  {card.personalInfo.bio}
+                </p>
+              </>
+            )}
+
+            {card.links && card.links.length > 0 && (
+              <>
+                <Separator className="bg-black/15" />
+                <div className="space-y-2">
+                  {card.links.map((link: SerializableLinkType) => (
+                    <div
+                      key={link.id}
+                      className={`flex cursor-pointer items-center gap-3 text-base ${isLoading[link.id] && "pointer-events-none"}`}
+                      onClick={() => handleLinkClick(link)}
+                    >
+                      <div
+                        className={`${colorClass} rounded-full p-2 text-white`}
+                      >
+                        {isLoading[link.id] ? (
+                          <Loading className="h-6 w-6 border-white border-t-black/10" />
+                        ) : (
+                          getIconComponent(link.type)
+                        )}
+                      </div>
+                      <div className="w-[calc(100%-2.75rem)] flex-1">
+                        <span className="font-medium text-gray-800">
+                          {link.label || link.type}
+                        </span>
+                        {link.value && (
+                          <p className="truncate text-sm text-gray-600">
+                            {link.value}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          <div
+            className={`${colorClass} flex items-center justify-between p-3`}
+          >
+            <span className={`text-xs text-white opacity-80`}>
+              Digital Business Card
+            </span>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-8 w-8 p-0 text-white hover:bg-white/20"
+                onClick={() => setIsQrDialogOpen(true)}
+              >
+                <QrCode className="h-4 w-4" />
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-8 w-8 p-0 text-white hover:bg-white/20"
+                onClick={() => setIsShareDialogOpen(true)}
+              >
+                <Share2 className="h-4 w-4" />
+              </Button>
             </div>
           </div>
-
-          {card.personalInfo.headline && (
-            <>
-              <Separator className="bg-black/15" />
-              <p className="wrap-anywhere text-gray-700 italic">
-                {card.personalInfo.headline}
-              </p>
-            </>
-          )}
-
-          {card.personalInfo.bio && (
-            <>
-              <Separator className="bg-black/15" />
-              <p className="text-sm wrap-anywhere text-gray-600">
-                {card.personalInfo.bio}
-              </p>
-            </>
-          )}
-
-          {card.links && card.links.length > 0 && (
-            <>
-              <Separator className="bg-black/15" />
-              <div className="space-y-2">
-                {card.links.map((link: SerializableLinkType) => (
-                  <button
-                    key={link.id}
-                    className="flex w-full items-center gap-3 text-sm"
-                    onClick={() => handleLinkClick(link)}
-                    disabled={isLoading[link.id]}
-                  >
-                    <div
-                      className={`${colorClass} rounded-full p-2 text-white`}
-                    >
-                      {isLoading[link.id] ? (
-                        <Loading />
-                      ) : (
-                        getIconComponent(link.type)
-                      )}
-                    </div>
-                    <div className="w-[calc(100%-2.75rem)] flex-1 text-left">
-                      <span className="font-medium text-gray-800">
-                        {link.label || link.type}
-                      </span>
-                      {link.value && (
-                        <p className="max-w-full truncate text-gray-600">
-                          {link.value}
-                        </p>
-                      )}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
         </div>
 
-        <div className={`${colorClass} flex items-center justify-between p-3`}>
-          <span className={`text-xs text-white opacity-80`}>
-            Digital Business Card
-          </span>
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-8 w-8 p-0 text-white hover:bg-white/20"
-              onClick={() => setIsQrDialogOpen(true)}
-            >
-              <QrCode className="h-4 w-4" />
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-8 w-8 p-0 text-white hover:bg-white/20"
-              onClick={() => setIsShareDialogOpen(true)}
-            >
-              <Share2 className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+        <QRCodeDialog
+          card={card}
+          open={isQrDialogOpen}
+          setOpen={(val) => setIsQrDialogOpen(val)}
+        />
+
+        <ShareCardDialog
+          card={card}
+          open={isShareDialogOpen}
+          setOpen={(val) => setIsShareDialogOpen(val)}
+        />
       </div>
-
-      <QRCodeDialog
-        card={card}
-        open={isQrDialogOpen}
-        setOpen={(val) => setIsQrDialogOpen(val)}
-      />
-
-      <ShareCardDialog
-        card={card}
-        open={isShareDialogOpen}
-        setOpen={(val) => setIsShareDialogOpen(val)}
-      />
     </div>
   );
 }

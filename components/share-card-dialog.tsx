@@ -38,7 +38,7 @@ export function ShareCardDialog({
         <DialogHeader>
           <DialogTitle className="text-xl">Share Card</DialogTitle>
           <DialogDescription>
-            Share your digital business card with others.
+            Share this digital business card with others.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col space-y-4 py-4">

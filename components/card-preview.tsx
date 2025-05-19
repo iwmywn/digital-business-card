@@ -44,7 +44,7 @@ export function CardPreview({
     const foundLinkType = linkTypes.find((lt) => lt.type === linkType);
     if (foundLinkType) {
       const IconComponent = foundLinkType.icon;
-      return <IconComponent className="h-4 w-4" />;
+      return <IconComponent className="h-6 w-6" />;
     }
     return null;
   };
@@ -65,19 +65,6 @@ export function CardPreview({
                   style={{ objectFit: "cover" }}
                 />
               </div>
-
-              {cardDesign.logoImage && (
-                <div className="absolute right-4 bottom-4 h-16 w-16 overflow-hidden rounded-lg shadow-md">
-                  <div className="relative h-full w-full">
-                    <Image
-                      src={getImageUrl("logo")}
-                      alt="Logo"
-                      fill
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                </div>
-              )}
             </div>
           ) : (
             <div
@@ -99,53 +86,63 @@ export function CardPreview({
           )}
         </div>
 
-        <div className="space-y-4 bg-white p-6">
-          <div className="flex items-start gap-4">
-            {cardDesign.profileImage && (
-              <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
-                <div className="relative h-full w-full">
-                  <Image
-                    src={getImageUrl("profile")}
-                    alt="Profile"
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
+        <div className="relative space-y-4 bg-white p-6">
+          {cardDesign.profileImage && (
+            <div className="absolute top-[-3.125rem] left-6 h-25 w-25 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
+              <div className="relative h-full w-full">
+                <Image
+                  src={getImageUrl("profile")}
+                  alt="Profile"
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
               </div>
-            )}
-            <div className="w-full space-y-1">
-              <h2 className="font-bold wrap-anywhere">
-                <span className="text-xl text-nowrap text-black">
-                  {personalInfo.fullName || "Full Name"}
-                </span>
-                <span className="ml-2 text-sm text-gray-500">
-                  {personalInfo.accreditations || "Accreditations"}
-                </span>
-              </h2>
-              <p className="font-medium wrap-anywhere">
-                <span className="text-gray-700">
-                  {personalInfo.jobTitle || "Job Title"}
-                </span>
-                <span className="text-gray-500">
-                  , {personalInfo.department || "Department"}
-                </span>
-              </p>
-              <p className="text-sm wrap-anywhere text-gray-500">
-                {personalInfo.company || "Company Name"}
-              </p>
             </div>
+          )}
+
+          {cardDesign.logoImage && (
+            <div className="absolute -top-8 right-6 h-16 w-16 overflow-hidden rounded-lg border-2 border-white shadow-md">
+              <div className="relative h-full w-full">
+                <Image
+                  src={getImageUrl("logo")}
+                  alt="Logo"
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+            </div>
+          )}
+
+          {cardDesign.profileImage && <div className="mt-10" />}
+
+          <div className="w-full space-y-1">
+            <h2 className="text-[1.75rem] leading-snug font-bold wrap-anywhere text-black">
+              {personalInfo.fullName || "Full Name"}
+            </h2>
+            <p className="text-xl leading-tight font-semibold wrap-anywhere text-gray-800">
+              {personalInfo.jobTitle || "Job Title"}
+            </p>
+            <p className="text-lg leading-tight font-medium wrap-anywhere text-gray-700">
+              {personalInfo.department || "Department"}
+            </p>
+            <p className="text-base wrap-anywhere text-gray-500">
+              {personalInfo.company || "Company Name"}
+            </p>
+            <p className="text-base wrap-anywhere text-gray-400 italic">
+              {personalInfo.accreditations || "Accreditations"}
+            </p>
           </div>
 
           <Separator className="bg-black/15" />
 
-          <p className="wrap-anywhere text-gray-700 italic">
+          <p className="text-base leading-snug wrap-anywhere text-gray-700 italic">
             {personalInfo.headline ||
               "A brief headline about who you are – your role, passion, or goal."}
           </p>
 
           <Separator className="bg-black/15" />
 
-          <p className="text-sm wrap-anywhere text-gray-600">
+          <p className="text-base leading-relaxed wrap-anywhere text-gray-600">
             {personalInfo.bio ||
               "Tell a little about yourself: your background, experience, or what makes you unique."}
           </p>
@@ -157,7 +154,7 @@ export function CardPreview({
                 {links.map((link) => (
                   <div
                     key={link.id}
-                    className="flex items-center gap-3 text-sm"
+                    className="flex items-center gap-3 text-base"
                   >
                     <div
                       className={`${colorClass} rounded-full p-2 text-white`}
@@ -169,7 +166,7 @@ export function CardPreview({
                         {link.label || link.type}
                       </span>
                       {link.value && (
-                        <p className="max-w-full truncate text-gray-600">
+                        <p className="truncate text-sm text-gray-600">
                           {link.value}
                         </p>
                       )}
