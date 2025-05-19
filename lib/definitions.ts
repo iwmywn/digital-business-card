@@ -57,7 +57,8 @@ type BaseCard<T> = {
 };
 
 type Profile = {
-  avatar?: Image;
+  profileImage?: Image;
+  coverImage?: Image;
   fullName: string;
   gender?: string;
   dateOfBirth?: Date | null;
@@ -65,7 +66,10 @@ type Profile = {
   company?: string;
   website?: string;
   bio?: string;
-  imageTransform?: ImageTransform;
+  imageTransforms?: {
+    profile?: ImageTransform;
+    cover?: ImageTransform;
+  };
 };
 
 type NotificationSettings = {

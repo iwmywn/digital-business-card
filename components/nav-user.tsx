@@ -31,8 +31,8 @@ export function NavUser() {
   const { user, isUserLoading, isUserError } = useUser();
   const router = useRouter();
   const avatar = getCloudinaryUrl(
-    user?.profile?.avatar,
-    user?.profile?.imageTransform,
+    user?.profile?.profileImage,
+    user?.profile?.imageTransforms?.profile,
   );
 
   async function onSignOut() {

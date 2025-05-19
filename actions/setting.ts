@@ -17,9 +17,13 @@ import { type ImageTransform } from "@/components/image-editor-dialog";
 import { type SettingsFormValues } from "@/components/account-form";
 import { NotificationSettingsFormValues } from "@/components/notification-settings";
 
+type ImageKey = "profileImage" | "coverImage";
 export async function updateProfile(
   values: ProfileFormValues,
-  imageTransform?: ImageTransform,
+  imageTransforms?: {
+    profile?: ImageTransform;
+    cover?: ImageTransform;
+  },
 ) {
   try {
     const { isSignedIn, userId } = await session.user.get();
@@ -34,43 +38,39 @@ export async function updateProfile(
       return { error: "Invalid data provided!" };
     }
 
-    const {
-      avatar,
-      fullName,
-      gender,
-      dateOfBirth,
-      jobTitle,
-      company,
-      website,
-      bio,
-    } = parsedValues.data;
     const updatedProfile = { ...parsedValues.data };
+    const updatedImageTransform = { ...imageTransforms };
 
-    if (avatar) {
-      if (avatar[1].startsWith("data:")) {
-        const { path, error } = await uploadToCloudinary(avatar[1], "avatar");
+    if (updatedImageTransform?.profile) {
+      updatedImageTransform.profile.croppedImageUrl = null;
+    }
+    if (updatedImageTransform?.cover) {
+      updatedImageTransform.cover.croppedImageUrl = null;
+    }
+
+    const imageKeys: ImageKey[] = ["profileImage", "coverImage"];
+
+    for (const key of imageKeys) {
+      const image = updatedProfile[key];
+      const folder = key.replace("Image", "");
+
+      if (!image) continue;
+
+      if (image[1].startsWith("data:")) {
+        const { path, error } = await uploadToCloudinary(image[1], folder);
         if (error || !path) {
           return { error };
         } else {
-          updatedProfile.avatar = [avatar[0], path];
+          updatedProfile[key] = [image[0], path];
         }
-      } else if (avatar[1].startsWith("https://")) {
-        const { path, error } = extractCloudinaryPath(avatar[1]);
+      } else if (image[1].startsWith("https://")) {
+        const { path, error } = extractCloudinaryPath(image[1]);
         if (error || !path) {
           return { error: error };
         } else {
-          updatedProfile.avatar = [avatar[0], path];
+          updatedProfile[key] = [image[0], path];
         }
       }
-    }
-
-    const updatedImageTransform = { ...imageTransform };
-
-    if (
-      updatedImageTransform &&
-      Object.keys(updatedImageTransform).length > 0
-    ) {
-      updatedImageTransform.croppedImageUrl = null;
     }
 
     const existingUser = await getUserById(userId);
@@ -81,17 +81,19 @@ export async function updateProfile(
     const { profile } = existingUser;
 
     const isSame =
-      updatedProfile.avatar?.[0] === profile.avatar?.[0] &&
-      updatedProfile.avatar?.[1] === profile.avatar?.[1] &&
-      fullName === profile.fullName &&
-      gender === profile.gender &&
-      isSameDate(dateOfBirth, profile.dateOfBirth) &&
-      jobTitle === profile.jobTitle &&
-      company === profile.company &&
-      website === profile.website &&
-      bio === profile.bio &&
+      updatedProfile.profileImage?.[0] === profile.profileImage?.[0] &&
+      updatedProfile.profileImage?.[1] === profile.profileImage?.[1] &&
+      updatedProfile.coverImage?.[0] === profile.coverImage?.[0] &&
+      updatedProfile.coverImage?.[1] === profile.coverImage?.[1] &&
+      updatedProfile.fullName === profile.fullName &&
+      updatedProfile.gender === profile.gender &&
+      isSameDate(updatedProfile.dateOfBirth, profile.dateOfBirth) &&
+      updatedProfile.jobTitle === profile.jobTitle &&
+      updatedProfile.company === profile.company &&
+      updatedProfile.website === profile.website &&
+      updatedProfile.bio === profile.bio &&
       JSON.stringify(updatedImageTransform) ===
-        JSON.stringify(profile.imageTransform);
+        JSON.stringify(profile.imageTransforms);
 
     if (isSame) {
       return { success: "No changes were made." };
@@ -105,7 +107,7 @@ export async function updateProfile(
         $set: {
           profile: {
             ...updatedProfile,
-            imageTransform: updatedImageTransform as ImageTransform | undefined,
+            imageTransforms: updatedImageTransform,
           },
           updatedAt: new Date(),
         },

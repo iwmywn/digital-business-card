@@ -58,11 +58,18 @@ export function InformationForm() {
   const [tempImage, setTempImage] = useState<string | null>(null);
   const { user, userResponse, mutate } = useUser();
   const [profileImage, setProfileImage] = useState<ImageType | undefined>(
-    user?.profile?.avatar,
+    user?.profile?.profileImage,
   );
-  const [imageTransform, setImageTransform] = useState<
-    ImageTransform | undefined
-  >(user?.profile?.imageTransform);
+  const [coverImage, setCoverImage] = useState<ImageType | undefined>(
+    user?.profile?.coverImage,
+  );
+  const [imageTransforms, setImageTransforms] = useState<{
+    profile?: ImageTransform;
+    cover?: ImageTransform;
+  }>(user?.profile?.imageTransforms || {});
+  const [currentImageType, setCurrentImageType] = useState<
+    "profile" | "cover" | undefined
+  >(undefined);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(publicProfileSchema),
@@ -81,9 +88,10 @@ export function InformationForm() {
     const { success, error } = await updateProfile(
       {
         ...values,
-        avatar: profileImage,
+        profileImage,
+        coverImage,
       },
-      imageTransform,
+      imageTransforms,
     );
 
     if (error || !success) {
@@ -95,23 +103,31 @@ export function InformationForm() {
           ...userResponse,
           user: {
             ...userResponse?.user,
-            profile: { ...values, avatar: profileImage, imageTransform },
+            profile: { ...values, profileImage, coverImage, imageTransforms },
           },
         });
       }
     }
   }
 
-  const handleImageClick = () => {
-    if (profileImage) {
-      setTempImage(profileImage[1]);
+  const handleImageClick = (type: "profile" | "cover") => {
+    let currentImage;
+    if (type === "profile") currentImage = profileImage;
+    if (type === "cover") currentImage = coverImage;
+
+    if (currentImage) {
+      setCurrentImageType(type);
+      setTempImage(currentImage[1]);
       setImageEditorOpen(true);
     } else {
-      document.getElementById("avatar")?.click();
+      document.getElementById(`${type}-image`)?.click();
     }
   };
 
-  async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleImageUpload(
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: "profile" | "cover",
+  ) {
     const fileInput = event.target;
     const file = fileInput.files?.[0];
     if (!file) return;
@@ -132,52 +148,71 @@ export function InformationForm() {
     reader.onload = (e) => {
       const result = e.target?.result as string;
 
+      setCurrentImageType(type);
       setTempImage(result);
       setImageEditorOpen(true);
 
       fileInput.value = "";
     };
     reader.onerror = () => {
-      toast.error("Failed to upload profile image!");
+      toast.error(`Failed to upload ${type} image!`);
       fileInput.value = "";
     };
     reader.readAsDataURL(file);
   }
 
-  const handleSaveImage = (transform: ImageTransform) => {
-    if (!tempImage) return;
+  const handleSaveImage = (transform: ImageTransform, type?: string) => {
+    if (!tempImage || !type) return;
 
     const { cloudinaryName } = checkEnv({
       cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
     });
 
-    setProfileImage([cloudinaryName, tempImage]);
-    setImageTransform(transform);
+    if (type === "profile") setProfileImage([cloudinaryName, tempImage]);
+    if (type === "cover") setCoverImage([cloudinaryName, tempImage]);
 
-    toast.success("Avatar image updated.");
+    setImageTransforms((prev) => ({
+      ...prev,
+      [type]: transform,
+    }));
+
+    toast.success(
+      `${type.charAt(0).toUpperCase() + type.slice(1)} image updated.`,
+    );
     setImageEditorOpen(false);
   };
 
-  const handleDeleteImage = () => {
-    setProfileImage(undefined);
+  const handleDeleteImage = (type?: string) => {
+    if (!type) return;
 
-    setImageTransform(undefined);
+    if (type === "profile") setProfileImage(undefined);
+    if (type === "cover") setCoverImage(undefined);
 
-    toast.success("Avatar image removed.");
+    const newTransforms = { ...imageTransforms };
+    delete newTransforms[type as keyof typeof newTransforms];
+    setImageTransforms(newTransforms);
+
+    toast.success(
+      `${type.charAt(0).toUpperCase() + type.slice(1)} image removed.`,
+    );
     setImageEditorOpen(false);
   };
 
-  const getImageUrl = () => {
-    if (imageTransform?.croppedImageUrl) {
-      return imageTransform?.croppedImageUrl || "/placeholder.svg";
-    }
+  const getImageUrl = (type: "profile" | "cover") => {
+    const transform = imageTransforms[type];
 
-    return getCloudinaryUrl(profileImage, imageTransform);
+    let imageUrl;
+
+    if (type === "profile") imageUrl = profileImage;
+    if (type === "cover") imageUrl = coverImage;
+
+    return getCloudinaryUrl(imageUrl, transform);
   };
 
   useEffect(() => {
-    setProfileImage(user?.profile?.avatar);
-    setImageTransform(user?.profile?.imageTransform);
+    setProfileImage(user?.profile?.profileImage);
+    setCoverImage(user?.profile?.coverImage);
+    setImageTransforms(user?.profile?.imageTransforms ?? {});
   }, [user]);
 
   return (
@@ -188,40 +223,79 @@ export function InformationForm() {
           <CardDescription>Update your profile information.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-            <div className="flex w-20 flex-col items-center gap-2">
-              <div
-                className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
-                onClick={() => handleImageClick()}
-              >
-                {profileImage ? (
-                  <div className="relative h-full w-full">
-                    <Image
-                      src={getImageUrl()}
-                      alt="Profile picture"
-                      fill
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                ) : (
-                  <div className="flex h-full w-full flex-col items-center justify-center">
-                    <ImageIcon className="h-8 w-8 text-gray-400" />
-                    <span className="mt-1 text-center text-xs text-gray-500">
-                      Click to upload
-                    </span>
-                  </div>
-                )}
+          <div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:items-start">
+            <div className="flex flex-col items-center space-y-6">
+              <div className="flex w-40 flex-col items-center gap-2">
+                <p className="text-sm">Profile Picture</p>
+                <div
+                  className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
+                  onClick={() => handleImageClick("profile")}
+                >
+                  {profileImage ? (
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={getImageUrl("profile")}
+                        alt="Profile picture"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex h-full w-full flex-col items-center justify-center">
+                      <ImageIcon className="h-8 w-8 text-gray-400" />
+                      <span className="mt-1 text-center text-xs text-gray-500">
+                        Click to upload
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <input
+                  id="profile-image"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handleImageUpload(e, "profile")}
+                />
+                <p className="text-muted-foreground text-center text-xs">
+                  {profileImage ? "Click to edit" : "Square, 400x400px"}
+                </p>
               </div>
-              <input
-                id="avatar"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageUpload}
-              />
-              <p className="text-muted-foreground text-center text-xs">
-                {profileImage ? "Click to edit" : "Square, 400x400px"}
-              </p>
+
+              <div className="flex w-40 flex-col items-center gap-2">
+                <p className="text-sm">Cover Photo</p>
+                <div
+                  className="relative flex h-20 w-40 cursor-pointer items-center justify-center overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
+                  onClick={() => handleImageClick("cover")}
+                >
+                  {coverImage ? (
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={getImageUrl("cover")}
+                        alt="Cover photo"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex h-full w-full flex-col items-center justify-center">
+                      <ImageIcon className="h-8 w-8 text-gray-400" />
+                      <span className="mt-1 text-center text-xs text-gray-500">
+                        Click to upload
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <input
+                  id="cover-image"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handleImageUpload(e, "cover")}
+                />
+                <p className="text-muted-foreground text-center text-xs">
+                  {profileImage ? "Click to edit" : "800x400px, 2:1 ratio"}
+                </p>
+              </div>
             </div>
 
             <Form {...form}>
@@ -439,9 +513,11 @@ export function InformationForm() {
       <ImageEditorDialog
         open={imageEditorOpen}
         onOpenChange={setImageEditorOpen}
-        imageType="profile"
+        imageType={currentImageType}
         imageUrl={tempImage}
-        initialTransform={imageTransform}
+        initialTransform={
+          currentImageType ? imageTransforms[currentImageType] : undefined
+        }
         onSave={handleSaveImage}
         onDelete={handleDeleteImage}
       />

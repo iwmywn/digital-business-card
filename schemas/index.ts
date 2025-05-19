@@ -71,7 +71,8 @@ const publicProfileSchema = z
     fullName: z
       .string()
       .min(2, { message: "Full name must be at least 2 characters long." }),
-    avatar: z.tuple([z.string(), z.string()]).optional(),
+    profileImage: z.tuple([z.string(), z.string()]).optional(),
+    coverImage: z.tuple([z.string(), z.string()]).optional(),
     gender: z.string().optional(),
     dateOfBirth: z.date().nullable().optional(),
     jobTitle: z.string().optional(),
