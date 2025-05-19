@@ -19,6 +19,7 @@ import { useCard, useUser } from "@/lib/swr";
 import { Loading } from "@/components/loading";
 import { personalInfoSchema } from "@/schemas";
 import { CreateCardSkeleton } from "@/components/skeletons";
+import Link from "next/link";
 
 export function EditCard({ card }: { card: CardType }) {
   const router = useRouter();
@@ -143,6 +144,9 @@ export function EditCard({ card }: { card: CardType }) {
           </Button>
           <Button onClick={handleUpdateCard} disabled={isSubmitting}>
             {isSubmitting ? <Loading /> : "Save changes"}
+          </Button>
+          <Button asChild>
+            <Link href="/management">Discard changes</Link>
           </Button>
         </div>
       </div>

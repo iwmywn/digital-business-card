@@ -157,11 +157,11 @@ export function CardPreview({
                     className="flex items-center gap-3 text-base"
                   >
                     <div
-                      className={`${colorClass} rounded-full p-2 text-white`}
+                      className={`${colorClass} flex items-center justify-center rounded-full p-2 text-white`}
                     >
                       {getIconComponent(link.type)}
                     </div>
-                    <div className="w-[calc(100%-2.75rem)] flex-1">
+                    <div className="w-[calc(100%-3.25rem)] flex-1">
                       <span className="font-medium text-gray-800">
                         {link.label || link.type}
                       </span>

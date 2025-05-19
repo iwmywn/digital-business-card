@@ -53,8 +53,6 @@ export function CardView({
           url = `mailto:${url}`;
         } else if (link.type === "Phone") {
           url = `tel:${url}`;
-        } else if (link.type === "WhatsApp") {
-          url = `https://wa.me/${url.replace(/\D/g, "")}`;
         } else if (link.type === "Address") {
           url = `https://maps.google.com/?q=${encodeURIComponent(url)}`;
         }
@@ -79,191 +77,197 @@ export function CardView({
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-8">
-      <div className="mx-auto w-full max-w-md">
-        <div
-          className={`ring-primary overflow-hidden rounded-xl shadow-sm ring-1 ring-offset-1 ${fontClass}`}
-        >
-          <div className={`relative ${colorClass}`}>
-            {card.cardDesign.coverImage ? (
-              <div className="relative h-48 w-full overflow-hidden">
-                <div className="relative h-full w-full">
-                  <Image
-                    src={getImageUrl("cover")}
-                    alt="Cover"
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div
-                className={`flex h-32 items-center justify-center p-6 text-white`}
-              >
-                {card.cardDesign.logoImage && (
-                  <div className="h-20 w-20 overflow-hidden rounded-lg shadow-md">
-                    <div className="relative h-full w-full">
-                      <Image
-                        src={getImageUrl("logo")}
-                        alt="Logo"
-                        fill
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
+    <>
+      <div
+        className={`${colorClass} pointer-events-none fixed inset-0 z-[-9999]`}
+      />
+      <div className="pointer-events-none fixed inset-0 z-[-8888] bg-white/20" />
+      <div className="flex min-h-screen items-center justify-center p-8">
+        <div className="mx-auto w-full max-w-md">
+          <div
+            className={`ring-primary overflow-hidden rounded-xl shadow-sm ring-1 ring-offset-1 ${fontClass}`}
+          >
+            <div className={`relative ${colorClass}`}>
+              {card.cardDesign.coverImage ? (
+                <div className="relative h-48 w-full overflow-hidden">
+                  <div className="pointer-events-none relative h-full w-full select-none">
+                    <Image
+                      src={getImageUrl("cover")}
+                      alt="Cover"
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
                   </div>
+                </div>
+              ) : (
+                <div
+                  className={`flex h-32 items-center justify-center p-6 text-white`}
+                >
+                  {card.cardDesign.logoImage && (
+                    <div className="h-20 w-20 overflow-hidden rounded-lg shadow-md">
+                      <div className="pointer-events-none relative h-full w-full select-none">
+                        <Image
+                          src={getImageUrl("logo")}
+                          alt="Logo"
+                          fill
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="relative space-y-4 bg-white p-6">
+              {card.cardDesign.profileImage && (
+                <div className="absolute top-[-3.125rem] left-6 h-25 w-25 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
+                  <div className="pointer-events-none relative h-full w-full select-none">
+                    <Image
+                      src={getImageUrl("profile")}
+                      alt="Profile"
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {card.cardDesign.logoImage && (
+                <div className="absolute -top-8 right-6 h-16 w-16 overflow-hidden rounded-lg border-2 border-white shadow-md">
+                  <div className="pointer-events-none relative h-full w-full select-none">
+                    <Image
+                      src={getImageUrl("logo")}
+                      alt="Logo"
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {card.cardDesign.profileImage && <div className="mt-10" />}
+
+              <div className="w-full space-y-1">
+                <h2 className="text-[1.75rem] leading-snug font-bold wrap-anywhere text-black">
+                  {card.personalInfo.fullName}
+                </h2>
+                {card.personalInfo.jobTitle && (
+                  <p className="text-xl leading-tight font-semibold wrap-anywhere text-gray-800">
+                    {card.personalInfo.jobTitle}
+                  </p>
+                )}
+                {card.personalInfo.department && (
+                  <p className="text-lg leading-tight font-medium wrap-anywhere text-gray-700">
+                    {card.personalInfo.department}
+                  </p>
+                )}
+                {card.personalInfo.company && (
+                  <p className="text-base wrap-anywhere text-gray-500">
+                    {card.personalInfo.company}
+                  </p>
+                )}
+                {card.personalInfo.accreditations && (
+                  <p className="text-base wrap-anywhere text-gray-400 italic">
+                    {card.personalInfo.accreditations}
+                  </p>
                 )}
               </div>
-            )}
-          </div>
 
-          <div className="relative space-y-4 bg-white p-6">
-            {card.cardDesign.profileImage && (
-              <div className="absolute top-[-3.125rem] left-6 h-25 w-25 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
-                <div className="relative h-full w-full">
-                  <Image
-                    src={getImageUrl("profile")}
-                    alt="Profile"
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-            )}
-
-            {card.cardDesign.logoImage && (
-              <div className="absolute -top-8 right-6 h-16 w-16 overflow-hidden rounded-lg border-2 border-white shadow-md">
-                <div className="relative h-full w-full">
-                  <Image
-                    src={getImageUrl("logo")}
-                    alt="Logo"
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-            )}
-
-            {card.cardDesign.profileImage && <div className="mt-10" />}
-
-            <div className="w-full space-y-1">
-              <h2 className="text-[1.75rem] leading-snug font-bold wrap-anywhere text-black">
-                {card.personalInfo.fullName}
-              </h2>
-              {card.personalInfo.jobTitle && (
-                <p className="text-xl leading-tight font-semibold wrap-anywhere text-gray-800">
-                  {card.personalInfo.jobTitle}
-                </p>
+              {card.personalInfo.headline && (
+                <>
+                  <Separator className="bg-black/15" />
+                  <p className="text-base leading-snug wrap-anywhere text-gray-700 italic">
+                    {card.personalInfo.headline}
+                  </p>
+                </>
               )}
-              {card.personalInfo.department && (
-                <p className="text-lg leading-tight font-medium wrap-anywhere text-gray-700">
-                  {card.personalInfo.department}
-                </p>
-              )}
-              {card.personalInfo.company && (
-                <p className="text-base wrap-anywhere text-gray-500">
-                  {card.personalInfo.company}
-                </p>
-              )}
-              {card.personalInfo.accreditations && (
-                <p className="text-base wrap-anywhere text-gray-400 italic">
-                  {card.personalInfo.accreditations}
-                </p>
-              )}
-            </div>
 
-            {card.personalInfo.headline && (
-              <>
-                <Separator className="bg-black/15" />
-                <p className="text-base leading-snug wrap-anywhere text-gray-700 italic">
-                  {card.personalInfo.headline}
-                </p>
-              </>
-            )}
+              {card.personalInfo.bio && (
+                <>
+                  <Separator className="bg-black/15" />
+                  <p className="text-base leading-relaxed wrap-anywhere text-gray-600">
+                    {card.personalInfo.bio}
+                  </p>
+                </>
+              )}
 
-            {card.personalInfo.bio && (
-              <>
-                <Separator className="bg-black/15" />
-                <p className="text-base leading-relaxed wrap-anywhere text-gray-600">
-                  {card.personalInfo.bio}
-                </p>
-              </>
-            )}
-
-            {card.links && card.links.length > 0 && (
-              <>
-                <Separator className="bg-black/15" />
-                <div className="space-y-2">
-                  {card.links.map((link: SerializableLinkType) => (
-                    <div
-                      key={link.id}
-                      className={`flex cursor-pointer items-center gap-3 text-base ${isLoading[link.id] && "pointer-events-none"}`}
-                      onClick={() => handleLinkClick(link)}
-                    >
+              {card.links && card.links.length > 0 && (
+                <>
+                  <Separator className="bg-black/15" />
+                  <div className="space-y-2">
+                    {card.links.map((link: SerializableLinkType) => (
                       <div
-                        className={`${colorClass} rounded-full p-2 text-white`}
+                        key={link.id}
+                        className={`flex cursor-pointer items-center gap-3 text-base ${isLoading[link.id] ? "pointer-events-none" : ""}`}
+                        onClick={() => handleLinkClick(link)}
                       >
-                        {isLoading[link.id] ? (
-                          <Loading className="h-6 w-6 border-white border-t-black/10" />
-                        ) : (
-                          getIconComponent(link.type)
-                        )}
+                        <div
+                          className={`${colorClass} flex items-center justify-center rounded-full p-2 text-white`}
+                        >
+                          {isLoading[link.id] ? (
+                            <Loading className="h-6 w-6 border-white border-t-black/10" />
+                          ) : (
+                            getIconComponent(link.type)
+                          )}
+                        </div>
+                        <div className="w-[calc(100%-3.25rem)] flex-1">
+                          <span className="font-medium text-gray-800">
+                            {link.label || link.type}
+                          </span>
+                          {link.value && (
+                            <p className="truncate text-sm text-gray-600">
+                              {link.value}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div className="w-[calc(100%-2.75rem)] flex-1">
-                        <span className="font-medium text-gray-800">
-                          {link.label || link.type}
-                        </span>
-                        {link.value && (
-                          <p className="truncate text-sm text-gray-600">
-                            {link.value}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
 
-          <div
-            className={`${colorClass} flex items-center justify-between p-3`}
-          >
-            <span className={`text-xs text-white opacity-80`}>
-              Digital Business Card
-            </span>
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-8 w-8 p-0 text-white hover:bg-white/20"
-                onClick={() => setIsQrDialogOpen(true)}
-              >
-                <QrCode className="h-4 w-4" />
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-8 w-8 p-0 text-white hover:bg-white/20"
-                onClick={() => setIsShareDialogOpen(true)}
-              >
-                <Share2 className="h-4 w-4" />
-              </Button>
+            <div
+              className={`${colorClass} flex items-center justify-between p-3`}
+            >
+              <span className={`text-xs text-white opacity-80`}>
+                Digital Business Card
+              </span>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0 text-white hover:bg-white/20"
+                  onClick={() => setIsQrDialogOpen(true)}
+                >
+                  <QrCode className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0 text-white hover:bg-white/20"
+                  onClick={() => setIsShareDialogOpen(true)}
+                >
+                  <Share2 className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
+
+          <QRCodeDialog
+            card={card}
+            open={isQrDialogOpen}
+            setOpen={(val) => setIsQrDialogOpen(val)}
+          />
+
+          <ShareCardDialog
+            card={card}
+            open={isShareDialogOpen}
+            setOpen={(val) => setIsShareDialogOpen(val)}
+          />
         </div>
-
-        <QRCodeDialog
-          card={card}
-          open={isQrDialogOpen}
-          setOpen={(val) => setIsQrDialogOpen(val)}
-        />
-
-        <ShareCardDialog
-          card={card}
-          open={isShareDialogOpen}
-          setOpen={(val) => setIsShareDialogOpen(val)}
-        />
       </div>
-    </div>
+    </>
   );
 }
