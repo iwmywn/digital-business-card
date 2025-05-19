@@ -70,7 +70,8 @@ export async function signUp(
       resendVerification: 1,
       stripeCustomerId: customer.customerId,
       profile: {
-        avatar: ["duobwq5xg", avatar],
+        profileImage: ["duobwq5xg", avatar],
+        coverImage: undefined,
         fullName,
         gender: undefined,
         dateOfBirth: undefined,
@@ -78,7 +79,7 @@ export async function signUp(
         company: undefined,
         website: undefined,
         bio: undefined,
-        imageTransform: undefined,
+        imageTransforms: undefined,
       },
       notificationSettings: {
         email: true,
