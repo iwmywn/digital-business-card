@@ -1,7 +1,7 @@
 "use server";
 
 import { ObjectId } from "mongodb";
-import { getCardCollection } from "@/lib/collections";
+import { getCardCollection, getUserCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
 import type { CardDesignValues } from "@/components/card-design";
@@ -252,6 +252,50 @@ export async function getCardToViewBySlug(slug: string) {
   } catch (error) {
     console.error("Error getting card slug:", error);
     return { error: "Failed to get card slug! Please try again later." };
+  }
+}
+
+export async function getCardByUserId(userId: string) {
+  try {
+    const existingUser = await (
+      await getUserCollection()
+    ).findOne({
+      _id: new ObjectId(userId),
+    });
+
+    if (!existingUser) return { error: "User not found!" };
+
+    const allCards = await (await getCardCollection())
+      .find({ userId })
+      .sort({ createdAt: 1 })
+      .toArray();
+
+    const { currentPlan } = existingUser;
+    const now = new Date();
+    const validProfessionalPlan = existingUser.purchasedPlans?.find(
+      (plan) =>
+        currentPlan === plan.planId &&
+        plan.planId === "professional" &&
+        new Date(plan.expiresAt) > now,
+    );
+
+    const filteredCards = validProfessionalPlan
+      ? allCards.filter((card) => card.isPublic)
+      : allCards;
+
+    const slugs = filteredCards.map((card) => {
+      let { slug: dynamicSlug } = card;
+      dynamicSlug =
+        dynamicSlug && validProfessionalPlan
+          ? dynamicSlug
+          : card._id.toString();
+      return dynamicSlug;
+    });
+
+    return slugs;
+  } catch (error) {
+    console.error("Error getting card:", error);
+    return { error: "Failed to get card! Please try again later." };
   }
 }
 

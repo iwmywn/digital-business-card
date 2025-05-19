@@ -162,7 +162,7 @@ export function CardManagement() {
                     </div>
 
                     {card.cardDesign.logoImage && (
-                      <div className="absolute right-4 bottom-4 h-12 w-12 overflow-hidden rounded-lg shadow-md">
+                      <div className="ring-primary absolute right-4 bottom-4 h-12 w-12 overflow-hidden rounded-lg shadow-md ring-1 ring-offset-1">
                         <div className="relative h-full w-full">
                           <Image
                             src={getImageUrl(card, "logo")}

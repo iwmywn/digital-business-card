@@ -66,7 +66,7 @@ export function CardPreview({
             </div>
           ) : (
             <div
-              className={`flex h-32 items-center justify-center p-6 text-white`}
+              className={`flex h-full items-center justify-center p-6 text-white`}
             >
               {cardDesign.logoImage && (
                 <div className="h-20 w-20 overflow-hidden rounded-lg shadow-md">
@@ -98,7 +98,7 @@ export function CardPreview({
             </div>
           )}
 
-          {cardDesign.logoImage && (
+          {cardDesign.logoImage && cardDesign.coverImage && (
             <div className="absolute -top-8 right-6 h-16 w-16 overflow-hidden rounded-lg border-2 border-white shadow-md">
               <div className="relative h-full w-full">
                 <Image

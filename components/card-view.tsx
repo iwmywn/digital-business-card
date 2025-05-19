@@ -99,7 +99,7 @@ export function CardView({
                 </div>
               ) : (
                 <div
-                  className={`flex h-32 items-center justify-center p-6 text-white`}
+                  className={`flex h-full items-center justify-center p-6 text-white`}
                 >
                   {card.cardDesign.logoImage && (
                     <div className="h-20 w-20 overflow-hidden rounded-lg shadow-md">
@@ -131,7 +131,7 @@ export function CardView({
                 </div>
               )}
 
-              {card.cardDesign.logoImage && (
+              {card.cardDesign.logoImage && card.cardDesign.coverImage && (
                 <div className="absolute -top-8 right-6 h-16 w-16 overflow-hidden rounded-lg border-2 border-white shadow-md">
                   <div className="pointer-events-none relative h-full w-full select-none">
                     <Image
