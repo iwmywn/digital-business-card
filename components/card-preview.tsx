@@ -51,9 +51,7 @@ export function CardPreview({
 
   return (
     <div className="mx-auto w-full max-w-md">
-      <div
-        className={`ring-primary overflow-hidden rounded-xl shadow-sm ring-1 ring-offset-1 ${fontClass}`}
-      >
+      <div className={`overflow-hidden rounded-xl shadow-sm ${fontClass}`}>
         <div className={`relative aspect-2/1 ${colorClass}`}>
           {cardDesign.coverImage ? (
             <div className="relative h-full w-full overflow-hidden">

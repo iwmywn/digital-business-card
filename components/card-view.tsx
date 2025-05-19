@@ -84,9 +84,7 @@ export function CardView({
       <div className="pointer-events-none fixed inset-0 z-[-8888] bg-white/20" />
       <div className="flex min-h-screen items-center justify-center p-8">
         <div className="mx-auto w-full max-w-md">
-          <div
-            className={`ring-primary overflow-hidden rounded-xl shadow-sm ring-1 ring-offset-1 ${fontClass}`}
-          >
+          <div className={`overflow-hidden rounded-xl shadow-sm ${fontClass}`}>
             <div className={`relative aspect-2/1 ${colorClass}`}>
               {card.cardDesign.coverImage ? (
                 <div className="relative h-full w-full overflow-hidden">
