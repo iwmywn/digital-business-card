@@ -73,7 +73,7 @@ export function UserProfileDisplay({
 
         <CardHeader className="relative pt-0 pb-0">
           <div className="-mt-16 flex flex-col items-center md:-mt-20">
-            <div className="border-background overflow-hidden rounded-full border-4 shadow-sm md:h-40 md:w-40">
+            <div className="border-background h-32 w-32 overflow-hidden rounded-full border-4 shadow-sm md:h-40 md:w-40">
               <div className="pointer-events-none relative h-full w-full select-none">
                 <Image
                   src={getCloudinaryUrl(
@@ -98,7 +98,7 @@ export function UserProfileDisplay({
               <TooltipProvider delayDuration={0}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="text-muted-foreground mt-2 flex items-center justify-center gap-1.5 text-sm">
+                    <div className="text-muted-foreground mt-2 flex items-center justify-center gap-1.5 text-sm sm:text-base">
                       <CalendarDays size={14} />
                       <span>{joinedFormatted}</span>
                     </div>
@@ -115,14 +115,16 @@ export function UserProfileDisplay({
         <CardContent className="space-y-6">
           {profile.bio && (
             <div>
-              <h2 className="mb-2 text-lg font-semibold">About</h2>
-              <p className="text-muted-foreground">{profile.bio}</p>
+              <h2 className="mb-2 text-base font-semibold sm:text-lg">About</h2>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                {profile.bio}
+              </p>
             </div>
           )}
 
           {Array.isArray(dynamicSlugs) && dynamicSlugs.length > 0 && (
             <div className="mb-6">
-              <h2 className="mb-2 text-lg font-semibold">
+              <h2 className="mb-2 text-base font-semibold sm:text-lg">
                 My Digital Business Cards
               </h2>
               <ul className="text-muted-foreground list-inside list-disc space-y-1">
@@ -132,7 +134,7 @@ export function UserProfileDisplay({
                       href={`${process.env.NEXT_PUBLIC_URL}/card/${slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-base"
+                      className="text-sm sm:text-base"
                     >
                       {`${process.env.NEXT_PUBLIC_URL}/card/${slug}`}
                     </FormLink>
@@ -153,12 +155,12 @@ export function UserProfileDisplay({
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {profile.jobTitle && (
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
-                  <Briefcase className="text-primary h-5 w-5" />
+                <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
+                  <Briefcase className="text-primary h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
-                <div>
+                <div className="text-sm sm:text-base">
                   <p className="font-medium">Profession</p>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground">
                     {profile.jobTitle || "Not specified"}
                   </p>
                 </div>
@@ -167,24 +169,22 @@ export function UserProfileDisplay({
 
             {profile.company && (
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
-                  <Building className="text-primary h-5 w-5" />
+                <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
+                  <Building className="text-primary h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
-                <div>
+                <div className="text-sm sm:text-base">
                   <p className="font-medium">Company</p>
-                  <p className="text-muted-foreground text-sm">
-                    {profile.company}
-                  </p>
+                  <p className="text-muted-foreground">{profile.company}</p>
                 </div>
               </div>
             )}
 
             {profile.website && (
               <div className="flex items-center gap-3 md:col-span-2">
-                <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
-                  <Globe className="text-primary h-5 w-5" />
+                <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
+                  <Globe className="text-primary h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
-                <div>
+                <div className="text-sm sm:text-base">
                   <p className="font-medium">Website</p>
                   <FormLink
                     href={
@@ -194,7 +194,7 @@ export function UserProfileDisplay({
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground text-sm"
+                    className="text-muted-foreground"
                   >
                     {profile.website}
                   </FormLink>
@@ -204,12 +204,12 @@ export function UserProfileDisplay({
 
             {profile.dateOfBirth && (
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
-                  <CalendarDays className="text-primary h-5 w-5" />
+                <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
+                  <CalendarDays className="text-primary h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
-                <div>
+                <div className="text-sm sm:text-base">
                   <p className="font-medium">Birthday</p>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground">
                     {formatDate(profile.dateOfBirth)}
                   </p>
                 </div>

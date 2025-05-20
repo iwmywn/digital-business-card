@@ -3,6 +3,7 @@ import { UserProfileDisplay } from "@/components/user-profile-display";
 import NotFound from "@/app/not-found";
 import type { Metadata } from "next";
 import { getCardByUserId } from "@/actions/card";
+import { getCloudinaryUrl } from "@/lib/utils";
 
 export async function generateMetadata({
   params,
@@ -21,7 +22,17 @@ export async function generateMetadata({
 
   return {
     title: user.profile.fullName,
-    description: `Explore ${user.profile.fullName}'s profile and contact information.`,
+    description:
+      user.profile.bio ||
+      `Explore ${user.profile.fullName}'s profile and contact information.`,
+    openGraph: {
+      images: [
+        getCloudinaryUrl(
+          user.profile.profileImage,
+          user.profile.imageTransforms?.profile,
+        ),
+      ],
+    },
   };
 }
 
