@@ -94,6 +94,7 @@ export const CardDesign = forwardRef(function CardDesign(
     "logo" | "profile" | "cover" | undefined
   >(undefined);
   const [tempImage, setTempImage] = useState<string | null>(null);
+  const [cloudinaryName, setCloudinaryName] = useState<string | null>(null);
   const form = useForm<BrandNameValue>({
     resolver: zodResolver(brandNameSchema),
     mode: "onChange",
@@ -153,6 +154,7 @@ export const CardDesign = forwardRef(function CardDesign(
     if (currentImage) {
       setCurrentImageType(type);
       setTempImage(currentImage[1]);
+      setCloudinaryName(currentImage[0]);
       setImageEditorOpen(true);
     } else {
       document.getElementById(`${type}-image`)?.click();
@@ -199,13 +201,16 @@ export const CardDesign = forwardRef(function CardDesign(
   const handleSaveImage = (transform: ImageTransform, type?: string) => {
     if (!tempImage || !type) return;
 
-    const { cloudinaryName } = checkEnv({
+    const { cloudinaryName: cloudinaryNameEnv } = checkEnv({
       cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
     });
 
-    if (type === "logo") setLogoImage([cloudinaryName, tempImage]);
-    if (type === "profile") setProfileImage([cloudinaryName, tempImage]);
-    if (type === "cover") setCoverImage([cloudinaryName, tempImage]);
+    if (type === "logo")
+      setLogoImage([cloudinaryName ?? cloudinaryNameEnv, tempImage]);
+    if (type === "profile")
+      setProfileImage([cloudinaryName ?? cloudinaryNameEnv, tempImage]);
+    if (type === "cover")
+      setCoverImage([cloudinaryName ?? cloudinaryNameEnv, tempImage]);
 
     setImageTransforms((prev) => ({
       ...prev,
@@ -447,6 +452,7 @@ export const CardDesign = forwardRef(function CardDesign(
         onOpenChange={setImageEditorOpen}
         imageType={currentImageType}
         imageUrl={tempImage}
+        cloudinaryName={cloudinaryName}
         initialTransform={
           currentImageType ? imageTransforms[currentImageType] : undefined
         }

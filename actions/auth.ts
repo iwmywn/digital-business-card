@@ -61,7 +61,7 @@ export async function signUp(
     const result = await (
       await getUserCollection()
     ).insertOne({
-      username: undefined,
+      username: "",
       email,
       phone,
       password: hashedPassword,
@@ -71,15 +71,15 @@ export async function signUp(
       stripeCustomerId: customer.customerId,
       profile: {
         profileImage: ["duobwq5xg", avatar],
-        coverImage: undefined,
+        // coverImage: undefined,
         fullName,
-        gender: undefined,
+        gender: "",
         dateOfBirth: undefined,
-        jobTitle: undefined,
-        company: undefined,
-        website: undefined,
-        bio: undefined,
-        imageTransforms: undefined,
+        jobTitle: "",
+        company: "",
+        website: "",
+        bio: "",
+        imageTransforms: {},
       },
       notificationSettings: {
         email: true,

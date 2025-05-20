@@ -14,7 +14,6 @@ import {
 import Cropper from "react-easy-crop";
 import { Loading } from "@/components/loading";
 import { getCloudinaryUrl } from "@/lib/utils";
-import { checkEnv } from "@/lib/utils";
 
 export type ImageTransform = {
   scale: number;
@@ -36,6 +35,7 @@ interface ImageEditorProps {
   onOpenChange: (open: boolean) => void;
   imageType?: "logo" | "profile" | "cover";
   imageUrl: string | null;
+  cloudinaryName: string | null;
   initialTransform?: ImageTransform;
   onSave: (transform: ImageTransform, imageType?: string) => void;
   onDelete: (imageType?: string) => void;
@@ -93,15 +93,14 @@ export function ImageEditorDialog({
   onOpenChange,
   imageType,
   imageUrl,
+  cloudinaryName,
   initialTransform,
   onSave,
   onDelete,
 }: ImageEditorProps) {
-  const { cloudinaryName } = checkEnv({
-    cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
-  });
   const processedImageUrl = useMemo(() => {
     if (
+      cloudinaryName &&
       imageUrl &&
       !imageUrl.startsWith("data:") &&
       !imageUrl.startsWith("https://")

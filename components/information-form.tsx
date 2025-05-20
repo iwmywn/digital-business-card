@@ -57,6 +57,7 @@ export function InformationForm() {
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [imageEditorOpen, setImageEditorOpen] = useState<boolean>(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
+  const [cloudinaryName, setCloudinaryName] = useState<string | null>(null);
   const { user, userResponse, mutate } = useUser();
   const [profileImage, setProfileImage] = useState<ImageType | undefined>(
     user?.profile?.profileImage,
@@ -119,6 +120,7 @@ export function InformationForm() {
     if (currentImage) {
       setCurrentImageType(type);
       setTempImage(currentImage[1]);
+      setCloudinaryName(currentImage[0]);
       setImageEditorOpen(true);
     } else {
       document.getElementById(`${type}-image`)?.click();
@@ -165,12 +167,14 @@ export function InformationForm() {
   const handleSaveImage = (transform: ImageTransform, type?: string) => {
     if (!tempImage || !type) return;
 
-    const { cloudinaryName } = checkEnv({
+    const { cloudinaryName: cloudinaryNameEnv } = checkEnv({
       cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
     });
 
-    if (type === "profile") setProfileImage([cloudinaryName, tempImage]);
-    if (type === "cover") setCoverImage([cloudinaryName, tempImage]);
+    if (type === "profile")
+      setProfileImage([cloudinaryName ?? cloudinaryNameEnv, tempImage]);
+    if (type === "cover")
+      setCoverImage([cloudinaryName ?? cloudinaryNameEnv, tempImage]);
 
     setImageTransforms((prev) => ({
       ...prev,
@@ -524,6 +528,7 @@ export function InformationForm() {
         onOpenChange={setImageEditorOpen}
         imageType={currentImageType}
         imageUrl={tempImage}
+        cloudinaryName={cloudinaryName}
         initialTransform={
           currentImageType ? imageTransforms[currentImageType] : undefined
         }
