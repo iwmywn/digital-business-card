@@ -94,3 +94,13 @@ export function checkEnv(vars: Record<string, string | undefined>) {
 
   return result;
 }
+
+export function someRight<T>(
+  arr: T[],
+  predicate: (item: T) => boolean,
+): boolean {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (predicate(arr[i])) return true;
+  }
+  return false;
+}

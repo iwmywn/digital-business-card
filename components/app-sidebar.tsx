@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import Image from "next/image";
-import { useUser } from "@/lib/swr";
+import { useSubscription, useUser } from "@/lib/swr";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -70,11 +70,13 @@ export const nav = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { isSubScriptionLoading, isSubscriptionError } = useSubscription();
   const { user, isUserLoading, isUserError } = useUser();
 
   useEffect(() => {
     if (isUserError) toast.error(isUserError);
-  }, [isUserError]);
+    if (isSubscriptionError) toast.error(isSubscriptionError);
+  }, [isUserError, isSubscriptionError]);
 
   return (
     <Sidebar
@@ -97,7 +99,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">EZNECT</span>
-                  {isUserLoading ? (
+                  {isSubScriptionLoading || isUserLoading ? (
                     <Skeleton className="h-3 w-24" />
                   ) : (
                     <span className="truncate text-xs capitalize">

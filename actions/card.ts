@@ -10,7 +10,7 @@ import type { SerializableLinkType } from "@/components/icons";
 import type { Card } from "@/lib/definitions";
 import * as constants from "@/constants";
 import { uploadToCloudinary } from "@/lib/cloudinary";
-import { extractCloudinaryPath } from "@/lib/utils";
+import { extractCloudinaryPath, someRight } from "@/lib/utils";
 import { SlugFormValues } from "@/components/custom-slug-dialog";
 import { cardSlugSchema } from "@/schemas";
 
@@ -198,6 +198,12 @@ export async function getCardToViewBySlug(slug: string) {
     let { slug: dynamicSlug } = card;
     const { currentPlan } = existingUser;
     const now = new Date();
+    const validBaiscPlan = existingUser.purchasedPlans?.find(
+      (plan) =>
+        currentPlan === plan.planId &&
+        plan.planId === "basic" &&
+        new Date(plan.expiresAt) > now,
+    );
     const validProfessionalPlan = existingUser.purchasedPlans?.find(
       (plan) =>
         currentPlan === plan.planId &&
@@ -214,6 +220,70 @@ export async function getCardToViewBySlug(slug: string) {
         error:
           "Access denied! Upgrade our professional plan to access via slug.",
       };
+    }
+
+    const usedFont = card.cardDesign.fontFamily;
+    const usedColor = card.cardDesign.cardColor;
+
+    let fontTier: "free" | "basic" | "all" | undefined;
+    if (someRight(constants.freeFontOptions, (f) => f.value === usedFont)) {
+      fontTier = "free";
+    } else if (
+      someRight(constants.basicFontOptions, (f) => f.value === usedFont)
+    ) {
+      fontTier = "basic";
+    } else if (
+      someRight(constants.allFontOptions, (f) => f.value === usedFont)
+    ) {
+      fontTier = "all";
+    }
+
+    let colorTier: "free" | "basic" | "all" | undefined;
+    if (someRight(constants.freeColorOptions, (c) => c.value === usedColor)) {
+      colorTier = "free";
+    } else if (
+      someRight(constants.basicColorOptions, (c) => c.value === usedColor)
+    ) {
+      colorTier = "basic";
+    } else if (
+      someRight(constants.allColorOptions, (c) => c.value === usedColor)
+    ) {
+      colorTier = "all";
+    }
+
+    if (
+      (currentPlan === "basic" && !validBaiscPlan) ||
+      currentPlan === "free"
+    ) {
+      if (fontTier === "basic") {
+        card.cardDesign.fontFamily = constants.defaultFont;
+      }
+      if (colorTier === "basic") {
+        card.cardDesign.cardColor = constants.defaultColor;
+      }
+    }
+
+    if (
+      (currentPlan === "professional" && !validProfessionalPlan) ||
+      currentPlan === "free" ||
+      currentPlan === "basic"
+    ) {
+      if (fontTier === "all") {
+        card.cardDesign.fontFamily = constants.defaultFont;
+      }
+      if (colorTier === "all") {
+        card.cardDesign.cardColor = constants.defaultColor;
+      }
+    }
+
+    if (!validProfessionalPlan) {
+      card.cardDesign.brandName = "Eznect";
+
+      if (currentPlan === "basic") {
+        card.links = card.links.slice(0, constants.maxBasicLinks);
+      } else {
+        card.links = card.links.slice(0, constants.maxFreeLinks);
+      }
     }
 
     if (isOwner) {

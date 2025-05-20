@@ -181,9 +181,9 @@ export function Links({
       <CardContent className="space-y-6">
         {links.length > 0 && (
           <div className="space-y-4">
-            <h3 className="mb-0 text-lg font-medium">Your Links</h3>
+            <h3 className="mb-0 text-base font-medium">Your Links</h3>
             <p className="text-muted-foreground text-sm">
-              Drag to reorder how links appear on your card
+              Drag to reorder how links appear on your card.
             </p>
 
             <DndContext

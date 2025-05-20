@@ -12,6 +12,7 @@ import {
   Globe,
   QrCode,
   Link as LinkIcon,
+  Info,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -44,6 +45,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export function getImageUrl(
   card: CardType | null,
@@ -113,6 +115,21 @@ export function CardManagement() {
           <Link href="/create">Create new card</Link>
         </Button>
       </div>
+
+      <Alert variant="default">
+        <Info />
+        <AlertTitle>Note</AlertTitle>
+        <AlertDescription>
+          Your card will appear to others based on your current plan or its
+          validity period. For example, if your card uses fonts and colors from
+          the basic plan, but your current plan is free or your basic plan has
+          expired, others will see your card with free plan styles (including
+          link limits). Similarly, if your card uses professional plan styles
+          but your current plan is not professional or your professional plan
+          has expired, it will also be shown to others with free plan styles
+          (including link limits).
+        </AlertDescription>
+      </Alert>
 
       <div ref={registerRef} className="flex items-center">
         <div className="relative flex-1">
