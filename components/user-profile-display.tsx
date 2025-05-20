@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -63,7 +62,7 @@ export function UserProfileDisplay({
                     profile.coverImage,
                     profile.imageTransforms?.cover,
                   )}
-                  alt="Cover"
+                  alt="Cover photo"
                   fill
                   style={{ objectFit: "cover" }}
                 />
@@ -74,18 +73,19 @@ export function UserProfileDisplay({
 
         <CardHeader className="relative pt-0 pb-0">
           <div className="-mt-16 flex flex-col items-center md:-mt-20">
-            <Avatar className="border-background pointer-events-none h-32 w-32 border-4 shadow-md md:h-40 md:w-40">
-              <AvatarImage
-                src={getCloudinaryUrl(
-                  profile.profileImage,
-                  profile.imageTransforms?.profile,
-                )}
-                alt={profile.fullName}
-              />
-              <AvatarFallback className="text-3xl md:text-4xl">
-                {profile.fullName.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
+            <div className="border-background overflow-hidden rounded-full border-4 shadow-sm md:h-40 md:w-40">
+              <div className="pointer-events-none relative h-full w-full select-none">
+                <Image
+                  src={getCloudinaryUrl(
+                    profile.profileImage,
+                    profile.imageTransforms?.profile,
+                  )}
+                  alt="Profile picture"
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+            </div>
 
             <div className="mt-4 text-center">
               <div className="flex items-center justify-center gap-2">
