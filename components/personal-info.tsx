@@ -85,12 +85,19 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
                   name="fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="flex items-center gap-2">
+                      <FormLabel
+                        htmlFor="fullName"
+                        className="flex items-center gap-2"
+                      >
                         <User className="h-4 w-4" />
                         Full Name
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} />
+                        <Input
+                          id="fullName"
+                          placeholder="John Doe"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -104,12 +111,16 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
                   name="jobTitle"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="flex items-center gap-2">
+                      <FormLabel
+                        htmlFor="jobTitle"
+                        className="flex items-center gap-2"
+                      >
                         <Briefcase className="h-4 w-4" />
                         Job Title
                       </FormLabel>
                       <FormControl>
                         <Input
+                          id="jobTitle"
                           placeholder="Marketing Director"
                           {...field}
                           value={field.value || ""}
@@ -129,12 +140,16 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
                   name="department"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="flex items-center gap-2">
+                      <FormLabel
+                        htmlFor="department"
+                        className="flex items-center gap-2"
+                      >
                         <Users className="h-4 w-4" />
                         Department
                       </FormLabel>
                       <FormControl>
                         <Input
+                          id="department"
                           placeholder="Marketing"
                           {...field}
                           value={field.value || ""}
@@ -152,12 +167,16 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
                   name="company"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="flex items-center gap-2">
+                      <FormLabel
+                        htmlFor="company"
+                        className="flex items-center gap-2"
+                      >
                         <Building className="h-4 w-4" />
                         Company Name
                       </FormLabel>
                       <FormControl>
                         <Input
+                          id="company"
                           placeholder="Acme Inc."
                           {...field}
                           value={field.value || ""}
@@ -175,12 +194,16 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
               name="accreditations"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
+                  <FormLabel
+                    htmlFor="accreditations"
+                    className="flex items-center gap-2"
+                  >
                     <Award className="h-4 w-4" />
                     Accreditations
                   </FormLabel>
                   <FormControl>
                     <Input
+                      id="accreditations"
                       placeholder="MBA, CPA, etc."
                       {...field}
                       value={field.value || ""}
@@ -196,12 +219,16 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
               name="headline"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
+                  <FormLabel
+                    htmlFor="headline"
+                    className="flex items-center gap-2"
+                  >
                     <FileText className="h-4 w-4" />
                     Headline
                   </FormLabel>
                   <FormControl>
                     <Input
+                      id="headline"
                       placeholder="Digital marketing specialist with 5+ years of experience."
                       {...field}
                       value={field.value || ""}
@@ -217,12 +244,13 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
               name="bio"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
+                  <FormLabel htmlFor="bio" className="flex items-center gap-2">
                     <FileEdit className="h-4 w-4" />
                     Bio
                   </FormLabel>
                   <FormControl>
                     <Textarea
+                      id="bio"
                       placeholder="Write a short bio about yourself..."
                       className="min-h-[100px] resize-none"
                       {...field}

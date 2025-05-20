@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,9 +20,31 @@ import { useUser } from "@/lib/swr";
 import * as constants from "@/constants";
 import { getCloudinaryUrl } from "@/lib/utils";
 import { checkEnv } from "@/lib/utils";
+import { brandNameSchema } from "@/schemas";
+import {
+  forwardRef,
+  Ref,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 // ['cloudinary image name', 'image path']
 export type Image = [string, string];
+
+type BrandNameValue = z.infer<typeof brandNameSchema>;
 
 export interface CardDesignValues {
   cardColor: string;
@@ -36,15 +57,19 @@ export interface CardDesignValues {
     profile?: ImageTransform;
     cover?: ImageTransform;
   };
+  brandName?: string;
 }
 
-export function CardDesign({
-  onSave,
-  initialValues,
-}: {
-  onSave: (data: CardDesignValues) => void;
-  initialValues: CardDesignValues;
-}) {
+export const CardDesign = forwardRef(function CardDesign(
+  {
+    onSave,
+    initialValues,
+  }: {
+    onSave: (data: CardDesignValues) => void;
+    initialValues: CardDesignValues;
+  },
+  ref: Ref<{ validate: () => Promise<boolean> }>,
+) {
   const { user } = useUser();
   const [logoImage, setLogoImage] = useState<Image | undefined>(
     initialValues?.logoImage,
@@ -64,12 +89,24 @@ export function CardDesign({
     profile?: ImageTransform;
     cover?: ImageTransform;
   }>(initialValues?.imageTransforms || {});
-
   const [imageEditorOpen, setImageEditorOpen] = useState<boolean>(false);
   const [currentImageType, setCurrentImageType] = useState<
     "logo" | "profile" | "cover" | undefined
   >(undefined);
   const [tempImage, setTempImage] = useState<string | null>(null);
+  const form = useForm<BrandNameValue>({
+    resolver: zodResolver(brandNameSchema),
+    mode: "onChange",
+    defaultValues: {
+      brandName: initialValues?.brandName || "",
+    },
+  });
+
+  const formValue = form.watch();
+
+  useImperativeHandle(ref, () => ({
+    validate: () => form.trigger(),
+  }));
 
   const fontOptions =
     user?.currentPlan === "free"
@@ -93,6 +130,7 @@ export function CardDesign({
       profileImage,
       coverImage,
       imageTransforms,
+      brandName: formValue.brandName,
     });
   }, [
     cardColor,
@@ -101,6 +139,8 @@ export function CardDesign({
     profileImage,
     coverImage,
     imageTransforms,
+    formValue.brandName,
+    initialValues.brandName,
     onSave,
   ]);
 
@@ -213,127 +253,129 @@ export function CardDesign({
   return (
     <>
       <Card className="rounded-lg">
-        <CardContent>
-          <Label className="mb-3 text-base leading-none font-semibold">
-            Add Images
-          </Label>
-          <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-            <div className="flex flex-col items-center space-y-3">
-              <Label className="text-sm">Company Logo</Label>
-              <div className="flex flex-col items-center gap-2">
-                <div
-                  className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
-                  onClick={() => handleImageClick("logo")}
-                >
-                  {logoImage ? (
-                    <div className="relative h-full w-full">
-                      <Image
-                        src={getImageUrl("logo")}
-                        alt="Company logo"
-                        fill
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center p-2">
-                      <ImageIcon className="h-8 w-8 text-gray-400" />
-                      <span className="mt-1 text-center text-xs text-gray-500">
-                        Click to upload
-                      </span>
-                    </div>
-                  )}
+        <CardContent className="space-y-6">
+          <div className="space-y-3">
+            <Label className="text-base leading-none font-semibold">
+              Add Images
+            </Label>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <div className="flex flex-col items-center space-y-3">
+                <Label className="text-sm">Company Logo</Label>
+                <div className="flex flex-col items-center gap-2">
+                  <div
+                    className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
+                    onClick={() => handleImageClick("logo")}
+                  >
+                    {logoImage ? (
+                      <div className="relative h-full w-full">
+                        <Image
+                          src={getImageUrl("logo")}
+                          alt="Company logo"
+                          fill
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex h-full w-full flex-col items-center justify-center p-2">
+                        <ImageIcon className="h-8 w-8 text-gray-400" />
+                        <span className="mt-1 text-center text-xs text-gray-500">
+                          Click to upload
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <input
+                    id="logo-image"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleImageUpload(e, "logo")}
+                  />
+                  <p className="text-muted-foreground text-center text-xs">
+                    {logoImage ? "Click to edit" : "Square, 400x400px"}
+                  </p>
                 </div>
-                <input
-                  id="logo-image"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => handleImageUpload(e, "logo")}
-                />
-                <p className="text-muted-foreground text-center text-xs">
-                  {logoImage ? "Click to edit" : "Square, 400x400px"}
-                </p>
               </div>
-            </div>
 
-            <div className="flex flex-col items-center space-y-3">
-              <Label className="text-sm">Profile Picture</Label>
-              <div className="flex flex-col items-center gap-2">
-                <div
-                  className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
-                  onClick={() => handleImageClick("profile")}
-                >
-                  {profileImage ? (
-                    <div className="relative h-full w-full">
-                      <Image
-                        src={getImageUrl("profile")}
-                        alt="Profile picture"
-                        fill
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center">
-                      <ImageIcon className="h-8 w-8 text-gray-400" />
-                      <span className="mt-1 text-center text-xs text-gray-500">
-                        Click to upload
-                      </span>
-                    </div>
-                  )}
+              <div className="flex flex-col items-center space-y-3">
+                <Label className="text-sm">Profile Picture</Label>
+                <div className="flex flex-col items-center gap-2">
+                  <div
+                    className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
+                    onClick={() => handleImageClick("profile")}
+                  >
+                    {profileImage ? (
+                      <div className="relative h-full w-full">
+                        <Image
+                          src={getImageUrl("profile")}
+                          alt="Profile picture"
+                          fill
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex h-full w-full flex-col items-center justify-center">
+                        <ImageIcon className="h-8 w-8 text-gray-400" />
+                        <span className="mt-1 text-center text-xs text-gray-500">
+                          Click to upload
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <input
+                    id="profile-image"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleImageUpload(e, "profile")}
+                  />
+                  <p className="text-muted-foreground text-center text-xs">
+                    {profileImage ? "Click to edit" : "Square, 400x400px"}
+                  </p>
                 </div>
-                <input
-                  id="profile-image"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => handleImageUpload(e, "profile")}
-                />
-                <p className="text-muted-foreground text-center text-xs">
-                  {profileImage ? "Click to edit" : "Square, 400x400px"}
-                </p>
               </div>
-            </div>
 
-            <div className="flex flex-col items-center space-y-3">
-              <Label className="text-sm">Cover Photo</Label>
-              <div className="flex flex-col items-center gap-2">
-                <div
-                  className="relative flex h-20 w-40 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
-                  onClick={() => handleImageClick("cover")}
-                >
-                  {coverImage ? (
-                    <div className="relative h-full w-full">
-                      <Image
-                        src={getImageUrl("cover")}
-                        alt="Cover photo"
-                        fill
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center">
-                      <ImageIcon className="h-8 w-8 text-gray-400" />
-                      <span className="mt-1 text-center text-xs text-gray-500">
-                        Click to upload
-                      </span>
-                    </div>
-                  )}
+              <div className="flex flex-col items-center space-y-3">
+                <Label className="text-sm">Cover Photo</Label>
+                <div className="flex flex-col items-center gap-2">
+                  <div
+                    className="relative flex h-20 w-40 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
+                    onClick={() => handleImageClick("cover")}
+                  >
+                    {coverImage ? (
+                      <div className="relative h-full w-full">
+                        <Image
+                          src={getImageUrl("cover")}
+                          alt="Cover photo"
+                          fill
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex h-full w-full flex-col items-center justify-center">
+                        <ImageIcon className="h-8 w-8 text-gray-400" />
+                        <span className="mt-1 text-center text-xs text-gray-500">
+                          Click to upload
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <input
+                    id="cover-image"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleImageUpload(e, "cover")}
+                  />
+                  <p className="text-muted-foreground text-center text-xs">
+                    {coverImage ? "Click to edit" : "800x400px, 2:1 ratio"}
+                  </p>
                 </div>
-                <input
-                  id="cover-image"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => handleImageUpload(e, "cover")}
-                />
-                <p className="text-muted-foreground text-center text-xs">
-                  {coverImage ? "Click to edit" : "800x400px, 2:1 ratio"}
-                </p>
               </div>
             </div>
           </div>
 
-          <div className="mb-6 space-y-3">
+          <div className="space-y-3">
             <Label className="text-base">Color</Label>
             <div className="flex flex-wrap gap-3">
               {colorOptions.map((color) => (
@@ -368,6 +410,35 @@ export function CardDesign({
               </SelectContent>
             </Select>
           </div>
+
+          {user?.currentPlan === "professional" && (
+            <Form {...form}>
+              <form>
+                <FormField
+                  control={form.control}
+                  name="brandName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="brandName"
+                        className="flex items-center gap-2 text-base font-medium"
+                      >
+                        Brand Name
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          id="brandName"
+                          placeholder="e.g. Eznect"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
+          )}
         </CardContent>
       </Card>
 
@@ -384,4 +455,4 @@ export function CardDesign({
       />
     </>
   );
-}
+});

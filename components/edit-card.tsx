@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
@@ -17,12 +17,13 @@ import type { SerializableLinkType } from "@/components/icons";
 import type { Card as CardType } from "@/lib/definitions";
 import { useCard, useUser } from "@/lib/swr";
 import { Loading } from "@/components/loading";
-import { personalInfoSchema } from "@/schemas";
+import { brandNameSchema, personalInfoSchema } from "@/schemas";
 import { CreateCardSkeleton } from "@/components/skeletons";
 import Link from "next/link";
 
 export function EditCard({ card }: { card: CardType }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<string>("design");
   const [previewMode, setPreviewMode] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -35,15 +36,29 @@ export function EditCard({ card }: { card: CardType }) {
   const [isPublic, setIsPublic] = useState<boolean>(card.isPublic);
   const [links, setLinks] = useState<SerializableLinkType[]>(card.links);
   const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
+  const cardDesignRef = useRef<{ validate: () => Promise<boolean> }>(null);
   const { cardResponse, mutate, cards, isCardLoading, isCardError } = useCard();
   const { isUserError, isUserLoading, user } = useUser();
+  console.log(pathname);
 
   async function handleUpdateCard() {
     if (isSubmitting) return;
 
-    const parsedValues = personalInfoSchema.safeParse(personalInfo);
+    const parsedCardDesignValue = brandNameSchema.safeParse({
+      brandName: cardDesign.brandName,
+    });
+    const parsedPersonalInfoValues = personalInfoSchema.safeParse(personalInfo);
 
-    if (!parsedValues.success) {
+    if (!parsedCardDesignValue.success) {
+      setActiveTab("design");
+      setTimeout(async () => {
+        await cardDesignRef.current?.validate();
+      }, 0);
+      router.push(`${pathname}#brandName`);
+      return;
+    }
+
+    if (!parsedPersonalInfoValues.success) {
       setActiveTab("personal");
       setTimeout(async () => {
         await personalInfoRef.current?.validate();
@@ -178,6 +193,7 @@ export function EditCard({ card }: { card: CardType }) {
                 <CardDesign
                   onSave={handleCardDesignUpdate}
                   initialValues={cardDesign}
+                  ref={cardDesignRef}
                 />
               </TabsContent>
 

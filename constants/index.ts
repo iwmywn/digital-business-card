@@ -247,7 +247,7 @@ const subscriptionPlans = [
       "Set a custom card link",
       "Toggle card public/private visibility",
       "Receive priority customer support",
-      "Remove all platform branding",
+      "Use your own brand name",
     ],
     popular: true,
     priceId: professionalId || "",

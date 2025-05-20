@@ -176,9 +176,11 @@ export function CardPreview({
           )}
         </div>
 
-        <div className={`${colorClass} flex items-center justify-between p-3`}>
-          <span className={`text-xs text-white opacity-80`}>
-            Digital Business Card
+        <div
+          className={`${colorClass} flex items-center justify-between gap-4 p-3`}
+        >
+          <span className={`text-xs wrap-anywhere text-white opacity-80`}>
+            {cardDesign.brandName}
           </span>
           <div className="flex gap-2">
             <Button

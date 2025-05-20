@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
@@ -20,10 +20,11 @@ import { useCard, useUser } from "@/lib/swr";
 import { CreateCardSkeleton } from "@/components/skeletons";
 import { Loading } from "@/components/loading";
 import * as constants from "@/constants";
-import { personalInfoSchema } from "@/schemas";
+import { brandNameSchema, personalInfoSchema } from "@/schemas";
 
 export function CreateCard() {
   const router = useRouter();
+  const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<string>("design");
   const [previewMode, setPreviewMode] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -33,6 +34,7 @@ export function CreateCard() {
     logoImage: undefined,
     profileImage: undefined,
     coverImage: undefined,
+    brandName: "Eznect",
   });
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>({
     fullName: "",
@@ -45,6 +47,7 @@ export function CreateCard() {
   });
   const [links, setLinks] = useState<SerializableLinkType[]>([]);
   const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
+  const cardDesignRef = useRef<{ validate: () => Promise<boolean> }>(null);
   const { cardResponse, cards, isCardLoading, isCardError, mutate } = useCard();
   const { isUserError, isUserLoading, user } = useUser();
   const [isPublic, setIsPublic] = useState<boolean>(true);
@@ -52,9 +55,21 @@ export function CreateCard() {
   async function handleCreateCard() {
     if (isSubmitting) return;
 
-    const parsedValues = personalInfoSchema.safeParse(personalInfo);
+    const parsedCardDesignValue = brandNameSchema.safeParse({
+      brandName: cardDesign.brandName,
+    });
+    const parsedPersonalInfoValues = personalInfoSchema.safeParse(personalInfo);
 
-    if (!parsedValues.success) {
+    if (!parsedCardDesignValue.success) {
+      setActiveTab("design");
+      setTimeout(async () => {
+        await cardDesignRef.current?.validate();
+      }, 0);
+      router.push(`${pathname}#brandName`);
+      return;
+    }
+
+    if (!parsedPersonalInfoValues.success) {
       setActiveTab("personal");
       setTimeout(async () => {
         await personalInfoRef.current?.validate();
@@ -204,6 +219,7 @@ export function CreateCard() {
                 <CardDesign
                   onSave={handleCardDesignUpdate}
                   initialValues={cardDesign}
+                  ref={cardDesignRef}
                 />
               </TabsContent>
 

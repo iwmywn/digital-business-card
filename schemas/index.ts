@@ -336,6 +336,20 @@ const cardSlugSchema = z
     }
   });
 
+const brandNameSchema = z
+  .object({ brandName: z.string().optional() })
+  .superRefine((data, ctx) => {
+    const { brandName } = data;
+
+    if (brandName && brandName.length > 100) {
+      ctx.addIssue({
+        path: ["brandName"],
+        message: "Brand name must not exceed 100 characters.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+  });
+
 export {
   signUpSchema,
   signInSchema,
@@ -348,4 +362,5 @@ export {
   notificationSettingsSchema,
   personalInfoSchema,
   cardSlugSchema,
+  brandNameSchema,
 };
