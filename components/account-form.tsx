@@ -35,7 +35,7 @@ import { Loading } from "@/components/loading";
 export type SettingsFormValues = z.infer<typeof accountSchema>;
 
 export function AccountForm() {
-  const { user } = useUser();
+  const { userResponse, user, mutate } = useUser();
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(accountSchema),
@@ -60,6 +60,16 @@ export function AccountForm() {
       toast.error(error);
     } else {
       toast.success(success);
+      if (userResponse?.user) {
+        mutate({
+          ...userResponse,
+          user: {
+            ...userResponse.user,
+            username: values.username,
+            phone: values.phone ?? "",
+          },
+        });
+      }
     }
   }
 

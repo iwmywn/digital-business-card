@@ -49,6 +49,7 @@ import {
 import { useUser } from "@/lib/swr";
 import Image from "next/image";
 import type { Image as ImageType } from "@/components/card-design";
+import Link from "next/link";
 
 export type ProfileFormValues = z.infer<typeof publicProfileSchema>;
 
@@ -102,7 +103,7 @@ export function InformationForm() {
         mutate({
           ...userResponse,
           user: {
-            ...userResponse?.user,
+            ...userResponse.user,
             profile: { ...values, profileImage, coverImage, imageTransforms },
           },
         });
@@ -223,8 +224,8 @@ export function InformationForm() {
           <CardDescription>Update your profile information.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:items-start">
-            <div className="flex flex-col items-center space-y-6">
+          <div className="flex flex-col items-center justify-center gap-6">
+            <div className="flex flex-col items-center gap-6 sm:flex-row sm:gap-12">
               <div className="flex w-40 flex-col items-center gap-2">
                 <p className="text-sm">Profile Picture</p>
                 <div
@@ -498,11 +499,19 @@ export function InformationForm() {
                   )}
                 />
 
-                <div className="flex flex-row-reverse">
+                <div className="flex flex-row-reverse gap-2">
                   <FormButton
                     isSubmitting={form.formState.isSubmitting}
                     text="Save Changes"
                   />
+                  <Button asChild>
+                    <Link
+                      href={`/profile/${user?.username || user?._id}`}
+                      target="_blank"
+                    >
+                      View public profile
+                    </Link>
+                  </Button>
                 </div>
               </form>
             </Form>

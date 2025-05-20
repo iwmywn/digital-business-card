@@ -431,10 +431,16 @@ function InformationSkeleton() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-          <div className="flex flex-col items-center gap-2">
-            <Skeleton className="h-20 w-20 rounded-full" />
-            <Skeleton className="h-4 w-20" />
+        <div className="flex flex-col items-center justify-center gap-6">
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:gap-12">
+            <div className="flex w-40 flex-col items-center gap-2">
+              <Skeleton className="h-20 w-20 rounded-full" />
+              <Skeleton className="h-4 w-20" />
+            </div>
+            <div className="flex w-40 flex-col items-center gap-2">
+              <Skeleton className="h-20 w-40" />
+              <Skeleton className="h-4 w-20" />
+            </div>
           </div>
 
           <div className="w-full space-y-4">
@@ -455,7 +461,8 @@ function InformationSkeleton() {
 
             <Skeleton className="h-24 w-full" />
 
-            <div className="flex flex-row-reverse">
+            <div className="flex flex-row-reverse gap-2">
+              <Skeleton className="h-10 w-32 rounded-md" />
               <Skeleton className="h-10 w-32 rounded-md" />
             </div>
           </div>

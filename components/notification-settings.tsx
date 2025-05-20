@@ -30,7 +30,7 @@ export type NotificationSettingsFormValues = z.infer<
 >;
 
 export function NotificationSettings() {
-  const { user } = useUser();
+  const { user, userResponse, mutate } = useUser();
   const form = useForm<NotificationSettingsFormValues>({
     resolver: zodResolver(notificationSettingsSchema),
     defaultValues: {
@@ -48,6 +48,12 @@ export function NotificationSettings() {
       toast.error(error);
     } else {
       toast.success(success);
+      if (userResponse?.user) {
+        mutate({
+          ...userResponse,
+          user: { ...userResponse.user, notificationSettings: values },
+        });
+      }
     }
   }
 
