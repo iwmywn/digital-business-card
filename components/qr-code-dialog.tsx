@@ -95,8 +95,8 @@ export function QRCodeDialog({
               Scan this QR code to view the digital business card.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col items-center justify-center p-4">
-            <div className="rounded-lg bg-white p-4">
+          <div className="flex flex-col items-center justify-center">
+            <div className="rounded-lg bg-white">
               {qrCodeUrl ? (
                 <Image
                   src={qrCodeUrl || "/placeholder.svg"}

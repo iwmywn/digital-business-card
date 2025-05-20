@@ -36,11 +36,6 @@ export function ShareCardDialog({
   const cardTitle = `Check out ${card.personalInfo.fullName}'s digital business card`;
 
   const shareHandlers = {
-    x: () => {
-      const url = `https://x.com/intent/post?url=${encodeURIComponent(cardUrl)}&text=${encodeURIComponent(cardTitle)}`;
-      window.open(url, "_blank", "noopener, noreferrer");
-    },
-
     whatsapp: () => {
       const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(cardTitle + " " + cardUrl)}`;
       window.open(url, "_blank", "noopener, noreferrer");
@@ -51,6 +46,11 @@ export function ShareCardDialog({
       const body = `Hi,\n\nTake a look at this digital business card:\n\n${cardUrl}\n\nBest regards,`;
       const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       window.open(mailtoLink, "_blank");
+    },
+
+    x: () => {
+      const url = `https://x.com/intent/post?url=${encodeURIComponent(cardUrl)}&text=${encodeURIComponent(cardTitle)}`;
+      window.open(url, "_blank", "noopener, noreferrer");
     },
   };
 
@@ -63,7 +63,7 @@ export function ShareCardDialog({
             Share this digital business card with others.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col space-y-4 py-4">
+        <div className="flex flex-col space-y-4">
           <div className="flex items-center space-x-4">
             <div className="relative flex-1">
               <Input value={cardUrl} readOnly className="pr-20" />
@@ -84,19 +84,6 @@ export function ShareCardDialog({
                     <Button
                       variant="outline"
                       className="flex-1"
-                      onClick={shareHandlers.x}
-                    >
-                      <SimpleIconComponent icon={siX} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Share on X</TooltipContent>
-                </Tooltip>
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="flex-1"
                       onClick={shareHandlers.whatsapp}
                     >
                       <SimpleIconComponent icon={siWhatsapp} />
@@ -104,7 +91,6 @@ export function ShareCardDialog({
                   </TooltipTrigger>
                   <TooltipContent>Share via WhatsApp</TooltipContent>
                 </Tooltip>
-
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -116,6 +102,18 @@ export function ShareCardDialog({
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>Share via Email</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={shareHandlers.x}
+                    >
+                      <SimpleIconComponent icon={siX} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Share on X</TooltipContent>
                 </Tooltip>
               </div>
             </TooltipProvider>
