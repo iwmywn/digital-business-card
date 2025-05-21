@@ -388,7 +388,7 @@ export function InformationForm() {
                                   )}
                                 >
                                   {field.value ? (
-                                    format(field.value, "MM/dd/yyyy")
+                                    format(new Date(field.value), "MM/dd/yyyy")
                                   ) : (
                                     <span>Pick a date</span>
                                   )}
@@ -402,9 +402,15 @@ export function InformationForm() {
                             >
                               <CalendarComponent
                                 mode="single"
-                                selected={field.value ?? undefined}
+                                selected={
+                                  field.value
+                                    ? new Date(field.value)
+                                    : undefined
+                                }
                                 onSelect={(day) => {
-                                  field.onChange(day);
+                                  field.onChange(
+                                    day ? format(day, "yyyy-MM-dd") : undefined,
+                                  );
                                   setShowCalendar(false);
                                 }}
                                 disabled={(date) =>

@@ -61,7 +61,7 @@ type Profile = {
   coverImage?: Image;
   fullName: string;
   gender?: string;
-  dateOfBirth?: Date | null;
+  dateOfBirth?: string;
   jobTitle?: string;
   company?: string;
   website?: string;

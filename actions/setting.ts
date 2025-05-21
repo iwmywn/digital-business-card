@@ -12,7 +12,7 @@ import { ObjectId } from "mongodb";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import bcrypt from "bcryptjs";
 import { type ProfileFormValues } from "@/components/information-form";
-import { extractCloudinaryPath, isSameDate } from "@/lib/utils";
+import { extractCloudinaryPath } from "@/lib/utils";
 import { type ImageTransform } from "@/components/image-editor-dialog";
 import { type SettingsFormValues } from "@/components/account-form";
 import { NotificationSettingsFormValues } from "@/components/notification-settings";
@@ -87,7 +87,7 @@ export async function updateProfile(
       updatedProfile.coverImage?.[1] === profile.coverImage?.[1] &&
       updatedProfile.fullName === profile.fullName &&
       updatedProfile.gender === profile.gender &&
-      isSameDate(updatedProfile.dateOfBirth, profile.dateOfBirth) &&
+      updatedProfile.dateOfBirth === profile.dateOfBirth &&
       updatedProfile.jobTitle === profile.jobTitle &&
       updatedProfile.company === profile.company &&
       updatedProfile.website === profile.website &&

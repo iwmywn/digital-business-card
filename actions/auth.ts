@@ -74,7 +74,7 @@ export async function signUp(
         // coverImage: undefined,
         fullName,
         gender: "",
-        dateOfBirth: undefined,
+        // dateOfBirth: undefined,
         jobTitle: "",
         company: "",
         website: "",

@@ -74,7 +74,7 @@ const publicProfileSchema = z
     profileImage: z.tuple([z.string(), z.string()]).optional(),
     coverImage: z.tuple([z.string(), z.string()]).optional(),
     gender: z.string().optional(),
-    dateOfBirth: z.date().nullable().optional(),
+    dateOfBirth: z.string().optional(),
     jobTitle: z.string().optional(),
     company: z.string().optional(),
     website: z.string().optional(),
@@ -99,11 +99,12 @@ const publicProfileSchema = z
 
     if (dateOfBirth) {
       const today = new Date();
-      let age = today.getFullYear() - dateOfBirth.getFullYear();
-      const monthDifference = today.getMonth() - dateOfBirth.getMonth();
+      const parseStringToDate = new Date(dateOfBirth);
+      let age = today.getFullYear() - parseStringToDate.getFullYear();
+      const monthDifference = today.getMonth() - parseStringToDate.getMonth();
       if (
         monthDifference < 0 ||
-        (monthDifference === 0 && today.getDate() < dateOfBirth.getDate())
+        (monthDifference === 0 && today.getDate() < parseStringToDate.getDate())
       ) {
         age--;
       }
