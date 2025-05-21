@@ -167,22 +167,42 @@ export function PaymentReceiptDialog({
                         <TableBody>
                           <TableRow>
                             <TableCell className="whitespace-normal">
-                              <span>
-                                {receiptData.customer.address.line1},{" "}
-                              </span>
-                              <span>
-                                {receiptData.customer.address.line2},{" "}
-                              </span>
-                              <span>{receiptData.customer.address.city}, </span>
-                              <span>
-                                {receiptData.customer.address.state},{" "}
-                              </span>
-                              <span>
-                                {receiptData.customer.address.postal_code},{" "}
-                              </span>
-                              <span>
-                                {receiptData.customer.address.country}
-                              </span>
+                              {receiptData.customer.address.line1 && (
+                                <span>
+                                  {receiptData.customer.address.line1},{" "}
+                                </span>
+                              )}
+
+                              {receiptData.customer.address.line2 && (
+                                <span>
+                                  {receiptData.customer.address.line2},{" "}
+                                </span>
+                              )}
+
+                              {receiptData.customer.address.city && (
+                                <span>
+                                  {receiptData.customer.address.city},{" "}
+                                </span>
+                              )}
+
+                              {receiptData.customer.address.state && (
+                                <span>
+                                  {receiptData.customer.address.state},{" "}
+                                </span>
+                              )}
+
+                              {receiptData.customer.address.postal_code && (
+                                <span>
+                                  {receiptData.customer.address.postal_code}
+                                  ,{" "}
+                                </span>
+                              )}
+
+                              {receiptData.customer.address.country && (
+                                <span>
+                                  {receiptData.customer.address.country}.
+                                </span>
+                              )}
                             </TableCell>
                           </TableRow>
                         </TableBody>

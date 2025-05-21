@@ -29,14 +29,18 @@ function PaymentStatusUI({
   );
 }
 
-export function PaymentSuccessUI() {
+export function PaymentSuccessUI({
+  successMessage,
+}: {
+  successMessage: string;
+}) {
   return (
     <PaymentStatusUI
       icon={<CheckCircle />}
       iconColor="text-green-600"
       iconBg="bg-green-100"
       title="Payment Successful!"
-      message="Your subscription is active. Thank you for your payment."
+      message={successMessage}
     />
   );
 }

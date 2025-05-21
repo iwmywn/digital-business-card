@@ -12,7 +12,7 @@ export default function page() {
   return (
     <NotFoundUI
       icon={<BellOff />}
-      title="NO NOTIFICATIONS"
+      title="NO NOTIFICATIONS (WIP)"
       message="You're all caught up! There are no new notifications at the moment."
       className="min-h-[calc(100vh-4.83rem)]"
     />

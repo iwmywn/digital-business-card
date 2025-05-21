@@ -109,14 +109,20 @@ export async function verifyCheckoutSession(sessionId: string) {
           error: "unauthorized_access",
         };
 
-      const result = await processSuccessfulPayment({
+      const { error } = await processSuccessfulPayment({
         userId,
         planId,
         paymentIntentId,
         amount,
       });
 
-      return result;
+      if (error) {
+        return { error };
+      }
+
+      return {
+        success: `Your ${planId} plan with the transaction id ${paymentIntentId.slice(3)} is active. Thank you for your payment.`,
+      };
     }
 
     return { error: undefined };

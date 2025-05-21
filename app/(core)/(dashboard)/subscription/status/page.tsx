@@ -22,14 +22,14 @@ export default async function page({
     redirect("/subscription");
   }
 
-  const { error } = await verifyCheckoutSession(sessionId);
+  const { success, error } = await verifyCheckoutSession(sessionId);
 
-  if (error) {
+  if (error || !success) {
     if (error === "unauthorized_access") {
       return <UnauthorizedAccessUI />;
     }
     return <PaymentErrorUI errorMessage={error} />;
   }
 
-  return <PaymentSuccessUI />;
+  return <PaymentSuccessUI successMessage={success} />;
 }
