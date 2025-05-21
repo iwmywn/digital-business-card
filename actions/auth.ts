@@ -164,6 +164,11 @@ export async function forgotPassword(
         error: undefined,
       };
 
+    if (!existingUser.emailVerified)
+      return {
+        error: "Account not verified. Please check your email to verify!",
+      };
+
     if (existingUser.resendVerification >= 2)
       return {
         error: "You have reached the maximum number of resend attempts!",

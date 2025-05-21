@@ -181,7 +181,7 @@ export function InformationForm() {
       [type]: transform,
     }));
 
-    toast.success(
+    toast.info(
       `${type.charAt(0).toUpperCase() + type.slice(1)} image updated.`,
     );
     setImageEditorOpen(false);
@@ -197,7 +197,7 @@ export function InformationForm() {
     delete newTransforms[type as keyof typeof newTransforms];
     setImageTransforms(newTransforms);
 
-    toast.success(
+    toast.info(
       `${type.charAt(0).toUpperCase() + type.slice(1)} image removed.`,
     );
     setImageEditorOpen(false);

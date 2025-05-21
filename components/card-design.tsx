@@ -217,7 +217,7 @@ export const CardDesign = forwardRef(function CardDesign(
       [type]: transform,
     }));
 
-    toast.success(
+    toast.info(
       `${type.charAt(0).toUpperCase() + type.slice(1)} image updated.`,
     );
     setImageEditorOpen(false);
@@ -234,7 +234,7 @@ export const CardDesign = forwardRef(function CardDesign(
     delete newTransforms[type as keyof typeof newTransforms];
     setImageTransforms(newTransforms);
 
-    toast.success(
+    toast.info(
       `${type.charAt(0).toUpperCase() + type.slice(1)} image removed.`,
     );
     setImageEditorOpen(false);

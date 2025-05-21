@@ -194,7 +194,7 @@ export function UserProfileDisplay({
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground"
+                    className="text-muted-foreground sm:text-base"
                   >
                     {profile.website}
                   </FormLink>

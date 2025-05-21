@@ -60,13 +60,9 @@ export function AccountForm() {
       toast.error(error);
     } else {
       toast.success(success);
-      form.reset({
-        username: user?.username,
-        phone: user?.phone,
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
+      form.setValue("currentPassword", "");
+      form.setValue("newPassword", "");
+      form.setValue("confirmPassword", "");
       if (userResponse?.user) {
         mutate({
           ...userResponse,

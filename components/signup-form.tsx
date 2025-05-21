@@ -29,10 +29,12 @@ import { useState } from "react";
 import ReCaptchaPopup from "@/components/recaptcha";
 import { FormButton } from "@/components/form-button";
 import { signUp } from "@/actions/auth";
+import { useRouter } from "next/navigation";
 
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUpForm() {
+  const router = useRouter();
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const form = useForm<SignUpFormValues>({
@@ -59,6 +61,7 @@ export function SignUpForm() {
     } else {
       toast.success(success);
       form.reset();
+      router.push("/signin");
     }
 
     setRecaptchaToken(null);
