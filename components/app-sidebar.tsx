@@ -16,9 +16,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import Image from "next/image";
@@ -86,31 +84,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {...props}
     >
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild tooltip="Eznect Home">
-              <Link href="/home">
-                <Image
-                  src="/images/logo.png"
-                  alt="EZNECT"
-                  width={32}
-                  height={32}
-                  className="rounded-lg"
-                />
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">EZNECT</span>
-                  {isSubScriptionLoading || isUserLoading ? (
-                    <Skeleton className="h-3 w-24" />
-                  ) : (
-                    <span className="truncate text-xs capitalize">
-                      {user?.currentPlan}
-                    </span>
-                  )}
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <SidebarMenuButton size="lg" asChild tooltip="Eznect Home">
+          <Link href="/home">
+            <Image
+              src="/images/logo.png"
+              alt="EZNECT"
+              width={32}
+              height={32}
+              className="rounded-lg"
+            />
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-semibold">EZNECT</span>
+              {isSubScriptionLoading || isUserLoading ? (
+                <Skeleton className="h-3 w-24" />
+              ) : (
+                <span className="truncate text-xs capitalize">
+                  {user?.currentPlan}
+                </span>
+              )}
+            </div>
+          </Link>
+        </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
         <Nav navMain={nav.navMain} navSecondary={nav.navSecondary} />

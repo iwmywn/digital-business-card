@@ -35,6 +35,8 @@ import { Contact } from "lucide-react";
 import { FormButton } from "@/components/form-button";
 import { contactSchema } from "@/schemas";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { submitContact } from "@/actions/support-requests";
+import { useState } from "react";
 
 const departments = [
   { value: "support", label: "Technical Support" },
@@ -44,9 +46,10 @@ const departments = [
   { value: "feedback", label: "Product Feedback" },
 ];
 
-type ContactFormValues = z.infer<typeof contactSchema>;
+export type ContactFormValues = z.infer<typeof contactSchema>;
 
-export function ContactForm() {
+export function ContactDialog() {
+  const [open, setOpen] = useState<boolean>(false);
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
@@ -54,24 +57,26 @@ export function ContactForm() {
       lastName: "",
       company: "",
       email: "",
-      phone: "",
+      phone: undefined,
       department: "",
       message: "",
     },
   });
 
-  // values: ContactFormValues
-  async function onSubmit() {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+  async function onSubmit(values: ContactFormValues) {
+    const { success, error } = await submitContact(values);
 
-    toast.success(
-      "Your message has been sent successfully. We'll get back to you soon.",
-    );
-    form.reset();
+    if (error || !success) {
+      toast.error(error);
+    } else {
+      form.reset();
+      setOpen(false);
+      toast.success(success);
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <SidebarMenuItem key="Contact Us">
           <SidebarMenuButton tooltip="Contact Us">
@@ -231,7 +236,6 @@ export function ContactForm() {
                     <Textarea
                       id="message"
                       placeholder="Please provide details about your inquiry..."
-                      className="min-h-[100px]"
                       {...field}
                     />
                   </FormControl>

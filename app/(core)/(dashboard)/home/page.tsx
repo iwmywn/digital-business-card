@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { Bug } from "lucide-react";
+import { EmptyState } from "@/components/empty-state";
+import { BugReportDialog } from "@/components/bug-report-dialog";
 
 export function generateMetadata(): Metadata {
   return { title: "Home" };
@@ -6,18 +9,14 @@ export function generateMetadata(): Metadata {
 
 export default function page() {
   return (
-    <div className="flex h-full flex-1 flex-col gap-4 p-4 pt-0">
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-      </div>
-    </div>
+    <EmptyState
+      icon={<Bug />}
+      title="HELP IMPROVE THIS PROJECT"
+      message="Found a bug or have a suggestion? We appreciate your feedback to make
+        this project better."
+      className="min-h-[calc(100vh-4.83rem)]"
+    >
+      <BugReportDialog />
+    </EmptyState>
   );
 }

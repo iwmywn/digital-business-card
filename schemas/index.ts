@@ -351,6 +351,13 @@ const brandNameSchema = z
     }
   });
 
+const bugReportSchema = z.object({
+  title: z.string().min(5, "Title must be at least 5 characters"),
+  type: z.enum(["bug", "feature", "improvement"]),
+  description: z.string().min(20, "Description must be at least 20 characters"),
+  steps: z.string().optional(),
+});
+
 export {
   signUpSchema,
   signInSchema,
@@ -364,4 +371,5 @@ export {
   personalInfoSchema,
   cardSlugSchema,
   brandNameSchema,
+  bugReportSchema,
 };

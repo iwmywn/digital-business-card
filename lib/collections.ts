@@ -4,6 +4,8 @@ import type {
   DBUser,
   DBAvatar,
   DBCard,
+  DBIssue,
+  DBContact,
 } from "@/lib/definitions";
 
 export async function getPrivateTokenCollection() {
@@ -20,4 +22,12 @@ export async function getUserCollection() {
 
 export async function getCardCollection() {
   return await collection<DBCard>("cards");
+}
+
+export async function getIssueCollection() {
+  return await collection<DBIssue>("issues");
+}
+
+export async function getContactCollection() {
+  return await collection<DBContact>("contacts");
 }

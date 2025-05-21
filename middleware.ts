@@ -75,10 +75,6 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (path === "/") {
-    return redirectTo(routes.signInRoute, nextUrl);
-  }
-
   const user_session = cookies.get("user_session")?.value;
 
   if (!user_session) {

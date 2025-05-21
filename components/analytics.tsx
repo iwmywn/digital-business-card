@@ -30,7 +30,7 @@ import { useEffect, useState } from "react";
 import { useCard, useUser } from "@/lib/swr";
 import { AnalyticsSkeleton } from "@/components/skeletons";
 import { toast } from "sonner";
-import { NotFoundUI } from "@/components/not-found-ui";
+import { EmptyState } from "@/components/empty-state";
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 
 const chartConfig = {
@@ -255,7 +255,7 @@ export function Analytics() {
 
   if (user?.currentPlan === "free") {
     return (
-      <NotFoundUI
+      <EmptyState
         icon={<ChartColumnIncreasing />}
         title="UNLOCK ANALYTICS"
         message="Upgrade to our basic or professional plan to access analytics for your
@@ -269,7 +269,7 @@ export function Analytics() {
 
   if (cards.length === 0) {
     return (
-      <NotFoundUI
+      <EmptyState
         icon={<ChartColumnIncreasing />}
         title="NO CARDS YET"
         message="Create a digital business card to start tracking your analytics."
@@ -403,7 +403,7 @@ export function Analytics() {
         </CardHeader>
         <CardContent>
           {user?.currentPlan === "basic" ? (
-            <NotFoundUI
+            <EmptyState
               icon={<ChartColumnIncreasing />}
               title="UNLOCK ANALYTICS"
               message="Upgrade to our professional plan to access detailed analytics

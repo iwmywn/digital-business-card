@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ContactForm } from "@/components/contact-form";
+import { ContactDialog } from "@/components/contact-dialog";
 
 interface NavItem {
   title: string;
@@ -64,7 +64,7 @@ export function Nav({ navMain, navSecondary }: NavProps) {
         <SidebarGroupContent>
           <SidebarMenu>
             {renderMenu(navSecondary)}
-            <ContactForm />
+            <ContactDialog />
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>

@@ -56,6 +56,29 @@ type BaseCard<T> = {
   updatedAt: Date;
 };
 
+type BaseIssue<T> = {
+  _id: T;
+  userId: string;
+  title: string;
+  type: "bug" | "feature" | "improvement";
+  description: string;
+  steps?: string;
+  submittedAt: Date;
+};
+
+type BaseContact<T> = {
+  _id: T;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  company: string;
+  email: string;
+  phone?: string;
+  department: string;
+  message: string;
+  submittedAt: Date;
+};
+
 type Profile = {
   profileImage?: Image;
   coverImage?: Image;
@@ -104,5 +127,11 @@ export type DBUser = BaseUser<ObjectId>;
 
 export type Card = BaseCard<string>;
 export type DBCard = BaseCard<ObjectId>;
+
+export type Issue = BaseIssue<string>;
+export type DBIssue = BaseIssue<ObjectId>;
+
+export type Contact = BaseContact<string>;
+export type DBContact = BaseContact<ObjectId>;
 
 export type { PaymentHistory, Profile, NotificationSettings };

@@ -32,7 +32,7 @@ import type { Card as CardType } from "@/lib/definitions";
 import { getCloudinaryUrl, getColorClass, getFontClass } from "@/lib/utils";
 import { CardManagementSkeleton } from "@/components/skeletons";
 import { useCard, useUser } from "@/lib/swr";
-import { NotFoundUI } from "@/components/not-found-ui";
+import { EmptyState } from "@/components/empty-state";
 import { QRCodeDialog } from "@/components/qr-code-dialog";
 import { ShareCardDialog } from "@/components/share-card-dialog";
 import { DeleteCardDialog } from "@/components/delete-card-dialog";
@@ -116,7 +116,7 @@ export function CardManagement() {
         </Button>
       </div>
 
-      <Alert variant="default">
+      <Alert ref={registerRef} variant="default">
         <Info />
         <AlertTitle>Note</AlertTitle>
         <AlertDescription>
@@ -144,7 +144,7 @@ export function CardManagement() {
       </div>
 
       {filteredCards.length === 0 ? (
-        <NotFoundUI
+        <EmptyState
           icon={<Search />}
           title="NO CARDS FOUND"
           message={
@@ -152,9 +152,8 @@ export function CardManagement() {
               ? "You haven't created any cards yet."
               : "We couldn't find any cards matching your search. Try a different search term."
           }
-          className="border border-dashed"
           style={{
-            minHeight: `calc(100vh - ${calculatedHeight}px - 7.83rem)`,
+            minHeight: `calc(100vh - ${calculatedHeight}px - 9.33rem)`,
           }}
         />
       ) : (

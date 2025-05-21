@@ -1,7 +1,7 @@
 import * as fonts from "@/app/fonts";
 
 const basicId = process.env.NEXT_PUBLIC_BASIC_ID;
-const professionalId = process.env.NEXT_PUBLIC_PROFESSION_ID;
+const professionalId = process.env.NEXT_PUBLIC_PROFESSIONAL_ID;
 
 const maxFreeCards = 1;
 const maxBasicCards = 3;
@@ -223,7 +223,7 @@ const subscriptionPlans = [
   {
     id: "basic",
     name: "Basic",
-    price: 9.99,
+    price: 7.99,
     features: [
       `Create up to ${maxBasicCards} digital business cards`,
       "Unlock additional themes",
@@ -237,7 +237,7 @@ const subscriptionPlans = [
   {
     id: "professional",
     name: "Professional",
-    price: 19.99,
+    price: 15.99,
     features: [
       `Create up to ${maxProfessionalCards} digital business cards`,
       "Unlock the full theme library",

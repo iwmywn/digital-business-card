@@ -25,7 +25,7 @@ import { getPaymentHistoryDetails } from "@/actions/plan";
 import { toast } from "sonner";
 import { ReceiptData } from "@/components/payment-receipt-dialog";
 import { useSubscription } from "@/lib/swr";
-import { NotFoundUI } from "@/components/not-found-ui";
+import { EmptyState } from "@/components/empty-state";
 import { formatDate } from "@/lib/utils";
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 
@@ -108,7 +108,7 @@ export function BillingHistory({
         </CardHeader>
         <CardContent>
           {filteredHistory.length === 0 ? (
-            <NotFoundUI
+            <EmptyState
               icon={<Receipt />}
               title="NO TRANSACTIONS FOUND"
               message={

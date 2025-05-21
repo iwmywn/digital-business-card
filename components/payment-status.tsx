@@ -16,7 +16,7 @@ function PaymentStatusUI({
   message: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-[calc(100vh-4.83rem)] flex-col items-center justify-center gap-2 px-6 text-center md:px-16">
+    <div className="flex min-h-[calc(100vh-4.83rem)] flex-col items-center justify-center gap-2 rounded-lg border border-dashed px-6 text-center md:px-16">
       <div className={`rounded-full p-3 ${iconBg}`}>
         <div className={`${iconColor}`}>{icon}</div>
       </div>

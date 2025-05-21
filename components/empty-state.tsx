@@ -3,28 +3,30 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { HTMLAttributes, ReactNode } from "react";
 
-interface NotFoundUIProps extends HTMLAttributes<HTMLDivElement> {
+interface EmptyStateProps extends HTMLAttributes<HTMLDivElement> {
   icon: ReactNode;
   title: string;
   message: string;
+  children?: ReactNode;
   linkHref?: string;
   linkLabel?: string;
   className?: string;
 }
 
-export function NotFoundUI({
+export function EmptyState({
   icon,
   title,
   message,
+  children,
   linkHref,
   linkLabel,
   className,
   ...props
-}: NotFoundUIProps) {
+}: EmptyStateProps) {
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center gap-2 rounded-lg px-6 text-center md:px-16",
+        "flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed px-6 text-center md:px-16",
         className,
       )}
       {...props}
@@ -39,6 +41,7 @@ export function NotFoundUI({
           </Link>
         </Button>
       )}
+      {children && children}
     </div>
   );
 }

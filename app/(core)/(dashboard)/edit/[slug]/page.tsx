@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { EditCard } from "@/components/edit-card";
 import { getCardToEditBySlug } from "@/actions/card";
-import { NotFoundUI } from "@/components/not-found-ui";
+import { EmptyState } from "@/components/empty-state";
 import { Ghost } from "lucide-react";
 
 export async function generateMetadata({
@@ -35,7 +35,7 @@ export default async function page({
 
   if (error || !card) {
     return (
-      <NotFoundUI
+      <EmptyState
         icon={<Ghost />}
         title="OOPS! AN ERROR OCCURRED"
         message={error}

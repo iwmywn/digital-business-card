@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { NotFoundUI } from "@/components/not-found-ui";
+import { EmptyState } from "@/components/empty-state";
 import { BellOff } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function page() {
   return (
-    <NotFoundUI
+    <EmptyState
       icon={<BellOff />}
       title="NO NOTIFICATIONS (WIP)"
       message="You're all caught up! There are no new notifications at the moment."
