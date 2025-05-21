@@ -3,6 +3,7 @@ import { nunito } from "@/app/fonts";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { TopProgressBar } from "@/components/top-progress-bar";
 
 export const metadata: Metadata = {
   title: {
@@ -27,6 +28,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <TopProgressBar />
           <Toaster richColors closeButton />
           {children}
         </ThemeProvider>
