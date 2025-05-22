@@ -87,7 +87,10 @@ export async function middleware(req: NextRequest) {
     return redirectIfProtectedRoute(path, nextUrl);
   }
 
-  if (routes.authRoutes.some((route) => path.startsWith(route))) {
+  if (
+    path === "/" ||
+    routes.authRoutes.some((route) => path.startsWith(route))
+  ) {
     return redirectTo(routes.DEFAULT_SIGNIN_REDIRECT, nextUrl);
   }
 

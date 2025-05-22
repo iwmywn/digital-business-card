@@ -58,9 +58,11 @@ export function TopProgressBar() {
         e.button === 0 &&
         !e.metaKey &&
         !e.ctrlKey &&
-        !e.shiftKey
+        !e.shiftKey &&
+        !e.altKey
       ) {
         const linkUrl = new URL(link.href);
+        if (linkUrl.pathname === pathname) return;
         const targetPath = linkUrl.pathname + linkUrl.search + linkUrl.hash;
         if (targetPath !== pathname) {
           start();

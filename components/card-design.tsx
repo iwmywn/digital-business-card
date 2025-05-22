@@ -381,7 +381,7 @@ export const CardDesign = forwardRef(function CardDesign(
           </div>
 
           <div className="space-y-3">
-            <Label className="text-base">Color</Label>
+            <Label className="text-base">Card Color</Label>
             <div className="flex flex-wrap gap-3">
               {colorOptions.map((color) => (
                 <button
@@ -397,7 +397,7 @@ export const CardDesign = forwardRef(function CardDesign(
           </div>
 
           <div className="space-y-3">
-            <Label className="text-base">Font</Label>
+            <Label className="text-base">Font Family</Label>
             <Select value={fontFamily} onValueChange={setFontFamily}>
               <SelectTrigger className={`${selectedFont.className} w-full`}>
                 <SelectValue placeholder="Select a font" />
