@@ -55,7 +55,7 @@ export function PrivateForm() {
     } else {
       toast.success(success);
       const searchParams = new URLSearchParams(window.location.search);
-      const callbackUrl = searchParams.get("next") || "/signin";
+      const callbackUrl = searchParams.get("next") || "/";
 
       form.reset();
       router.push(callbackUrl);

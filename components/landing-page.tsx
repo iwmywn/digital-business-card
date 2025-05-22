@@ -309,9 +309,10 @@ export function LandingPage() {
       <main className="w-full px-6 md:px-8 lg:px-10">
         <section className="relative py-16 md:py-20 lg:py-24">
           <div className="flex flex-col gap-6">
-            <h1 className="mb-6 text-center text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-              Connect Instantly with Digital Business Cards
-            </h1>
+            <div className="mb-6 text-center text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+              <h1>Connect Instantly</h1>
+              <h1>with Digital Business Cards</h1>
+            </div>
             <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
               Share your contact information with a simple scan. Create
               customizable digital business cards that make networking
@@ -320,8 +321,8 @@ export function LandingPage() {
             <div className="flex w-full flex-col justify-center gap-4 sm:flex-row">
               <Link href="/signup" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full">
-                  Create your card
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  Create Your Card
+                  <ArrowRight />
                 </Button>
               </Link>
               <Button
@@ -387,7 +388,7 @@ export function LandingPage() {
                   </CardContent>
                   <CardFooter>
                     <Link href="/signup" className="w-full">
-                      <Button className="w-full">Create your own card</Button>
+                      <Button className="w-full">Create Your Own Card</Button>
                     </Link>
                   </CardFooter>
                 </Card>
@@ -409,7 +410,7 @@ export function LandingPage() {
                 target="_blank"
                 className="sm:mx-auto sm:w-fit"
               >
-                See full demo
+                See Full Demo
                 <ExternalLink />
               </Link>
             </Button>
@@ -712,7 +713,7 @@ export function LandingPage() {
                   className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
                 >
                   Get Started for Free
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight />
                 </Button>
               </Link>
               <Button
