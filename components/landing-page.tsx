@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -178,28 +178,46 @@ const testimonials = [
 
 export function LandingPage() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [cardColor, setCardColor] = useState<string>(mockCardDesign.cardColor);
-  const [fontFamily, setFontFamily] = useState<string>(
-    mockCardDesign.fontFamily,
-  );
+
   const isIPad = useMediaQuery("(max-width: 1024px)");
-
-  const autoScrollOptions = {
-    speed: 0.5,
-    startDelay: 0,
-    stopOnInteraction: false,
-    stopOnMouseEnter: true,
-  };
-
-  const [emblaRef] = useEmblaCarousel(
-    { loop: true, align: isIPad ? "center" : "start" },
-    isIPad ? [] : [AutoScroll(autoScrollOptions)],
-  );
-
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const featuresRef = useRef<HTMLElement>(null);
   const pricingRef = useRef<HTMLElement>(null);
   const testimonialsRef = useRef<HTMLElement>(null);
   const faqRef = useRef<HTMLElement>(null);
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: isIPad ? "center" : "start",
+      skipSnaps: false,
+    },
+    isIPad
+      ? []
+      : [
+          AutoScroll({
+            speed: 0.5,
+            startDelay: 0,
+            stopOnInteraction: false,
+            stopOnMouseEnter: true,
+          }),
+        ],
+  );
+  const [cardColor, setCardColor] = useState<string>(mockCardDesign.cardColor);
+  const [fontFamily, setFontFamily] = useState<string>(
+    mockCardDesign.fontFamily,
+  );
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    setScrollSnaps(emblaApi.scrollSnapList());
+    emblaApi.on("select", onSelect);
+    onSelect();
+  }, [emblaApi, onSelect]);
 
   mockCardDesign.cardColor = cardColor;
   mockCardDesign.fontFamily = fontFamily;
@@ -261,7 +279,7 @@ export function LandingPage() {
           >
             <Image
               src="/images/logo.png"
-              alt="EZNECT"
+              alt="EZNECT Logo"
               width={24}
               height={24}
               className="rounded-lg"
@@ -420,7 +438,7 @@ export function LandingPage() {
         <section
           id="features"
           ref={featuresRef}
-          className="bg-card rounded-[5rem] py-16 md:py-20 lg:py-24"
+          className="bg-card rounded-[5rem] py-16 shadow-sm md:py-20 lg:py-24"
         >
           <div className="flex flex-col gap-6 px-4 md:px-6 lg:px-8">
             <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
@@ -628,7 +646,7 @@ export function LandingPage() {
         <section
           id="testimonials"
           ref={testimonialsRef}
-          className="bg-card overflow-hidden rounded-[5rem] py-16 md:py-20 lg:py-24"
+          className="bg-card overflow-hidden rounded-[5rem] py-16 shadow-sm md:py-20 lg:py-24"
         >
           <div className="relative flex flex-col items-center gap-6 [&>h2,p]:mx-4 md:[&>h2,p]:mx-6 lg:[&>h2,p]:mx-8">
             <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
@@ -647,7 +665,7 @@ export function LandingPage() {
                   {testimonials.map((testimonial, index) => (
                     <Card
                       key={index}
-                      className="hover:ring-primary mr-4 h-full min-w-fit transition-all hover:ring-1 hover:ring-offset-1"
+                      className={`hover:ring-primary mr-4 h-full min-w-fit transition-all hover:ring-1 hover:ring-offset-1 ${isIPad ? "cursor-pointer" : ""}`}
                     >
                       <CardHeader>
                         <div className="flex items-center gap-4">
@@ -680,6 +698,22 @@ export function LandingPage() {
               </div>
             </div>
           </div>
+
+          {isIPad && (
+            <div className="flex justify-center gap-x-2 pt-2">
+              {scrollSnaps.map((_, index) => (
+                <div
+                  key={index}
+                  onClick={() => emblaApi?.scrollTo(index)}
+                  className={`group before:border-ring/50 relative flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 before:absolute before:inset-0 before:rounded-full before:border`}
+                >
+                  <span
+                    className={`block h-2 w-2 rounded-full transition-colors duration-300 ${index === selectedIndex ? "bg-primary" : ""} `}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
         <section
@@ -738,7 +772,7 @@ export function LandingPage() {
               >
                 <Image
                   src="/images/logo.png"
-                  alt="EZNECT"
+                  alt="EZNECT Logo"
                   width={24}
                   height={24}
                   className="rounded-lg"

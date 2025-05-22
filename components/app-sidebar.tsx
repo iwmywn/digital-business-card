@@ -88,7 +88,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <Link href="/home">
             <Image
               src="/images/logo.png"
-              alt="EZNECT"
+              alt="EZNECT Logo"
               width={32}
               height={32}
               className="rounded-lg"
