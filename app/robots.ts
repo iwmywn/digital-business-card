@@ -4,9 +4,23 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: ["/card/", "/profile/"],
-      disallow: "/",
+      allow: ["/"],
+      disallow: [
+        "/home",
+        "/create",
+        "/management",
+        "/analytics",
+        "/subscription/",
+        "/settings",
+        "/edit",
+        "/notifications",
+        "/signin",
+        "/signup",
+        "/forgot-password",
+        "/email-handler",
+        "/maintenance",
+        "/private",
+      ],
     },
-    sitemap: `${process.env.NEXT_PUBLIC_URL}/sitemap.xml`,
   };
 }
