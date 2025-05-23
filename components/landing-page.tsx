@@ -67,8 +67,8 @@ const mockPersonalInfo: PersonalInfoValues = {
   department: "Research & Development",
   company: "NextTech Solutions",
   accreditations: "MBA, CPA",
-  headline: "Software engineer with 1+ year of experience.",
-  bio: "Software engineer with skills in full-stack development, cloud computing, and system design.",
+  headline: "Software Engineer with 1+ year of experience.",
+  bio: "Software Engineer with skills in full-stack development, cloud computing, and system design.",
 };
 
 const mockLinks: SerializableLinkType[] = [
