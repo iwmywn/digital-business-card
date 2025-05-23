@@ -53,7 +53,7 @@ export function Header() {
       : () => null;
 
   return (
-    <header className="bg-background/75 sticky top-0 z-50 flex shrink-0 items-center justify-between py-2 backdrop-blur">
+    <header className="bg-primary-foreground/75 sticky top-0 z-50 flex shrink-0 items-center justify-between py-2 backdrop-blur">
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1" />
         <Breadcrumb>
