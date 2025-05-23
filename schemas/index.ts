@@ -154,7 +154,9 @@ const publicProfileSchema = z
 const accountSchema = z
   .object({
     username: z.string().optional(),
-    phone: z.string().optional(),
+    phone: z
+      .string()
+      .regex(/^\+?[1-9][0-9]{7,14}$/, "Phone number must be valid."),
     currentPassword: z.string().optional(),
     newPassword: z.string().optional(),
     confirmPassword: z.string().optional(),
@@ -304,6 +306,39 @@ const personalInfoSchema = z
     }
   });
 
+const usernameSchema = z
+  .object({
+    username: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    const { username } = data;
+
+    if (username) {
+      const match = username.match(/^[a-zA-Z0-9]+$/);
+      if (!match) {
+        ctx.addIssue({
+          path: ["username"],
+          code: z.ZodIssueCode.custom,
+          message: "Username contains invalid characters.",
+        });
+      }
+      if (username.length < 6) {
+        ctx.addIssue({
+          path: ["username"],
+          message: "Username must be at least 6 characters long.",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+      if (username.length > 20) {
+        ctx.addIssue({
+          path: ["username"],
+          message: "Username must be no more than 20 characters long.",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    }
+  });
+
 const cardSlugSchema = z
   .object({
     slug: z.string().optional(),
@@ -372,4 +407,5 @@ export {
   cardSlugSchema,
   brandNameSchema,
   bugReportSchema,
+  usernameSchema,
 };

@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { accountSchema } from "@/schemas";
+import { accountSchema, usernameSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { PasswordInput } from "@/components/ui/password-input";
 import { PhoneInput } from "@/components/ui/phone-input";
@@ -69,7 +69,7 @@ export function AccountForm() {
           user: {
             ...userResponse.user,
             username: values.username,
-            phone: values.phone ?? "",
+            phone: values.phone,
           },
         });
       }
@@ -85,7 +85,7 @@ export function AccountForm() {
       return;
     }
 
-    const parsedValue = accountSchema.safeParse({ username });
+    const parsedValue = usernameSchema.safeParse({ username });
 
     if (!parsedValue.success) {
       const errorMessages = parsedValue.error.errors
