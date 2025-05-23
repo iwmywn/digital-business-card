@@ -8,7 +8,7 @@ import { Share2, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { linkTypes, type SerializableLinkType } from "@/components/icons";
 import type { Card as CardType } from "@/lib/definitions";
-import { getColorClass, getFontClass } from "@/lib/utils";
+import { cn, getColorClass, getFontClass } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { getCloudinaryUrl } from "@/lib/utils";
 import { Loading } from "@/components/loading";
@@ -348,12 +348,16 @@ export function CardView({
             ref={saveButtonRef}
             className={`${showGradient ? "from-primary bg-gradient-to-t to-transparent" : ""} sticky right-0 bottom-0 left-0 z-50 flex items-center justify-center py-4 transition-all duration-200`}
           >
-            <Button
+            <button
               onClick={handleSaveContact}
-              className={`${colorClass} rounded-lg ${showGradient ? "px-7 py-3.5" : "px-14 py-7 text-base"} text-white transition-all duration-500`}
+              className={cn(
+                "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap text-white shadow-xs transition-all duration-500 outline-none hover:opacity-80 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 has-[>svg]:px-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+                colorClass,
+                showGradient ? "px-7 py-3.5" : "px-14 py-7 text-base",
+              )}
             >
               Save Contact
-            </Button>
+            </button>
           </div>
         </div>
       </div>
