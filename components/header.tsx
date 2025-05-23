@@ -38,7 +38,7 @@ const other = [
 export function Header() {
   const pathname = usePathname();
 
-  const allNavItems = [...nav.navMain, ...nav.navSecondary, ...other];
+  const allNavItems = [...nav, ...other];
   const foundItem = allNavItems.find(
     (item) => item.url === pathname || pathname.startsWith(item.url),
   );

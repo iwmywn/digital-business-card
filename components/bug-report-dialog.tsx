@@ -153,7 +153,7 @@ export function BugReportDialog() {
                   </FormControl>
                   <FormDescription>
                     For bug reports, please provide steps to reproduce if
-                    possible
+                    possible.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

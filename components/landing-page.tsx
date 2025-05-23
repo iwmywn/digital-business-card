@@ -20,7 +20,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CardPreview } from "@/components/card-preview";
-import { FAQSection } from "@/components/faq";
 import { subscriptionPlans } from "@/constants";
 import type { SerializableLinkType } from "@/components/icons";
 import * as constants from "@/constants";
@@ -39,6 +38,10 @@ import { Label } from "@/components/ui/label";
 import { SimpleIconComponent } from "@/components/icons";
 import { siFacebook, siInstagram, siX } from "simple-icons";
 import { PersonalInfoValues } from "@/components/personal-info";
+import { Separator } from "@/components/ui/separator";
+import { TermsOfServiceDialog } from "@/components/terms-of-service-dialog";
+import { PrivacyPolicyDialog } from "@/components/privacy-policy-dialog";
+import { FAQDialog } from "@/components/faq-dialog";
 
 const mockCardDesign: CardDesignValues = {
   cardColor: constants.defaultColor,
@@ -177,15 +180,17 @@ const testimonials = [
 ];
 
 export function LandingPage() {
+  const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false);
+  const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
-
   const isIPad = useMediaQuery("(max-width: 1024px)");
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const howItWorksRef = useRef<HTMLElement>(null);
   const featuresRef = useRef<HTMLElement>(null);
   const pricingRef = useRef<HTMLElement>(null);
   const testimonialsRef = useRef<HTMLElement>(null);
-  const faqRef = useRef<HTMLElement>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -225,10 +230,10 @@ export function LandingPage() {
   useEffect(() => {
     const handleScroll = () => {
       const sections = [
+        { id: "how-it-works", ref: howItWorksRef },
         { id: "features", ref: featuresRef },
         { id: "pricing", ref: pricingRef },
         { id: "testimonials", ref: testimonialsRef },
-        { id: "faq", ref: faqRef },
       ];
 
       let found = false;
@@ -259,7 +264,7 @@ export function LandingPage() {
     const section = document.getElementById(sectionId);
     if (section) {
       window.scrollTo({
-        top: section.offsetTop - 60,
+        top: section.offsetTop - 63,
         behavior: "smooth",
       });
     }
@@ -270,64 +275,64 @@ export function LandingPage() {
     constants.allFontOptions[0];
 
   return (
-    <div className="min-h-screen">
-      <header className="bg-background/75 sticky top-0 z-49 flex shrink-0 items-center justify-between border-b backdrop-blur">
-        <div className="flex h-16 w-full items-center justify-between px-6 md:px-8 lg:px-10">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-xl font-extrabold"
-          >
-            <Image
-              src="/images/logo.png"
-              alt="EZNECT Logo"
-              width={24}
-              height={24}
-              className="rounded-lg"
-            />
-            <span>EZNECT</span>
-          </Link>
-          <nav className="hidden gap-8 md:flex">
-            <button
-              onClick={() => scrollToSection("features")}
-              className={`text-sm font-medium transition-colors ${activeSection === "features" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
+    <>
+      <div className="min-h-screen">
+        <header className="bg-background/75 sticky top-0 z-50 flex shrink-0 items-center justify-between border-b backdrop-blur">
+          <div className="flex h-16 w-full items-center justify-between px-6 md:px-8 lg:px-10">
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-xl font-extrabold"
             >
-              Features
-            </button>
-            <button
-              onClick={() => scrollToSection("pricing")}
-              className={`text-sm font-medium transition-colors ${activeSection === "pricing" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
-            >
-              Pricing
-            </button>
-            <button
-              onClick={() => scrollToSection("testimonials")}
-              className={`text-sm font-medium transition-colors ${activeSection === "testimonials" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
-            >
-              Testimonials
-            </button>
-            <button
-              onClick={() => scrollToSection("faq")}
-              className={`text-sm font-medium transition-colors ${activeSection === "faq" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
-            >
-              FAQ
-            </button>
-          </nav>
-          <div className="flex items-center gap-4">
-            <Link href="/signin">
-              <Button variant="outline" size="sm">
-                Sign In
-              </Button>
+              <Image
+                src="/images/logo.png"
+                alt="EZNECT Logo"
+                width={24}
+                height={24}
+                className="rounded-lg"
+              />
+              <span>EZNECT</span>
             </Link>
-            <Link href="/signup">
-              <Button size="sm">Get Started</Button>
-            </Link>
+            <nav className="hidden gap-8 md:flex">
+              <button
+                onClick={() => scrollToSection("how-it-works")}
+                className={`text-sm font-medium transition-colors ${activeSection === "how-it-works" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
+              >
+                How It Works
+              </button>
+              <button
+                onClick={() => scrollToSection("features")}
+                className={`text-sm font-medium transition-colors ${activeSection === "features" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
+              >
+                Features
+              </button>
+              <button
+                onClick={() => scrollToSection("pricing")}
+                className={`text-sm font-medium transition-colors ${activeSection === "pricing" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
+              >
+                Pricing
+              </button>
+              <button
+                onClick={() => scrollToSection("testimonials")}
+                className={`text-sm font-medium transition-colors ${activeSection === "testimonials" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
+              >
+                Testimonials
+              </button>
+            </nav>
+            <div className="flex items-center gap-4">
+              <Link href="/signin">
+                <Button variant="outline" size="sm">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="sm">Get Started</Button>
+              </Link>
+            </div>
           </div>
-        </div>
-      </header>
-      <main className="w-full px-6 md:px-8 lg:px-10">
-        <section className="relative py-16 md:py-20 lg:py-24">
-          <div className="flex flex-col gap-6">
-            <div className="mb-6 text-center text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+        </header>
+        <main className="w-full px-6 md:px-8 lg:px-10">
+          <section className="bg-secondary dark:bg-card mb-1 flex min-h-screen flex-col items-center justify-center gap-12 px-4 [clip-path:polygon(0%_15%,100%_0%,100%_85%,0%_100%)] md:px-6 lg:px-8">
+            <div className="text-center text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
               <h1>Connect Instantly</h1>
               <h1>with Digital Business Cards</h1>
             </div>
@@ -352,454 +357,458 @@ export function LandingPage() {
                 Learn More
               </Button>
             </div>
+          </section>
 
-            <div className="mt-6 grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
-              <div className="w-full lg:sticky lg:top-16 lg:col-span-2">
-                <Card className="h-full">
-                  <CardHeader>
-                    <CardTitle className="text-lg">
-                      Customize Your Card
-                    </CardTitle>
-                    <CardDescription>
-                      Choose from a variety of fonts and colors to personalize
-                      your digital business card.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="space-y-3">
-                      <Label className="text-base">Font Family</Label>
-                      <Select value={fontFamily} onValueChange={setFontFamily}>
-                        <SelectTrigger
-                          className={`${selectedFont.className} w-full`}
+          <section
+            id="how-it-works"
+            ref={howItWorksRef}
+            className="relative py-16 md:py-20 lg:py-24"
+          >
+            <div className="flex flex-col gap-6">
+              <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
+                How It Works
+              </h2>
+              <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
+                Easily personalize your digital business card by selecting your
+                preferred fonts and colors.
+              </p>
+
+              <div className="mt-6 grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
+                <div className="w-full lg:sticky lg:top-16 lg:col-span-2">
+                  <Card className="h-full">
+                    <CardContent className="space-y-6">
+                      <div className="space-y-3">
+                        <Label className="text-base">Font Family</Label>
+                        <Select
+                          value={fontFamily}
+                          onValueChange={setFontFamily}
                         >
-                          <SelectValue placeholder="Select a font" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {constants.allFontOptions.map((font) => (
-                            <SelectItem
-                              key={font.value}
-                              value={font.value}
-                              className={font.className}
-                            >
-                              {font.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-3">
-                      <Label className="text-base">Card Color</Label>
-                      <div className="flex flex-wrap gap-3">
-                        {constants.allColorOptions.map((color) => (
-                          <button
-                            key={color.value}
-                            className={`h-12 w-12 cursor-pointer rounded-md shadow-sm transition-all ${color.color} ${cardColor === color.value ? "ring-primary scale-110 ring-1 ring-offset-1" : "hover:ring-primary hover:ring-1 hover:ring-offset-1"} `}
-                            onClick={() => setCardColor(color.value)}
-                            title={color.label}
-                            type="button"
-                            aria-label={`Select ${color.label} color`}
-                          />
-                        ))}
+                          <SelectTrigger
+                            className={`${selectedFont.className} w-full`}
+                          >
+                            <SelectValue placeholder="Select a font" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {constants.allFontOptions.map((font) => (
+                              <SelectItem
+                                key={font.value}
+                                value={font.value}
+                                className={font.className}
+                              >
+                                {font.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Link href="/signup" className="w-full">
-                      <Button className="w-full">Create Your Own Card</Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              </div>
 
-              <div className="w-full">
-                <CardPreview
-                  cardDesign={mockCardDesign}
-                  personalInfo={mockPersonalInfo}
-                  links={mockLinks}
-                  size="small"
-                />
-              </div>
-            </div>
-
-            <Button asChild>
-              <Link
-                href={`${process.env.NEXT_PUBLIC_URL}/card/iwmywn`}
-                target="_blank"
-                className="sm:mx-auto sm:w-fit"
-              >
-                See Full Demo
-                <ExternalLink />
-              </Link>
-            </Button>
-          </div>
-        </section>
-
-        <section
-          id="features"
-          ref={featuresRef}
-          className="bg-card rounded-[5rem] py-16 shadow-sm md:py-20 lg:py-24"
-        >
-          <div className="flex flex-col gap-6 px-4 md:px-6 lg:px-8">
-            <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
-              Everything You Need in a Digital Business Card
-            </h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
-              EZNECT provides all the tools you need to create, share, and
-              manage your digital presence professionally.
-            </p>
-            <div className="[&>div]:hover:ring-primary mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 [&>div]:hover:ring-1 [&>div]:hover:ring-offset-1">
-              <Card>
-                <CardHeader>
-                  <QrCode className="text-primary mb-2 h-10 w-10" />
-                  <CardTitle>Instant Sharing</CardTitle>
-                  <CardDescription>
-                    Share your contact information instantly with a QR code that
-                    can be scanned by any smartphone.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-primary mb-2 h-10 w-10"
-                  >
-                    <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
-                    <path d="M12 18h.01" />
-                  </svg>
-                  <CardTitle>Mobile Optimized</CardTitle>
-                  <CardDescription>
-                    Your digital business card looks great on any device,
-                    ensuring a professional experience for everyone.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-primary mb-2 h-10 w-10"
-                  >
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                  </svg>
-                  <CardTitle>Real-time Updates</CardTitle>
-                  <CardDescription>
-                    Update your information anytime and it&apos;s instantly
-                    reflected on your digital card.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-primary mb-2 h-10 w-10"
-                  >
-                    <path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6" />
-                    <path d="M14 3v5h5" />
-                    <circle cx="16" cy="16" r="6" />
-                    <path d="M16 14v4" />
-                    <path d="M16 20h.01" />
-                  </svg>
-                  <CardTitle>Analytics & Insights</CardTitle>
-                  <CardDescription>
-                    Track who views your card and gain valuable insights about
-                    your networking efforts.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-primary mb-2 h-10 w-10"
-                  >
-                    <path d="M12 2H2v10h10V2z" />
-                    <path d="M22 12h-10v10h10V12z" />
-                    <path d="M12 12H2v10h10V12z" />
-                    <path d="M22 2h-10v10h10V2z" />
-                  </svg>
-                  <CardTitle>Customizable Design</CardTitle>
-                  <CardDescription>
-                    Choose from multiple templates and customize colors, fonts,
-                    and layouts to match your brand.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-primary mb-2 h-10 w-10"
-                  >
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  </svg>
-                  <CardTitle>Privacy Controls</CardTitle>
-                  <CardDescription>
-                    Control who sees your information with advanced privacy
-                    settings and permissions.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        <section
-          id="pricing"
-          ref={pricingRef}
-          className="relative py-16 md:py-20 lg:py-24"
-        >
-          <div className="flex flex-col gap-6">
-            <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
-              Choose the plan that&apos;s right for you, from individual
-              professionals to large teams.
-            </p>
-            <div className="mt-6 flex flex-wrap justify-center gap-6">
-              {subscriptionPlans.map((plan) => (
-                <Card
-                  key={plan.id}
-                  className={
-                    "hover:ring-primary relative max-w-sm min-w-[17.5rem] flex-1 overflow-hidden shadow-sm transition-all duration-200 hover:ring-1 hover:ring-offset-1"
-                  }
-                >
-                  {plan.popular && (
-                    <div className="absolute top-0 right-0">
-                      <div className="bg-primary text-primary-foreground flex items-center gap-1 rounded-bl-lg px-3 py-1 text-xs font-medium">
-                        <Sparkles className="h-3 w-3" />
-                        Popular
-                      </div>
-                    </div>
-                  )}
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between text-lg">
-                      {plan.name}
-                    </CardTitle>
-                    <CardDescription className="flex items-baseline">
-                      <span className="text-base font-bold">
-                        {plan.price === 0
-                          ? "Free forever"
-                          : `$${plan.price.toFixed(2)} / month`}
-                      </span>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {plan.features.map((feature) => (
-                        <li key={feature} className="flex items-start">
-                          <Check className="text-primary mt-0.5 mr-2 h-4 w-4 flex-shrink-0" />
-                          <span className="text-sm">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter className="mt-auto">
-                    <Link href="/signup" className="w-full">
-                      <Button
-                        className="w-full"
-                        variant={plan.popular ? "default" : "outline"}
-                      >
-                        {plan.id === "free" ? "Get Started" : "Upgrade"}
-                      </Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section
-          id="testimonials"
-          ref={testimonialsRef}
-          className="bg-card overflow-hidden rounded-[5rem] py-16 shadow-sm md:py-20 lg:py-24"
-        >
-          <div className="relative flex flex-col items-center gap-6 [&>h2,p]:mx-4 md:[&>h2,p]:mx-6 lg:[&>h2,p]:mx-8">
-            <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
-              What Our Customers Say
-            </h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
-              Join thousands of professionals who are already using EZNECT to
-              enhance their networking.
-            </p>
-
-            <div className="from-background pointer-events-none absolute -top-17 -bottom-17 left-0 z-10 hidden w-20 bg-gradient-to-r to-transparent md:-top-21 md:-bottom-21 lg:-top-25 lg:-bottom-25 lg:block" />
-            <div className="from-background pointer-events-none absolute -top-17 right-0 -bottom-17 z-10 hidden w-20 bg-gradient-to-l to-transparent md:-top-21 md:-bottom-21 lg:-top-25 lg:-bottom-25 lg:block" />
-            <div className="relative mx-auto mt-6 w-full">
-              <div className="overflow-hidden" ref={emblaRef}>
-                <div className="flex py-1">
-                  {testimonials.map((testimonial, index) => (
-                    <Card
-                      key={index}
-                      className={`hover:ring-primary mr-4 h-full min-w-fit transition-all hover:ring-1 hover:ring-offset-1 ${isIPad ? "cursor-pointer" : ""}`}
-                    >
-                      <CardHeader>
-                        <div className="flex items-center gap-4">
-                          <div className="h-14 w-14 overflow-hidden rounded-full">
-                            <Image
-                              src={testimonial.image}
-                              alt={testimonial.name}
-                              width={56}
-                              height={56}
+                      <div className="space-y-3">
+                        <Label className="text-base">Card Color</Label>
+                        <div className="flex flex-wrap gap-3">
+                          {constants.allColorOptions.map((color) => (
+                            <button
+                              key={color.value}
+                              className={`h-12 w-12 cursor-pointer rounded-md shadow-sm transition-all ${color.color} ${cardColor === color.value ? "ring-primary scale-110 ring-1 ring-offset-1" : "hover:ring-primary hover:ring-1 hover:ring-offset-1"} `}
+                              onClick={() => setCardColor(color.value)}
+                              title={color.label}
+                              type="button"
+                              aria-label={`Select ${color.label} color`}
                             />
-                          </div>
-                          <div className="text-primary">
-                            <CardTitle className="text-lg">
-                              {testimonial.name}
-                            </CardTitle>
-                            <CardDescription>
-                              {testimonial.title}
-                            </CardDescription>
-                          </div>
+                          ))}
                         </div>
-                      </CardHeader>
-                      <CardContent className="max-w-96">
-                        <span className="text-muted-foreground">
-                          &quot;{testimonial.quote}&quot;
-                        </span>
-                      </CardContent>
-                    </Card>
-                  ))}
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Link href="/signup" className="w-full">
+                        <Button className="w-full">Create Your Own Card</Button>
+                      </Link>
+                    </CardFooter>
+                  </Card>
                 </div>
-              </div>
-            </div>
-          </div>
 
-          {isIPad && (
-            <div className="flex justify-center gap-x-2 pt-2">
-              {scrollSnaps.map((_, index) => (
-                <div
-                  key={index}
-                  onClick={() => emblaApi?.scrollTo(index)}
-                  className={`group before:border-ring/50 relative flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 before:absolute before:inset-0 before:rounded-full before:border`}
-                >
-                  <span
-                    className={`block h-2 w-2 rounded-full transition-colors duration-300 ${index === selectedIndex ? "bg-primary" : ""} `}
+                <div className="w-full">
+                  <CardPreview
+                    cardDesign={mockCardDesign}
+                    personalInfo={mockPersonalInfo}
+                    links={mockLinks}
+                    size="small"
                   />
                 </div>
-              ))}
-            </div>
-          )}
-        </section>
+              </div>
 
-        <section
-          id="faq"
-          ref={faqRef}
-          className="relative py-16 md:py-20 lg:py-24"
-        >
-          <div className="flex flex-col gap-6">
-            <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
-              Find answers to common questions about our digital business card
-              service.
-            </p>
-            <div className="mx-auto mt-6 w-full max-w-5xl space-y-6">
-              <FAQSection />
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-foreground text-background overflow-hidden rounded-[5rem] py-16 md:py-20 lg:py-24">
-          <div className="relative flex flex-col items-center gap-6">
-            <h2 className="text-center text-4xl font-black tracking-tight sm:text-5xl">
-              Ready to Modernize Your Networking?
-            </h2>
-            <div className="flex flex-col justify-center gap-4 font-bold sm:flex-row">
-              <Link href="/signup">
-                <Button
-                  size="lg"
-                  className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
+              <Button asChild>
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_URL}/card/iwmywn`}
+                  target="_blank"
+                  className="sm:mx-auto sm:w-fit"
                 >
-                  Get Started for Free
-                  <ArrowRight />
-                </Button>
-              </Link>
-              <Button
-                size="lg"
-                variant="outline"
-                className="bg-foreground hover:bg-accent-foreground hover:text-accent dark:bg-muted-foreground/10 dark:border-muted-foreground dark:hover:bg-muted-foreground/20"
-                onClick={() => scrollToSection("pricing")}
-              >
-                View Pricing
+                  See Full Demo
+                  <ExternalLink />
+                </Link>
               </Button>
             </div>
-          </div>
-        </section>
-      </main>
-      <footer className="mt-16 w-full border-t px-6 md:mt-20 md:px-8 lg:mt-24 lg:px-10">
-        <div className="py-12 md:py-16 lg:py-20">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4">
-            <div className="space-y-4">
-              <Link
-                href="/"
-                className="flex items-center gap-2 text-xl font-extrabold"
-              >
-                <Image
-                  src="/images/logo.png"
-                  alt="EZNECT Logo"
-                  width={24}
-                  height={24}
-                  className="rounded-lg"
+          </section>
+
+          <section
+            id="features"
+            ref={featuresRef}
+            className="bg-secondary dark:bg-card py-16 [clip-path:polygon(0%_5%,5%_0%,95%_0%,100%_5%,100%_95%,95%_100%,5%_100%,0%_95%)] md:py-20 lg:py-24"
+          >
+            <div className="flex flex-col gap-6 px-4 md:px-6 lg:px-8">
+              <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
+                Everything You Need in a Digital Business Card
+              </h2>
+              <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
+                EZNECT provides all the tools you need to create, share, and
+                manage your digital presence professionally.
+              </p>
+              <div className="[&>div]:hover:ring-primary mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 [&>div]:hover:ring-1 [&>div]:hover:ring-offset-1">
+                <Card>
+                  <CardHeader>
+                    <QrCode className="text-primary mb-2 h-10 w-10" />
+                    <CardTitle>Instant Sharing</CardTitle>
+                    <CardDescription>
+                      Share your contact information instantly with a QR code
+                      that can be scanned by any smartphone.
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-primary mb-2 h-10 w-10"
+                    >
+                      <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                      <path d="M12 18h.01" />
+                    </svg>
+                    <CardTitle>Mobile Optimized</CardTitle>
+                    <CardDescription>
+                      Your digital business card looks great on any device,
+                      ensuring a professional experience for everyone.
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-primary mb-2 h-10 w-10"
+                    >
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                    </svg>
+                    <CardTitle>Real-time Updates</CardTitle>
+                    <CardDescription>
+                      Update your information anytime and it&apos;s instantly
+                      reflected on your digital card.
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-primary mb-2 h-10 w-10"
+                    >
+                      <path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6" />
+                      <path d="M14 3v5h5" />
+                      <circle cx="16" cy="16" r="6" />
+                      <path d="M16 14v4" />
+                      <path d="M16 20h.01" />
+                    </svg>
+                    <CardTitle>Analytics & Insights</CardTitle>
+                    <CardDescription>
+                      Track who views your card and gain valuable insights about
+                      your networking efforts.
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-primary mb-2 h-10 w-10"
+                    >
+                      <path d="M12 2H2v10h10V2z" />
+                      <path d="M22 12h-10v10h10V12z" />
+                      <path d="M12 12H2v10h10V12z" />
+                      <path d="M22 2h-10v10h10V2z" />
+                    </svg>
+                    <CardTitle>Customizable Design</CardTitle>
+                    <CardDescription>
+                      Choose from multiple templates and customize colors,
+                      fonts, and layouts to match your brand.
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-primary mb-2 h-10 w-10"
+                    >
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    <CardTitle>Privacy Controls</CardTitle>
+                    <CardDescription>
+                      Control who sees your information with advanced privacy
+                      settings and permissions.
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </div>
+            </div>
+          </section>
+
+          <section
+            id="pricing"
+            ref={pricingRef}
+            className="relative py-16 md:py-20 lg:py-24"
+          >
+            <div className="flex flex-col gap-6">
+              <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
+                Simple, Transparent Pricing
+              </h2>
+              <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
+                Choose the plan that&apos;s right for you, from individual
+                professionals to large teams.
+              </p>
+              <div className="mt-6 flex flex-wrap justify-center gap-6">
+                {subscriptionPlans.map((plan) => (
+                  <Card
+                    key={plan.id}
+                    className={
+                      "hover:ring-primary relative max-w-sm min-w-[17.5rem] flex-1 overflow-hidden shadow-sm transition-all duration-200 hover:ring-1 hover:ring-offset-1"
+                    }
+                  >
+                    {plan.popular && (
+                      <div className="absolute top-0 right-0">
+                        <div className="bg-primary text-primary-foreground flex items-center gap-1 rounded-bl-lg px-3 py-1 text-xs font-medium">
+                          <Sparkles className="h-3 w-3" />
+                          Popular
+                        </div>
+                      </div>
+                    )}
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-between text-lg">
+                        {plan.name}
+                      </CardTitle>
+                      <CardDescription className="flex items-baseline">
+                        <span className="text-base font-bold">
+                          {plan.price === 0
+                            ? "Free forever"
+                            : `$${plan.price.toFixed(2)} / month`}
+                        </span>
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2">
+                        {plan.features.map((feature) => (
+                          <li key={feature} className="flex items-start">
+                            <Check className="text-primary mt-0.5 mr-2 h-4 w-4 flex-shrink-0" />
+                            <span className="text-sm">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                    <CardFooter className="mt-auto">
+                      <Link href="/signup" className="w-full">
+                        <Button className="w-full" variant="outline">
+                          {plan.id === "free" ? "Get Started" : "Upgrade"}
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section
+            id="testimonials"
+            ref={testimonialsRef}
+            className="bg-secondary dark:bg-card overflow-hidden rounded-[5rem] py-16 md:py-20 lg:py-24"
+          >
+            <div className="relative flex flex-col items-center gap-6 [&>h2,p]:mx-4 md:[&>h2,p]:mx-6 lg:[&>h2,p]:mx-8">
+              <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
+                What Our Customers Say
+              </h2>
+              <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
+                Join thousands of professionals who are already using EZNECT to
+                enhance their networking.
+              </p>
+
+              <div className="from-background pointer-events-none absolute -top-17 -bottom-17 left-0 z-10 hidden w-20 bg-gradient-to-r to-transparent md:-top-21 md:-bottom-21 lg:-top-25 lg:-bottom-25 lg:block" />
+              <div className="from-background pointer-events-none absolute -top-17 right-0 -bottom-17 z-10 hidden w-20 bg-gradient-to-l to-transparent md:-top-21 md:-bottom-21 lg:-top-25 lg:-bottom-25 lg:block" />
+              <div className="relative mx-auto mt-6 w-full">
+                <div className="overflow-hidden" ref={emblaRef}>
+                  <div className="flex py-1">
+                    {testimonials.map((testimonial, index) => (
+                      <Card
+                        key={index}
+                        className={`hover:ring-primary mr-4 h-full min-w-fit transition-all hover:ring-1 hover:ring-offset-1 ${isIPad ? "cursor-pointer" : ""}`}
+                      >
+                        <CardHeader>
+                          <div className="flex items-center gap-4">
+                            <div className="h-14 w-14 overflow-hidden rounded-full">
+                              <Image
+                                src={testimonial.image}
+                                alt={testimonial.name}
+                                width={56}
+                                height={56}
+                              />
+                            </div>
+                            <div className="text-primary">
+                              <CardTitle className="text-lg">
+                                {testimonial.name}
+                              </CardTitle>
+                              <CardDescription>
+                                {testimonial.title}
+                              </CardDescription>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="max-w-96">
+                          <span className="text-muted-foreground">
+                            &quot;{testimonial.quote}&quot;
+                          </span>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {isIPad && (
+              <div className="flex justify-center gap-x-2 pt-2">
+                {scrollSnaps.map((_, index) => (
+                  <div
+                    key={index}
+                    onClick={() => emblaApi?.scrollTo(index)}
+                    className={`group before:border-ring/50 relative flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 before:absolute before:inset-0 before:rounded-full before:border`}
+                  >
+                    <span
+                      className={`block h-2 w-2 rounded-full transition-colors duration-300 ${index === selectedIndex ? "bg-primary" : ""} `}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <section className="relative py-16 md:py-20 lg:py-24">
+            <div className="relative flex flex-col items-center gap-6">
+              <h2 className="text-center text-4xl font-black tracking-tight sm:text-5xl">
+                Ready to Modernize Your Networking?
+              </h2>
+              <div className="flex flex-col justify-center gap-4 font-bold sm:flex-row">
+                <Link href="/signup">
+                  <Button size="lg">
+                    Get Started for Free
+                    <ArrowRight />
+                  </Button>
+                </Link>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={() => scrollToSection("pricing")}
+                >
+                  View Pricing
+                </Button>
+              </div>
+            </div>
+          </section>
+        </main>
+        <footer className="w-full border-t px-6 text-xs md:px-8 lg:px-10">
+          <div className="py-2 md:py-3 lg:py-4">
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex items-center gap-2">
+                <div
+                  className="text-muted-foreground hover:text-foreground cursor-pointer"
+                  onClick={() => setIsFaqOpen(true)}
+                >
+                  FAQ
+                </div>
+                <Separator
+                  orientation="vertical"
+                  className="border-muted-foreground h-4"
                 />
-                <span>EZNECT</span>
-              </Link>
-              <div>
+                <div
+                  className="text-muted-foreground hover:text-foreground cursor-pointer"
+                  onClick={() => setIsTermsOpen(true)}
+                >
+                  Terms
+                </div>
+                <Separator
+                  orientation="vertical"
+                  className="border-muted-foreground h-4"
+                />
+                <div
+                  className="text-muted-foreground hover:text-foreground cursor-pointer"
+                  onClick={() => setIsPrivacyOpen(true)}
+                >
+                  Privacy
+                </div>
+              </div>
+              <div className="text-muted-foreground flex items-center gap-1">
+                <p>
+                  &copy; {new Date().getFullYear()} EZNECT. All rights reserved.
+                </p>
+                <Separator
+                  orientation="vertical"
+                  className="border-muted-foreground ml-3 h-6"
+                />
                 <Button variant="ghost" asChild>
-                  <Link href="#" className="text-muted-foreground">
+                  <Link href="#">
                     <SimpleIconComponent icon={siFacebook} />
                     <span className="sr-only">Facebook</span>
                   </Link>
                 </Button>
                 <Button variant="ghost" asChild>
-                  <Link href="#" className="text-muted-foreground">
+                  <Link href="#">
                     <SimpleIconComponent icon={siInstagram} />
                     <span className="sr-only">Instagram</span>
                   </Link>
                 </Button>
                 <Button variant="ghost" asChild>
-                  <Link href="#" className="text-muted-foreground">
+                  <Link href="#">
                     <SimpleIconComponent icon={siX} />
                     <span className="sr-only">X</span>
                   </Link>
                 </Button>
                 <Button variant="ghost" asChild>
-                  <Link href="#" className="text-muted-foreground">
+                  <Link href="#">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -821,108 +830,14 @@ export function LandingPage() {
                   </Link>
                 </Button>
               </div>
-              <p className="text-muted-foreground text-sm">
-                &copy; {new Date().getFullYear()} EZNECT. All rights reserved.
-              </p>
-            </div>
-            <div>
-              <h3 className="mb-4 font-medium">Product</h3>
-              <ul className="space-y-2">
-                <li>
-                  <button
-                    onClick={() => scrollToSection("features")}
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    Features
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection("pricing")}
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    Pricing
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection("testimonials")}
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    Testimonials
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection("faq")}
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    FAQ
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="mb-4 font-medium">Company</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="#"
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="mb-4 font-medium">Legal</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/terms"
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    Terms of Service
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="text-muted-foreground hover:text-foreground text-sm"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-              </ul>
             </div>
           </div>
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
+
+      <FAQDialog open={isFaqOpen} setOpen={setIsFaqOpen} />
+      <TermsOfServiceDialog open={isTermsOpen} setOpen={setIsTermsOpen} />
+      <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />
+    </>
   );
 }

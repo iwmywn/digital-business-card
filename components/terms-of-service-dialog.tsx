@@ -1,23 +1,30 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Dispatch, SetStateAction } from "react";
 
-export function TermsOfService() {
+export function TermsOfServiceDialog({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   return (
-    <Card className="rounded-lg">
-      <CardHeader>
-        <CardTitle className="text-xl">Terms of Service</CardTitle>
-        <CardDescription>Last updated: April 29, 2025.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6 text-sm">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="max-h-[85vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-xl">Terms of Service</DialogTitle>
+          <DialogDescription>Last updated: April 29, 2025.</DialogDescription>
+        </DialogHeader>
         <section>
           <h3 className="mb-2 text-base font-medium">1. Acceptance of Terms</h3>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             By accessing or using our digital business card service, you agree
             to be bound by these Terms of Service. If you do not agree to all
             the terms and conditions, you may not access or use our services.
@@ -30,12 +37,12 @@ export function TermsOfService() {
           <h3 className="mb-2 text-base font-medium">
             2. Description of Service
           </h3>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-4 text-sm">
             Our service provides users with the ability to create, customize,
             and share digital business cards. We reserve the right to modify,
             suspend, or discontinue any aspect of the service at any time.
           </p>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Features and functionality may vary based on subscription level and
             may change over time as the service evolves.
           </p>
@@ -47,13 +54,13 @@ export function TermsOfService() {
           <h3 className="mb-2 text-base font-medium">
             3. Registration and Account
           </h3>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-4 text-sm">
             To use certain features of our service, you must register for an
             account. You agree to provide accurate, current, and complete
             information during the registration process and to update such
             information to keep it accurate, current, and complete.
           </p>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             You are responsible for safeguarding your password and for all
             activities that occur under your account. You agree to notify us
             immediately of any unauthorized use of your account.
@@ -64,12 +71,12 @@ export function TermsOfService() {
 
         <section>
           <h3 className="mb-2 text-base font-medium">4. Payment Terms</h3>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-4 text-sm">
             Some aspects of our service require payment of fees. All fees are
             stated in U.S. dollars unless otherwise specified. You agree to pay
             all applicable fees as described on our website.
           </p>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Subscription fees are billed in advance on a monthly or annual
             basis, depending on the billing cycle you select. You may cancel
             your subscription at any time, but no refunds will be provided for
@@ -81,7 +88,7 @@ export function TermsOfService() {
 
         <section>
           <h3 className="mb-2 text-base font-medium">5. User Content</h3>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             You retain all rights to any content you submit, post, or display on
             or through our service. By submitting, posting, or displaying
             content, you grant us a worldwide, non-exclusive, royalty-free
@@ -96,11 +103,11 @@ export function TermsOfService() {
           <h3 className="mb-2 text-base font-medium">
             6. Prohibited Activities
           </h3>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-4 text-sm">
             You agree not to engage in any of the following prohibited
             activities:
           </p>
-          <ul className="text-muted-foreground list-inside list-disc space-y-2">
+          <ul className="text-muted-foreground list-inside list-disc space-y-2 text-sm">
             <li>
               Using the service for any illegal purpose or in violation of any
               laws.
@@ -134,7 +141,7 @@ export function TermsOfService() {
 
         <section>
           <h3 className="mb-2 text-base font-medium">7. Termination</h3>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             We may terminate or suspend your account and access to the service
             immediately, without prior notice or liability, for any reason,
             including if you breach these Terms of Service. Upon termination,
@@ -148,7 +155,7 @@ export function TermsOfService() {
           <h3 className="mb-2 text-base font-medium">
             8. Disclaimer of Warranties
           </h3>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             The service is provided on an &quot;as is&quot; and &quot;as
             available&quot; basis. We expressly disclaim all warranties of any
             kind, whether express or implied, including but not limited to the
@@ -163,7 +170,7 @@ export function TermsOfService() {
           <h3 className="mb-2 text-base font-medium">
             9. Limitation of Liability
           </h3>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             In no event shall we be liable for any indirect, incidental,
             special, consequential, or punitive damages, including without
             limitation, loss of profits, data, use, goodwill, or other
@@ -176,7 +183,7 @@ export function TermsOfService() {
 
         <section>
           <h3 className="mb-2 text-base font-medium">10. Changes to Terms</h3>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             We reserve the right to modify these Terms of Service at any time.
             We will provide notice of any material changes through the service
             or by other means. Your continued use of the service after such
@@ -184,7 +191,7 @@ export function TermsOfService() {
             Terms of Service and agreement to abide and be bound by them.
           </p>
         </section>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -55,7 +55,7 @@ export function CardPreview({
         <div className={`relative aspect-2/1 ${colorClass}`}>
           {cardDesign.coverImage ? (
             <div className="relative h-full w-full overflow-hidden">
-              <div className="relative h-full w-full">
+              <div className="pointer-events-none relative h-full w-full select-none">
                 <Image
                   src={getImageUrl("cover")}
                   alt="Cover"
@@ -70,7 +70,7 @@ export function CardPreview({
             >
               {cardDesign.logoImage && (
                 <div className="h-20 w-20 overflow-hidden rounded-lg shadow-md">
-                  <div className="relative h-full w-full">
+                  <div className="pointer-events-none relative h-full w-full select-none">
                     <Image
                       src={getImageUrl("logo")}
                       alt="Logo"
@@ -87,7 +87,7 @@ export function CardPreview({
         <div className="relative space-y-4 bg-white p-6">
           {cardDesign.profileImage && (
             <div className="absolute top-[-3.125rem] left-6 h-25 w-25 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
-              <div className="relative h-full w-full">
+              <div className="pointer-events-none relative h-full w-full select-none">
                 <Image
                   src={getImageUrl("profile")}
                   alt="Profile"
@@ -100,7 +100,7 @@ export function CardPreview({
 
           {cardDesign.logoImage && cardDesign.coverImage && (
             <div className="absolute -top-8 right-6 h-16 w-16 overflow-hidden rounded-lg border-2 border-white shadow-md">
-              <div className="relative h-full w-full">
+              <div className="pointer-events-none relative h-full w-full select-none">
                 <Image
                   src={getImageUrl("logo")}
                   alt="Logo"

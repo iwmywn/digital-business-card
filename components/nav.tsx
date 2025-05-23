@@ -1,6 +1,12 @@
 "use client";
 
-import { type LucideIcon } from "lucide-react";
+import {
+  CircleHelpIcon,
+  Contact,
+  ReceiptText,
+  GlobeLock,
+  type LucideIcon,
+} from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -11,6 +17,10 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ContactDialog } from "@/components/contact-dialog";
+import { FAQDialog } from "@/components/faq-dialog";
+import { useState } from "react";
+import { TermsOfServiceDialog } from "@/components/terms-of-service-dialog";
+import { PrivacyPolicyDialog } from "@/components/privacy-policy-dialog";
 
 interface NavItem {
   title: string;
@@ -19,55 +29,89 @@ interface NavItem {
 }
 
 interface NavProps {
-  navMain: NavItem[];
-  navSecondary: NavItem[];
+  nav: NavItem[];
 }
 
-export function Nav({ navMain, navSecondary }: NavProps) {
+export function Nav({ nav }: NavProps) {
   const pathname = usePathname();
-
-  const renderMenu = (
-    items: NavItem[],
-    size?: "default" | "sm" | "lg" | null,
-  ) => (
-    <>
-      {items.map((item) => {
-        const isActive = pathname === item.url;
-
-        return (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton
-              asChild
-              isActive={isActive}
-              size={size}
-              tooltip={item.title}
-            >
-              <Link href={item.url}>
-                <item.icon />
-                <span>{item.title}</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        );
-      })}
-    </>
-  );
+  const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false);
+  const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
+  const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
 
   return (
     <>
       <SidebarGroup>
         <SidebarGroupContent>
-          <SidebarMenu>{renderMenu(navMain)}</SidebarMenu>
+          <SidebarMenu>
+            {nav.map((item) => {
+              const isActive = pathname === item.url;
+
+              return (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={isActive}
+                    tooltip={item.title}
+                  >
+                    <Link href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
       <SidebarGroup className="mt-auto">
         <SidebarGroupContent>
           <SidebarMenu>
-            {renderMenu(navSecondary)}
-            <ContactDialog />
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip="FAQ"
+                onClick={() => setIsFaqOpen(true)}
+              >
+                <CircleHelpIcon />
+                <span>FAQ</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip="Terms of Service"
+                onClick={() => setIsTermsOpen(true)}
+              >
+                <ReceiptText />
+                <span>Terms of Service</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip="Privacy Policy"
+                onClick={() => setIsPrivacyOpen(true)}
+              >
+                <GlobeLock />
+                <span>Privacy Policy</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip="Contact Us"
+                onClick={() => setIsContactOpen(true)}
+              >
+                <Contact />
+                <span>Contact Us</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
+
+      <FAQDialog open={isFaqOpen} setOpen={setIsFaqOpen} />
+      <TermsOfServiceDialog open={isTermsOpen} setOpen={setIsTermsOpen} />
+      <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />
+      <ContactDialog open={isContactOpen} setOpen={setIsContactOpen} />
     </>
   );
 }

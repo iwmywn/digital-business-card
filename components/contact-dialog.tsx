@@ -10,7 +10,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -30,13 +29,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { Contact } from "lucide-react";
 import { FormButton } from "@/components/form-button";
 import { contactSchema } from "@/schemas";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { submitContact } from "@/actions/support-requests";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 const departments = [
   { value: "support", label: "Technical Support" },
@@ -48,8 +45,13 @@ const departments = [
 
 export type ContactFormValues = z.infer<typeof contactSchema>;
 
-export function ContactDialog() {
-  const [open, setOpen] = useState<boolean>(false);
+export function ContactDialog({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
@@ -77,14 +79,6 @@ export function ContactDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <SidebarMenuItem key="Contact Us">
-          <SidebarMenuButton tooltip="Contact Us">
-            <Contact />
-            <span>Contact Us</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </DialogTrigger>
       <DialogContent
         className="max-h-[85vh] overflow-y-auto"
         onWheel={(e) => e.stopPropagation()}

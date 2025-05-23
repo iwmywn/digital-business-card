@@ -5,9 +5,6 @@ import {
   Kanban,
   ChartColumnIncreasing,
   CreditCard,
-  CircleHelp,
-  ReceiptText,
-  GlobeLock,
 } from "lucide-react";
 import { Nav } from "@/components/nav";
 import { NavUser } from "@/components/nav-user";
@@ -25,47 +22,28 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-export const nav = {
-  navMain: [
-    {
-      title: "Create Card",
-      url: "/create",
-      icon: BadgePlus,
-    },
-    {
-      title: "Card Management",
-      url: "/management",
-      icon: Kanban,
-    },
-    {
-      title: "Analytics",
-      url: "/analytics",
-      icon: ChartColumnIncreasing,
-    },
-    {
-      title: "Subscription Plans",
-      url: "/subscription",
-      icon: CreditCard,
-    },
-  ],
-  navSecondary: [
-    {
-      title: "FAQ",
-      url: "/faq",
-      icon: CircleHelp,
-    },
-    {
-      title: "Terms of Service",
-      url: "/terms",
-      icon: ReceiptText,
-    },
-    {
-      title: "Privacy Policy",
-      url: "/privacy",
-      icon: GlobeLock,
-    },
-  ],
-};
+export const nav = [
+  {
+    title: "Create Card",
+    url: "/create",
+    icon: BadgePlus,
+  },
+  {
+    title: "Card Management",
+    url: "/management",
+    icon: Kanban,
+  },
+  {
+    title: "Analytics",
+    url: "/analytics",
+    icon: ChartColumnIncreasing,
+  },
+  {
+    title: "Subscription Plans",
+    url: "/subscription",
+    icon: CreditCard,
+  },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isSubScriptionLoading, isSubscriptionError } = useSubscription();
@@ -107,7 +85,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
-        <Nav navMain={nav.navMain} navSecondary={nav.navSecondary} />
+        <Nav nav={nav} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
