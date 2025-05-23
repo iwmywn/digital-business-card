@@ -29,12 +29,12 @@ export function CardView({
   const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
   const [showGradient, setShowGradient] = useState(true);
   const saveButtonRef = useRef<HTMLDivElement | null>(null);
-  const qrShareRef = useRef<HTMLDivElement | null>(null);
+  const footerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const saveBtn = saveButtonRef.current;
-      const share = qrShareRef.current;
+      const share = footerRef.current;
 
       if (saveBtn && share) {
         const saveBottom = saveBtn.getBoundingClientRect().bottom;
@@ -317,7 +317,7 @@ export function CardView({
             </div>
 
             <div
-              ref={qrShareRef}
+              ref={footerRef}
               className={`${colorClass} flex items-center justify-between gap-4 p-3`}
             >
               <span className={`text-xs wrap-anywhere text-white opacity-80`}>

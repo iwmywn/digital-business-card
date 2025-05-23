@@ -59,7 +59,7 @@ export function formatDate(
 export function handleCopyLink(slug: string) {
   const link = `${process.env.NEXT_PUBLIC_URL}/card/${slug}`;
   navigator.clipboard.writeText(link);
-  toast.success("Link copied to clipboard.");
+  toast.info("Link copied.");
 }
 
 export function checkEnv(vars: Record<string, string | undefined>) {
