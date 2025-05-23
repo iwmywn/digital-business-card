@@ -352,7 +352,7 @@ export function LandingPage() {
                 variant="outline"
                 size="lg"
                 className="w-full sm:w-auto"
-                onClick={() => scrollToSection("features")}
+                onClick={() => scrollToSection("how-it-works")}
               >
                 Learn More
               </Button>

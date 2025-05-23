@@ -121,7 +121,7 @@ export async function verifyCheckoutSession(sessionId: string) {
       }
 
       return {
-        success: `Your ${planId} plan with the transaction id ${paymentIntentId.slice(3)} is active. Thank you for your payment.`,
+        success: `Your ${planId} plan with the transaction ID ${paymentIntentId.slice(3)} is active. Thank you for your payment.`,
       };
     }
 

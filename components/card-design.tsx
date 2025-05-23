@@ -233,6 +233,7 @@ export const CardDesign = forwardRef(function CardDesign(
     const newTransforms = { ...imageTransforms };
     delete newTransforms[type as keyof typeof newTransforms];
     setImageTransforms(newTransforms);
+    setCloudinaryName(null);
 
     toast.info(
       `${type.charAt(0).toUpperCase() + type.slice(1)} image removed.`,
