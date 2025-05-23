@@ -157,6 +157,7 @@ export const CardDesign = forwardRef(function CardDesign(
       setCloudinaryName(currentImage[0]);
       setImageEditorOpen(true);
     } else {
+      setCloudinaryName(null);
       document.getElementById(`${type}-image`)?.click();
     }
   };
