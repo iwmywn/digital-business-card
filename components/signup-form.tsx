@@ -30,11 +30,15 @@ import ReCaptchaPopup from "@/components/recaptcha";
 import { FormButton } from "@/components/form-button";
 import { signUp } from "@/actions/auth";
 import { useRouter } from "next/navigation";
+import { TermsOfServiceDialog } from "@/components/terms-of-service-dialog";
+import { PrivacyPolicyDialog } from "@/components/privacy-policy-dialog";
 
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUpForm() {
   const router = useRouter();
+  const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const form = useForm<SignUpFormValues>({
@@ -179,6 +183,34 @@ export function SignUpForm() {
                   )}
                 />
 
+                <div className="text-muted-foreground text-center text-sm">
+                  By signing up, you agree to our{" "}
+                  <FormLink
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsTermsOpen(true);
+                    }}
+                    className="text-foreground"
+                  >
+                    Terms of Service
+                  </FormLink>{" "}
+                  and{" "}
+                  <FormLink
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsPrivacyOpen(true);
+                    }}
+                    className="text-foreground"
+                  >
+                    Privacy Policy
+                  </FormLink>
+                  .
+                </div>
+
                 <FormButton
                   isSubmitting={form.formState.isSubmitting}
                   text="Sign up"
@@ -191,6 +223,9 @@ export function SignUpForm() {
           </div>
         </CardContent>
       </Card>
+
+      <TermsOfServiceDialog open={isTermsOpen} setOpen={setIsTermsOpen} />
+      <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />
     </>
   );
 }
