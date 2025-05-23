@@ -62,7 +62,8 @@ export function TopProgressBar() {
         !e.altKey
       ) {
         const linkUrl = new URL(link.href);
-        if (linkUrl.pathname === pathname) return;
+        if (linkUrl.pathname === pathname || linkUrl.protocol === "blob:")
+          return;
         const targetPath = linkUrl.pathname + linkUrl.search + linkUrl.hash;
         if (targetPath !== pathname) {
           start();

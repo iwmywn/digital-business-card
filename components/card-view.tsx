@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { trackCardClick } from "@/actions/card";
 import { toast } from "sonner";
@@ -27,6 +27,94 @@ export function CardView({
   const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false);
   const [isShareDialogOpen, setIsShareDialogOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
+  const [showGradient, setShowGradient] = useState(true);
+  const saveButtonRef = useRef<HTMLDivElement | null>(null);
+  const qrShareRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const saveBtn = saveButtonRef.current;
+      const share = qrShareRef.current;
+
+      if (saveBtn && share) {
+        const saveBottom = saveBtn.getBoundingClientRect().bottom;
+        const shareBottom = share.getBoundingClientRect().bottom;
+
+        setShowGradient(saveBottom < shareBottom);
+      }
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const handleSaveContact = async () => {
+    try {
+      const vCardData = generateVCard(card);
+      const blob = new Blob([vCardData], { type: "text/vcard;charset=utf-8" });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${card.personalInfo.fullName.replace(/\s+/g, "_")}.vcf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(url);
+      toast.info("Contact saved.");
+    } catch (error) {
+      console.error("Error saving contact:", error);
+      toast.error("Failed to save contact! Please try again later.");
+    }
+  };
+
+  const generateVCard = (card: CardType) => {
+    const vCard = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      `FN:${card.personalInfo.fullName}`,
+      `N:${card.personalInfo.fullName.split(" ").reverse().join(";")}`,
+    ];
+
+    if (card.personalInfo.jobTitle) {
+      vCard.push(`TITLE:${card.personalInfo.jobTitle}`);
+    }
+
+    if (card.personalInfo.company) {
+      vCard.push(`ORG:${card.personalInfo.company}`);
+    }
+
+    if (card.personalInfo.bio) {
+      vCard.push(`NOTE:${card.personalInfo.bio}`);
+    }
+
+    card.links?.forEach((link: SerializableLinkType) => {
+      switch (link.type) {
+        case "Email":
+          vCard.push(`EMAIL:${link.value}`);
+          break;
+        case "Phone":
+          vCard.push(`TEL:${link.value}`);
+          break;
+        case "Link":
+          vCard.push(`URL:${link.value}`);
+          break;
+        case "LinkedIn":
+          vCard.push(`URL:${link.value}`);
+          break;
+        case "Address":
+          vCard.push(`ADR:;;${link.value};;;;`);
+          break;
+      }
+    });
+
+    vCard.push("END:VCARD");
+    return vCard.join("\r\n");
+  };
   const fontClass = getFontClass(card.cardDesign.fontFamily);
   const colorClass = getColorClass(card.cardDesign.cardColor);
 
@@ -82,9 +170,11 @@ export function CardView({
         className={`${colorClass} pointer-events-none fixed inset-0 z-[-9999]`}
       />
       <div className="pointer-events-none fixed inset-0 z-[-8888] bg-white/20" />
-      <div className="flex min-h-screen items-center justify-center p-8">
-        <div className="mx-auto w-full max-w-md">
-          <div className={`overflow-hidden rounded-xl shadow-sm ${fontClass}`}>
+      <div
+        className={`flex min-h-screen items-center justify-center p-8 ${fontClass}`}
+      >
+        <div className="relative mx-auto w-full max-w-md">
+          <div className="overflow-hidden rounded-xl shadow-sm">
             <div className={`relative aspect-2/1 ${colorClass}`}>
               {card.cardDesign.coverImage ? (
                 <div className="relative h-full w-full overflow-hidden">
@@ -227,6 +317,7 @@ export function CardView({
             </div>
 
             <div
+              ref={qrShareRef}
               className={`${colorClass} flex items-center justify-between gap-4 p-3`}
             >
               <span className={`text-xs wrap-anywhere text-white opacity-80`}>
@@ -253,19 +344,31 @@ export function CardView({
             </div>
           </div>
 
-          <QRCodeDialog
-            card={card}
-            open={isQrDialogOpen}
-            setOpen={(val) => setIsQrDialogOpen(val)}
-          />
-
-          <ShareCardDialog
-            card={card}
-            open={isShareDialogOpen}
-            setOpen={(val) => setIsShareDialogOpen(val)}
-          />
+          <div
+            ref={saveButtonRef}
+            className={`${showGradient ? "from-primary bg-gradient-to-t to-transparent" : ""} sticky right-0 bottom-0 left-0 z-50 flex items-center justify-center py-4 transition-all duration-200`}
+          >
+            <Button
+              onClick={handleSaveContact}
+              className={`${colorClass} rounded-lg ${showGradient ? "px-7 py-3.5" : "px-14 py-7 text-base"} text-white transition-all duration-500`}
+            >
+              Save Contact
+            </Button>
+          </div>
         </div>
       </div>
+
+      <QRCodeDialog
+        card={card}
+        open={isQrDialogOpen}
+        setOpen={(val) => setIsQrDialogOpen(val)}
+      />
+
+      <ShareCardDialog
+        card={card}
+        open={isShareDialogOpen}
+        setOpen={(val) => setIsShareDialogOpen(val)}
+      />
     </>
   );
 }

@@ -73,6 +73,7 @@ export function QRCodeDialog({
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      toast.info("QR code downloaded.");
     } catch (error) {
       console.error("Error generating QR code for download:", error);
       toast.error("Failed to download QR code! Please try again later.");
