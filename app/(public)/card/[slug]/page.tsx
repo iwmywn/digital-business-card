@@ -20,7 +20,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: card.personalInfo.fullName,
+    title: `${card.personalInfo.fullName}'s Digital Business Card`,
     description:
       card.personalInfo.headline ||
       `Digital business card for ${card.personalInfo.fullName}`,

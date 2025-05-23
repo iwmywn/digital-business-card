@@ -21,7 +21,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: user.profile.fullName,
+    title: `${user.profile.fullName}'s Profile`,
     description:
       user.profile.bio ||
       `Explore ${user.profile.fullName}'s profile and contact information.`,
