@@ -42,7 +42,7 @@ export function NavUser() {
       toast.error(error);
     } else {
       toast.success(success);
-      router.push("/signin");
+      router.push("/");
     }
   }
 
