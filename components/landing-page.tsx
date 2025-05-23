@@ -438,7 +438,7 @@ export function LandingPage() {
 
               <Button asChild>
                 <Link
-                  href={`${process.env.NEXT_PUBLIC_URL}/card/iwmywn`}
+                  href="/card/iwmywn"
                   target="_blank"
                   className="sm:mx-auto sm:w-fit"
                 >

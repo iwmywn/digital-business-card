@@ -146,7 +146,7 @@ export function CardView({
         }
       }
 
-      window.open(url, "_blank");
+      window.open(url, "_blank", "noopener, noreferrer");
     }
 
     setIsLoading((prev) => ({ ...prev, [link.id]: false }));

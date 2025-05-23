@@ -131,9 +131,8 @@ export function UserProfileDisplay({
                 {dynamicSlugs.map((slug) => (
                   <li key={slug} className="truncate">
                     <FormLink
-                      href={`${process.env.NEXT_PUBLIC_URL}/card/${slug}`}
+                      href={`/card/${slug}`}
                       target="_blank"
-                      rel="noopener noreferrer"
                       className="text-sm sm:text-base"
                     >
                       {`${process.env.NEXT_PUBLIC_URL}/card/${slug}`}
