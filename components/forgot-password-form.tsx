@@ -99,7 +99,7 @@ export function ForgotPasswordForm() {
                 />
                 <FormButton
                   isSubmitting={form.formState.isSubmitting}
-                  text="Send Reset Link"
+                  text="Send reset link"
                 />
                 <FormLink href="/signin" side="center">
                   Back to sign in

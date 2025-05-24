@@ -210,10 +210,11 @@ const accountSchema = z
         });
       }
 
-      if (!newPassword || newPassword.length < 8) {
+      if (!newPassword || !basePasswordSchema.safeParse(newPassword).success) {
         ctx.addIssue({
           path: ["newPassword"],
-          message: "New password must be at least 8 characters long.",
+          message:
+            "Password must be at least 8 characters long, include uppercase, lowercase, number and special character.",
           code: z.ZodIssueCode.custom,
         });
       }
