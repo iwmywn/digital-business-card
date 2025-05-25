@@ -143,24 +143,23 @@ export function CardView({
   async function handleLinkClick(link: SerializableLinkType) {
     setIsLoading((prev) => ({ ...prev, [link.id]: true }));
 
-    const { error } = await trackCardClick(card._id);
+    const fp = await FingerprintJS.load();
+    const result = await fp.get();
+    const visitorId = result.visitorId;
+    await trackCardClick(card._id, visitorId, link.type);
 
-    if (error) {
-      toast.error(error);
-    } else {
-      let url = link.value;
-      if (!url.startsWith("http://") && !url.startsWith("https://")) {
-        if (link.type === "Email") {
-          url = `mailto:${url}`;
-        } else if (link.type === "Phone") {
-          url = `tel:${url}`;
-        } else if (link.type === "Address") {
-          url = `https://maps.google.com/?q=${encodeURIComponent(url)}`;
-        }
+    let url = link.value;
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      if (link.type === "Email") {
+        url = `mailto:${url}`;
+      } else if (link.type === "Phone") {
+        url = `tel:${url}`;
+      } else if (link.type === "Address") {
+        url = `https://maps.google.com/?q=${encodeURIComponent(url)}`;
       }
-
-      window.open(url, "_blank", "noopener, noreferrer");
     }
+
+    window.open(url, "_blank", "noopener, noreferrer");
 
     setIsLoading((prev) => ({ ...prev, [link.id]: false }));
   }

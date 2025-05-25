@@ -55,6 +55,11 @@ type BaseCard<T> = {
   viewFingerprint: {
     [date: string]: string[];
   };
+  clickFingerprint: {
+    [date: string]: {
+      [visitorId: string]: string[];
+    };
+  };
   createdAt: Date;
   updatedAt: Date;
 };

@@ -106,6 +106,7 @@ export async function saveCard(
         viewHistory: [],
         clickHistory: [],
         viewFingerprint: {},
+        clickFingerprint: {},
         createdAt: now,
         updatedAt: now,
       });
@@ -399,12 +400,17 @@ export async function deleteCard(cardId: string) {
   }
 }
 
-export async function trackCardClick(cardId: string) {
+export async function trackCardClick(
+  cardId: string,
+  visitorId: string,
+  linkType: string,
+) {
   try {
     const { isSignedIn, userId } = await session.user.get();
     const cardCollection = await getCardCollection();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().split("T")[0];
 
     const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
 
@@ -412,7 +418,10 @@ export async function trackCardClick(cardId: string) {
       return { error: "Card not found" };
     }
 
-    if (isSignedIn && userId && userId === card?.userId) {
+    if (
+      card.clickFingerprint?.[todayStr]?.[visitorId]?.includes(linkType) ||
+      (isSignedIn && userId && userId === card?.userId)
+    ) {
       return { error: undefined };
     }
 
@@ -439,6 +448,9 @@ export async function trackCardClick(cardId: string) {
             clicks: 1,
             "clickHistory.$.count": 1,
           },
+          $addToSet: {
+            [`clickFingerprint.${todayStr}.${visitorId}`]: linkType,
+          },
         },
       );
     } else {
@@ -451,6 +463,9 @@ export async function trackCardClick(cardId: string) {
               date: today,
               count: 1,
             },
+          },
+          $set: {
+            [`clickFingerprint.${todayStr}.${visitorId}`]: [linkType],
           },
         },
       );
