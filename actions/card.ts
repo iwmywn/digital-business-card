@@ -279,7 +279,7 @@ export async function getCardToViewBySlug(slug: string) {
     }
 
     if (!validProfessionalPlan) {
-      card.cardDesign.brandName = "Eznect";
+      card.cardDesign.brandName = "Visiq";
 
       if (currentPlan === "basic") {
         card.links = card.links.slice(0, constants.maxBasicLinks);

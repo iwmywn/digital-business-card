@@ -7,11 +7,11 @@ import { TopProgressBar } from "@/components/top-progress-bar";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | EZNECT",
-    default: "EZNECT",
+    template: "%s | Visiq",
+    default: "Visiq",
   },
   description:
-    "Eznect's digital business cards make sharing your contact info a breeze with a simple QR code. They're easy to customize, quick to update, and perfect for making a strong first impression.",
+    "Visiq's digital business cards make sharing your contact info a breeze with a simple QR code. They're easy to customize, quick to update, and perfect for making a strong first impression.",
 };
 
 export default async function RootLayout({

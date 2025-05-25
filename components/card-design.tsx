@@ -435,7 +435,7 @@ export const CardDesign = forwardRef(function CardDesign(
                       <FormControl>
                         <Input
                           id="brandName"
-                          placeholder="e.g. Eznect"
+                          placeholder="e.g. Visiq"
                           {...field}
                         />
                       </FormControl>

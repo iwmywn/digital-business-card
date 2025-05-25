@@ -17,11 +17,11 @@ export async function sendEmail(
   const emailHandlerUrl = `${process.env.NEXT_PUBLIC_URL}/email-handler?mode=${mode}&email=${email}&token=${token}`;
   const subject =
     mode === "verifyEmail"
-      ? "Verify your Eznect account"
-      : "Reset your Eznect password";
+      ? "Verify your Visiq account"
+      : "Reset your Visiq password";
   const message =
     mode === "verifyEmail"
-      ? "Thank you for joining Eznect! We just need one final step from you - please confirm your email address by clicking the button below to verify it and get started."
+      ? "Thank you for joining Visiq! We just need one final step from you - please confirm your email address by clicking the button below to verify it and get started."
       : "No one likes being locked out of their account, and we're here to help. Just click the button below to get started. If you didn't request a password reset, feel free to ignore this email.";
   const btnText = mode === "verifyEmail" ? "Verify" : "Reset your password";
 
@@ -31,10 +31,10 @@ export async function sendEmail(
     subject: subject,
     html: `
       <table
-      style="width: 100%; background-color: #fefcf7; padding: 20px 40px; border-radius: 12px; text-align: center; font-family: Arial, sans-serif;">
+      style="width: 100%; padding: 20px 40px; border-radius: 12px; text-align: center; font-family: Arial, sans-serif;">
       <tr>
         <td>
-          <p style="font-size: 22px; font-weight: 600; margin-bottom: 20px; margin-top: 0px">Eznect</p>
+          <p style="font-size: 22px; font-weight: 600; margin-bottom: 20px; margin-top: 0px">Visiq</p>
           <p style="font-size: 16px; margin: 10px 0 20px 0; line-height: 1.6;">
             Hey there, <br>
             ${message}
@@ -44,7 +44,7 @@ export async function sendEmail(
           <p style="font-size: 14px; margin-top: 20px;">
             Cheers,
             <span style="margin-top: 8px; display: block"></span>
-            Eznect
+            Visiq
           </p>
           <div style="height: 2px; background-color: #666; opacity: 0.2; margin: 30px 0"></div>
           <p style="color: #666; font-size: 12px">Alternatively, you can copy and paste the link below into your browser:

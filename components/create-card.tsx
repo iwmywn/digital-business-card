@@ -34,7 +34,7 @@ export function CreateCard() {
     logoImage: undefined,
     profileImage: undefined,
     coverImage: undefined,
-    brandName: "Eznect",
+    brandName: "Visiq",
   });
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>({
     fullName: "",

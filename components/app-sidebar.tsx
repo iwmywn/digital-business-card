@@ -62,17 +62,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {...props}
     >
       <SidebarHeader>
-        <SidebarMenuButton size="lg" asChild tooltip="Eznect Home">
+        <SidebarMenuButton size="lg" asChild tooltip="Visiq Home">
           <Link href="/home">
             <Image
               src="/images/logo.png"
-              alt="EZNECT Logo"
+              alt="Visiq Logo"
               width={32}
               height={32}
               className="rounded-lg"
             />
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">EZNECT</span>
+              <span className="truncate font-semibold">Visiq</span>
               {isSubScriptionLoading || isUserLoading ? (
                 <Skeleton className="h-3 w-24" />
               ) : (
