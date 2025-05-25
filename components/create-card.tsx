@@ -114,6 +114,8 @@ export function CreateCard() {
             clicks: 0,
             viewHistory: [],
             clickHistory: [],
+            viewFingerprint: {},
+            clickFingerprint: {},
             createdAt: new Date(),
             updatedAt: new Date(),
             editable: true,
