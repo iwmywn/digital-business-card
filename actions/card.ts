@@ -105,6 +105,7 @@ export async function saveCard(
         clicks: 0,
         viewHistory: [],
         clickHistory: [],
+        viewFingerprint: {},
         createdAt: now,
         updatedAt: now,
       });
@@ -400,20 +401,22 @@ export async function deleteCard(cardId: string) {
 
 export async function trackCardClick(cardId: string) {
   try {
+    const { isSignedIn, userId } = await session.user.get();
     const cardCollection = await getCardCollection();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const card = await cardCollection.findOne({
-      _id: new ObjectId(cardId),
-      "clickHistory.date": {
-        $gte: today,
-        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
-      },
-    });
+    const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
+
+    if (!card) {
+      return { error: "Card not found" };
+    }
+
+    if (isSignedIn && userId && userId === card?.userId) {
+      return { error: undefined };
+    }
 
     if (
-      card &&
       card.clickHistory &&
       card.clickHistory.some((entry: { date: Date; count: number }) => {
         const entryDate = new Date(entry.date);
@@ -460,22 +463,28 @@ export async function trackCardClick(cardId: string) {
   }
 }
 
-export async function trackCardView(cardId: string) {
+export async function trackCardView(cardId: string, visitorId: string) {
   try {
+    const { isSignedIn, userId } = await session.user.get();
     const cardCollection = await getCardCollection();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().split("T")[0];
 
-    const card = await cardCollection.findOne({
-      _id: new ObjectId(cardId),
-      "viewHistory.date": {
-        $gte: today,
-        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
-      },
-    });
+    const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
+
+    if (!card) {
+      return { error: "Card not found" };
+    }
 
     if (
-      card &&
+      card.viewFingerprint?.[todayStr]?.includes(visitorId) ||
+      (isSignedIn && userId && userId === card?.userId)
+    ) {
+      return { error: undefined };
+    }
+
+    if (
       card.viewHistory &&
       card.viewHistory.some((entry: { date: Date; count: number }) => {
         const entryDate = new Date(entry.date);
@@ -498,6 +507,9 @@ export async function trackCardView(cardId: string) {
             views: 1,
             "viewHistory.$.count": 1,
           },
+          $addToSet: {
+            [`viewFingerprint.${todayStr}`]: visitorId,
+          },
         },
       );
     } else {
@@ -510,6 +522,9 @@ export async function trackCardView(cardId: string) {
               date: today,
               count: 1,
             },
+          },
+          $set: {
+            [`viewFingerprint.${todayStr}`]: [visitorId],
           },
         },
       );

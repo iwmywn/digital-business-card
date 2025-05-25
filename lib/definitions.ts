@@ -52,6 +52,9 @@ type BaseCard<T> = {
     date: Date;
     count: number;
   }[];
+  viewFingerprint: {
+    [date: string]: string[];
+  };
   createdAt: Date;
   updatedAt: Date;
 };

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { trackCardClick } from "@/actions/card";
+import { trackCardClick, trackCardView } from "@/actions/card";
 import { toast } from "sonner";
 import { Share2, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { getCloudinaryUrl } from "@/lib/utils";
 import { Loading } from "@/components/loading";
 import { QRCodeDialog } from "@/components/qr-code-dialog";
 import { ShareCardDialog } from "@/components/share-card-dialog";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 export function CardView({
   card,
@@ -30,6 +31,18 @@ export function CardView({
   const [showGradient, setShowGradient] = useState(true);
   const saveButtonRef = useRef<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const loadFingerprintAndTrack = async () => {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      const visitorId = result.visitorId;
+
+      await trackCardView(card._id, visitorId);
+    };
+
+    loadFingerprintAndTrack();
+  }, [card._id]);
 
   useEffect(() => {
     const handleScroll = () => {

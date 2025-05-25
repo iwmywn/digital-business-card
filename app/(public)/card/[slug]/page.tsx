@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getCardToViewBySlug, trackCardView } from "@/actions/card";
+import { getCardToViewBySlug } from "@/actions/card";
 import { CardView } from "@/components/card-view";
 import NotFound from "@/app/not-found";
 import { getCloudinaryUrl } from "@/lib/utils";
@@ -46,8 +46,6 @@ export default async function page({
   if (error || !card) {
     return <NotFound />;
   }
-
-  await trackCardView(card?._id);
 
   return <CardView card={card} />;
 }
