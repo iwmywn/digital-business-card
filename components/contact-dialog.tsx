@@ -199,7 +199,7 @@ export function ContactDialog({
                   >
                     <FormControl>
                       <SelectTrigger id="department" className="w-full">
-                        <SelectValue placeholder="Select Department..." />
+                        <SelectValue placeholder="Select department..." />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

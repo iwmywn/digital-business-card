@@ -44,7 +44,7 @@ export function BugReportDialog() {
     resolver: zodResolver(bugReportSchema),
     defaultValues: {
       title: "",
-      type: "bug",
+      type: "",
       description: "",
       steps: "",
     },
@@ -106,7 +106,7 @@ export function BugReportDialog() {
                   >
                     <FormControl>
                       <SelectTrigger id="type" className="w-full">
-                        <SelectValue placeholder="Select report type" />
+                        <SelectValue placeholder="Select report type..." />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
