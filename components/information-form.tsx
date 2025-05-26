@@ -137,13 +137,18 @@ export function InformationForm() {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("File size exceeds 5MB limit");
+      toast.error("File size exceeds 5MB limit!");
       fileInput.value = "";
       return;
     }
 
-    if (!file.type.startsWith("image/")) {
-      toast.error("Only image files are allowed!");
+    const allowedExtensions = [".jpg", ".jpeg", ".png"];
+    const fileExtension = file.name
+      .toLowerCase()
+      .slice(file.name.lastIndexOf("."));
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      toast.error("Only JPG, JPEG and PNG images are allowed!");
       fileInput.value = "";
       return;
     }
@@ -259,7 +264,7 @@ export function InformationForm() {
                 <input
                   id="profile-image"
                   type="file"
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png"
                   className="hidden"
                   onChange={(e) => handleImageUpload(e, "profile")}
                 />
@@ -295,7 +300,7 @@ export function InformationForm() {
                 <input
                   id="cover-image"
                   type="file"
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png"
                   className="hidden"
                   onChange={(e) => handleImageUpload(e, "cover")}
                 />
