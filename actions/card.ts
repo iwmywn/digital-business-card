@@ -410,8 +410,8 @@ export async function trackCardClick(
     const cardCollection = await getCardCollection();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
     const todayStr = today.toISOString().split("T")[0];
-
     const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
 
     if (!card) {
@@ -429,10 +429,7 @@ export async function trackCardClick(
       card.clickHistory &&
       card.clickHistory.some((entry: { date: Date; count: number }) => {
         const entryDate = new Date(entry.date);
-        return (
-          entryDate >= today &&
-          entryDate < new Date(today.getTime() + 24 * 60 * 60 * 1000)
-        );
+        return entryDate >= today && entryDate < tomorrow;
       })
     ) {
       await cardCollection.updateOne(
@@ -440,7 +437,7 @@ export async function trackCardClick(
           _id: new ObjectId(cardId),
           "clickHistory.date": {
             $gte: today,
-            $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+            $lt: tomorrow,
           },
         },
         {
@@ -484,8 +481,8 @@ export async function trackCardView(cardId: string, visitorId: string) {
     const cardCollection = await getCardCollection();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
     const todayStr = today.toISOString().split("T")[0];
-
     const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
 
     if (!card) {
@@ -503,10 +500,7 @@ export async function trackCardView(cardId: string, visitorId: string) {
       card.viewHistory &&
       card.viewHistory.some((entry: { date: Date; count: number }) => {
         const entryDate = new Date(entry.date);
-        return (
-          entryDate >= today &&
-          entryDate < new Date(today.getTime() + 24 * 60 * 60 * 1000)
-        );
+        return entryDate >= today && entryDate < tomorrow;
       })
     ) {
       await cardCollection.updateOne(
@@ -514,7 +508,7 @@ export async function trackCardView(cardId: string, visitorId: string) {
           _id: new ObjectId(cardId),
           "viewHistory.date": {
             $gte: today,
-            $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+            $lt: tomorrow,
           },
         },
         {

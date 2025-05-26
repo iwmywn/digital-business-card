@@ -5,6 +5,8 @@ import { bugReportSchema, contactSchema } from "@/schemas";
 import { getContactCollection, getIssueCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
 import { ContactFormValues } from "@/components/contact-dialog";
+import { getUserById } from "@/lib/data";
+import * as constants from "@/constants";
 
 export async function submitContact(values: ContactFormValues) {
   try {
@@ -14,11 +16,37 @@ export async function submitContact(values: ContactFormValues) {
       return { error: "Unauthorized!" };
     }
 
+    const existingUser = await getUserById(userId);
+
+    if (!existingUser) return { error: "User not found!" };
+
     const parsedValues = contactSchema.safeParse(values);
 
     if (!parsedValues.success) return { error: "Invalid data provided!" };
 
     const contactCollection = await getContactCollection();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+
+    const submissionsToday = await contactCollection.countDocuments({
+      userId,
+      submittedAt: {
+        $gte: today,
+        $lt: tomorrow,
+      },
+    });
+
+    const planLimits: Record<string, number> = {
+      free: constants.maxFreeCards,
+      basic: constants.maxBasicCards,
+      professional: constants.maxProfessionalCards,
+    };
+
+    if (submissionsToday >= planLimits[existingUser.currentPlan]) {
+      return { error: "You have reached your daily submission limit!" };
+    }
+
     const result = await contactCollection.insertOne({
       ...parsedValues.data,
       userId,
@@ -51,6 +79,22 @@ export async function submitIssue(values: BugReportFormValues) {
     if (!parsedValues.success) return { error: "Invalid data provided!" };
 
     const issueCollection = await getIssueCollection();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+
+    const submissionsToday = await issueCollection.countDocuments({
+      userId,
+      submittedAt: {
+        $gte: today,
+        $lt: tomorrow,
+      },
+    });
+
+    if (submissionsToday >= 30) {
+      return { error: "You have reached your daily submission limit!" };
+    }
+
     const result = await issueCollection.insertOne({
       ...parsedValues.data,
       userId,
