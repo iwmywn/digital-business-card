@@ -288,7 +288,7 @@ export function CardManagement() {
                               className="cursor-not-allowed opacity-50"
                               onClick={() =>
                                 toast.error(
-                                  "Upgrade to our professional plan to customize this card link.",
+                                  "Upgrade to our professional plan to customize this card link!",
                                 )
                               }
                             >
@@ -322,7 +322,7 @@ export function CardManagement() {
                               className="cursor-not-allowed opacity-50"
                               onClick={() =>
                                 toast.error(
-                                  "Upgrade to our professional plan to change this card visibility.",
+                                  "Upgrade to our professional plan to change this card visibility!",
                                 )
                               }
                             >

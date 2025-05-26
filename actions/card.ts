@@ -76,7 +76,7 @@ export async function saveCard(
 
       if (!existingCard) {
         return {
-          error: "Card not found or you don't have permission to edit it.",
+          error: "Card not found or you don't have permission to edit it!",
         };
       }
 
@@ -387,7 +387,7 @@ export async function deleteCard(cardId: string) {
 
     if (!existingCard) {
       return {
-        error: "Card not found or you don't have permission to delete it.",
+        error: "Card not found or you don't have permission to delete it!",
       };
     }
 
@@ -680,7 +680,7 @@ export async function getCards() {
       const editable = index < maxCards;
       const message = editable
         ? undefined
-        : `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s).`;
+        : `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s)!`;
       let { slug: dynamicSlug } = card;
 
       dynamicSlug =
@@ -703,7 +703,7 @@ export async function getCards() {
 
     if (cardCount >= maxCards) {
       return {
-        error: `You've reached the maximum number of cards (${maxCards}) allowed on your ${currentPlan} plan.`,
+        error: `You've reached the maximum number of cards (${maxCards}) allowed on your ${currentPlan} plan!`,
         cards: enhancedCards,
       };
     }

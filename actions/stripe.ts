@@ -30,7 +30,7 @@ export async function createCheckoutSession(priceId: string, planId: string) {
     if (!existingUser) return { error: "User not found!" };
 
     if (!existingUser.stripeCustomerId) {
-      return { error: "No Stripe customer ID found" };
+      return { error: "No Stripe customer ID found!" };
     }
 
     const url = process.env.NEXT_PUBLIC_URL;

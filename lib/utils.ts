@@ -71,7 +71,7 @@ export function checkEnv(vars: Record<string, string | undefined>) {
     if (value) {
       result[key] = value;
     } else {
-      toast.error(`Missing environment variable: ${key}`);
+      toast.error(`Missing environment variable: ${key}!`);
       missingVars.push(key);
     }
   }
