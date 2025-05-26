@@ -86,12 +86,34 @@ export function CardView({
   };
 
   const generateVCard = (card: CardType) => {
+    const nameParts = card.personalInfo.fullName.trim().split(" ");
+    let lastName = "";
+    let firstName = "";
+    let middleName = "";
+
+    if (nameParts.length === 1) {
+      firstName = nameParts[0];
+    } else if (nameParts.length === 2) {
+      lastName = nameParts[0];
+      firstName = nameParts[1];
+    } else {
+      lastName = nameParts[0];
+      firstName = nameParts[nameParts.length - 1];
+      middleName = nameParts.slice(1, -1).join(" ");
+    }
+
     const vCard = [
       "BEGIN:VCARD",
       "VERSION:3.0",
       `FN:${card.personalInfo.fullName}`,
-      `N:${card.personalInfo.fullName.split(" ").reverse().join(";")}`,
+      `N:${lastName};${firstName};${middleName};;`,
     ];
+
+    // if (card.cardDesign.profileImage) {
+    //   vCard.push(
+    //     `PHOTO:VALUE=URL:${getCloudinaryUrl(card.cardDesign.profileImage, card.cardDesign.imageTransforms?.profile)}`,
+    //   );
+    // }
 
     if (card.personalInfo.jobTitle) {
       vCard.push(`TITLE:${card.personalInfo.jobTitle}`);
@@ -101,27 +123,26 @@ export function CardView({
       vCard.push(`ORG:${card.personalInfo.company}`);
     }
 
-    if (card.personalInfo.bio) {
-      vCard.push(`NOTE:${card.personalInfo.bio}`);
+    const noteParts = [];
+    if (card.personalInfo.headline) noteParts.push(card.personalInfo.headline);
+    if (card.personalInfo.bio) noteParts.push(card.personalInfo.bio);
+    if (noteParts.length > 0) {
+      vCard.push(`NOTE:${noteParts.join("\\n")}`);
     }
 
     card.links?.forEach((link: SerializableLinkType) => {
       switch (link.type) {
         case "Email":
-          vCard.push(`EMAIL:${link.value}`);
+          vCard.push(`EMAIL;TYPE=${link.label || link.type}:${link.value}`);
           break;
         case "Phone":
-          vCard.push(`TEL:${link.value}`);
-          break;
-        case "Link":
-          vCard.push(`URL:${link.value}`);
-          break;
-        case "LinkedIn":
-          vCard.push(`URL:${link.value}`);
+          vCard.push(`TEL;TYPE=${link.label || link.type}:${link.value}`);
           break;
         case "Address":
-          vCard.push(`ADR:;;${link.value};;;;`);
+          vCard.push(`ADR;TYPE=${link.label || link.type}:;;${link.value};;;;`);
           break;
+        default:
+          vCard.push(`URL;TYPE=${link.label || link.type}:${link.value}`);
       }
     });
 
