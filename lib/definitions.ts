@@ -68,7 +68,7 @@ type BaseIssue<T> = {
   _id: T;
   userId: string;
   title: string;
-  type: "bug" | "feature" | "improvement";
+  type: string;
   description: string;
   steps?: string;
   submittedAt: Date;
