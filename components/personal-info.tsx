@@ -36,7 +36,7 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
     onSave: (data: PersonalInfoValues) => void;
     initialValues?: Partial<PersonalInfoValues>;
   },
-  ref: Ref<{ validate: () => Promise<boolean> }>,
+  ref?: Ref<{ validate: () => Promise<boolean> }>,
 ) {
   const form = useForm<PersonalInfoValues>({
     resolver: zodResolver(personalInfoSchema),

@@ -64,13 +64,16 @@ export const CardDesign = forwardRef(function CardDesign(
   {
     onSave,
     initialValues,
+    plan,
   }: {
     onSave: (data: CardDesignValues) => void;
     initialValues: CardDesignValues;
+    plan?: "free" | "basic" | "professional";
   },
-  ref: Ref<{ validate: () => Promise<boolean> }>,
+  ref?: Ref<{ validate: () => Promise<boolean> }>,
 ) {
   const { user } = useUser();
+  const effectivePlan = plan ?? user?.currentPlan;
   const [logoImage, setLogoImage] = useState<Image | undefined>(
     initialValues?.logoImage,
   );
@@ -110,16 +113,16 @@ export const CardDesign = forwardRef(function CardDesign(
   }));
 
   const fontOptions =
-    user?.currentPlan === "free"
+    effectivePlan === "free"
       ? constants.freeFontOptions
-      : user?.currentPlan === "basic"
+      : effectivePlan === "basic"
         ? constants.basicFontOptions
         : constants.allFontOptions;
 
   const colorOptions =
-    user?.currentPlan === "free"
+    effectivePlan === "free"
       ? constants.freeColorOptions
-      : user?.currentPlan === "basic"
+      : effectivePlan === "basic"
         ? constants.basicColorOptions
         : constants.allColorOptions;
 
@@ -423,7 +426,7 @@ export const CardDesign = forwardRef(function CardDesign(
             </Select>
           </div>
 
-          {user?.currentPlan === "professional" && (
+          {effectivePlan === "professional" && (
             <Form {...form}>
               <form>
                 <FormField

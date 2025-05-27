@@ -23,63 +23,20 @@ import { CardPreview } from "@/components/card-preview";
 import { subscriptionPlans } from "@/constants";
 import type { SerializableLinkType } from "@/components/icons";
 import * as constants from "@/constants";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { CardDesignValues } from "@/components/card-design";
+import { CardDesign, CardDesignValues } from "@/components/card-design";
 import { Label } from "@/components/ui/label";
 import { SimpleIconComponent } from "@/components/icons";
 import { siFacebook, siInstagram, siX } from "simple-icons";
-import { PersonalInfoValues } from "@/components/personal-info";
+import { PersonalInfo, PersonalInfoValues } from "@/components/personal-info";
 import { Separator } from "@/components/ui/separator";
 import { TermsOfServiceDialog } from "@/components/terms-of-service-dialog";
 import { PrivacyPolicyDialog } from "@/components/privacy-policy-dialog";
 import { FAQDialog } from "@/components/faq-dialog";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-const mockCardDesign: CardDesignValues = {
-  cardColor: constants.defaultColor,
-  fontFamily: constants.defaultFont,
-  logoImage: [
-    "duobwq5xg",
-    "v1747620720/digital-business-card/logo/leid7yrr9f1wljyp2svp.png",
-  ],
-  profileImage: [
-    "duobwq5xg",
-    "v1747137735/business-cards/profile/quspaw8scggryuzskvb1.jpg",
-  ],
-  coverImage: [
-    "duobwq5xg",
-    "v1747620890/digital-business-card/cover/ue2mwjeicfandqa2hxag.jpg",
-  ],
-  brandName: "iwmywn",
-};
-
-const mockPersonalInfo: PersonalInfoValues = {
-  fullName: "Hoàng Anh Tuấn",
-  jobTitle: "Software Engineer",
-  department: "Research & Development",
-  company: "NextTech Solutions",
-  accreditations: "MBA, CPA",
-  headline: "Software Engineer with 1+ year of experience.",
-  bio: "Software Engineer with skills in full-stack development, cloud computing, and system design.",
-};
-
-const mockLinks: SerializableLinkType[] = [
-  {
-    id: "1",
-    type: "GitHub",
-    value: "https://github.com/iwmywn",
-    category: "Business",
-  },
-];
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Links } from "@/components/links";
 
 const testimonials = [
   {
@@ -209,15 +166,57 @@ export function LandingPage() {
           }),
         ],
   );
-  const [cardColor, setCardColor] = useState<string>(mockCardDesign.cardColor);
-  const [fontFamily, setFontFamily] = useState<string>(
-    mockCardDesign.fontFamily,
-  );
-  const [activeTab, setActiveTab] = useState<string>("free");
+  const [activeTab, setActiveTab] = useState<string>("design");
+  const [planActiveTab, setPlanActiveTab] = useState<string>("free");
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
+  const [cardDesign, setCardDesign] = useState<CardDesignValues>({
+    cardColor: constants.defaultColor,
+    fontFamily: constants.defaultFont,
+    logoImage: [
+      "duobwq5xg",
+      "v1747620720/digital-business-card/logo/leid7yrr9f1wljyp2svp.png",
+    ],
+    profileImage: [
+      "duobwq5xg",
+      "v1747137735/business-cards/profile/quspaw8scggryuzskvb1.jpg",
+    ],
+    coverImage: [
+      "duobwq5xg",
+      "v1747620890/digital-business-card/cover/ue2mwjeicfandqa2hxag.jpg",
+    ],
+    brandName: "iwmywn",
+  });
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>({
+    fullName: "Hoàng Anh Tuấn",
+    jobTitle: "Software Engineer",
+    department: "Research & Development",
+    company: "NextTech Solutions",
+    accreditations: "MBA, CPA",
+    headline: "Software Engineer with 1+ year of experience.",
+    bio: "Software Engineer with skills in full-stack development, cloud computing, and system design.",
+  });
+  const [links, setLinks] = useState<SerializableLinkType[]>([
+    {
+      id: "1",
+      type: "GitHub",
+      value: "https://github.com/iwmywn",
+      category: "Business",
+    },
+  ]);
+  const handleCardDesignUpdate = useCallback((data: CardDesignValues) => {
+    setCardDesign(data);
+  }, []);
+
+  const handlePersonalInfoUpdate = useCallback((data: PersonalInfoValues) => {
+    setPersonalInfo(data);
+  }, []);
+
+  const handleLinksUpdate = useCallback((data: SerializableLinkType[]) => {
+    setLinks(data);
+  }, []);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -225,9 +224,6 @@ export function LandingPage() {
     emblaApi.on("select", onSelect);
     onSelect();
   }, [emblaApi, onSelect]);
-
-  mockCardDesign.cardColor = cardColor;
-  mockCardDesign.fontFamily = fontFamily;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -271,23 +267,6 @@ export function LandingPage() {
       });
     }
   };
-
-  const colorOptions =
-    activeTab === "free"
-      ? constants.freeColorOptions
-      : activeTab === "basic"
-        ? constants.basicColorOptions
-        : constants.allColorOptions;
-
-  const fontOptions =
-    activeTab === "free"
-      ? constants.freeFontOptions
-      : activeTab === "basic"
-        ? constants.basicFontOptions
-        : constants.allFontOptions;
-
-  const selectedFont =
-    fontOptions.find((font) => font.value === fontFamily) || fontOptions[0];
 
   return (
     <>
@@ -384,75 +363,91 @@ export function LandingPage() {
                 How It Works
               </h2>
               <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
-                Easily personalize your digital business card by selecting your
-                preferred fonts and colors.
+                Customize your card with just a few clicks - choose fonts,
+                colors, and more to match your style.
               </p>
 
               <div className="mt-6 grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
-                <div className="w-full lg:sticky lg:top-16 lg:col-span-2">
+                <div className="w-full space-y-6 lg:sticky lg:top-16 lg:col-span-2">
+                  <div className="space-y-3">
+                    <Label className="text-base">Subscription Plans</Label>
+                    <Tabs
+                      value={planActiveTab}
+                      onValueChange={(tab) => {
+                        setPlanActiveTab(tab);
+                        setCardDesign({
+                          ...cardDesign,
+                          cardColor: constants.defaultColor,
+                          fontFamily: constants.defaultFont,
+                          brandName: "iwmywn",
+                        });
+                        setLinks(
+                          tab === "free"
+                            ? links.slice(0, constants.maxFreeLinks)
+                            : tab === "basic"
+                              ? links.slice(0, constants.maxBasicLinks)
+                              : links.slice(0, constants.maxProfessionalLinks),
+                        );
+                      }}
+                      className="w-full"
+                    >
+                      <TabsList className="grid w-full grid-cols-3">
+                        <TabsTrigger value="free">Free</TabsTrigger>
+                        <TabsTrigger value="basic">Basic</TabsTrigger>
+                        <TabsTrigger value="professional">
+                          Professional
+                        </TabsTrigger>
+                      </TabsList>
+                    </Tabs>
+                  </div>
+
                   <Card className="h-full">
                     <CardContent className="space-y-6">
-                      <div className="space-y-3">
-                        <Label className="text-base">Subscription Plans</Label>
-                        <Tabs
-                          value={activeTab}
-                          onValueChange={(tab) => {
-                            setActiveTab(tab);
-                            setCardColor(constants.defaultColor);
-                            setFontFamily(constants.defaultFont);
-                          }}
-                          className="w-full"
-                        >
-                          <TabsList className="grid w-full grid-cols-3">
-                            <TabsTrigger value="free">Free</TabsTrigger>
-                            <TabsTrigger value="basic">Basic</TabsTrigger>
-                            <TabsTrigger value="professional">
-                              Professional
-                            </TabsTrigger>
-                          </TabsList>
-                        </Tabs>
-                      </div>
+                      <Tabs
+                        value={activeTab}
+                        onValueChange={setActiveTab}
+                        className="w-full"
+                      >
+                        <TabsList className="grid w-full grid-cols-3">
+                          <TabsTrigger value="design">Design</TabsTrigger>
+                          <TabsTrigger value="personal">
+                            Personal Info
+                          </TabsTrigger>
+                          <TabsTrigger value="links">Links</TabsTrigger>
+                        </TabsList>
 
-                      <div className="space-y-3">
-                        <Label className="text-base">Font Family</Label>
-                        <Select
-                          value={fontFamily}
-                          onValueChange={setFontFamily}
-                        >
-                          <SelectTrigger
-                            className={`${selectedFont.className} w-full`}
-                          >
-                            <SelectValue placeholder="Select a font" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {fontOptions.map((font) => (
-                              <SelectItem
-                                key={font.value}
-                                value={font.value}
-                                className={font.className}
-                              >
-                                {font.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                        <TabsContent value="design" className="space-y-4 pt-4">
+                          <CardDesign
+                            key={planActiveTab}
+                            onSave={handleCardDesignUpdate}
+                            initialValues={cardDesign}
+                            plan={
+                              planActiveTab as "free" | "basic" | "professional"
+                            }
+                          />
+                        </TabsContent>
 
-                      <div className="space-y-3">
-                        <Label className="text-base">Card Color</Label>
-                        <div className="flex flex-wrap gap-3">
-                          {colorOptions.map((color) => (
-                            <button
-                              key={color.value}
-                              className={`h-12 w-12 cursor-pointer rounded-md shadow-sm transition-all ${color.color} ${cardColor === color.value ? "ring-primary scale-110 ring-1 ring-offset-1" : "hover:ring-primary hover:ring-1 hover:ring-offset-1"} `}
-                              onClick={() => setCardColor(color.value)}
-                              title={color.label}
-                              type="button"
-                              aria-label={`Select ${color.label} color`}
-                            />
-                          ))}
-                        </div>
-                      </div>
+                        <TabsContent
+                          value="personal"
+                          className="space-y-4 pt-4"
+                        >
+                          <PersonalInfo
+                            onSave={handlePersonalInfoUpdate}
+                            initialValues={personalInfo}
+                          />
+                        </TabsContent>
+
+                        <TabsContent value="links" className="space-y-4 pt-4">
+                          <Links
+                            key={planActiveTab}
+                            onSave={handleLinksUpdate}
+                            initialLinks={links}
+                            plan={
+                              planActiveTab as "free" | "basic" | "professional"
+                            }
+                          />
+                        </TabsContent>
+                      </Tabs>
                     </CardContent>
                     <CardFooter>
                       <Link href="/signup" className="w-full">
@@ -464,9 +459,9 @@ export function LandingPage() {
 
                 <div className="w-full">
                   <CardPreview
-                    cardDesign={mockCardDesign}
-                    personalInfo={mockPersonalInfo}
-                    links={mockLinks}
+                    cardDesign={cardDesign}
+                    personalInfo={personalInfo}
+                    links={links}
                     size="small"
                   />
                 </div>

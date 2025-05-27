@@ -105,16 +105,18 @@ const maxLinksByPlan: Record<string, number> = {
 export function Links({
   onSave,
   initialLinks = [],
+  plan,
 }: {
   onSave: (links: SerializableLinkType[]) => void;
   initialLinks?: SerializableLinkType[];
+  plan?: "free" | "basic" | "professional";
 }) {
   const [links, setLinks] = useState<LinkType[]>(() => {
     return initialLinks.map((link) => toLinkType(link));
   });
   const { user } = useUser();
-  const currentPlan = user?.currentPlan || "free";
-  const maxLinks = maxLinksByPlan[currentPlan];
+  const effectivePlan = plan ?? user?.currentPlan;
+  const maxLinks = maxLinksByPlan[effectivePlan ?? "free"];
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -135,7 +137,7 @@ export function Links({
   const addLink = (type: string, category: string, icon: React.ElementType) => {
     if (links.length >= maxLinks) {
       toast.warning(
-        `Your ${user?.currentPlan} plan allows up to ${maxLinks} links.`,
+        `Your ${effectivePlan} plan allows up to ${maxLinks} links.`,
       );
       return;
     }
@@ -177,7 +179,7 @@ export function Links({
   };
 
   return (
-    <Card className="rounded-lg">
+    <Card className="max-h-screen overflow-y-auto rounded-lg">
       <CardContent className="space-y-6">
         {links.length > 0 && (
           <div className="space-y-4">
@@ -195,7 +197,7 @@ export function Links({
                 items={links.map((link) => link.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="space-y-2">
+                <div className="max-h-[13rem] space-y-2 overflow-y-auto">
                   {links.map((link) => (
                     <SortableLink
                       key={link.id}
