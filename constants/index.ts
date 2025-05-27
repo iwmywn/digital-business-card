@@ -104,16 +104,6 @@ const basicColorOptions = [
 const allColorOptions = [
   ...basicColorOptions,
   {
-    value: "ice",
-    label: "Ice",
-    color: "bg-gradient-to-r from-cyan-100 via-blue-200 to-indigo-200",
-  },
-  {
-    value: "arctic",
-    label: "Arctic",
-    color: "bg-gradient-to-r from-blue-100 via-cyan-200 to-teal-300",
-  },
-  {
     value: "mojito",
     label: "Mojito",
     color: "bg-gradient-to-r from-green-300 via-lime-400 to-yellow-300",

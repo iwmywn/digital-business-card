@@ -353,7 +353,7 @@ export function CardView({
               ref={footerRef}
               className={`${colorClass} flex items-center justify-between gap-4 p-3`}
             >
-              <span className={`text-xs wrap-anywhere text-white opacity-80`}>
+              <span className={`text-xs wrap-anywhere text-white`}>
                 {card.cardDesign.brandName}
               </span>
               <div className="flex gap-2">
