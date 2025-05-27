@@ -370,10 +370,10 @@ export function LandingPage() {
         </header>
         <main className="w-full px-6 md:px-8 lg:px-10">
           <section className="bg-secondary dark:bg-card mb-1 flex min-h-screen flex-col items-center justify-center gap-12 px-4 [clip-path:polygon(0%_15%,100%_0%,100%_85%,0%_100%)] md:px-6 lg:px-8">
-            <div className="text-center text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-              <h1>Connect Instantly</h1>
-              <h1>with Digital Business Cards</h1>
-            </div>
+            <h1 className="text-center text-[clamp(2.25rem,5vw+1rem,4.5rem)] leading-[1.1] font-black tracking-tight text-balance">
+              Connect Instantly <br />
+              with Digital Business Cards
+            </h1>
             <p className="text-muted-foreground mx-auto max-w-2xl text-center text-base sm:text-lg">
               Share your contact information with a simple scan. Create
               customizable digital business cards that make networking
