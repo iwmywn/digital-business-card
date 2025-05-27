@@ -268,7 +268,7 @@ export const CardDesign = forwardRef(function CardDesign(
         <CardContent className="space-y-6">
           <div className="space-y-3">
             <Label className="text-base leading-none font-semibold">
-              Add Images
+              Images
             </Label>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div className="flex flex-col items-center space-y-3">

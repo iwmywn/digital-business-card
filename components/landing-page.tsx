@@ -42,6 +42,7 @@ import { Separator } from "@/components/ui/separator";
 import { TermsOfServiceDialog } from "@/components/terms-of-service-dialog";
 import { PrivacyPolicyDialog } from "@/components/privacy-policy-dialog";
 import { FAQDialog } from "@/components/faq-dialog";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const mockCardDesign: CardDesignValues = {
   cardColor: constants.defaultColor,
@@ -212,6 +213,7 @@ export function LandingPage() {
   const [fontFamily, setFontFamily] = useState<string>(
     mockCardDesign.fontFamily,
   );
+  const [activeTab, setActiveTab] = useState<string>("free");
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -270,9 +272,22 @@ export function LandingPage() {
     }
   };
 
+  const colorOptions =
+    activeTab === "free"
+      ? constants.freeColorOptions
+      : activeTab === "basic"
+        ? constants.basicColorOptions
+        : constants.allColorOptions;
+
+  const fontOptions =
+    activeTab === "free"
+      ? constants.freeFontOptions
+      : activeTab === "basic"
+        ? constants.basicFontOptions
+        : constants.allFontOptions;
+
   const selectedFont =
-    constants.allFontOptions.find((font) => font.value === fontFamily) ||
-    constants.allFontOptions[0];
+    fontOptions.find((font) => font.value === fontFamily) || fontOptions[0];
 
   return (
     <>
@@ -378,6 +393,27 @@ export function LandingPage() {
                   <Card className="h-full">
                     <CardContent className="space-y-6">
                       <div className="space-y-3">
+                        <Label className="text-base">Subscription Plans</Label>
+                        <Tabs
+                          value={activeTab}
+                          onValueChange={(tab) => {
+                            setActiveTab(tab);
+                            setCardColor(constants.defaultColor);
+                            setFontFamily(constants.defaultFont);
+                          }}
+                          className="w-full"
+                        >
+                          <TabsList className="grid w-full grid-cols-3">
+                            <TabsTrigger value="free">Free</TabsTrigger>
+                            <TabsTrigger value="basic">Basic</TabsTrigger>
+                            <TabsTrigger value="professional">
+                              Professional
+                            </TabsTrigger>
+                          </TabsList>
+                        </Tabs>
+                      </div>
+
+                      <div className="space-y-3">
                         <Label className="text-base">Font Family</Label>
                         <Select
                           value={fontFamily}
@@ -389,7 +425,7 @@ export function LandingPage() {
                             <SelectValue placeholder="Select a font" />
                           </SelectTrigger>
                           <SelectContent>
-                            {constants.allFontOptions.map((font) => (
+                            {fontOptions.map((font) => (
                               <SelectItem
                                 key={font.value}
                                 value={font.value}
@@ -405,7 +441,7 @@ export function LandingPage() {
                       <div className="space-y-3">
                         <Label className="text-base">Card Color</Label>
                         <div className="flex flex-wrap gap-3">
-                          {constants.allColorOptions.map((color) => (
+                          {colorOptions.map((color) => (
                             <button
                               key={color.value}
                               className={`h-12 w-12 cursor-pointer rounded-md shadow-sm transition-all ${color.color} ${cardColor === color.value ? "ring-primary scale-110 ring-1 ring-offset-1" : "hover:ring-primary hover:ring-1 hover:ring-offset-1"} `}
