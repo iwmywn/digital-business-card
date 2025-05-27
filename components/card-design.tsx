@@ -409,8 +409,11 @@ export const CardDesign = forwardRef(function CardDesign(
           <div className="space-y-3">
             <Label className="text-base">Font Family</Label>
             <Select value={fontFamily} onValueChange={setFontFamily}>
-              <SelectTrigger className={`${selectedFont.className} w-full`}>
-                <SelectValue placeholder="Select a font" />
+              <SelectTrigger
+                className={`${selectedFont.className} w-full`}
+                aria-label="Font family selection"
+              >
+                <SelectValue placeholder="Select a font..." />
               </SelectTrigger>
               <SelectContent>
                 {fontOptions.map((font) => (

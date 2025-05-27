@@ -364,6 +364,7 @@ export function CardView({
                   onClick={() => setIsQrDialogOpen(true)}
                 >
                   <QrCode className="h-4 w-4" />
+                  <span className="sr-only">Show QR code</span>
                 </Button>
                 <Button
                   size="sm"
@@ -372,6 +373,7 @@ export function CardView({
                   onClick={() => setIsShareDialogOpen(true)}
                 >
                   <Share2 className="h-4 w-4" />
+                  <span className="sr-only">Share link</span>
                 </Button>
               </div>
             </div>

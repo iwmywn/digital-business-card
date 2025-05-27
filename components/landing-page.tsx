@@ -443,6 +443,11 @@ export function LandingPage() {
                           Professional
                         </TabsTrigger>
                       </TabsList>
+                      <div className="sr-only">
+                        <TabsContent value="free" />
+                        <TabsContent value="basic" />
+                        <TabsContent value="professional" />
+                      </div>
                     </Tabs>
                   </div>
 

@@ -189,6 +189,7 @@ export function CardPreview({
               className="h-8 w-8 p-0 text-white hover:bg-white/20"
             >
               <QrCode className="h-4 w-4" />
+              <span className="sr-only">Show QR code</span>
             </Button>
             <Button
               size="sm"
@@ -196,6 +197,7 @@ export function CardPreview({
               className="h-8 w-8 p-0 text-white hover:bg-white/20"
             >
               <Share2 className="h-4 w-4" />
+              <span className="sr-only">Share link</span>
             </Button>
           </div>
         </div>
