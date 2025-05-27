@@ -50,9 +50,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, isUserLoading, isUserError } = useUser();
 
   useEffect(() => {
-    if (isUserError) toast.error(isUserError);
-    if (isSubscriptionError) toast.error(isSubscriptionError);
-  }, [isUserError, isSubscriptionError]);
+    if (isUserError && !isUserLoading) toast.error(isUserError);
+    if (isSubscriptionError && !isSubScriptionLoading)
+      toast.error(isSubscriptionError);
+  }, [isUserError, isSubscriptionError, isUserLoading, isSubScriptionLoading]);
 
   return (
     <Sidebar

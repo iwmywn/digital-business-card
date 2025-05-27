@@ -39,7 +39,6 @@ export function EditCard({ card }: { card: CardType }) {
   const cardDesignRef = useRef<{ validate: () => Promise<boolean> }>(null);
   const { cardResponse, mutate, cards, isCardLoading, isCardError } = useCard();
   const { isUserError, isUserLoading, user } = useUser();
-  console.log(pathname);
 
   async function handleUpdateCard() {
     if (isSubmitting) return;
@@ -125,13 +124,14 @@ export function EditCard({ card }: { card: CardType }) {
   useEffect(() => {
     if (
       isCardError &&
-      !isCardError.includes("You've reached the maximum number of cards")
+      !isCardError.includes("You've reached the maximum number of cards") &&
+      !isCardLoading
     )
       toast.error(isCardError);
-    if (isUserError) {
+    if (isUserError && !isUserLoading) {
       toast.error(isUserError);
     }
-  }, [isCardError, isUserError]);
+  }, [isCardError, isUserError, isUserLoading, isCardLoading]);
 
   if (isCardLoading || isUserLoading) return <CreateCardSkeleton />;
 
@@ -193,6 +193,7 @@ export function EditCard({ card }: { card: CardType }) {
                 <CardDesign
                   onSave={handleCardDesignUpdate}
                   initialValues={cardDesign}
+                  currentUserPlan={user?.currentPlan}
                   ref={cardDesignRef}
                 />
               </TabsContent>
@@ -206,7 +207,11 @@ export function EditCard({ card }: { card: CardType }) {
               </TabsContent>
 
               <TabsContent value="links" className="space-y-4 pt-4">
-                <Links onSave={handleLinksUpdate} initialLinks={links} />
+                <Links
+                  onSave={handleLinksUpdate}
+                  initialLinks={links}
+                  currentUserPlan={user?.currentPlan}
+                />
               </TabsContent>
             </Tabs>
           </div>

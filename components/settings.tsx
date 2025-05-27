@@ -12,8 +12,8 @@ export function Settings() {
   const { isUserLoading, isUserError } = useUser();
 
   useEffect(() => {
-    if (isUserError) toast.error(isUserError);
-  }, [isUserError]);
+    if (isUserError && !isUserLoading) toast.error(isUserError);
+  }, [isUserError, isUserLoading]);
 
   if (isUserLoading) {
     return <SettingsSkeleton />;

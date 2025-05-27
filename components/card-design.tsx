@@ -16,7 +16,6 @@ import {
   ImageEditorDialog,
   type ImageTransform,
 } from "@/components/image-editor-dialog";
-import { useUser } from "@/lib/swr";
 import * as constants from "@/constants";
 import { getCloudinaryUrl } from "@/lib/utils";
 import { checkEnv } from "@/lib/utils";
@@ -64,16 +63,17 @@ export const CardDesign = forwardRef(function CardDesign(
   {
     onSave,
     initialValues,
-    plan,
+    publicPlan,
+    currentUserPlan,
   }: {
     onSave: (data: CardDesignValues) => void;
     initialValues: CardDesignValues;
-    plan?: "free" | "basic" | "professional";
+    publicPlan?: "free" | "basic" | "professional";
+    currentUserPlan?: "free" | "basic" | "professional";
   },
   ref?: Ref<{ validate: () => Promise<boolean> }>,
 ) {
-  const { user } = useUser();
-  const effectivePlan = plan ?? user?.currentPlan;
+  const effectivePlan = publicPlan ?? currentUserPlan;
   const [logoImage, setLogoImage] = useState<Image | undefined>(
     initialValues?.logoImage,
   );

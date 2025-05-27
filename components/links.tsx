@@ -32,7 +32,6 @@ import {
 } from "@/components/icons";
 import { toLinkType } from "@/components/icons";
 import * as constants from "@/constants";
-import { useUser } from "@/lib/swr";
 import { toast } from "sonner";
 
 function SortableLink({
@@ -105,17 +104,18 @@ const maxLinksByPlan: Record<string, number> = {
 export function Links({
   onSave,
   initialLinks = [],
-  plan,
+  publicPlan,
+  currentUserPlan,
 }: {
   onSave: (links: SerializableLinkType[]) => void;
   initialLinks?: SerializableLinkType[];
-  plan?: "free" | "basic" | "professional";
+  publicPlan?: "free" | "basic" | "professional";
+  currentUserPlan?: "free" | "basic" | "professional";
 }) {
   const [links, setLinks] = useState<LinkType[]>(() => {
     return initialLinks.map((link) => toLinkType(link));
   });
-  const { user } = useUser();
-  const effectivePlan = plan ?? user?.currentPlan;
+  const effectivePlan = publicPlan ?? currentUserPlan;
   const maxLinks = maxLinksByPlan[effectivePlan ?? "free"];
 
   const sensors = useSensors(

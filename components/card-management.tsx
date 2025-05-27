@@ -91,11 +91,12 @@ export function CardManagement() {
   useEffect(() => {
     if (
       isCardError &&
-      !isCardError.includes("You've reached the maximum number of cards")
+      !isCardError.includes("You've reached the maximum number of cards") &&
+      !isCardLoading
     )
       toast.error(isCardError);
-    if (isUserError) toast.error(isUserError);
-  }, [isCardError, isUserError]);
+    if (isUserError && !isUserLoading) toast.error(isUserError);
+  }, [isCardError, isUserError, isUserLoading, isCardLoading]);
 
   if (isCardLoading || isUserLoading) return <CardManagementSkeleton />;
 

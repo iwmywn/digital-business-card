@@ -19,8 +19,9 @@ export function SubscriptionPlans() {
   const { registerRef, calculatedHeight } = useDynamicHeightAuto();
 
   useEffect(() => {
-    if (isSubscriptionError) toast.error(isSubscriptionError);
-  }, [isSubscriptionError]);
+    if (isSubscriptionError && !isSubScriptionLoading)
+      toast.error(isSubscriptionError);
+  }, [isSubscriptionError, isSubScriptionLoading]);
 
   if (isSubScriptionLoading) {
     return <SubscriptionPlansSkeleton />;

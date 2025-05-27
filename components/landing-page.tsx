@@ -466,7 +466,7 @@ export function LandingPage() {
                             key={planActiveTab}
                             onSave={handleCardDesignUpdate}
                             initialValues={cardDesign}
-                            plan={
+                            publicPlan={
                               planActiveTab as "free" | "basic" | "professional"
                             }
                           />
@@ -487,7 +487,7 @@ export function LandingPage() {
                             key={planActiveTab}
                             onSave={handleLinksUpdate}
                             initialLinks={links}
-                            plan={
+                            publicPlan={
                               planActiveTab as "free" | "basic" | "professional"
                             }
                           />

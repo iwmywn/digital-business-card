@@ -241,13 +241,14 @@ export function Analytics() {
   };
 
   useEffect(() => {
-    if (isUserError) toast.error(isUserError);
+    if (isUserError && !isUserLoading) toast.error(isUserError);
     if (
       isCardError &&
-      !isCardError.includes("You've reached the maximum number of cards")
+      !isCardError.includes("You've reached the maximum number of cards") &&
+      !isCardLoading
     )
       toast.error(isCardError);
-  }, [isUserError, isCardError]);
+  }, [isUserError, isCardError, isUserLoading, isCardLoading]);
 
   if (isUserLoading || isCardLoading) {
     return <AnalyticsSkeleton />;

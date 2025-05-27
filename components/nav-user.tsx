@@ -47,8 +47,8 @@ export function NavUser() {
   }
 
   useEffect(() => {
-    if (isUserError) toast.error(isUserError);
-  }, [isUserError]);
+    if (isUserError && !isUserLoading) toast.error(isUserError);
+  }, [isUserError, isUserLoading]);
 
   if (isUserLoading) return <UserSkeleton />;
 

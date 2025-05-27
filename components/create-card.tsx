@@ -146,13 +146,14 @@ export function CreateCard() {
   useEffect(() => {
     if (
       isCardError &&
-      !isCardError.includes("You've reached the maximum number of cards")
+      !isCardError.includes("You've reached the maximum number of cards") &&
+      !isCardLoading
     )
       toast.error(isCardError);
-    if (isUserError) {
+    if (isUserError && !isUserLoading) {
       toast.error(isUserError);
     }
-  }, [isCardError, isUserError]);
+  }, [isCardError, isUserError, isUserLoading, isCardLoading]);
 
   if (isCardLoading || isUserLoading) return <CreateCardSkeleton />;
 
@@ -221,6 +222,7 @@ export function CreateCard() {
                 <CardDesign
                   onSave={handleCardDesignUpdate}
                   initialValues={cardDesign}
+                  currentUserPlan={user?.currentPlan}
                   ref={cardDesignRef}
                 />
               </TabsContent>
@@ -234,7 +236,11 @@ export function CreateCard() {
               </TabsContent>
 
               <TabsContent value="links" className="space-y-4 pt-4">
-                <Links onSave={handleLinksUpdate} initialLinks={links} />
+                <Links
+                  onSave={handleLinksUpdate}
+                  initialLinks={links}
+                  currentUserPlan={user?.currentPlan}
+                />
               </TabsContent>
             </Tabs>
           </div>
