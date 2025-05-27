@@ -185,9 +185,53 @@ export function LandingPage() {
     ],
     coverImage: [
       "duobwq5xg",
-      "v1747620890/digital-business-card/cover/ue2mwjeicfandqa2hxag.jpg",
+      "v1748320039/digital-business-card/cover/xfnk3hybkdcafo6gnp9d.jpg",
     ],
     brandName: "Visiq",
+    imageTransforms: {
+      profile: {
+        scale: 1,
+        positionX: 0,
+        positionY: 0,
+        croppedAreaPixels: {
+          width: 460,
+          height: 460,
+          x: 0,
+          y: 0,
+        },
+        naturalWidth: 460,
+        naturalHeight: 460,
+        croppedImageUrl: "/images/profile-picture.jpeg",
+      },
+      logo: {
+        scale: 1,
+        positionX: 0,
+        positionY: 0,
+        croppedAreaPixels: {
+          width: 456,
+          height: 456,
+          x: 0,
+          y: 0,
+        },
+        naturalWidth: 456,
+        naturalHeight: 456,
+        croppedImageUrl: "/images/company-logo.png",
+      },
+      cover: {
+        scale: 1,
+        positionX: 0,
+        positionY: 0,
+        croppedAreaPixels: {
+          width: 1486,
+          height: 743,
+          x: 0,
+          y: 130,
+        },
+        naturalWidth: 1486,
+        naturalHeight: 1003,
+        croppedImageUrl: "/images/cover-photo.jpg",
+      },
+    },
   });
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>({
     fullName: "Hoàng Anh Tuấn",
