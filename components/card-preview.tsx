@@ -123,10 +123,10 @@ export function CardPreview({
             <p className="text-lg leading-tight font-medium wrap-anywhere text-gray-700">
               {personalInfo.department || "Department"}
             </p>
-            <p className="text-base wrap-anywhere text-gray-500">
+            <p className="text-base wrap-anywhere text-gray-600">
               {personalInfo.company || "Company Name"}
             </p>
-            <p className="text-base wrap-anywhere text-gray-400 italic">
+            <p className="text-base wrap-anywhere text-gray-500 italic">
               {personalInfo.accreditations || "Accreditations"}
             </p>
           </div>
@@ -135,12 +135,12 @@ export function CardPreview({
 
           <p className="text-base leading-snug wrap-anywhere text-gray-700 italic">
             {personalInfo.headline ||
-              "A brief headline about who you are – your role, passion, or goal."}
+              "A brief headline about who you are - your role, passion, or goal."}
           </p>
 
           <Separator className="bg-black/15" />
 
-          <p className="text-base leading-relaxed wrap-anywhere text-gray-600">
+          <p className="text-base leading-relaxed wrap-anywhere text-gray-700">
             {personalInfo.bio ||
               "Tell a little about yourself: your background, experience, or what makes you unique."}
           </p>

@@ -284,12 +284,12 @@ export function CardView({
                   </p>
                 )}
                 {card.personalInfo.company && (
-                  <p className="text-base wrap-anywhere text-gray-500">
+                  <p className="text-base wrap-anywhere text-gray-600">
                     {card.personalInfo.company}
                   </p>
                 )}
                 {card.personalInfo.accreditations && (
-                  <p className="text-base wrap-anywhere text-gray-400 italic">
+                  <p className="text-base wrap-anywhere text-gray-500 italic">
                     {card.personalInfo.accreditations}
                   </p>
                 )}
@@ -307,7 +307,7 @@ export function CardView({
               {card.personalInfo.bio && (
                 <>
                   <Separator className="bg-black/15" />
-                  <p className="text-base leading-relaxed wrap-anywhere text-gray-600">
+                  <p className="text-base leading-relaxed wrap-anywhere text-gray-700">
                     {card.personalInfo.bio}
                   </p>
                 </>
