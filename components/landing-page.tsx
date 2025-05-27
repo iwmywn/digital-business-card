@@ -187,7 +187,7 @@ export function LandingPage() {
       "duobwq5xg",
       "v1747620890/digital-business-card/cover/ue2mwjeicfandqa2hxag.jpg",
     ],
-    brandName: "iwmywn",
+    brandName: "Visiq",
   });
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>({
     fullName: "Hoàng Anh Tuấn",
@@ -379,7 +379,8 @@ export function LandingPage() {
                           ...cardDesign,
                           cardColor: constants.defaultColor,
                           fontFamily: constants.defaultFont,
-                          brandName: "iwmywn",
+                          brandName:
+                            tab === "professional" ? "iwmywn" : "Visiq",
                         });
                         setLinks(
                           tab === "free"
@@ -457,7 +458,7 @@ export function LandingPage() {
                   </Card>
                 </div>
 
-                <div className="w-full">
+                <div className="w-full lg:sticky lg:top-16">
                   <CardPreview
                     cardDesign={cardDesign}
                     personalInfo={personalInfo}
