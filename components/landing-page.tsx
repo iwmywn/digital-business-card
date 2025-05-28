@@ -776,11 +776,15 @@ export function LandingPage() {
               <div className="from-background pointer-events-none absolute -top-17 right-0 -bottom-17 z-10 hidden w-20 bg-gradient-to-l to-transparent md:-top-21 md:-bottom-21 lg:-top-25 lg:-bottom-25 lg:block" />
               <div className="relative mx-auto mt-6 w-full">
                 <div className="overflow-hidden" ref={emblaRef}>
-                  <div className="flex items-stretch py-1">
+                  <div
+                    className="flex items-stretch py-1 will-change-transform"
+                    style={{ touchAction: "pan-y pinch-zoom" }}
+                  >
                     {filteredTestimonials.map((testimonial, index) => (
                       <Card
                         key={index}
-                        className={`hover:ring-primary mr-4 min-w-fit transition-all hover:ring-1 hover:ring-offset-1 ${isIPad ? "cursor-pointer" : ""}`}
+                        className={`hover:ring-primary mr-4 min-w-fit transition-all will-change-transform hover:ring-1 hover:ring-offset-1 ${isIPad ? "cursor-pointer" : ""}`}
+                        style={{ transform: "translate3d(0,0,0)" }}
                       >
                         <CardHeader>
                           <div className="flex items-center gap-4">
