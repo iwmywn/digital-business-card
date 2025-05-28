@@ -292,34 +292,36 @@ export function LandingPage() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = [
-        { id: "how-it-works", ref: howItWorksRef },
-        { id: "features", ref: featuresRef },
-        { id: "pricing", ref: pricingRef },
-        { id: "testimonials", ref: testimonialsRef },
-      ];
+      requestAnimationFrame(() => {
+        const sections = [
+          { id: "how-it-works", ref: howItWorksRef },
+          { id: "features", ref: featuresRef },
+          { id: "pricing", ref: pricingRef },
+          { id: "testimonials", ref: testimonialsRef },
+        ];
 
-      let found = false;
+        let found = false;
 
-      for (const section of sections) {
-        const el = section.ref.current;
-        if (el) {
-          const rect = el.getBoundingClientRect();
+        for (const section of sections) {
+          const el = section.ref.current;
+          if (el) {
+            const rect = el.getBoundingClientRect();
 
-          if (rect.top < window.innerHeight && rect.bottom > 64) {
-            setActiveSection(section.id);
-            found = true;
-            break;
+            if (rect.top < window.innerHeight && rect.bottom > 64) {
+              setActiveSection(section.id);
+              found = true;
+              break;
+            }
           }
         }
-      }
 
-      if (!found) {
-        setActiveSection(null);
-      }
+        if (!found) {
+          setActiveSection(null);
+        }
+      });
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -390,9 +392,9 @@ export function LandingPage() {
             </div>
           </div>
         </header>
-        <main className="w-full px-6 md:px-8 lg:px-10">
+        <main id="landing-page" className="w-full px-6 md:px-8 lg:px-10">
           <section className="bg-secondary dark:bg-card mb-1 flex min-h-screen flex-col items-center justify-center gap-12 px-4 [clip-path:polygon(0%_15%,100%_0%,100%_85%,0%_100%)] md:px-6 lg:px-8">
-            <h1 className="text-center text-[clamp(2.25rem,5vw+1rem,4.5rem)] leading-[1.1] font-black tracking-tight text-balance">
+            <h1 className="text-center text-[clamp(2.25rem,5vw+1rem,4.5rem)] leading-[1.1] font-black tracking-tight">
               Connect Instantly <br />
               with Digital Business Cards
             </h1>
