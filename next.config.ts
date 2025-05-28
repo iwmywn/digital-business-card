@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
@@ -14,6 +15,17 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  experimental: {
+    optimizeCss: true,
+    optimizeServerReact: true,
+    optimisticClientCache: true,
+    esmExternals: true,
+    scrollRestoration: true,
+    ppr: true,
+    cpus: 1,
+    reactCompiler: true,
+    inlineCss: true,
   },
 };
 
