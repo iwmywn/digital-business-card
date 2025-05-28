@@ -9,6 +9,7 @@ import {
   ExternalLink,
   QrCode,
   Sparkles,
+  Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,6 +38,8 @@ import { PrivacyPolicyDialog } from "@/components/privacy-policy-dialog";
 import { FAQDialog } from "@/components/faq-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Links } from "@/components/links";
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 const testimonials = [
   {
@@ -138,6 +141,7 @@ const testimonials = [
 ];
 
 export function LandingPage() {
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false);
   const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
@@ -262,6 +266,21 @@ export function LandingPage() {
     setLinks(data);
   }, []);
 
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      window.scrollTo({
+        top: section.offsetTop - 63,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handleMenuClick = (sectionId: string) => {
+    scrollToSection(sectionId);
+    setIsDrawerOpen(false);
+  };
+
   useEffect(() => {
     if (!emblaApi) return;
     setScrollSnaps(emblaApi.scrollSnapList());
@@ -302,19 +321,9 @@ export function LandingPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      window.scrollTo({
-        top: section.offsetTop - 63,
-        behavior: "smooth",
-      });
-    }
-  };
-
   return (
     <>
-      <div className="min-h-screen">
+      <div className="min-h-screen" data-vaul-drawer-wrapper>
         <header className="bg-background/75 sticky top-0 z-50 flex shrink-0 items-center justify-between border-b backdrop-blur">
           <div className="flex h-16 w-full items-center justify-between px-6 md:px-8 lg:px-10">
             <Link
@@ -330,7 +339,7 @@ export function LandingPage() {
               />
               <span>Visiq</span>
             </Link>
-            <nav className="hidden gap-8 md:flex">
+            <nav className="hidden gap-8 lg:flex">
               <button
                 onClick={() => scrollToSection("how-it-works")}
                 className={`text-sm font-medium transition-colors ${activeSection === "how-it-works" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
@@ -357,14 +366,20 @@ export function LandingPage() {
               </button>
             </nav>
             <div className="flex items-center gap-4">
-              <Link href="/signin">
-                <Button variant="outline" size="sm">
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/signup">
-                <Button size="sm">Get Started</Button>
-              </Link>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/signin">Sign In</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link href="/signup">Get Started</Link>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setIsDrawerOpen(true)}
+                className="flex lg:hidden"
+              >
+                <Menu />
+                <span className="sr-only">Menu</span>
+              </Button>
             </div>
           </div>
         </header>
@@ -919,6 +934,49 @@ export function LandingPage() {
       <FAQDialog open={isFaqOpen} setOpen={setIsFaqOpen} />
       <TermsOfServiceDialog open={isTermsOpen} setOpen={setIsTermsOpen} />
       <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />
+      <Drawer
+        open={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        shouldScaleBackground
+        setBackgroundColorOnScale={false}
+      >
+        <DrawerContent>
+          <VisuallyHidden>
+            <DrawerTitle>Navigate</DrawerTitle>
+          </VisuallyHidden>
+
+          <div className="space-y-4 px-4 py-2">
+            <Button
+              variant="ghost"
+              onClick={() => handleMenuClick("how-it-works")}
+              className="w-full text-base"
+            >
+              How It Works
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => handleMenuClick("features")}
+              className="w-full text-base"
+            >
+              Features
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => handleMenuClick("pricing")}
+              className="w-full text-base"
+            >
+              Pricing
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => handleMenuClick("testimonials")}
+              className="w-full text-base"
+            >
+              Testimonials
+            </Button>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }
