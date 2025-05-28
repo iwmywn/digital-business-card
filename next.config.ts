@@ -17,9 +17,6 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    optimizeCss: true,
-    optimizeServerReact: true,
-    optimisticClientCache: true,
     esmExternals: true,
     scrollRestoration: true,
     ppr: true,
