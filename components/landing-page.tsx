@@ -266,6 +266,8 @@ export function LandingPage() {
     setLinks(data);
   }, []);
 
+  const filteredTestimonials = isIPad ? testimonials.slice(0, 6) : testimonials;
+
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -757,6 +759,7 @@ export function LandingPage() {
 
           <section
             id="testimonials"
+            key={filteredTestimonials.length}
             ref={testimonialsRef}
             className="bg-secondary dark:bg-card overflow-hidden rounded-[5rem] py-16 md:py-20 lg:py-24"
           >
@@ -774,40 +777,38 @@ export function LandingPage() {
               <div className="relative mx-auto mt-6 w-full">
                 <div className="overflow-hidden" ref={emblaRef}>
                   <div className="flex items-stretch py-1">
-                    {(isIPad ? testimonials.slice(0, 6) : testimonials).map(
-                      (testimonial, index) => (
-                        <Card
-                          key={index}
-                          className={`hover:ring-primary mr-4 min-w-fit transition-all hover:ring-1 hover:ring-offset-1 ${isIPad ? "cursor-pointer" : ""}`}
-                        >
-                          <CardHeader>
-                            <div className="flex items-center gap-4">
-                              <div className="h-14 w-14 overflow-hidden rounded-full">
-                                <Image
-                                  src={testimonial.image}
-                                  alt={testimonial.name}
-                                  width={56}
-                                  height={56}
-                                />
-                              </div>
-                              <div className="text-primary">
-                                <CardTitle className="text-lg">
-                                  {testimonial.name}
-                                </CardTitle>
-                                <CardDescription>
-                                  {testimonial.title}
-                                </CardDescription>
-                              </div>
+                    {filteredTestimonials.map((testimonial, index) => (
+                      <Card
+                        key={index}
+                        className={`hover:ring-primary mr-4 min-w-fit transition-all hover:ring-1 hover:ring-offset-1 ${isIPad ? "cursor-pointer" : ""}`}
+                      >
+                        <CardHeader>
+                          <div className="flex items-center gap-4">
+                            <div className="h-14 w-14 overflow-hidden rounded-full">
+                              <Image
+                                src={testimonial.image}
+                                alt={testimonial.name}
+                                width={56}
+                                height={56}
+                              />
                             </div>
-                          </CardHeader>
-                          <CardContent className="max-w-96">
-                            <span className="text-muted-foreground">
-                              &quot;{testimonial.quote}&quot;
-                            </span>
-                          </CardContent>
-                        </Card>
-                      ),
-                    )}
+                            <div className="text-primary">
+                              <CardTitle className="text-lg">
+                                {testimonial.name}
+                              </CardTitle>
+                              <CardDescription>
+                                {testimonial.title}
+                              </CardDescription>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="max-w-96">
+                          <span className="text-muted-foreground">
+                            &quot;{testimonial.quote}&quot;
+                          </span>
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
                 </div>
               </div>
