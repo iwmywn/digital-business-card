@@ -337,7 +337,7 @@ export function LandingPage() {
                 height={24}
                 className="rounded-lg"
               />
-              <span>Visiq</span>
+              <span className="sr-only sm:not-sr-only">Visiq</span>
             </Link>
             <nav className="hidden gap-8 lg:flex">
               <button
@@ -366,16 +366,21 @@ export function LandingPage() {
               </button>
             </nav>
             <div className="flex items-center gap-4">
-              <Button variant="outline" size="sm" asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="hidden sm:inline-flex"
+              >
                 <Link href="/signin">Sign In</Link>
               </Button>
-              <Button size="sm" asChild>
+              <Button size="sm" asChild className="hidden sm:inline-flex">
                 <Link href="/signup">Get Started</Link>
               </Button>
               <Button
                 variant="outline"
                 onClick={() => setIsDrawerOpen(true)}
-                className="flex lg:hidden"
+                className="lg:hidden"
               >
                 <Menu />
                 <span className="sr-only">Menu</span>
@@ -973,6 +978,22 @@ export function LandingPage() {
               className="w-full text-base"
             >
               Testimonials
+            </Button>
+            <Button
+              variant="ghost"
+              asChild
+              className="w-full text-base sm:hidden"
+              onClick={() => setIsDrawerOpen(false)}
+            >
+              <Link href="/signin">Sign In</Link>
+            </Button>
+            <Button
+              variant="ghost"
+              asChild
+              className="w-full text-base sm:hidden"
+              onClick={() => setIsDrawerOpen(false)}
+            >
+              <Link href="/signup">Get Started</Link>
             </Button>
           </div>
         </DrawerContent>
