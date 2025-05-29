@@ -2,7 +2,7 @@
 
 import { forwardRef, Ref, useEffect, useImperativeHandle } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import {
   User,
@@ -52,26 +52,15 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
     },
   });
 
-  const formValues = form.watch();
-
   useImperativeHandle(ref, () => ({
     validate: () => form.trigger(),
   }));
 
-  useEffect(() => {
-    const hasChanged =
-      formValues.fullName !== initialValues?.fullName ||
-      formValues.jobTitle !== initialValues?.jobTitle ||
-      formValues.department !== initialValues?.department ||
-      formValues.company !== initialValues?.company ||
-      formValues.accreditations !== initialValues?.accreditations ||
-      formValues.headline !== initialValues?.headline ||
-      formValues.bio !== initialValues?.bio;
+  const watchedValues = useWatch({ control: form.control });
 
-    if (hasChanged) {
-      onSave(formValues);
-    }
-  }, [formValues, onSave, initialValues]);
+  useEffect(() => {
+    onSave(watchedValues as PersonalInfoValues);
+  }, [watchedValues, onSave]);
 
   return (
     <Card className="rounded-lg">

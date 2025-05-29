@@ -28,7 +28,7 @@ import {
   useState,
 } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import {
   Form,
@@ -106,8 +106,6 @@ export const CardDesign = forwardRef(function CardDesign(
     },
   });
 
-  const formValue = form.watch();
-
   useImperativeHandle(ref, () => ({
     validate: () => form.trigger(),
   }));
@@ -126,6 +124,11 @@ export const CardDesign = forwardRef(function CardDesign(
         ? constants.basicColorOptions
         : constants.allColorOptions;
 
+  const brandName = useWatch({
+    control: form.control,
+    name: "brandName",
+  });
+
   useEffect(() => {
     onSave({
       cardColor,
@@ -134,7 +137,7 @@ export const CardDesign = forwardRef(function CardDesign(
       profileImage,
       coverImage,
       imageTransforms,
-      brandName: formValue.brandName,
+      brandName,
     });
   }, [
     cardColor,
@@ -143,8 +146,7 @@ export const CardDesign = forwardRef(function CardDesign(
     profileImage,
     coverImage,
     imageTransforms,
-    formValue.brandName,
-    initialValues.brandName,
+    brandName,
     onSave,
   ]);
 

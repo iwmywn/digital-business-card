@@ -11,7 +11,7 @@ import { Loading } from "@/components/loading";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { cardSlugSchema } from "@/schemas";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -51,7 +51,11 @@ export function CustomSlugDialog({
   });
   const [isChecking, setIsChecking] = useState<boolean>(false);
   const [isSlugAvailable, setIsSlugAvailable] = useState<boolean | null>(null);
-  const debouncedSlug = useDebounce(form.watch("slug"), 500);
+  const slug = useWatch({
+    control: form.control,
+    name: "slug",
+  });
+  const debouncedSlug = useDebounce(slug, 500);
   const { cardResponse, mutate, cards } = useCard();
 
   async function onSubmit(values: SlugFormValues) {

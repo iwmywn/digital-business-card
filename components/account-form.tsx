@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import {
   Card,
@@ -51,7 +51,11 @@ export function AccountForm() {
   const [isUsernameAvailable, setIsUsernameAvailable] = useState<
     boolean | null
   >(null);
-  const debouncedUsername = useDebounce(form.watch("username"), 500);
+  const username = useWatch({
+    control: form.control,
+    name: "username",
+  });
+  const debouncedUsername = useDebounce(username, 500);
 
   async function onSubmit(values: SettingsFormValues) {
     const { success, error } = await updateAccount(values);
