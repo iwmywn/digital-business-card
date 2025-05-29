@@ -216,6 +216,7 @@ export function CardView({
                       src={getImageUrl("cover")}
                       alt="Cover"
                       fill
+                      priority
                       style={{ objectFit: "cover" }}
                     />
                   </div>
@@ -231,6 +232,7 @@ export function CardView({
                           src={getImageUrl("logo")}
                           alt="Logo"
                           fill
+                          priority
                           style={{ objectFit: "cover" }}
                         />
                       </div>
@@ -248,6 +250,7 @@ export function CardView({
                       src={getImageUrl("profile")}
                       alt="Profile"
                       fill
+                      priority
                       style={{ objectFit: "cover" }}
                     />
                   </div>
@@ -261,6 +264,7 @@ export function CardView({
                       src={getImageUrl("logo")}
                       alt="Logo"
                       fill
+                      priority
                       style={{ objectFit: "cover" }}
                     />
                   </div>
