@@ -60,6 +60,7 @@ export function CardPreview({
                   src={getImageUrl("cover")}
                   alt="Cover"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 448px"
                   style={{ objectFit: "cover" }}
                 />
               </div>
@@ -75,6 +76,7 @@ export function CardPreview({
                       src={getImageUrl("logo")}
                       alt="Logo"
                       fill
+                      sizes="80px"
                       style={{ objectFit: "cover" }}
                     />
                   </div>
@@ -92,6 +94,7 @@ export function CardPreview({
                   src={getImageUrl("profile")}
                   alt="Profile"
                   fill
+                  sizes="100px"
                   style={{ objectFit: "cover" }}
                 />
               </div>
@@ -105,6 +108,7 @@ export function CardPreview({
                   src={getImageUrl("logo")}
                   alt="Logo"
                   fill
+                  sizes="64px"
                   style={{ objectFit: "cover" }}
                 />
               </div>

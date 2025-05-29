@@ -289,6 +289,7 @@ export const CardDesign = forwardRef(function CardDesign(
                           src={getImageUrl("logo")}
                           alt="Company logo"
                           fill
+                          sizes="80px"
                           style={{ objectFit: "cover" }}
                         />
                       </div>
@@ -327,6 +328,7 @@ export const CardDesign = forwardRef(function CardDesign(
                           src={getImageUrl("profile")}
                           alt="Profile picture"
                           fill
+                          sizes="80px"
                           style={{ objectFit: "cover" }}
                         />
                       </div>
@@ -365,6 +367,7 @@ export const CardDesign = forwardRef(function CardDesign(
                           src={getImageUrl("cover")}
                           alt="Cover photo"
                           fill
+                          sizes="160px"
                           style={{ objectFit: "cover" }}
                         />
                       </div>

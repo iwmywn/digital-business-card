@@ -249,6 +249,7 @@ export function InformationForm() {
                         src={getImageUrl("profile")}
                         alt="Profile picture"
                         fill
+                        sizes="80px"
                         style={{ objectFit: "cover" }}
                       />
                     </div>
@@ -285,6 +286,7 @@ export function InformationForm() {
                         src={getImageUrl("cover")}
                         alt="Cover photo"
                         fill
+                        sizes="160px"
                         style={{ objectFit: "cover" }}
                       />
                     </div>
