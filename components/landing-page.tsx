@@ -24,6 +24,7 @@ import { CardPreview } from "@/components/card-preview";
 import { subscriptionPlans } from "@/constants";
 import type { SerializableLinkType } from "@/components/icons";
 import * as constants from "@/constants";
+import { EmblaCarouselType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -156,8 +157,6 @@ export function LandingPage() {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
-      align: isIPad ? "center" : "start",
-      skipSnaps: false,
     },
     isIPad
       ? []
@@ -172,10 +171,6 @@ export function LandingPage() {
   );
   const [activeTab, setActiveTab] = useState<string>("design");
   const [planActiveTab, setPlanActiveTab] = useState<string>("free");
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
   const [cardDesign, setCardDesign] = useState<CardDesignValues>({
     cardColor: constants.defaultColor,
     fontFamily: constants.defaultFont,
@@ -283,12 +278,28 @@ export function LandingPage() {
     setIsDrawerOpen(false);
   };
 
+  const onInit = useCallback((emblaApi: EmblaCarouselType) => {
+    setScrollSnaps(emblaApi.scrollSnapList());
+  }, []);
+
+  const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, []);
+
   useEffect(() => {
     if (!emblaApi) return;
-    setScrollSnaps(emblaApi.scrollSnapList());
-    emblaApi.on("select", onSelect);
-    onSelect();
-  }, [emblaApi, onSelect]);
+
+    onInit(emblaApi);
+    onSelect(emblaApi);
+    emblaApi.on("reInit", onInit).on("reInit", onSelect).on("select", onSelect);
+
+    return () => {
+      emblaApi
+        .off("reInit", onInit)
+        .off("reInit", onSelect)
+        .off("select", onSelect);
+    };
+  }, [emblaApi, onInit, onSelect]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -780,7 +791,11 @@ export function LandingPage() {
                 <div className="overflow-hidden" ref={emblaRef}>
                   <div
                     className="flex items-stretch py-1 will-change-transform"
-                    style={{ touchAction: "pan-y pinch-zoom" }}
+                    style={{
+                      touchAction: "pan-y pinch-zoom",
+                      backfaceVisibility: "hidden",
+                      transformStyle: "preserve-3d",
+                    }}
                   >
                     {filteredTestimonials.map((testimonial, index) => (
                       <Card
