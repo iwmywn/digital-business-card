@@ -64,6 +64,7 @@ export function UserProfileDisplay({
                   )}
                   alt="Cover photo"
                   fill
+                  priority
                   style={{ objectFit: "cover" }}
                 />
               </div>
@@ -82,6 +83,7 @@ export function UserProfileDisplay({
                   )}
                   alt="Profile picture"
                   fill
+                  priority
                   style={{ objectFit: "cover" }}
                 />
               </div>
