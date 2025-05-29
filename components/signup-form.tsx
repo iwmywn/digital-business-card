@@ -25,8 +25,8 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { FormLink } from "@/components/form-link";
 import { signUpSchema } from "@/schemas";
-import { useState } from "react";
-import ReCaptchaPopup from "@/components/recaptcha";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { ReCaptchaDialog } from "@/components/recaptcha-dialog";
 import { FormButton } from "@/components/form-button";
 import { signUp } from "@/actions/auth";
 import { useRouter } from "next/navigation";
@@ -40,7 +40,9 @@ export function SignUpForm() {
   const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const isProcessingRef = useRef<boolean>(false);
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -52,34 +54,53 @@ export function SignUpForm() {
     },
   });
 
-  async function onSubmit(values: SignUpFormValues) {
-    if (!showCaptcha && !recaptchaToken) {
-      setShowCaptcha(true);
-      return;
+  const processSignUp = useCallback(
+    async (values: SignUpFormValues, token: string) => {
+      if (isProcessingRef.current) return;
+
+      isProcessingRef.current = true;
+      setIsLoading(true);
+
+      const { success, error } = await signUp(values, token);
+
+      if (error || !success) {
+        toast.error(error);
+      } else {
+        toast.success(success);
+        form.reset();
+        router.push("/signin");
+      }
+
+      setIsLoading(false);
+      setRecaptchaToken(null);
+      setShowCaptcha(false);
+      isProcessingRef.current = false;
+    },
+    [form, router],
+  );
+
+  const onSubmit = useCallback(
+    async (values: SignUpFormValues) => {
+      if (isProcessingRef.current) return;
+
+      if (!recaptchaToken) {
+        setShowCaptcha(true);
+        return;
+      }
+
+      await processSignUp(values, recaptchaToken);
+    },
+    [recaptchaToken, processSignUp],
+  );
+
+  useEffect(() => {
+    if (recaptchaToken && !isProcessingRef.current) {
+      processSignUp(form.getValues(), recaptchaToken);
     }
-
-    const { success, error } = await signUp(values, recaptchaToken);
-
-    if (error || !success) {
-      toast.error(error);
-    } else {
-      toast.success(success);
-      form.reset();
-      router.push("/signin");
-    }
-
-    setRecaptchaToken(null);
-    setShowCaptcha(false);
-  }
+  }, [recaptchaToken, form, processSignUp]);
 
   return (
     <>
-      {showCaptcha && (
-        <ReCaptchaPopup
-          onClose={() => setShowCaptcha(false)}
-          setRecaptchaToken={(token) => setRecaptchaToken(token)}
-        />
-      )}
       <Card>
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>
@@ -212,7 +233,7 @@ export function SignUpForm() {
                 </div>
 
                 <FormButton
-                  isSubmitting={form.formState.isSubmitting}
+                  isSubmitting={isLoading || form.formState.isSubmitting}
                   text="Sign up"
                 />
               </div>
@@ -223,6 +244,13 @@ export function SignUpForm() {
           </div>
         </CardContent>
       </Card>
+
+      {showCaptcha && (
+        <ReCaptchaDialog
+          onClose={() => setShowCaptcha(false)}
+          setRecaptchaToken={(token) => setRecaptchaToken(token)}
+        />
+      )}
 
       <TermsOfServiceDialog open={isTermsOpen} setOpen={setIsTermsOpen} />
       <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />

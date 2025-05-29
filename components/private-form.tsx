@@ -21,8 +21,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import ReCaptchaPopup from "@/components/recaptcha";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { ReCaptchaDialog } from "@/components/recaptcha-dialog";
 import { tokenSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { FormLink } from "@/components/form-link";
@@ -33,7 +33,9 @@ export type PrivateFormValues = z.infer<typeof tokenSchema>;
 
 export function PrivateForm() {
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const isProcessingRef = useRef<boolean>(false);
   const form = useForm<PrivateFormValues>({
     resolver: zodResolver(tokenSchema),
     defaultValues: {
@@ -42,37 +44,56 @@ export function PrivateForm() {
   });
   const router = useRouter();
 
-  async function onSubmit(values: PrivateFormValues) {
-    if (!showCaptcha && !recaptchaToken) {
-      setShowCaptcha(true);
-      return;
+  const processSignInPrivate = useCallback(
+    async (values: PrivateFormValues, token: string) => {
+      if (isProcessingRef.current) return;
+
+      isProcessingRef.current = true;
+      setIsLoading(true);
+
+      const { success, error } = await signInPrivate(values, token);
+
+      if (error || !success) {
+        toast.error(error);
+      } else {
+        toast.success(success);
+        const searchParams = new URLSearchParams(window.location.search);
+        const callbackUrl = searchParams.get("next") || "/";
+
+        form.reset();
+        router.push(callbackUrl);
+      }
+
+      setIsLoading(false);
+      setRecaptchaToken(null);
+      setShowCaptcha(false);
+      isProcessingRef.current = false;
+    },
+    [form, router],
+  );
+
+  const onSubmit = useCallback(
+    async (values: PrivateFormValues) => {
+      if (isProcessingRef.current) return;
+
+      if (!recaptchaToken) {
+        setShowCaptcha(true);
+        return;
+      }
+
+      await processSignInPrivate(values, recaptchaToken);
+    },
+    [recaptchaToken, processSignInPrivate],
+  );
+
+  useEffect(() => {
+    if (recaptchaToken && !isProcessingRef.current) {
+      processSignInPrivate(form.getValues(), recaptchaToken);
     }
-
-    const { success, error } = await signInPrivate(values, recaptchaToken);
-
-    if (error || !success) {
-      toast.error(error);
-    } else {
-      toast.success(success);
-      const searchParams = new URLSearchParams(window.location.search);
-      const callbackUrl = searchParams.get("next") || "/";
-
-      form.reset();
-      router.push(callbackUrl);
-    }
-
-    setRecaptchaToken(null);
-    setShowCaptcha(false);
-  }
+  }, [recaptchaToken, form, processSignInPrivate]);
 
   return (
     <>
-      {showCaptcha && (
-        <ReCaptchaPopup
-          onClose={() => setShowCaptcha(false)}
-          setRecaptchaToken={(token) => setRecaptchaToken(token)}
-        />
-      )}
       <Card>
         <CardHeader>
           <CardTitle className="text-xl">Secure Access</CardTitle>
@@ -113,7 +134,7 @@ export function PrivateForm() {
                   )}
                 />
                 <FormButton
-                  isSubmitting={form.formState.isSubmitting}
+                  isSubmitting={isLoading || form.formState.isSubmitting}
                   text="Submit"
                 />
               </div>
@@ -121,6 +142,13 @@ export function PrivateForm() {
           </Form>
         </CardContent>
       </Card>
+
+      {showCaptcha && (
+        <ReCaptchaDialog
+          onClose={() => setShowCaptcha(false)}
+          setRecaptchaToken={(token) => setRecaptchaToken(token)}
+        />
+      )}
     </>
   );
 }

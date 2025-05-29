@@ -10,7 +10,7 @@ interface ReCaptchaPopupProps {
   setRecaptchaToken: (token: string | null) => void;
 }
 
-export default function ReCaptchaPopup({
+export function ReCaptchaDialog({
   onClose,
   setRecaptchaToken,
 }: ReCaptchaPopupProps) {
@@ -21,9 +21,7 @@ export default function ReCaptchaPopup({
     }
 
     setRecaptchaToken(token);
-    setTimeout(() => {
-      onClose();
-    }, 500);
+    onClose();
   };
 
   const handleDialogClose = () => {

@@ -22,8 +22,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { FormLink } from "@/components/form-link";
-import { useState } from "react";
-import ReCaptchaPopup from "@/components/recaptcha";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { ReCaptchaDialog } from "@/components/recaptcha-dialog";
 import { emailSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { forgotPassword } from "@/actions/auth";
@@ -32,7 +32,9 @@ export type EmailFormValues = z.infer<typeof emailSchema>;
 
 export function ForgotPasswordForm() {
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const isProcessingRef = useRef<boolean>(false);
   const form = useForm<EmailFormValues>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
@@ -40,33 +42,52 @@ export function ForgotPasswordForm() {
     },
   });
 
-  async function onSubmit(values: EmailFormValues) {
-    if (!showCaptcha && !recaptchaToken) {
-      setShowCaptcha(true);
-      return;
+  const processForgotPassword = useCallback(
+    async (values: EmailFormValues, token: string) => {
+      if (isProcessingRef.current) return;
+
+      isProcessingRef.current = true;
+      setIsLoading(true);
+
+      const { success, error } = await forgotPassword(values, token);
+
+      if (error || !success) {
+        toast.error(error);
+      } else {
+        toast.success(success);
+        form.reset();
+      }
+
+      setIsLoading(false);
+      setRecaptchaToken(null);
+      setShowCaptcha(false);
+      isProcessingRef.current = false;
+    },
+    [form],
+  );
+
+  const onSubmit = useCallback(
+    async (values: EmailFormValues) => {
+      if (isProcessingRef.current) return;
+
+      if (!recaptchaToken) {
+        setShowCaptcha(true);
+        return;
+      }
+
+      await processForgotPassword(values, recaptchaToken);
+    },
+    [recaptchaToken, processForgotPassword],
+  );
+
+  useEffect(() => {
+    if (recaptchaToken && !isProcessingRef.current) {
+      processForgotPassword(form.getValues(), recaptchaToken);
     }
-
-    const { success, error } = await forgotPassword(values, recaptchaToken);
-
-    if (error || !success) {
-      toast.error(error);
-    } else {
-      toast.success(success);
-      form.reset();
-    }
-
-    setRecaptchaToken(null);
-    setShowCaptcha(false);
-  }
+  }, [recaptchaToken, form, processForgotPassword]);
 
   return (
     <>
-      {showCaptcha && (
-        <ReCaptchaPopup
-          onClose={() => setShowCaptcha(false)}
-          setRecaptchaToken={(token) => setRecaptchaToken(token)}
-        />
-      )}
       <Card>
         <CardHeader>
           <CardTitle className="text-xl">Forgot Password</CardTitle>
@@ -98,7 +119,7 @@ export function ForgotPasswordForm() {
                   )}
                 />
                 <FormButton
-                  isSubmitting={form.formState.isSubmitting}
+                  isSubmitting={isLoading || form.formState.isSubmitting}
                   text="Send reset link"
                 />
                 <FormLink href="/signin" side="center">
@@ -109,6 +130,13 @@ export function ForgotPasswordForm() {
           </Form>
         </CardContent>
       </Card>
+
+      {showCaptcha && (
+        <ReCaptchaDialog
+          onClose={() => setShowCaptcha(false)}
+          setRecaptchaToken={(token) => setRecaptchaToken(token)}
+        />
+      )}
     </>
   );
 }
