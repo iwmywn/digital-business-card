@@ -157,6 +157,7 @@ export function LandingPage() {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
+      watchDrag: isIPad,
     },
     isIPad
       ? []
@@ -844,7 +845,7 @@ export function LandingPage() {
                     className={`group before:border-ring/50 relative flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 before:absolute before:inset-0 before:rounded-full before:border`}
                   >
                     <span
-                      className={`block h-2 w-2 rounded-full transition-colors duration-300 ${index === selectedIndex ? "bg-primary" : ""} `}
+                      className={`block h-2 w-2 rounded-full transition-colors duration-300 ${index === selectedIndex ? "bg-primary" : ""}`}
                     />
                   </div>
                 ))}

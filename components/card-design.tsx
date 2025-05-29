@@ -396,7 +396,7 @@ export const CardDesign = forwardRef(function CardDesign(
               {colorOptions.map((color) => (
                 <button
                   key={color.value}
-                  className={`h-12 w-12 cursor-pointer rounded-md shadow-sm transition-all ${color.color} ${cardColor === color.value ? "ring-primary scale-110 ring-1 ring-offset-1" : "hover:ring-primary hover:ring-1 hover:ring-offset-1"} `}
+                  className={`h-12 w-12 cursor-pointer rounded-md shadow-sm transition-all ${color.color} ${cardColor === color.value ? "ring-primary scale-110 ring-1 ring-offset-1" : "hover:ring-primary hover:ring-1 hover:ring-offset-1"}`}
                   onClick={() => setCardColor(color.value)}
                   title={color.label}
                   type="button"
