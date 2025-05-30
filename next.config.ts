@@ -16,7 +16,6 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    esmExternals: true,
     scrollRestoration: true,
     ppr: true,
     cpus: 1,
