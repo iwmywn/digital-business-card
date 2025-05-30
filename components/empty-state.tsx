@@ -35,10 +35,8 @@ export function EmptyState({
       <h2 className="text-lg font-semibold">{title}</h2>
       <p className="text-gray-400">{message}</p>
       {linkHref && linkLabel && (
-        <Button asChild>
-          <Link href={linkHref} className="mt-2">
-            {linkLabel}
-          </Link>
+        <Button className="mt-2" asChild>
+          <Link href={linkHref}>{linkLabel}</Link>
         </Button>
       )}
       {children && children}

@@ -63,7 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {...props}
     >
       <SidebarHeader>
-        <SidebarMenuButton size="lg" asChild tooltip="Visiq Home">
+        <SidebarMenuButton size="lg" tooltip="Visiq Home" asChild>
           <Link href="/home">
             <Image
               src="/images/logo.png"

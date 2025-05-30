@@ -50,9 +50,9 @@ export function Nav({ nav }: NavProps) {
               return (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
-                    asChild
                     isActive={isActive}
                     tooltip={item.title}
+                    asChild
                   >
                     <Link href={item.url}>
                       <item.icon />

@@ -17,9 +17,9 @@ export default function Error({
   return (
     <div className="flex h-screen flex-col items-center justify-center gap-2 px-6 text-center md:px-16">
       <h2 className="text-lg font-semibold">Something went wrong!</h2>
-      <Link href="/home" className="mt-2">
-        <Button>Go home</Button>
-      </Link>
+      <Button className="mt-2" asChild>
+        <Link href="/home">Go home</Link>
+      </Button>
     </div>
   );
 }

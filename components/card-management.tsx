@@ -112,7 +112,7 @@ export function CardManagement() {
             View and manage your digital business cards.
           </p>
         </div>
-        <Button asChild className="bg-primary">
+        <Button className="bg-primary" asChild>
           <Link href="/create">Create new card</Link>
         </Button>
       </div>

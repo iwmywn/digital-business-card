@@ -385,12 +385,12 @@ export function LandingPage() {
               <Button
                 variant="outline"
                 size="sm"
-                asChild
                 className="hidden sm:inline-flex"
+                asChild
               >
                 <Link href="/signin">Sign In</Link>
               </Button>
-              <Button size="sm" asChild className="hidden sm:inline-flex">
+              <Button size="sm" className="hidden sm:inline-flex" asChild>
                 <Link href="/signup">Get Started</Link>
               </Button>
               <Button
@@ -416,12 +416,12 @@ export function LandingPage() {
               effortless and leave a lasting impression.
             </p>
             <div className="flex w-full flex-col justify-center gap-4 sm:flex-row">
-              <Link href="/signup" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full">
+              <Button size="lg" className="w-full sm:w-auto" asChild>
+                <Link href="/signup">
                   Create Your Card
                   <ArrowRight />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
               <Button
                 variant="outline"
                 size="lg"
@@ -536,9 +536,9 @@ export function LandingPage() {
                       </Tabs>
                     </CardContent>
                     <CardFooter>
-                      <Link href="/signup" className="w-full">
-                        <Button className="w-full">Create Your Own Card</Button>
-                      </Link>
+                      <Button className="w-full" asChild>
+                        <Link href="/signup">Create Your Own Card</Link>
+                      </Button>
                     </CardFooter>
                   </Card>
                 </div>
@@ -553,12 +553,8 @@ export function LandingPage() {
                 </div>
               </div>
 
-              <Button asChild>
-                <Link
-                  href="/card/iwmywn"
-                  target="_blank"
-                  className="sm:mx-auto sm:w-fit"
-                >
+              <Button className="sm:mx-auto sm:w-fit" asChild>
+                <Link href="/card/iwmywn" target="_blank">
                   See Full Demo
                   <ExternalLink />
                 </Link>
@@ -759,11 +755,11 @@ export function LandingPage() {
                       </ul>
                     </CardContent>
                     <CardFooter className="mt-auto">
-                      <Link href="/signup" className="w-full">
-                        <Button className="w-full" variant="outline">
+                      <Button className="w-full" variant="outline" asChild>
+                        <Link href="/signup">
                           {plan.id === "free" ? "Get Started" : "Upgrade"}
-                        </Button>
-                      </Link>
+                        </Link>
+                      </Button>
                     </CardFooter>
                   </Card>
                 ))}
@@ -859,12 +855,12 @@ export function LandingPage() {
                 Ready to Modernize Your Networking?
               </h2>
               <div className="flex flex-col justify-center gap-4 font-bold sm:flex-row">
-                <Link href="/signup">
-                  <Button size="lg">
+                <Button size="lg" asChild>
+                  <Link href="/signup">
                     Get Started for Free
                     <ArrowRight />
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
                 <Button
                   size="lg"
                   variant="outline"
@@ -1006,17 +1002,17 @@ export function LandingPage() {
             </Button>
             <Button
               variant="ghost"
-              asChild
               className="w-full text-base sm:hidden"
               onClick={() => setIsDrawerOpen(false)}
+              asChild
             >
               <Link href="/signin">Sign In</Link>
             </Button>
             <Button
               variant="ghost"
-              asChild
               className="w-full text-base sm:hidden"
               onClick={() => setIsDrawerOpen(false)}
+              asChild
             >
               <Link href="/signup">Get Started</Link>
             </Button>
