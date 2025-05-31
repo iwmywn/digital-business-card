@@ -51,11 +51,13 @@ export function CustomSlugDialog({
   });
   const [isChecking, setIsChecking] = useState<boolean>(false);
   const [isSlugAvailable, setIsSlugAvailable] = useState<boolean | null>(null);
-  const slug = useWatch({
-    control: form.control,
-    name: "slug",
-  });
-  const debouncedSlug = useDebounce(slug, 500);
+  const debouncedSlug = useDebounce(
+    useWatch({
+      control: form.control,
+      name: "slug",
+    }),
+    500,
+  );
   const { cardResponse, mutate, cards } = useCard();
 
   async function onSubmit(values: SlugFormValues) {

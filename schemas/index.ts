@@ -132,7 +132,12 @@ const publicProfileSchema = z
       });
     }
 
-    if (website && !/^https?:\/\/[^\s]+$/.test(website)) {
+    if (
+      website &&
+      !/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/.test(
+        website,
+      )
+    ) {
       ctx.addIssue({
         path: ["website"],
         message: "Website must be a valid URL.",

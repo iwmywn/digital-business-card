@@ -51,11 +51,13 @@ export function AccountForm() {
   const [isUsernameAvailable, setIsUsernameAvailable] = useState<
     boolean | null
   >(null);
-  const username = useWatch({
-    control: form.control,
-    name: "username",
-  });
-  const debouncedUsername = useDebounce(username, 500);
+  const debouncedUsername = useDebounce(
+    useWatch({
+      control: form.control,
+      name: "username",
+    }),
+    500,
+  );
 
   async function onSubmit(values: SettingsFormValues) {
     const { success, error } = await updateAccount(values);
@@ -202,7 +204,7 @@ export function AccountForm() {
                 placeholder="Email"
                 type="email"
                 readOnly
-                defaultValue="user@nextmail.com"
+                defaultValue={user?.email}
               />
               <FormDescription>
                 This email is linked to your account and cannot be changed.

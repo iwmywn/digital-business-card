@@ -131,10 +131,14 @@ export async function checkUsername(username: string) {
 
     const userCollection = await getUserCollection();
 
-    await userCollection.findOne({
+    const existingUsername = await userCollection.findOne({
       username,
       _id: { $ne: new ObjectId(userId) },
     });
+
+    if (existingUsername) {
+      return { error: `Username '${username}' is not available!` };
+    }
 
     return { error: undefined };
   } catch (error) {
