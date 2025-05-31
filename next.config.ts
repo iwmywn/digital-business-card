@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
     scrollRestoration: true,
     ppr: true,
     cpus: 1,
-    reactCompiler: true,
+    // reactCompiler: true,
     inlineCss: true,
   },
 };
