@@ -4,12 +4,15 @@ import NotFound from "@/app/not-found";
 import type { Metadata } from "next";
 import { getCardByUserId } from "@/actions/card";
 import { getCloudinaryUrl } from "@/lib/utils";
+import { connection } from "next/server";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  await connection();
+
   const param = await params;
   const user = await getUserBySlug(param.slug);
 
@@ -41,6 +44,8 @@ export default async function page({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  await connection();
+
   const param = await params;
   const user = await getUserBySlug(param.slug);
 

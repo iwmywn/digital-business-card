@@ -3,12 +3,15 @@ import { getCardToViewBySlug } from "@/actions/card";
 import { CardView } from "@/components/card-view";
 import NotFound from "@/app/not-found";
 import { getCloudinaryUrl } from "@/lib/utils";
+import { connection } from "next/server";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  await connection();
+
   const param = await params;
   const { card, error } = await getCardToViewBySlug(param.slug);
 
@@ -40,6 +43,8 @@ export default async function page({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  await connection();
+
   const param = await params;
   const { card, error } = await getCardToViewBySlug(param.slug);
 

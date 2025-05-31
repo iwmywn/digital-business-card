@@ -3,12 +3,15 @@ import { EditCard } from "@/components/edit-card";
 import { getCardToEditBySlug } from "@/actions/card";
 import { EmptyState } from "@/components/empty-state";
 import { Ghost } from "lucide-react";
+import { connection } from "next/server";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  await connection();
+
   const param = await params;
   const { card, error } = await getCardToEditBySlug(param.slug);
 
@@ -30,6 +33,8 @@ export default async function page({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  await connection();
+
   const param = await params;
   const { card, error } = await getCardToEditBySlug(param.slug);
 
