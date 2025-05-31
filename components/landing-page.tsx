@@ -912,25 +912,41 @@ export function LandingPage() {
                   className="border-muted-foreground ml-3 h-6"
                 />
                 <Button variant="ghost" asChild>
-                  <Link href="#">
+                  <Link
+                    href="https://www.facebook.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <SimpleIconComponent icon={siFacebook} />
                     <span className="sr-only">Facebook</span>
                   </Link>
                 </Button>
                 <Button variant="ghost" asChild>
-                  <Link href="#">
+                  <Link
+                    href="https://www.instagram.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <SimpleIconComponent icon={siInstagram} />
                     <span className="sr-only">Instagram</span>
                   </Link>
                 </Button>
                 <Button variant="ghost" asChild>
-                  <Link href="#">
+                  <Link
+                    href="https://x.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <SimpleIconComponent icon={siX} />
                     <span className="sr-only">X</span>
                   </Link>
                 </Button>
                 <Button variant="ghost" asChild>
-                  <Link href="#">
+                  <Link
+                    href="https://www.linkedin.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -947,7 +963,6 @@ export function LandingPage() {
                       <rect width="4" height="12" x="2" y="9" />
                       <circle cx="4" cy="4" r="2" />
                     </svg>
-
                     <span className="sr-only">LinkedIn</span>
                   </Link>
                 </Button>
