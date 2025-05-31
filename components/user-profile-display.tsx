@@ -51,9 +51,9 @@ export function UserProfileDisplay({
   };
 
   return (
-    <div className="flex items-center justify-center p-8">
+    <div className="flex min-h-screen items-center justify-center p-8">
       <Card className="w-full max-w-xl overflow-hidden rounded-lg border-none pt-0">
-        <div className="bg-foreground/40 aspect-2/1">
+        <div className="bg-foreground/15 aspect-2/1">
           {profile.coverImage && (
             <div className="relative h-full w-full overflow-hidden">
               <div className="pointer-events-none relative h-full w-full select-none">

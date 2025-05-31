@@ -5,6 +5,8 @@ import type { Metadata } from "next";
 import { getCardByUserId } from "@/actions/card";
 import { getCloudinaryUrl } from "@/lib/utils";
 import { connection } from "next/server";
+import { Suspense } from "react";
+import { ProfileSkeleton } from "@/components/skeletons";
 
 export async function generateMetadata({
   params,
@@ -39,7 +41,19 @@ export async function generateMetadata({
   };
 }
 
-export default async function page({
+export default function page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  return (
+    <Suspense fallback={<ProfileSkeleton />}>
+      <UserProfileContent params={params} />
+    </Suspense>
+  );
+}
+
+async function UserProfileContent({
   params,
 }: {
   params: Promise<{ slug: string }>;

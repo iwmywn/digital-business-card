@@ -4,6 +4,8 @@ import { CardView } from "@/components/card-view";
 import NotFound from "@/app/not-found";
 import { getCloudinaryUrl } from "@/lib/utils";
 import { connection } from "next/server";
+import { Suspense } from "react";
+import { CardSkeleton } from "@/components/skeletons";
 
 export async function generateMetadata({
   params,
@@ -38,7 +40,25 @@ export async function generateMetadata({
   };
 }
 
-export default async function page({
+export default function page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className="bg-primary-foreground flex min-h-screen items-center justify-center p-8">
+          <CardSkeleton />
+        </div>
+      }
+    >
+      <ViewCardContent params={params} />
+    </Suspense>
+  );
+}
+
+async function ViewCardContent({
   params,
 }: {
   params: Promise<{ slug: string }>;

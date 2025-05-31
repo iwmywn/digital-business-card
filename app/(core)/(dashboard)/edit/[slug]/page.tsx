@@ -4,6 +4,8 @@ import { getCardToEditBySlug } from "@/actions/card";
 import { EmptyState } from "@/components/empty-state";
 import { Ghost } from "lucide-react";
 import { connection } from "next/server";
+import { Suspense } from "react";
+import { CreateCardSkeleton } from "@/components/skeletons";
 
 export async function generateMetadata({
   params,
@@ -28,7 +30,19 @@ export async function generateMetadata({
   };
 }
 
-export default async function page({
+export default function page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  return (
+    <Suspense fallback={<CreateCardSkeleton />}>
+      <EditCardContent params={params} />
+    </Suspense>
+  );
+}
+
+async function EditCardContent({
   params,
 }: {
   params: Promise<{ slug: string }>;

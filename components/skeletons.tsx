@@ -26,6 +26,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
+import { Separator } from "@/components/ui/separator";
 
 export function UserSkeleton() {
   return (
@@ -39,6 +40,64 @@ export function UserSkeleton() {
       </div>
       <Skeleton className="ml-auto h-4 w-4" />
     </SidebarMenuButton>
+  );
+}
+
+export function CardSkeleton() {
+  return (
+    <div className="relative mx-auto w-full max-w-md">
+      <div className="overflow-hidden rounded-xl shadow-sm">
+        <Skeleton className="relative aspect-2/1 w-full rounded-none" />
+        <div className="bg-background/15 relative space-y-4 p-6">
+          <Skeleton className="absolute top-[-3.125rem] left-6 h-25 w-25 rounded-full shadow-md" />
+          <Skeleton className="absolute -top-8 right-6 h-16 w-16 rounded-lg shadow-md" />
+
+          <div className="mt-10 w-full space-y-2">
+            <Skeleton className="h-6 w-3/4 rounded" />
+            <Skeleton className="h-5 w-1/2 rounded" />
+            <Skeleton className="h-5 w-1/3 rounded" />
+            <Skeleton className="h-4 w-1/4 rounded" />
+            <Skeleton className="h-4 w-1/3 rounded" />
+          </div>
+
+          <Separator className="bg-primary-foreground/5" />
+
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full rounded" />
+          </div>
+
+          <Separator className="bg-primary-foreground/5" />
+
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full rounded" />
+            <Skeleton className="h-4 w-5/6 rounded" />
+            <Skeleton className="h-4 w-2/3 rounded" />
+          </div>
+
+          <Separator className="bg-primary-foreground/5" />
+
+          <div className="space-y-2">
+            {[...Array(2)].map((_, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <Skeleton className="h-10 w-10 shrink-0 rounded-full" />
+                <div className="w-full space-y-1">
+                  <Skeleton className="h-4 w-1/3 rounded" />
+                  <Skeleton className="h-3 w-2/3 rounded" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-primary/10 flex items-center justify-between px-4 py-3">
+          <Skeleton className="bg-primary/10 h-4 w-1/4 rounded" />
+          <div className="flex gap-2">
+            <Skeleton className="bg-primary/10 h-8 w-8 rounded-md" />
+            <Skeleton className="bg-primary/10 h-8 w-8 rounded-md" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -109,7 +168,7 @@ export function CreateCardSkeleton() {
 
         <div className="hidden xl:block">
           <div className="sticky top-[3.75rem] space-y-4">
-            <Skeleton className="h-115 w-full rounded-xl" />
+            <CardSkeleton />
           </div>
         </div>
       </div>
@@ -551,5 +610,61 @@ function NotificationPreferencesSkeleton() {
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+export function ProfileSkeleton() {
+  return (
+    <div className="flex min-h-screen items-center justify-center p-8">
+      <Card className="w-full max-w-xl overflow-hidden rounded-lg border-none pt-0">
+        <div className="bg-foreground/15 aspect-2/1">
+          <Skeleton className="h-full w-full" />
+        </div>
+
+        <CardHeader className="relative pt-0 pb-0">
+          <div className="-mt-16 flex flex-col items-center md:-mt-20">
+            <Skeleton className="h-32 w-32 rounded-full md:h-40 md:w-40" />
+
+            <div className="mt-4 space-y-2 text-center">
+              <div className="mx-auto h-6 w-48 rounded-md">
+                <Skeleton className="mx-auto h-6 w-48" />
+              </div>
+              <div className="mx-auto h-4 w-32">
+                <Skeleton className="mx-auto h-4 w-32" />
+              </div>
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent className="mt-2 space-y-6">
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-28" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+          </div>
+
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-64" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-2/3" />
+          </div>
+
+          <Separator className="bg-primary-foreground/5" />
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-32" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
