@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
     reactCompiler: true,
     inlineCss: true,
   },
+  poweredByHeader: false,
 };
 
 export default nextConfig;
