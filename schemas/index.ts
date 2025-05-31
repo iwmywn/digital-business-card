@@ -61,9 +61,7 @@ const contactSchema = z.object({
     .regex(/^\+?[1-9][0-9]{7,14}$/, "Phone number must be valid.")
     .optional(),
   department: z.string().min(1, { message: "Please select a department." }),
-  message: z
-    .string()
-    .min(10, { message: "Message must be at least 10 characters." }),
+  message: z.string().min(1, { message: "Message is required." }),
 });
 
 const publicProfileSchema = z
@@ -388,9 +386,11 @@ const brandNameSchema = z
   });
 
 const bugReportSchema = z.object({
-  title: z.string().min(5, "Title must be at least 5 characters"),
+  title: z.string().min(5, "Title must be at least 5 characters."),
   type: z.string().min(1, { message: "Please select a report type." }),
-  description: z.string().min(20, "Description must be at least 20 characters"),
+  description: z
+    .string()
+    .min(20, "Description must be at least 20 characters."),
   steps: z.string().optional(),
 });
 
