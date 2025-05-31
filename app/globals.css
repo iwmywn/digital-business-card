@@ -116,6 +116,10 @@
     @apply border-border outline-ring/50;
   }
 
+  html {
+    text-rendering: optimizeLegibility;
+  }
+
   body {
     @apply bg-background text-foreground pointer-events-auto! antialiased;
   }
