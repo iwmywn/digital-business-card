@@ -28,7 +28,7 @@ export function CardView({
   const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false);
   const [isShareDialogOpen, setIsShareDialogOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
-  const [showGradient, setShowGradient] = useState(true);
+  const [showGradient, setShowGradient] = useState<boolean>(false);
   const saveButtonRef = useRef<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLDivElement | null>(null);
 
