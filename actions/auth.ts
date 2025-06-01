@@ -32,17 +32,18 @@ export async function signUp(
   try {
     if (!recaptchaToken) return { error: "Missing recaptcha token!" };
 
-    const verify = await verifyRecaptchaToken(recaptchaToken);
-
-    if (!verify) return { error: "Captcha challenge failed!" };
-
     const parsedValues = signUpSchema.safeParse(values);
 
     if (!parsedValues.success) return { error: "Invalid data provided!" };
 
     const { fullName, email, phone, password } = parsedValues.data;
-    const existingUser = await getUserByEmail(email);
 
+    const [verify, existingUser] = await Promise.all([
+      verifyRecaptchaToken(recaptchaToken),
+      getUserByEmail(email),
+    ]);
+
+    if (!verify) return { error: "Captcha challenge failed!" };
     if (existingUser) return { error: "Email already signed up!" };
 
     const [hashedPassword, avatars, customer] = await Promise.all([
@@ -146,16 +147,18 @@ export async function forgotPassword(
   try {
     if (!recaptchaToken) return { error: "Missing recaptcha token!" };
 
-    const verify = await verifyRecaptchaToken(recaptchaToken);
-
-    if (!verify) return { error: "Captcha challenge failed!" };
-
     const parsedValues = emailSchema.safeParse(values);
 
     if (!parsedValues.success) return { error: "Invalid data provided!" };
 
     const { email } = parsedValues.data;
-    const existingUser = await getUserByEmail(email);
+
+    const [verify, existingUser] = await Promise.all([
+      verifyRecaptchaToken(recaptchaToken),
+      getUserByEmail(email),
+    ]);
+
+    if (!verify) return { error: "Captcha challenge failed!" };
 
     if (!existingUser)
       return {
@@ -295,17 +298,19 @@ export async function signInPrivate(
   try {
     if (!recaptchaToken) return { error: "Missing recaptcha token!" };
 
-    const verify = await verifyRecaptchaToken(recaptchaToken);
-
-    if (!verify) return { error: "Captcha challenge failed!" };
-
     const parsedValues = tokenSchema.safeParse(values);
 
     if (!parsedValues.success) return { error: "Invalid data provided!" };
 
     const { token } = parsedValues.data;
 
-    const privateTokenCollection = await getPrivateTokenCollection();
+    const [verify, privateTokenCollection] = await Promise.all([
+      verifyRecaptchaToken(recaptchaToken),
+      getPrivateTokenCollection(),
+    ]);
+
+    if (!verify) return { error: "Captcha challenge failed!" };
+
     const existingToken = await privateTokenCollection.findOne({
       token,
     });
