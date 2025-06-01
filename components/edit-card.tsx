@@ -217,7 +217,7 @@ export function EditCard({ card }: { card: CardType }) {
           </div>
 
           <div className="hidden xl:block">
-            <div className="sticky top-[3.75rem] space-y-4">
+            <div className="sticky top-[7.75rem] space-y-4">
               <CardPreview
                 cardDesign={cardDesign}
                 personalInfo={personalInfo}
