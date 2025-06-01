@@ -13,12 +13,12 @@ export function VerifyEmail({
   email: string | undefined;
 }) {
   const [Icon, setIcon] = useState<LucideIcon>(() => X);
-  const [message, setMessage] = useState<string | undefined>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [message, setMessage] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchToken = async () => {
-      setLoading(true);
+    (async () => {
+      setIsLoading(true);
       const { success, error } = await verifyEmail(email, token);
 
       if (error || !success) {
@@ -27,14 +27,12 @@ export function VerifyEmail({
         setIcon(() => Check);
         setMessage(success);
       }
-      setLoading(false);
-    };
-
-    fetchToken();
+      setIsLoading(false);
+    })();
   }, [token, email]);
 
-  if (loading) {
-    return <Loading className="h-8 w-8" />;
+  if (isLoading) {
+    return <Loading className="h-8 w-8 border-white border-t-black/10" />;
   }
 
   return (

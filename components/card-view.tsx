@@ -33,15 +33,13 @@ export function CardView({
   const footerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const loadFingerprintAndTrack = async () => {
+    (async () => {
       const fp = await FingerprintJS.load();
       const result = await fp.get();
       const visitorId = result.visitorId;
 
       await trackCardView(card._id, visitorId);
-    };
-
-    loadFingerprintAndTrack();
+    })();
   }, [card._id]);
 
   useEffect(() => {

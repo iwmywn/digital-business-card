@@ -276,8 +276,28 @@ export async function verifyEmail(
 
     return { success: "Email verified successfully.", error: undefined };
   } catch (error) {
-    console.error("Error verifying token: ", error);
-    return { error: "Failed to verify token! Please try again later." };
+    console.error("Error verifying email: ", error);
+    return { error: "Failed to verify email! Please try again later." };
+  }
+}
+
+export async function findEmailAndToken(
+  email: string | undefined,
+  token: string | undefined,
+) {
+  try {
+    if (!token || !email) return { error: "Invalid data provided!" };
+
+    const user = await (
+      await getUserCollection()
+    ).findOne({ email: email, verificationToken: token });
+
+    if (!user) return { error: "Token expired!" };
+
+    return { error: undefined };
+  } catch (error) {
+    console.error("Error finding email and token: ", error);
+    return { error: "Failed to find email and token! Please try again later." };
   }
 }
 

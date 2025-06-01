@@ -23,10 +23,12 @@ import {
 import { PasswordInput } from "@/components/ui/password-input";
 import { resetPasswordSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
-import { resetPassword } from "@/actions/auth";
+import { findEmailAndToken, resetPassword } from "@/actions/auth";
 import { useRouter } from "next/navigation";
 import { FormLink } from "@/components/form-link";
-
+import { useEffect, useState } from "react";
+import { Loading } from "@/components/loading";
+import { X } from "lucide-react";
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 
 export function ResetPasswordForm({
@@ -37,6 +39,8 @@ export function ResetPasswordForm({
   email: string | undefined;
 }) {
   const router = useRouter();
+  const [message, setMessage] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const form = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
@@ -56,6 +60,28 @@ export function ResetPasswordForm({
       router.push("/signin");
     }
   }
+
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      const { error } = await findEmailAndToken(email, token);
+
+      if (error) {
+        setMessage(error);
+      }
+      setIsLoading(false);
+    })();
+  }, [email, token]);
+
+  if (isLoading)
+    return <Loading className="h-8 w-8 border-white border-t-black/10" />;
+  if (message)
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 text-sm">
+        <X size={30} />
+        {message}
+      </div>
+    );
 
   return (
     <Card>
