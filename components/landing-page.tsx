@@ -548,7 +548,6 @@ export function LandingPage() {
                     cardDesign={cardDesign}
                     personalInfo={personalInfo}
                     links={links}
-                    size="small"
                   />
                 </div>
               </div>

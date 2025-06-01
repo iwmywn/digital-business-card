@@ -15,16 +15,13 @@ interface CardPreviewProps {
   cardDesign: CardDesignValues;
   personalInfo: PersonalInfoValues;
   links: SerializableLinkType[];
-  size?: "small" | "large";
 }
 
 export function CardPreview({
   cardDesign,
   personalInfo,
   links,
-  size = "large",
 }: CardPreviewProps) {
-  const isSmall = size === "small";
   const colorClass = getColorClass(cardDesign.cardColor);
   const fontClass = getFontClass(cardDesign.fontFamily);
 
@@ -206,12 +203,6 @@ export function CardPreview({
           </div>
         </div>
       </div>
-
-      {!isSmall && (
-        <div className="mt-4 text-center text-sm text-gray-500">
-          <p>Preview shows how your card will appear to others</p>
-        </div>
-      )}
     </div>
   );
 }

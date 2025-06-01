@@ -172,7 +172,6 @@ export function EditCard({ card }: { card: CardType }) {
             cardDesign={cardDesign}
             personalInfo={personalInfo}
             links={links}
-            size="large"
           />
         </div>
       ) : (
@@ -222,7 +221,6 @@ export function EditCard({ card }: { card: CardType }) {
                 cardDesign={cardDesign}
                 personalInfo={personalInfo}
                 links={links}
-                size="small"
               />
             </div>
           </div>
