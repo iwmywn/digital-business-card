@@ -71,8 +71,30 @@ export async function saveCard(
     }
 
     const cardCollection = await getCardCollection();
+    const currentPlan = existingUser.currentPlan;
+    let maxCards = constants.maxFreeCards;
+
+    if (currentPlan === "basic") {
+      maxCards = constants.maxBasicCards;
+    } else if (currentPlan === "professional") {
+      maxCards = constants.maxProfessionalCards;
+    }
 
     if (cardId) {
+      const cards = await cardCollection
+        .find({ userId })
+        .sort({ createdAt: 1 })
+        .toArray();
+      const editableCard = cards.find(
+        (card, index) => card._id.toString() === cardId && index < maxCards,
+      );
+
+      if (!editableCard) {
+        return {
+          error: `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s)!`,
+        };
+      }
+
       const existingCard = await cardCollection.findOne({
         _id: new ObjectId(cardId),
         userId,
@@ -97,16 +119,7 @@ export async function saveCard(
         },
       );
     } else {
-      const currentPlan = existingUser.currentPlan;
       const cardCount = await cardCollection.countDocuments({ userId });
-
-      let maxCards = constants.maxFreeCards;
-
-      if (currentPlan === "basic") {
-        maxCards = constants.maxBasicCards;
-      } else if (currentPlan === "professional") {
-        maxCards = constants.maxProfessionalCards;
-      }
 
       if (cardCount >= maxCards) {
         return {
@@ -607,6 +620,14 @@ export async function updateSlug(values: SlugFormValues, cardId: string) {
       return { error: "Invalid data provided!" };
     }
 
+    const existingUser = await getUserById(userId);
+
+    if (!existingUser) return { error: "User not found!" };
+    if (existingUser.currentPlan !== "professional")
+      return {
+        error: "Upgrade to our professional plan to customize this card link!",
+      };
+
     const { slug } = parsedValues.data;
     const cardCollection = await getCardCollection();
     const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
@@ -653,6 +674,15 @@ export async function updateCardVisibility(cardId: string, isPublic: boolean) {
     if (!isSignedIn || !userId) {
       return { error: "Unauthorized!" };
     }
+
+    const existingUser = await getUserById(userId);
+
+    if (!existingUser) return { error: "User not found!" };
+    if (existingUser.currentPlan !== "professional")
+      return {
+        error:
+          "Upgrade to our professional plan to change this card visibility!",
+      };
 
     const cardCollection = await getCardCollection();
 
