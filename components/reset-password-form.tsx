@@ -24,6 +24,8 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { resetPasswordSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { resetPassword } from "@/actions/auth";
+import { useRouter } from "next/navigation";
+import { FormLink } from "@/components/form-link";
 
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 
@@ -34,6 +36,7 @@ export function ResetPasswordForm({
   token: string | undefined;
   email: string | undefined;
 }) {
+  const router = useRouter();
   const form = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
@@ -50,6 +53,7 @@ export function ResetPasswordForm({
     } else {
       toast.success(success);
       form.reset();
+      router.push("/signin");
     }
   }
 
@@ -107,8 +111,11 @@ export function ResetPasswordForm({
 
               <FormButton
                 isSubmitting={form.formState.isSubmitting}
-                text="Reset Password"
+                text="Reset password"
               />
+              <FormLink href="/signin" side="center">
+                Back to sign in
+              </FormLink>
             </div>
           </form>
         </Form>
