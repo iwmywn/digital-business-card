@@ -196,7 +196,7 @@ export function CreateCard() {
       )}
 
       {previewMode ? (
-        <div className="flex justify-center">
+        <div className="sticky">
           <CardPreview
             cardDesign={cardDesign}
             personalInfo={personalInfo}

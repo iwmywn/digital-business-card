@@ -167,7 +167,7 @@ export function EditCard({ card }: { card: CardType }) {
       </div>
 
       {previewMode ? (
-        <div className="flex justify-center">
+        <div className="sticky">
           <CardPreview
             cardDesign={cardDesign}
             personalInfo={personalInfo}
