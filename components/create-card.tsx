@@ -159,7 +159,7 @@ export function CreateCard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="bg-primary-foreground/75 sticky top-[3.25rem] z-50 flex flex-col gap-6 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold">
             {previewMode ? "Card Preview" : "Create Card"}
@@ -210,7 +210,7 @@ export function CreateCard() {
             <Tabs
               value={activeTab}
               onValueChange={setActiveTab}
-              className="w-full"
+              className="w-full xl:sticky xl:top-[7.75rem]"
             >
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="design">Design</TabsTrigger>
