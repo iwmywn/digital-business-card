@@ -71,7 +71,7 @@ export async function saveCard(
     }
 
     const cardCollection = await getCardCollection();
-    const currentPlan = existingUser.currentPlan;
+    const { currentPlan } = existingUser;
     let maxCards = constants.maxFreeCards;
 
     if (currentPlan === "basic") {
@@ -86,7 +86,7 @@ export async function saveCard(
         .sort({ createdAt: 1 })
         .toArray();
       const editableCard = cards.find(
-        (card, index) => card._id.toString() === cardId && index < maxCards,
+        (c, idx) => c._id.toString() === cardId && idx < maxCards,
       );
 
       if (!editableCard) {
@@ -164,22 +164,56 @@ export async function getCardToEditBySlug(slug: string) {
     const isValidObjectId =
       ObjectId.isValid(slug) && new ObjectId(slug).toString() === slug;
     const query = isValidObjectId ? { _id: new ObjectId(slug) } : { slug };
-    const card = await (await getCardCollection()).findOne(query);
+    const [cardCollection, currentUser] = await Promise.all([
+      getCardCollection(),
+      session.user.get(),
+    ]);
+
+    if (!currentUser.isSignedIn || !currentUser.userId) {
+      return { error: "Unauthorized!" };
+    }
+
+    const [card, cards, existingUser] = await Promise.all([
+      cardCollection.findOne(query),
+      cardCollection
+        .find({ userId: currentUser.userId })
+        .sort({ createdAt: 1 })
+        .toArray(),
+      getUserById(currentUser.userId),
+    ]);
 
     if (!card) {
       return { error: "Card not found!" };
     }
 
-    const [currentUser, existingUser] = await Promise.all([
-      session.user.get(),
-      getUserById(card.userId),
-    ]);
-    const isOwner =
-      currentUser?.isSignedIn && currentUser.userId === card.userId;
-
     if (!existingUser) return { error: "User not found!" };
 
     const { currentPlan } = existingUser;
+    let maxCards = constants.maxFreeCards;
+
+    if (currentPlan === "basic") {
+      maxCards = constants.maxBasicCards;
+    } else if (currentPlan === "professional") {
+      maxCards = constants.maxProfessionalCards;
+    }
+
+    const editableCard = cards.find(
+      (c, idx) => c._id.toString() === card._id.toString() && idx < maxCards,
+    );
+
+    if (!editableCard) {
+      return {
+        error: `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s)!`,
+      };
+    }
+
+    const isOwner =
+      currentUser?.isSignedIn && currentUser.userId === card.userId;
+
+    if (!isOwner) {
+      return { error: "This card belongs to another user." };
+    }
+
     const now = new Date();
     const validProfessionalPlan = existingUser.purchasedPlans?.find(
       (plan) =>
@@ -188,14 +222,9 @@ export async function getCardToEditBySlug(slug: string) {
         new Date(plan.expiresAt) > now,
     );
 
-    if (!isOwner) {
-      return { error: "Access denied! This card belongs to another user." };
-    }
-
     if (!validProfessionalPlan && !isValidObjectId) {
       return {
-        error:
-          "Access denied! Upgrade our professional plan to access via slug.",
+        error: "Upgrade our professional plan to access via slug.",
       };
     }
 
@@ -253,8 +282,7 @@ export async function getCardToViewBySlug(slug: string) {
 
     if (!validProfessionalPlan && !isValidObjectId) {
       return {
-        error:
-          "Access denied! Upgrade our professional plan to access via slug.",
+        error: "Upgrade our professional plan to access via slug.",
       };
     }
 
@@ -339,7 +367,7 @@ export async function getCardToViewBySlug(slug: string) {
     }
 
     if (validProfessionalPlan && !card.isPublic) {
-      return { error: "Access denied! This card is private." };
+      return { error: "This card is private." };
     }
 
     return {
@@ -712,7 +740,7 @@ export async function getCards() {
 
     if (!existingUser) return { error: "User not found!" };
 
-    const currentPlan = existingUser.currentPlan;
+    const { currentPlan } = existingUser;
     const cardCollection = await getCardCollection();
     const [cardCount, cards] = await Promise.all([
       cardCollection.countDocuments({ userId }),
@@ -727,21 +755,21 @@ export async function getCards() {
       maxCards = constants.maxProfessionalCards;
     }
 
-    const enhancedCards = cards.map((card, index) => {
-      const editable = index < maxCards;
+    const enhancedCards = cards.map((c, idx) => {
+      const editable = idx < maxCards;
       const message = editable
         ? undefined
         : `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s)!`;
-      let { slug: dynamicSlug } = card;
+      let { slug: dynamicSlug } = c;
 
       dynamicSlug =
         dynamicSlug && currentPlan === "professional"
           ? dynamicSlug
-          : card._id.toString();
+          : c._id.toString();
 
       return {
-        ...card,
-        _id: card._id.toString(),
+        ...c,
+        _id: c._id.toString(),
         editable,
         message,
         dynamicSlug,
