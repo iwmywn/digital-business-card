@@ -29,6 +29,10 @@ export async function saveCard(
       return { error: "Unauthorized!" };
     }
 
+    const existingUser = await getUserById(userId);
+
+    if (!existingUser) return { error: "User not found!" };
+
     const updatedCardDesign = { ...cardDesign };
 
     if (updatedCardDesign.imageTransforms?.logo) {
@@ -93,6 +97,23 @@ export async function saveCard(
         },
       );
     } else {
+      const currentPlan = existingUser.currentPlan;
+      const cardCount = await cardCollection.countDocuments({ userId });
+
+      let maxCards = constants.maxFreeCards;
+
+      if (currentPlan === "basic") {
+        maxCards = constants.maxBasicCards;
+      } else if (currentPlan === "professional") {
+        maxCards = constants.maxProfessionalCards;
+      }
+
+      if (cardCount >= maxCards) {
+        return {
+          error: `You've reached the maximum number of cards (${maxCards}) allowed on your ${currentPlan} plan!`,
+        };
+      }
+
       const now = new Date();
 
       const result = await cardCollection.insertOne({
