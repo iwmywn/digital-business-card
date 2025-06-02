@@ -24,6 +24,8 @@ export function getCloudinaryUrl(path?: Image, transform?: ImageTransform) {
   if (transform?.croppedImageUrl) return transform.croppedImageUrl;
   if (!path) return "/placeholder.svg";
 
+  const optimizations = "f_auto,q_auto";
+
   if (transform && transform.croppedAreaPixels) {
     const cropParams = [
       `x_${Math.round(transform.croppedAreaPixels.x)}`,
@@ -33,10 +35,10 @@ export function getCloudinaryUrl(path?: Image, transform?: ImageTransform) {
       "c_crop",
     ];
     const transformation = cropParams.join(",");
-    return `https://res.cloudinary.com/${path[0]}/image/upload/${transformation}/${path[1]}`;
+    return `https://res.cloudinary.com/${path[0]}/image/upload/${transformation},${optimizations}/${path[1]}`;
   }
 
-  return `https://res.cloudinary.com/${path[0]}/image/upload/${path[1]}`;
+  return `https://res.cloudinary.com/${path[0]}/image/upload/${optimizations}/${path[1]}`;
 }
 
 export function extractCloudinaryPath(cloudinaryUrl: string) {
