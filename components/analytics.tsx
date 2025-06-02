@@ -195,7 +195,7 @@ export function Analytics() {
     } else if (range === "30days") {
       startDate.setDate(now.getDate() - 30);
     } else {
-      startDate.setDate(cards[0].createdAt.getDate());
+      startDate.setTime(cards[0].createdAt.getTime());
     }
 
     const dateRange: string[] = [];
