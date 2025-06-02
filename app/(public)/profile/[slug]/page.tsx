@@ -71,3 +71,7 @@ async function UserProfileContent({
 
   return <UserProfileDisplay user={user} dynamicSlugs={dynamicSlugs} />;
 }
+
+export function generateStaticParams() {
+  return [{ slug: "iwmywn" }];
+}

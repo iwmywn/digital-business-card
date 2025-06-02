@@ -74,3 +74,7 @@ async function ViewCardContent({
 
   return <CardView card={card} />;
 }
+
+export function generateStaticParams() {
+  return [{ slug: "iwmywn" }];
+}
