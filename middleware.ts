@@ -6,11 +6,13 @@ import { siteConfig } from "@/lib/config";
 import { NextURL } from "next/dist/server/web/next-url";
 import { session } from "@/lib/session";
 
-function redirectIfProtectedRoute(path: string, nextUrl: NextURL) {
-  if (routes.protectedRoutes.some((route) => path.startsWith(route))) {
+function redirectIfProtectedRoute(nextUrl: NextURL) {
+  const { pathname, search } = nextUrl;
+
+  if (routes.protectedRoutes.some((route) => pathname.startsWith(route))) {
     const redirectUrl = new URL(routes.signInRoute, nextUrl);
-    if (path !== "/") {
-      redirectUrl.searchParams.set("next", path);
+    if (pathname !== "/") {
+      redirectUrl.searchParams.set("next", pathname + search);
     }
     return NextResponse.redirect(redirectUrl);
   }
@@ -18,14 +20,16 @@ function redirectIfProtectedRoute(path: string, nextUrl: NextURL) {
   return NextResponse.next();
 }
 
-function redirectIfNotPrivateRoute(path: string, nextUrl: NextURL) {
+function redirectIfNotPrivateRoute(nextUrl: NextURL) {
+  const { pathname, search } = nextUrl;
+
   if (
-    path !== routes.privateRoute &&
-    !routes.ignoredRoutes.some((route) => path.startsWith(route))
+    pathname !== routes.privateRoute &&
+    !routes.ignoredRoutes.some((route) => pathname.startsWith(route))
   ) {
     const redirectUrl = new URL(routes.privateRoute, nextUrl);
-    if (path !== "/") {
-      redirectUrl.searchParams.set("next", path);
+    if (pathname !== "/") {
+      redirectUrl.searchParams.set("next", pathname + search);
     }
     return NextResponse.redirect(redirectUrl);
   }
@@ -39,38 +43,38 @@ function redirectTo(path: string, nextUrl: NextURL) {
 
 export async function middleware(req: NextRequest) {
   const { nextUrl, cookies } = req;
-  const path = nextUrl.pathname;
+  const { pathname } = nextUrl;
 
   const private_session = cookies.get("private_session")?.value;
 
   if (siteConfig.privateMode) {
     if (!private_session) {
-      return redirectIfNotPrivateRoute(path, nextUrl);
+      return redirectIfNotPrivateRoute(nextUrl);
     }
 
     const { hasPrivateAccess } = await session.private.get();
 
     if (!hasPrivateAccess) {
-      return redirectIfNotPrivateRoute(path, nextUrl);
+      return redirectIfNotPrivateRoute(nextUrl);
     }
 
-    if (path === routes.privateRoute) {
+    if (pathname === routes.privateRoute) {
       return redirectTo(routes.signInRoute, nextUrl);
     }
   } else {
-    if (path === routes.privateRoute) {
+    if (pathname === routes.privateRoute) {
       return redirectTo(routes.signInRoute, nextUrl);
     }
   }
 
   if (siteConfig.maintenanceMode) {
-    if (path !== routes.maintenanceRoute && path !== routes.ogRoute) {
+    if (pathname !== routes.maintenanceRoute && pathname !== routes.ogRoute) {
       return redirectTo(routes.maintenanceRoute, nextUrl);
     }
 
     return NextResponse.next();
   } else {
-    if (path === routes.maintenanceRoute) {
+    if (pathname === routes.maintenanceRoute) {
       return redirectTo(routes.signInRoute, nextUrl);
     }
   }
@@ -78,18 +82,18 @@ export async function middleware(req: NextRequest) {
   const user_session = cookies.get("user_session")?.value;
 
   if (!user_session) {
-    return redirectIfProtectedRoute(path, nextUrl);
+    return redirectIfProtectedRoute(nextUrl);
   }
 
   const { isSignedIn, expires } = await session.user.get();
 
   if (!isSignedIn) {
-    return redirectIfProtectedRoute(path, nextUrl);
+    return redirectIfProtectedRoute(nextUrl);
   }
 
   if (
-    path === "/" ||
-    routes.authRoutes.some((route) => path.startsWith(route))
+    pathname === "/" ||
+    routes.authRoutes.some((route) => pathname.startsWith(route))
   ) {
     return redirectTo(routes.DEFAULT_SIGNIN_REDIRECT, nextUrl);
   }

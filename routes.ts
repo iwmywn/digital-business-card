@@ -15,7 +15,6 @@ const protectedRoutes = [
   "/terms",
   "/privacy",
   "/settings",
-  "/subscription/status",
   "/edit",
   "/notifications",
 ];
