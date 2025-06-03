@@ -44,6 +44,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Links } from "@/components/links";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const testimonials = [
   {
@@ -173,7 +180,7 @@ export function LandingPage() {
           }),
         ],
   );
-  const [activeTab, setActiveTab] = useState<string>("design");
+  const [designActiveTab, setDesignActiveTab] = useState<string>("design");
   const [planActiveTab, setPlanActiveTab] = useState<string>("free");
   const [cardDesign, setCardDesign] = useState<CardDesignValues>({
     cardColor: constants.defaultColor,
@@ -292,6 +299,23 @@ export function LandingPage() {
   const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, []);
+
+  const handlePlanActiveTab = (tab: string) => {
+    setPlanActiveTab(tab);
+    setCardDesign({
+      ...cardDesign,
+      cardColor: constants.defaultColor,
+      fontFamily: constants.defaultFont,
+      brandName: tab === "professional" ? "iwmywn" : "Visiq",
+    });
+    setLinks(
+      tab === "free"
+        ? links.slice(0, constants.maxFreeLinks)
+        : tab === "basic"
+          ? links.slice(0, constants.maxBasicLinks)
+          : links.slice(0, constants.maxProfessionalLinks),
+    );
+  };
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -459,25 +483,9 @@ export function LandingPage() {
                     <Label className="text-base">Subscription Plans</Label>
                     <Tabs
                       value={planActiveTab}
-                      onValueChange={(tab) => {
-                        setPlanActiveTab(tab);
-                        setCardDesign({
-                          ...cardDesign,
-                          cardColor: constants.defaultColor,
-                          fontFamily: constants.defaultFont,
-                          brandName:
-                            tab === "professional" ? "iwmywn" : "Visiq",
-                        });
-                        setLinks(
-                          tab === "free"
-                            ? links.slice(0, constants.maxFreeLinks)
-                            : tab === "basic"
-                              ? links.slice(0, constants.maxBasicLinks)
-                              : links.slice(0, constants.maxProfessionalLinks),
-                        );
-                      }}
+                      onValueChange={(tab) => handlePlanActiveTab(tab)}
                     >
-                      <div className="w-full overflow-x-auto">
+                      <div className="hidden w-full overflow-x-auto md:block">
                         <TabsList className="w-full min-w-[19.5rem]">
                           <TabsTrigger value="free">Free</TabsTrigger>
                           <TabsTrigger value="basic">Basic</TabsTrigger>
@@ -486,6 +494,26 @@ export function LandingPage() {
                           </TabsTrigger>
                         </TabsList>
                       </div>
+
+                      <Select
+                        value={planActiveTab}
+                        onValueChange={(tab) => handlePlanActiveTab(tab)}
+                      >
+                        <SelectTrigger
+                          className="flex w-full md:hidden"
+                          aria-label="Plan selection"
+                        >
+                          <SelectValue placeholder="Select a subscription plan..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="free">Free</SelectItem>
+                          <SelectItem value="basic">Basic</SelectItem>
+                          <SelectItem value="professional">
+                            Professional
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+
                       <div className="sr-only">
                         <TabsContent value="free" />
                         <TabsContent value="basic" />
@@ -496,16 +524,38 @@ export function LandingPage() {
 
                   <Card className="h-full">
                     <CardContent className="space-y-6">
-                      <Tabs value={activeTab} onValueChange={setActiveTab}>
-                        <div className="w-full overflow-x-auto">
+                      <Tabs
+                        value={designActiveTab}
+                        onValueChange={setDesignActiveTab}
+                      >
+                        <div className="hidden w-full overflow-x-auto md:block">
                           <TabsList className="w-full min-w-[30.75rem]">
                             <TabsTrigger value="design">Design</TabsTrigger>
-                            <TabsTrigger value="personal">
+                            <TabsTrigger value="personal-information">
                               Personal Information
                             </TabsTrigger>
                             <TabsTrigger value="links">Links</TabsTrigger>
                           </TabsList>
                         </div>
+
+                        <Select
+                          value={designActiveTab}
+                          onValueChange={setDesignActiveTab}
+                        >
+                          <SelectTrigger
+                            className="flex w-full md:hidden"
+                            aria-label="Card design selection"
+                          >
+                            <SelectValue placeholder="Select a section to customize..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="design">Design</SelectItem>
+                            <SelectItem value="personal-information">
+                              Personal Information
+                            </SelectItem>
+                            <SelectItem value="links">Links</SelectItem>
+                          </SelectContent>
+                        </Select>
 
                         <TabsContent value="design" className="space-y-4 pt-4">
                           <CardDesign
@@ -519,7 +569,7 @@ export function LandingPage() {
                         </TabsContent>
 
                         <TabsContent
-                          value="personal"
+                          value="personal-information"
                           className="space-y-4 pt-4"
                         >
                           <PersonalInformation

@@ -21,6 +21,13 @@ import { CreateCardSkeleton } from "@/components/skeletons";
 import { Loading } from "@/components/loading";
 import * as constants from "@/constants";
 import { brandNameSchema, personalInformationSchema } from "@/schemas";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function CreateCard() {
   const router = useRouter();
@@ -215,15 +222,31 @@ export function CreateCard() {
               onValueChange={setActiveTab}
               className="xl:sticky xl:top-[7.75rem]"
             >
-              <div className="w-full overflow-x-auto">
+              <div className="hidden w-full overflow-x-auto sm:block">
                 <TabsList className="w-full min-w-[30.75rem]">
                   <TabsTrigger value="design">Design</TabsTrigger>
-                  <TabsTrigger value="personal">
+                  <TabsTrigger value="personal-information">
                     Personal Information
                   </TabsTrigger>
                   <TabsTrigger value="links">Links</TabsTrigger>
                 </TabsList>
               </div>
+
+              <Select value={activeTab} onValueChange={setActiveTab}>
+                <SelectTrigger
+                  className="flex w-full sm:hidden"
+                  aria-label="Card design selection"
+                >
+                  <SelectValue placeholder="Select a section to customize..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="design">Design</SelectItem>
+                  <SelectItem value="personal-information">
+                    Personal Information
+                  </SelectItem>
+                  <SelectItem value="links">Links</SelectItem>
+                </SelectContent>
+              </Select>
 
               <TabsContent value="design" className="space-y-4 pt-4">
                 <CardDesign
@@ -234,7 +257,10 @@ export function CreateCard() {
                 />
               </TabsContent>
 
-              <TabsContent value="personal" className="space-y-4 pt-4">
+              <TabsContent
+                value="personal-information"
+                className="space-y-4 pt-4"
+              >
                 <PersonalInformation
                   onSave={handlePersonalInfoUpdate}
                   initialValues={personalInfo}
