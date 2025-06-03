@@ -7,9 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { CardDesign, type CardDesignValues } from "@/components/card-design";
 import {
-  PersonalInfo,
-  type PersonalInfoValues,
-} from "@/components/personal-info";
+  PersonalInformation,
+  type PersonalInformationValues,
+} from "@/components/personal-information";
 import { Links } from "@/components/links";
 import { CardPreview } from "@/components/card-preview";
 import { saveCard } from "@/actions/card";
@@ -17,7 +17,7 @@ import type { SerializableLinkType } from "@/components/icons";
 import type { Card as CardType } from "@/lib/definitions";
 import { useCard, useUser } from "@/lib/swr";
 import { Loading } from "@/components/loading";
-import { brandNameSchema, personalInfoSchema } from "@/schemas";
+import { brandNameSchema, personalInformationSchema } from "@/schemas";
 import { CreateCardSkeleton } from "@/components/skeletons";
 import Link from "next/link";
 
@@ -30,7 +30,7 @@ export function EditCard({ card }: { card: CardType }) {
   const [cardDesign, setCardDesign] = useState<CardDesignValues>(
     card.cardDesign,
   );
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>(
+  const [personalInfo, setPersonalInfo] = useState<PersonalInformationValues>(
     card.personalInfo,
   );
   const [isPublic, setIsPublic] = useState<boolean>(card.isPublic);
@@ -46,7 +46,8 @@ export function EditCard({ card }: { card: CardType }) {
     const parsedCardDesignValue = brandNameSchema.safeParse({
       brandName: cardDesign.brandName,
     });
-    const parsedPersonalInfoValues = personalInfoSchema.safeParse(personalInfo);
+    const parsedPersonalInfoValues =
+      personalInformationSchema.safeParse(personalInfo);
 
     if (!parsedCardDesignValue.success) {
       setActiveTab("design");
@@ -113,9 +114,12 @@ export function EditCard({ card }: { card: CardType }) {
     setCardDesign(data);
   }, []);
 
-  const handlePersonalInfoUpdate = useCallback((data: PersonalInfoValues) => {
-    setPersonalInfo(data);
-  }, []);
+  const handlePersonalInfoUpdate = useCallback(
+    (data: PersonalInformationValues) => {
+      setPersonalInfo(data);
+    },
+    [],
+  );
 
   const handleLinksUpdate = useCallback((data: SerializableLinkType[]) => {
     setLinks(data);
@@ -180,13 +184,17 @@ export function EditCard({ card }: { card: CardType }) {
             <Tabs
               value={activeTab}
               onValueChange={setActiveTab}
-              className="w-full xl:sticky xl:top-[7.75rem]"
+              className="xl:sticky xl:top-[7.75rem]"
             >
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="design">Design</TabsTrigger>
-                <TabsTrigger value="personal">Personal Info</TabsTrigger>
-                <TabsTrigger value="links">Links</TabsTrigger>
-              </TabsList>
+              <div className="w-full overflow-x-auto">
+                <TabsList className="w-full min-w-[30.75rem]">
+                  <TabsTrigger value="design">Design</TabsTrigger>
+                  <TabsTrigger value="personal">
+                    Personal Information
+                  </TabsTrigger>
+                  <TabsTrigger value="links">Links</TabsTrigger>
+                </TabsList>
+              </div>
 
               <TabsContent value="design" className="space-y-4 pt-4">
                 <CardDesign
@@ -198,7 +206,7 @@ export function EditCard({ card }: { card: CardType }) {
               </TabsContent>
 
               <TabsContent value="personal" className="space-y-4 pt-4">
-                <PersonalInfo
+                <PersonalInformation
                   onSave={handlePersonalInfoUpdate}
                   initialValues={personalInfo}
                   ref={personalInfoRef}

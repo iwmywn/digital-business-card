@@ -32,7 +32,10 @@ import { CardDesign, CardDesignValues } from "@/components/card-design";
 import { Label } from "@/components/ui/label";
 import { SimpleIconComponent } from "@/components/icons";
 import { siFacebook, siInstagram, siX } from "simple-icons";
-import { PersonalInfo, PersonalInfoValues } from "@/components/personal-info";
+import {
+  PersonalInformation,
+  PersonalInformationValues,
+} from "@/components/personal-information";
 import { Separator } from "@/components/ui/separator";
 import { TermsOfServiceDialog } from "@/components/terms-of-service-dialog";
 import { PrivacyPolicyDialog } from "@/components/privacy-policy-dialog";
@@ -233,7 +236,7 @@ export function LandingPage() {
       },
     },
   });
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>({
+  const [personalInfo, setPersonalInfo] = useState<PersonalInformationValues>({
     fullName: "Hoàng Anh Tuấn",
     jobTitle: "Software Engineer",
     department: "Research & Development",
@@ -254,9 +257,12 @@ export function LandingPage() {
     setCardDesign(data);
   }, []);
 
-  const handlePersonalInfoUpdate = useCallback((data: PersonalInfoValues) => {
-    setPersonalInfo(data);
-  }, []);
+  const handlePersonalInfoUpdate = useCallback(
+    (data: PersonalInformationValues) => {
+      setPersonalInfo(data);
+    },
+    [],
+  );
 
   const handleLinksUpdate = useCallback((data: SerializableLinkType[]) => {
     setLinks(data);
@@ -470,15 +476,16 @@ export function LandingPage() {
                               : links.slice(0, constants.maxProfessionalLinks),
                         );
                       }}
-                      className="w-full"
                     >
-                      <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="free">Free</TabsTrigger>
-                        <TabsTrigger value="basic">Basic</TabsTrigger>
-                        <TabsTrigger value="professional">
-                          Professional
-                        </TabsTrigger>
-                      </TabsList>
+                      <div className="w-full overflow-x-auto">
+                        <TabsList className="w-full min-w-[19.5rem]">
+                          <TabsTrigger value="free">Free</TabsTrigger>
+                          <TabsTrigger value="basic">Basic</TabsTrigger>
+                          <TabsTrigger value="professional">
+                            Professional
+                          </TabsTrigger>
+                        </TabsList>
+                      </div>
                       <div className="sr-only">
                         <TabsContent value="free" />
                         <TabsContent value="basic" />
@@ -489,18 +496,16 @@ export function LandingPage() {
 
                   <Card className="h-full">
                     <CardContent className="space-y-6">
-                      <Tabs
-                        value={activeTab}
-                        onValueChange={setActiveTab}
-                        className="w-full"
-                      >
-                        <TabsList className="grid w-full grid-cols-3">
-                          <TabsTrigger value="design">Design</TabsTrigger>
-                          <TabsTrigger value="personal">
-                            Personal Info
-                          </TabsTrigger>
-                          <TabsTrigger value="links">Links</TabsTrigger>
-                        </TabsList>
+                      <Tabs value={activeTab} onValueChange={setActiveTab}>
+                        <div className="w-full overflow-x-auto">
+                          <TabsList className="w-full min-w-[30.75rem]">
+                            <TabsTrigger value="design">Design</TabsTrigger>
+                            <TabsTrigger value="personal">
+                              Personal Information
+                            </TabsTrigger>
+                            <TabsTrigger value="links">Links</TabsTrigger>
+                          </TabsList>
+                        </div>
 
                         <TabsContent value="design" className="space-y-4 pt-4">
                           <CardDesign
@@ -517,7 +522,7 @@ export function LandingPage() {
                           value="personal"
                           className="space-y-4 pt-4"
                         >
-                          <PersonalInfo
+                          <PersonalInformation
                             onSave={handlePersonalInfoUpdate}
                             initialValues={personalInfo}
                           />

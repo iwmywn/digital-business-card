@@ -24,22 +24,24 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { personalInfoSchema } from "@/schemas";
+import { personalInformationSchema } from "@/schemas";
 
-export type PersonalInfoValues = z.infer<typeof personalInfoSchema>;
+export type PersonalInformationValues = z.infer<
+  typeof personalInformationSchema
+>;
 
-export const PersonalInfo = forwardRef(function PersonalInfo(
+export const PersonalInformation = forwardRef(function PersonalInformation(
   {
     onSave,
     initialValues,
   }: {
-    onSave: (data: PersonalInfoValues) => void;
-    initialValues?: Partial<PersonalInfoValues>;
+    onSave: (data: PersonalInformationValues) => void;
+    initialValues?: Partial<PersonalInformationValues>;
   },
   ref?: Ref<{ validate: () => Promise<boolean> }>,
 ) {
-  const form = useForm<PersonalInfoValues>({
-    resolver: zodResolver(personalInfoSchema),
+  const form = useForm<PersonalInformationValues>({
+    resolver: zodResolver(personalInformationSchema),
     mode: "onChange",
     defaultValues: {
       fullName: initialValues?.fullName || "",
@@ -59,7 +61,7 @@ export const PersonalInfo = forwardRef(function PersonalInfo(
   const watchedValues = useWatch({ control: form.control });
 
   useEffect(() => {
-    onSave(watchedValues as PersonalInfoValues);
+    onSave(watchedValues as PersonalInformationValues);
   }, [watchedValues, onSave]);
 
   return (

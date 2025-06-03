@@ -9,9 +9,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { CardDesign, type CardDesignValues } from "@/components/card-design";
 import {
-  PersonalInfo,
-  type PersonalInfoValues,
-} from "@/components/personal-info";
+  PersonalInformation,
+  type PersonalInformationValues,
+} from "@/components/personal-information";
 import { Links } from "@/components/links";
 import { CardPreview } from "@/components/card-preview";
 import { saveCard } from "@/actions/card";
@@ -20,7 +20,7 @@ import { useCard, useUser } from "@/lib/swr";
 import { CreateCardSkeleton } from "@/components/skeletons";
 import { Loading } from "@/components/loading";
 import * as constants from "@/constants";
-import { brandNameSchema, personalInfoSchema } from "@/schemas";
+import { brandNameSchema, personalInformationSchema } from "@/schemas";
 
 export function CreateCard() {
   const router = useRouter();
@@ -36,7 +36,7 @@ export function CreateCard() {
     coverImage: undefined,
     brandName: "Visiq",
   });
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfoValues>({
+  const [personalInfo, setPersonalInfo] = useState<PersonalInformationValues>({
     fullName: "",
     jobTitle: "",
     department: "",
@@ -58,7 +58,8 @@ export function CreateCard() {
     const parsedCardDesignValue = brandNameSchema.safeParse({
       brandName: cardDesign.brandName,
     });
-    const parsedPersonalInfoValues = personalInfoSchema.safeParse(personalInfo);
+    const parsedPersonalInfoValues =
+      personalInformationSchema.safeParse(personalInfo);
 
     if (!parsedCardDesignValue.success) {
       setActiveTab("design");
@@ -135,9 +136,12 @@ export function CreateCard() {
     setCardDesign(data);
   }, []);
 
-  const handlePersonalInfoUpdate = useCallback((data: PersonalInfoValues) => {
-    setPersonalInfo(data);
-  }, []);
+  const handlePersonalInfoUpdate = useCallback(
+    (data: PersonalInformationValues) => {
+      setPersonalInfo(data);
+    },
+    [],
+  );
 
   const handleLinksUpdate = useCallback((data: SerializableLinkType[]) => {
     setLinks(data);
@@ -209,13 +213,17 @@ export function CreateCard() {
             <Tabs
               value={activeTab}
               onValueChange={setActiveTab}
-              className="w-full xl:sticky xl:top-[7.75rem]"
+              className="xl:sticky xl:top-[7.75rem]"
             >
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="design">Design</TabsTrigger>
-                <TabsTrigger value="personal">Personal Info</TabsTrigger>
-                <TabsTrigger value="links">Links</TabsTrigger>
-              </TabsList>
+              <div className="w-full overflow-x-auto">
+                <TabsList className="w-full min-w-[30.75rem]">
+                  <TabsTrigger value="design">Design</TabsTrigger>
+                  <TabsTrigger value="personal">
+                    Personal Information
+                  </TabsTrigger>
+                  <TabsTrigger value="links">Links</TabsTrigger>
+                </TabsList>
+              </div>
 
               <TabsContent value="design" className="space-y-4 pt-4">
                 <CardDesign
@@ -227,7 +235,7 @@ export function CreateCard() {
               </TabsContent>
 
               <TabsContent value="personal" className="space-y-4 pt-4">
-                <PersonalInfo
+                <PersonalInformation
                   onSave={handlePersonalInfoUpdate}
                   initialValues={personalInfo}
                   ref={personalInfoRef}

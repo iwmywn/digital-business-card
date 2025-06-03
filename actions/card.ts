@@ -5,7 +5,7 @@ import { getCardCollection, getUserCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
 import type { CardDesignValues } from "@/components/card-design";
-import type { PersonalInfoValues } from "@/components/personal-info";
+import type { PersonalInformationValues } from "@/components/personal-information";
 import type { SerializableLinkType } from "@/components/icons";
 import type { Card } from "@/lib/definitions";
 import * as constants from "@/constants";
@@ -17,7 +17,7 @@ import { cardSlugSchema } from "@/schemas";
 type ImageKey = "logoImage" | "profileImage" | "coverImage";
 export async function saveCard(
   cardDesign: CardDesignValues,
-  personalInfo: PersonalInfoValues,
+  personalInfo: PersonalInformationValues,
   links: SerializableLinkType[],
   isPublic: boolean,
   cardId?: string,

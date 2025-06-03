@@ -245,7 +245,7 @@ const notificationSettingsSchema = z.object({
   security: z.boolean(),
 });
 
-const personalInfoSchema = z
+const personalInformationSchema = z
   .object({
     fullName: z
       .string()
@@ -409,7 +409,7 @@ export {
   publicProfileSchema,
   accountSchema,
   notificationSettingsSchema,
-  personalInfoSchema,
+  personalInformationSchema,
   cardSlugSchema,
   brandNameSchema,
   bugReportSchema,

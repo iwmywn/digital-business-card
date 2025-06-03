@@ -1,6 +1,6 @@
 import type { ObjectId } from "mongodb";
 import type { SerializableLinkType } from "@/components/icons";
-import type { PersonalInfoValues } from "@/components/personal-info";
+import type { PersonalInformationValues } from "@/components/personal-information";
 import type { CardDesignValues, Image } from "@/components/card-design";
 import type { ImageTransform } from "@/components/image-editor-dialog";
 
@@ -39,7 +39,7 @@ type BaseCard<T> = {
   userId: string;
   slug?: string;
   cardDesign: CardDesignValues;
-  personalInfo: PersonalInfoValues;
+  personalInfo: PersonalInformationValues;
   links: SerializableLinkType[];
   isPublic: boolean;
   views: number;

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import type { CardDesignValues } from "@/components/card-design";
-import type { PersonalInfoValues } from "@/components/personal-info";
+import type { PersonalInformationValues } from "@/components/personal-information";
 import type { SerializableLinkType } from "@/components/icons";
 import { QrCode, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { getCloudinaryUrl } from "@/lib/utils";
 
 interface CardPreviewProps {
   cardDesign: CardDesignValues;
-  personalInfo: PersonalInfoValues;
+  personalInfo: PersonalInformationValues;
   links: SerializableLinkType[];
 }
 
