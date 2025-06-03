@@ -35,6 +35,15 @@ const other = [
   },
 ];
 
+const ColorDialog =
+  process.env.NODE_ENV === "development"
+    ? dynamic(
+        () =>
+          import("@/components/color-dialog").then((mod) => mod.ColorDialog),
+        { ssr: false },
+      )
+    : () => null;
+
 export function Header() {
   const pathname = usePathname();
 
@@ -42,15 +51,6 @@ export function Header() {
   const foundItem = allNavItems.find(
     (item) => item.url === pathname || pathname.startsWith(item.url),
   );
-
-  const ColorDialog =
-    process.env.NODE_ENV === "development"
-      ? dynamic(
-          () =>
-            import("@/components/color-dialog").then((mod) => mod.ColorDialog),
-          { ssr: false },
-        )
-      : () => null;
 
   return (
     <header className="bg-primary-foreground/75 sticky top-0 z-50 flex shrink-0 items-center justify-between py-2 backdrop-blur">
