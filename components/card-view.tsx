@@ -200,7 +200,7 @@ export function CardView({
       <div
         className={`${colorClass} pointer-events-none fixed inset-0 z-[-9999]`}
       />
-      <div className="pointer-events-none fixed inset-0 z-[-8888] bg-white/20" />
+      <div className="pointer-events-none fixed inset-0 z-[-8888] bg-white/10" />
       <div
         className={`flex min-h-screen items-center justify-center p-8 ${fontClass}`}
       >
@@ -387,7 +387,7 @@ export function CardView({
 
           <div
             ref={saveButtonRef}
-            className={`${showGradient ? "from-primary bg-gradient-to-t to-transparent" : ""} sticky right-0 bottom-0 left-0 z-50 flex items-center justify-center py-4 transition-all duration-200`}
+            className={`${showGradient ? "bg-gradient-to-t from-white to-transparent" : ""} sticky right-0 bottom-0 left-0 z-50 flex items-center justify-center py-4 transition-all duration-200`}
           >
             <button
               onClick={handleSaveContact}
