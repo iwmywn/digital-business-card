@@ -957,69 +957,71 @@ export function LandingPage() {
                   Privacy
                 </div>
               </div>
-              <div className="text-muted-foreground flex items-center gap-1">
-                <p>
+              <div className="text-muted-foreground flex flex-col-reverse items-center gap-1 min-[31.25rem]:flex-row">
+                <span>
                   &copy; {new Date().getFullYear()} Visiq. All rights reserved.
-                </p>
+                </span>
                 <Separator
                   orientation="vertical"
-                  className="border-muted-foreground ml-3 h-6"
+                  className="border-muted-foreground ml-3 hidden h-6 min-[31.25rem]:block"
                 />
-                <Button variant="ghost" asChild>
-                  <Link
-                    href="https://www.facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <SimpleIconComponent icon={siFacebook} />
-                    <span className="sr-only">Facebook</span>
-                  </Link>
-                </Button>
-                <Button variant="ghost" asChild>
-                  <Link
-                    href="https://www.instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <SimpleIconComponent icon={siInstagram} />
-                    <span className="sr-only">Instagram</span>
-                  </Link>
-                </Button>
-                <Button variant="ghost" asChild>
-                  <Link
-                    href="https://x.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <SimpleIconComponent icon={siX} />
-                    <span className="sr-only">X</span>
-                  </Link>
-                </Button>
-                <Button variant="ghost" asChild>
-                  <Link
-                    href="https://www.linkedin.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-linkedin-icon lucide-linkedin"
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" asChild>
+                    <Link
+                      href="https://www.facebook.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                      <rect width="4" height="12" x="2" y="9" />
-                      <circle cx="4" cy="4" r="2" />
-                    </svg>
-                    <span className="sr-only">LinkedIn</span>
-                  </Link>
-                </Button>
+                      <SimpleIconComponent icon={siFacebook} />
+                      <span className="sr-only">Facebook</span>
+                    </Link>
+                  </Button>
+                  <Button variant="ghost" asChild>
+                    <Link
+                      href="https://www.instagram.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SimpleIconComponent icon={siInstagram} />
+                      <span className="sr-only">Instagram</span>
+                    </Link>
+                  </Button>
+                  <Button variant="ghost" asChild>
+                    <Link
+                      href="https://x.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <SimpleIconComponent icon={siX} />
+                      <span className="sr-only">X</span>
+                    </Link>
+                  </Button>
+                  <Button variant="ghost" asChild>
+                    <Link
+                      href="https://www.linkedin.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-linkedin-icon lucide-linkedin"
+                      >
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                        <rect width="4" height="12" x="2" y="9" />
+                        <circle cx="4" cy="4" r="2" />
+                      </svg>
+                      <span className="sr-only">LinkedIn</span>
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
