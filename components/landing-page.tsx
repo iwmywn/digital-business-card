@@ -370,7 +370,7 @@ export function LandingPage() {
   return (
     <>
       <div className="min-h-screen" data-vaul-drawer-wrapper>
-        <header className="bg-background/75 sticky top-0 z-50 flex shrink-0 items-center justify-between border-b backdrop-blur">
+        <header className="bg-background/75 sticky top-0 z-50 flex shrink-0 items-center justify-between border-b backdrop-blur-xs backdrop-saturate-150">
           <div className="flex h-16 w-full items-center justify-between px-6 md:px-8 lg:px-10">
             <Link
               href="/"

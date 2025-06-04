@@ -148,7 +148,7 @@ export function EditCard({ card }: { card: CardType }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-primary-foreground/75 sticky top-[3.25rem] z-50 flex flex-col gap-6 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+      <div className="bg-primary-foreground/75 sticky top-[3.25rem] z-50 flex flex-col gap-6 backdrop-blur-xs backdrop-saturate-150 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold">
             {previewMode ? "Card Preview" : "Edit Card"}
