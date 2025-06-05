@@ -141,6 +141,8 @@ export async function createStripeCustomer(email: string, name: string) {
       name,
     });
 
+    if (!customer) return { error: "Stripe returned no customer object!" };
+
     return { customerId: customer.id, error: undefined };
   } catch (error) {
     console.error("Error creating Stripe customer:", error);

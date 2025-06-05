@@ -52,8 +52,9 @@ export async function signUp(
       createStripeCustomer(email, fullName),
     ]);
 
-    if (customer.error) {
-      return { error: customer.error };
+    if (customer.error || !customer.customerId) {
+      console.error(customer.error);
+      return { error: "Account creation failed! Try again later." };
     }
 
     const verificationToken = nanoid();

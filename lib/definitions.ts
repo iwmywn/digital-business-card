@@ -23,7 +23,7 @@ type BaseUser<T> = {
   emailVerified: boolean;
   verificationToken: string;
   resendVerification: number;
-  stripeCustomerId?: string;
+  stripeCustomerId: string;
   profile: Profile;
   notificationSettings: NotificationSettings;
   currentPlan: "free" | "basic" | "professional";
