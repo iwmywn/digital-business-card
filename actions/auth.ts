@@ -240,16 +240,16 @@ export async function resetPassword(
 
     if (!token || !email) return { error: "Invalid data provided!" };
 
-    const user = await (
-      await getUserCollection()
-    ).findOne({ email: email, verificationToken: token });
+    const userCollection = await getUserCollection();
+    const user = await userCollection.findOne({
+      email: email,
+      verificationToken: token,
+    });
 
     if (!user) return { error: "Token expired!" };
 
-    const userCollection = await getUserCollection();
-
     await userCollection.updateOne(
-      { email: email!, verificationToken: token! },
+      { email: email, verificationToken: token },
       {
         $set: {
           password: hashedPassword,
@@ -274,16 +274,16 @@ export async function verifyEmail(
   try {
     if (!token || !email) return { error: "Invalid data provided!" };
 
-    const user = await (
-      await getUserCollection()
-    ).findOne({ email: email, verificationToken: token });
+    const userCollection = await getUserCollection();
+    const user = await userCollection.findOne({
+      email: email,
+      verificationToken: token,
+    });
 
     if (!user) return { error: "Token expired or email already verified!" };
 
-    const userCollection = await getUserCollection();
-
     await userCollection.updateOne(
-      { verificationToken: token! },
+      { verificationToken: token },
       {
         $set: {
           emailVerified: true,
