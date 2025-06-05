@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SubscriptionPlans } from "@/components/subscription-plans";
+import { SubscriptionManagement } from "@/components/subscription-management";
 
 export const metadata: Metadata = {
   title: "Subscription Plans",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function page() {
-  return <SubscriptionPlans />;
+  return <SubscriptionManagement />;
 }

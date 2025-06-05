@@ -1,155 +1,70 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Sparkles } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { createCheckoutSession } from "@/actions/stripe";
-import { switchToPlan } from "@/actions/plan";
-import { subscriptionPlans } from "@/constants";
-import { useSubscription, useUser } from "@/lib/swr";
+import { ShieldCheck } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSubscription } from "@/lib/swr";
+import { useEffect } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { Loading } from "@/components/loading";
-import { formatDate } from "@/lib/utils";
+import { CurrentPlan } from "@/components/current-plan";
+import { SubscriptionPlans } from "@/components/subscription-plans";
+import { BillingHistory } from "@/components/billing-history";
+import { SubscriptionPlansSkeleton } from "@/components/skeletons";
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 
 export function SubscriptionManagement() {
-  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
-  const { basic, professional } = useSubscription();
-  const { userResponse, user, mutate } = useUser();
-  const router = useRouter();
+  const { isSubScriptionLoading, isSubscriptionError } = useSubscription();
+  const [activeTab, setActiveTab] = useState<string>("plans");
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
 
-  async function handleSubscribe(priceId: string, planId: string) {
-    setIsLoading((prev) => ({ ...prev, [planId]: true }));
+  useEffect(() => {
+    if (isSubscriptionError && !isSubScriptionLoading)
+      toast.error(isSubscriptionError);
+  }, [isSubscriptionError, isSubScriptionLoading]);
 
-    const { error, url } = await createCheckoutSession(priceId, planId);
-
-    if (error || !url) {
-      toast.error(error);
-    } else {
-      router.push(url);
-    }
-    setIsLoading((prev) => ({ ...prev, [planId]: false }));
-  }
-
-  async function handleSwitchPlan(planId: "free" | "basic" | "professional") {
-    setIsLoading((prev) => ({ ...prev, [planId]: true }));
-
-    const { error } = await switchToPlan(planId);
-
-    if (error) {
-      toast.error(error);
-    } else {
-      if (userResponse?.user) {
-        mutate({
-          ...userResponse,
-          user: { ...userResponse.user, currentPlan: planId },
-        });
-      }
-    }
-    setIsLoading((prev) => ({ ...prev, [planId]: false }));
+  if (isSubScriptionLoading) {
+    return <SubscriptionPlansSkeleton />;
   }
 
   return (
-    <div className="flex flex-wrap gap-6">
-      {subscriptionPlans.map((plan) => {
-        const isCurrentPlan = user?.currentPlan === plan.id;
-        const isAccessible =
-          plan.id === "basic"
-            ? basic.hasAccess
-            : plan.id === "professional"
-              ? professional.hasAccess
-              : true;
+    <div className="space-y-6">
+      <div ref={registerRef}>
+        <h2 className="text-xl font-semibold">Subscription Plans</h2>
+        <p className="text-muted-foreground text-sm">
+          Manage your subscription plans and billing history.
+        </p>
+      </div>
 
-        const expirationDate =
-          plan.id === "basic"
-            ? basic.expiresAt
-            : plan.id === "professional"
-              ? professional.expiresAt
-              : null;
+      <Alert ref={registerRef}>
+        <ShieldCheck />
+        <AlertTitle>Secure Payments</AlertTitle>
+        <AlertDescription>
+          Our service only requires a one-time registration and doesn&apos;t
+          store your card details on its servers. Your payment information is
+          securely processed by Stripe, ensuring maximum protection for your
+          financial data.
+        </AlertDescription>
+      </Alert>
 
-        return (
-          <Card
-            key={plan.id}
-            className={`relative min-w-[17.5rem] flex-1 overflow-hidden shadow-sm transition-all duration-200 ${isCurrentPlan ? "ring-primary ring-1 ring-offset-1" : "hover:ring-primary hover:ring-1 hover:ring-offset-1"}`}
-          >
-            {plan.popular && (
-              <div className="absolute top-0 right-0">
-                <div className="bg-primary text-primary-foreground flex items-center gap-1 rounded-bl-lg px-3 py-1 text-xs font-medium">
-                  <Sparkles className="h-3 w-3" />
-                  Popular
-                </div>
-              </div>
-            )}
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between text-lg">
-                {plan.name}
-              </CardTitle>
-              <CardDescription className="flex items-baseline">
-                <span className="text-base font-bold">
-                  {plan.price === 0
-                    ? "Free forever"
-                    : `$${plan.price.toFixed(2)} / month`}
-                </span>
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start">
-                    <CheckCircle2 className="text-primary mt-0.5 mr-2 h-4 w-4 flex-shrink-0" />
-                    <span className="text-sm">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-            <CardFooter className="mt-auto">
-              <div className="w-full">
-                {isAccessible && expirationDate && (
-                  <div className="bg-muted mb-4 rounded-md p-2 text-center text-xs">
-                    You have access until {formatDate(expirationDate, true)}
-                  </div>
-                )}
-
-                {isCurrentPlan ? (
-                  <Button className="w-full" disabled>
-                    Current plan
-                  </Button>
-                ) : isAccessible ? (
-                  <Button
-                    className="w-full"
-                    onClick={() =>
-                      handleSwitchPlan(
-                        plan.id as "free" | "basic" | "professional",
-                      )
-                    }
-                    disabled={isLoading[plan.id]}
-                  >
-                    {isLoading[plan.id] ? <Loading /> : "Switch to this plan"}
-                  </Button>
-                ) : (
-                  plan.id !== "free" && (
-                    <Button
-                      className="w-full"
-                      onClick={() => handleSubscribe(plan.priceId, plan.id)}
-                      disabled={isLoading[plan.id]}
-                    >
-                      {isLoading[plan.id] ? <Loading /> : "Upgrade"}
-                    </Button>
-                  )
-                )}
-              </div>
-            </CardFooter>
-          </Card>
-        );
-      })}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList ref={registerRef} className="grid w-full grid-cols-2">
+          <TabsTrigger value="plans">Subscription Plans</TabsTrigger>
+          <TabsTrigger value="history">Billing History</TabsTrigger>
+        </TabsList>
+        <TabsContent value="plans" className="mt-4 space-y-6">
+          <CurrentPlan />
+          <SubscriptionPlans />
+        </TabsContent>
+        <TabsContent value="history" className="mt-4">
+          <BillingHistory
+            style={{
+              minHeight: `calc(100vh - ${calculatedHeight}px - 9.3125rem)`,
+            }}
+            calculatedHeight={calculatedHeight}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
