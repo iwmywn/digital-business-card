@@ -78,7 +78,7 @@ export function CreateCard() {
     }
 
     if (!parsedPersonalInfoValues.success) {
-      setActiveTab("personal");
+      setActiveTab("personal-information");
       setTimeout(async () => {
         await personalInfoRef.current?.validate();
       }, 0);

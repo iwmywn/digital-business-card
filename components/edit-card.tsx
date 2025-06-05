@@ -66,7 +66,7 @@ export function EditCard({ card }: { card: CardType }) {
     }
 
     if (!parsedPersonalInfoValues.success) {
-      setActiveTab("personal");
+      setActiveTab("personal-information");
       setTimeout(async () => {
         await personalInfoRef.current?.validate();
       }, 0);
