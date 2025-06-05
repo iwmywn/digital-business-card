@@ -770,12 +770,12 @@ export function LandingPage() {
                 Choose the plan that&apos;s right for you, from individual
                 professionals to large teams.
               </p>
-              <div className="mt-6 flex flex-wrap justify-center gap-6">
+              <div className="mt-6 flex flex-col flex-wrap justify-center gap-6 min-[25rem]:flex-row">
                 {subscriptionPlans.map((plan) => (
                   <Card
                     key={plan.id}
                     className={
-                      "hover:ring-primary relative max-w-sm min-w-[17.5rem] flex-1 overflow-hidden shadow-sm transition-all duration-200 hover:ring-1 hover:ring-offset-1"
+                      "hover:ring-primary relative max-w-sm flex-1 overflow-hidden shadow-sm transition-all duration-200 hover:ring-1 hover:ring-offset-1 min-[25rem]:min-w-[17.5rem]"
                     }
                   >
                     {plan.popular && (
