@@ -59,7 +59,7 @@ export function SubscriptionPlans() {
         <TabsContent value="history" className="mt-4">
           <BillingHistory
             style={{
-              height: `calc(100vh - ${calculatedHeight}px - 9.3125rem)`,
+              minHeight: `calc(100vh - ${calculatedHeight}px - 9.3125rem)`,
             }}
             calculatedHeight={calculatedHeight}
           />
