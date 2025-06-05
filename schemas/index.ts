@@ -145,10 +145,10 @@ const publicProfileSchema = z
       });
     }
 
-    if (bio && bio.length > 160) {
+    if (bio && bio.length > 300) {
       ctx.addIssue({
         path: ["bio"],
-        message: "Bio must not exceed 160 characters.",
+        message: "Bio must not exceed 300 characters.",
         code: z.ZodIssueCode.custom,
       });
     }
@@ -301,10 +301,10 @@ const personalInformationSchema = z
       });
     }
 
-    if (bio && bio.length > 160) {
+    if (bio && bio.length > 300) {
       ctx.addIssue({
         path: ["bio"],
-        message: "Bio must not exceed 160 characters.",
+        message: "Bio must not exceed 300 characters.",
         code: z.ZodIssueCode.custom,
       });
     }
