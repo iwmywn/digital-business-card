@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { cardSlugSchema } from "@/schemas";
 import { useForm, useWatch } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@/hooks/use-debounce";
 import {

@@ -1,6 +1,6 @@
 "use client";
 
-import { z } from "zod";
+import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -29,6 +29,7 @@ import { FormLink } from "@/components/form-link";
 import { useEffect, useState } from "react";
 import { Loading } from "@/components/loading";
 import { X } from "lucide-react";
+
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 
 export function ResetPasswordForm({

@@ -1,10 +1,10 @@
 "use server";
 
-import { BugReportFormValues } from "@/components/bug-report-dialog";
+import type { BugReportFormValues } from "@/components/bug-report-dialog";
 import { bugReportSchema, contactSchema } from "@/schemas";
 import { getContactCollection, getIssueCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
-import { ContactFormValues } from "@/components/contact-dialog";
+import type { ContactFormValues } from "@/components/contact-dialog";
 import { getUserById } from "@/lib/data";
 import * as constants from "@/constants";
 

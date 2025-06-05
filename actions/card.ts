@@ -11,7 +11,7 @@ import type { Card } from "@/lib/definitions";
 import * as constants from "@/constants";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { extractCloudinaryPath, someRight } from "@/lib/utils";
-import { SlugFormValues } from "@/components/custom-slug-dialog";
+import type { SlugFormValues } from "@/components/custom-slug-dialog";
 import { cardSlugSchema } from "@/schemas";
 
 type ImageKey = "logoImage" | "profileImage" | "coverImage";
