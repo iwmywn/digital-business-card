@@ -154,7 +154,10 @@ export function CardManagement() {
               : "We couldn't find any cards matching your search. Try a different search term."
           }
           style={{
-            minHeight: `calc(100vh - ${calculatedHeight}px - 9.33rem)`,
+            minHeight:
+              window.innerWidth < 768
+                ? "250px"
+                : `calc(100vh - ${calculatedHeight}px - 9.33rem)`,
           }}
         />
       ) : (
