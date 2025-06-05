@@ -1,10 +1,8 @@
 import nodemailer from "nodemailer";
 
-export async function sendEmail(
-  email: string,
-  token: string,
-  mode: "resetPassword" | "verifyEmail",
-) {
+type EmailMode = "verifyEmail" | "resetPassword";
+
+export async function sendEmail(email: string, token: string, mode: EmailMode) {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SERVER_HOST,
     port: parseInt(process.env.EMAIL_SERVER_PORT || "587"),
@@ -57,4 +55,32 @@ export async function sendEmail(
     </table>
     `,
   });
+}
+
+export async function sendEmailWithRetry(
+  email: string,
+  token: string,
+  mode: EmailMode,
+  maxRetries = 3,
+  delayMs = 1000,
+) {
+  let attempt = 0;
+
+  while (attempt < maxRetries) {
+    try {
+      await sendEmail(email, token, mode);
+      return { error: undefined };
+    } catch (error) {
+      attempt++;
+      console.error(`Failed to send email (attempt ${attempt}):`, error);
+
+      if (attempt === maxRetries) {
+        return { error: "Failed to send email! Please try again later." };
+      }
+
+      await new Promise((res) => setTimeout(res, delayMs));
+    }
+  }
+
+  return { error: "Unexpected error in email retry logic!" };
 }

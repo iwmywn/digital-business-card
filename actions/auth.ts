@@ -12,7 +12,7 @@ import {
 } from "@/lib/collections";
 import { getAvatars, getUserByEmail, getUserById } from "@/lib/data";
 import { User } from "@/lib/definitions";
-import { sendEmail } from "@/lib/email";
+import { sendEmailWithRetry } from "@/lib/email";
 import { verifyRecaptchaToken } from "@/lib/recaptcha";
 import { session } from "@/lib/session";
 import {
@@ -59,10 +59,9 @@ export async function signUp(
 
     const verificationToken = nanoid();
     const avatar = avatars[Math.floor(Math.random() * 20)].image;
+    const userCollection = await getUserCollection();
 
-    const result = await (
-      await getUserCollection()
-    ).insertOne({
+    const result = await userCollection.insertOne({
       username: "",
       email,
       phone,
@@ -100,7 +99,16 @@ export async function signUp(
     if (!result.acknowledged)
       return { error: "Account creation failed! Try again later." };
 
-    await sendEmail(email, verificationToken, "verifyEmail");
+    const emailResult = await sendEmailWithRetry(
+      email,
+      verificationToken,
+      "verifyEmail",
+    );
+
+    if (emailResult.error) {
+      await userCollection.deleteOne({ _id: result.insertedId });
+      return { error: emailResult.error };
+    }
 
     return { success: "Verification email sent.", error: undefined };
   } catch (error) {
@@ -181,16 +189,27 @@ export async function forgotPassword(
     const verificationToken = nanoid();
     const userCollection = await getUserCollection();
 
-    await Promise.all([
-      userCollection.updateOne(
+    await userCollection.updateOne(
+      { email },
+      {
+        $set: { verificationToken, updatedAt: new Date() },
+        $inc: { resendVerification: 1 },
+      },
+    );
+
+    const emailResult = await sendEmailWithRetry(
+      email,
+      verificationToken,
+      "resetPassword",
+    );
+
+    if (emailResult.error) {
+      await userCollection.updateOne(
         { email },
-        {
-          $set: { verificationToken, updatedAt: new Date() },
-          $inc: { resendVerification: 1 },
-        },
-      ),
-      sendEmail(email, verificationToken, "resetPassword"),
-    ]);
+        { $inc: { resendVerification: -1 } },
+      );
+      return { error: emailResult.error };
+    }
 
     return {
       success:
