@@ -521,7 +521,7 @@ export function InformationForm() {
                 <div className="flex flex-row-reverse gap-2">
                   <FormButton
                     isSubmitting={form.formState.isSubmitting}
-                    text="Save Changes"
+                    text="Save changes"
                   />
                   <Button asChild>
                     <Link

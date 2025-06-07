@@ -166,7 +166,7 @@ export function NotificationSettings() {
             <div className="flex flex-row-reverse">
               <FormButton
                 isSubmitting={form.formState.isSubmitting}
-                text="Save Changes"
+                text="Save changes"
               />
             </div>
           </form>

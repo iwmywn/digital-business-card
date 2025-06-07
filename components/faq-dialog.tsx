@@ -125,7 +125,7 @@ export function FAQDialog({
               <AccordionContent>
                 If you want to update your personal or account information,
                 simply sign in to your account, go to Settings, make your
-                changes, and click &quot;Save Changes&quot;.
+                changes, and click &quot;Save changes&quot;.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="tech-3">
