@@ -2,7 +2,7 @@
 
 import { NextResponse, type NextRequest } from "next/server";
 import * as routes from "@/routes";
-import { siteConfig } from "@/lib/config";
+import { siteConfig } from "@/app/visiq.config";
 import { NextURL } from "next/dist/server/web/next-url";
 import { session } from "@/lib/session";
 
