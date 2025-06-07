@@ -288,8 +288,8 @@ export function LandingPage() {
   };
 
   const handleMenuClick = (sectionId: string) => {
-    scrollToSection(sectionId);
     setIsDrawerOpen(false);
+    scrollToSection(sectionId);
   };
 
   const onInit = useCallback((emblaApi: EmblaCarouselType) => {
