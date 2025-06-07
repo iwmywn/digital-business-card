@@ -66,7 +66,6 @@ const playfairDisplay = Playfair_Display({
 const nunito = Nunito({
   subsets: ["latin", "vietnamese"],
   display: "swap",
-  preload: true,
   fallback: ["var(--font-sans)"],
 });
 
