@@ -418,7 +418,7 @@ export function InformationForm() {
                                 }
                                 onSelect={(day) => {
                                   field.onChange(
-                                    day ? format(day, "yyyy-MM-dd") : undefined,
+                                    day ? format(day, "MM/dd/yyyy") : undefined,
                                   );
                                   setShowCalendar(false);
                                 }}

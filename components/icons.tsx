@@ -1,6 +1,7 @@
 import { Mail, Phone, Globe, Link2, MapPin, Ghost } from "lucide-react";
 
 import {
+  type SimpleIcon,
   siX,
   siInstagram,
   siFacebook,
@@ -20,7 +21,6 @@ import {
   siCashapp,
   siVenmo,
   siCalendly,
-  type SimpleIcon,
   siPinterest,
   siReddit,
   siTumblr,

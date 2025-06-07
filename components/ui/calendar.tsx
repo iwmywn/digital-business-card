@@ -41,12 +41,11 @@ function Calendar({
 }: CalendarProps) {
   return (
     <DayPicker
-      disableNavigation
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row gap-2",
         month: "flex flex-col gap-4",
-        caption: "flex justify-center pt-1 relative items-center w-full hidden",
+        caption: "flex justify-center pt-1 relative items-center w-full",
         caption_label: "text-sm font-medium",
         nav: "flex items-center gap-1",
         nav_button: cn(
@@ -99,8 +98,6 @@ function Calendar({
   );
 }
 
-Calendar.displayName = "Calendar";
-
 function CalendarComponent({ ...props }: CalendarProps) {
   const [date, setDate] = React.useState<Date>(
     props.selected instanceof Date ? props.selected : new Date(),
@@ -118,11 +115,7 @@ function CalendarComponent({ ...props }: CalendarProps) {
         <Select
           value={(date.getMonth() + 1).toString()}
           onValueChange={(value) => {
-            setDate(
-              new Date(
-                date.setFullYear(date.getFullYear(), parseInt(value) - 1),
-              ),
-            );
+            setDate(new Date(date.getFullYear(), parseInt(value) - 1, 1));
           }}
         >
           <SelectTrigger className="flex-1">
@@ -141,7 +134,7 @@ function CalendarComponent({ ...props }: CalendarProps) {
         <Select
           value={date.getFullYear().toString()}
           onValueChange={(value) => {
-            setDate(new Date(date.setFullYear(parseInt(value))));
+            setDate(new Date(parseInt(value), date.getMonth(), 1));
           }}
         >
           <SelectTrigger className="flex-1">
@@ -165,7 +158,7 @@ function CalendarComponent({ ...props }: CalendarProps) {
         </Select>
       </div>
 
-      <Calendar {...props} month={date} />
+      <Calendar {...props} month={date} onMonthChange={(newMonth) => setDate(newMonth)}/>
     </>
   );
 }
