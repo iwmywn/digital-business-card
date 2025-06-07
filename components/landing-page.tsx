@@ -15,6 +15,11 @@ import {
   Check,
   ExternalLink,
   QrCode,
+  TabletSmartphone,
+  Zap,
+  FileChartLine,
+  LayoutDashboard,
+  Shield,
   Sparkles,
   Menu,
 } from "lucide-react";
@@ -58,6 +63,68 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+const visiqSocialLinks = [
+  {
+    href: "https://www.facebook.com",
+    label: "Facebook",
+    icon: <SimpleIconComponent icon={siFacebook} />,
+  },
+  {
+    href: "https://www.instagram.com",
+    label: "Instagram",
+    icon: <SimpleIconComponent icon={siInstagram} />,
+  },
+  {
+    href: "https://x.com",
+    label: "X",
+    icon: <SimpleIconComponent icon={siX} />,
+  },
+  {
+    href: "https://www.linkedin.com",
+    label: "LinkedIn",
+    icon: LinkedInIcon,
+  },
+];
+
+const features = [
+  {
+    icon: QrCode,
+    title: "Instant Sharing",
+    description:
+      "Share your contact information instantly with a QR code that can be scanned by any smartphone.",
+  },
+  {
+    icon: TabletSmartphone,
+    title: "Mobile Optimized",
+    description:
+      "Your digital business card looks great on any device, ensuring a professional experience for everyone.",
+  },
+  {
+    icon: Zap,
+    title: "Real-time Updates",
+    description:
+      "Update your information anytime and it's instantly reflected on your digital card.",
+  },
+  {
+    icon: FileChartLine,
+    title: "Analytics & Insights",
+    description:
+      "Track who views and clicks your card and gain valuable insights about your networking efforts.",
+  },
+  {
+    icon: LayoutDashboard,
+    title: "Customizable Design",
+    description:
+      "Choose from multiple themes and customize colors, fonts to match your brand.",
+  },
+  {
+    icon: Shield,
+    title: "Privacy Controls",
+    description:
+      "Control who sees your information with advanced privacy settings and permissions.",
+  },
+];
 
 const testimonials = [
   {
@@ -155,29 +222,6 @@ const testimonials = [
       "https://images.unsplash.com/photo-1698510047345-ff32de8a3b74?q=80&w=1992",
     quote:
       "The technical implementation of Visiq is impressive. As a developer, I appreciate the attention to detail and the seamless user experience they've created.",
-  },
-];
-
-const visiqSocialLinks = [
-  {
-    href: "https://www.facebook.com",
-    label: "Facebook",
-    icon: <SimpleIconComponent icon={siFacebook} />,
-  },
-  {
-    href: "https://www.instagram.com",
-    label: "Instagram",
-    icon: <SimpleIconComponent icon={siInstagram} />,
-  },
-  {
-    href: "https://x.com",
-    label: "X",
-    icon: <SimpleIconComponent icon={siX} />,
-  },
-  {
-    href: "https://www.linkedin.com",
-    label: "LinkedIn",
-    icon: LinkedInIcon,
   },
 ];
 
@@ -651,129 +695,15 @@ export function LandingPage() {
                 manage your digital presence professionally.
               </p>
               <div className="[&>div]:hover:ring-primary mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 [&>div]:hover:ring-1 [&>div]:hover:ring-offset-1">
-                <Card>
-                  <CardHeader>
-                    <QrCode className="text-primary mb-2 h-10 w-10" />
-                    <CardTitle>Instant Sharing</CardTitle>
-                    <CardDescription>
-                      Share your contact information instantly with a QR code
-                      that can be scanned by any smartphone.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-primary mb-2 h-10 w-10"
-                    >
-                      <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
-                      <path d="M12 18h.01" />
-                    </svg>
-                    <CardTitle>Mobile Optimized</CardTitle>
-                    <CardDescription>
-                      Your digital business card looks great on any device,
-                      ensuring a professional experience for everyone.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-primary mb-2 h-10 w-10"
-                    >
-                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                    </svg>
-                    <CardTitle>Real-time Updates</CardTitle>
-                    <CardDescription>
-                      Update your information anytime and it&apos;s instantly
-                      reflected on your digital card.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-primary mb-2 h-10 w-10"
-                    >
-                      <path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6" />
-                      <path d="M14 3v5h5" />
-                      <circle cx="16" cy="16" r="6" />
-                      <path d="M16 14v4" />
-                      <path d="M16 20h.01" />
-                    </svg>
-                    <CardTitle>Analytics & Insights</CardTitle>
-                    <CardDescription>
-                      Track who views your card and gain valuable insights about
-                      your networking efforts.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-primary mb-2 h-10 w-10"
-                    >
-                      <path d="M12 2H2v10h10V2z" />
-                      <path d="M22 12h-10v10h10V12z" />
-                      <path d="M12 12H2v10h10V12z" />
-                      <path d="M22 2h-10v10h10V2z" />
-                    </svg>
-                    <CardTitle>Customizable Design</CardTitle>
-                    <CardDescription>
-                      Choose from multiple templates and customize colors,
-                      fonts, and layouts to match your brand.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-primary mb-2 h-10 w-10"
-                    >
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    </svg>
-                    <CardTitle>Privacy Controls</CardTitle>
-                    <CardDescription>
-                      Control who sees your information with advanced privacy
-                      settings and permissions.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
+                {features.map(({ icon: Icon, title, description }) => (
+                  <Card key={title}>
+                    <CardHeader>
+                      <Icon className="text-primary mb-2" size={40} />
+                      <CardTitle>{title}</CardTitle>
+                      <CardDescription>{description}</CardDescription>
+                    </CardHeader>
+                  </Card>
+                ))}
               </div>
             </div>
           </section>
