@@ -139,19 +139,19 @@ export function CreateCard() {
     setIsSubmitting(false);
   }
 
-  const handleCardDesignUpdate = useCallback((data: CardDesignValues) => {
-    setCardDesign(data);
+  const handleCardDesignUpdate = useCallback((values: CardDesignValues) => {
+    setCardDesign(values);
   }, []);
 
   const handlePersonalInfoUpdate = useCallback(
-    (data: PersonalInformationValues) => {
-      setPersonalInfo(data);
+    (values: PersonalInformationValues) => {
+      setPersonalInfo(values);
     },
     [],
   );
 
-  const handleLinksUpdate = useCallback((data: SerializableLinkType[]) => {
-    setLinks(data);
+  const handleLinksUpdate = useCallback((values: SerializableLinkType[]) => {
+    setLinks(values);
   }, []);
 
   useEffect(() => {

@@ -1,6 +1,13 @@
 "use client";
 
-import { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import {
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -151,6 +158,127 @@ const testimonials = [
   },
 ];
 
+const visiqSocialLinks = [
+  {
+    href: "https://www.facebook.com",
+    label: "Facebook",
+    icon: <SimpleIconComponent icon={siFacebook} />,
+  },
+  {
+    href: "https://www.instagram.com",
+    label: "Instagram",
+    icon: <SimpleIconComponent icon={siInstagram} />,
+  },
+  {
+    href: "https://x.com",
+    label: "X",
+    icon: <SimpleIconComponent icon={siX} />,
+  },
+  {
+    href: "https://www.linkedin.com",
+    label: "LinkedIn",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="lucide lucide-linkedin-icon lucide-linkedin"
+      >
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+        <rect width="4" height="12" x="2" y="9" />
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+    ),
+  },
+];
+
+const demoCardDesign: CardDesignValues = {
+  cardColor: constants.defaultColor,
+  fontFamily: constants.defaultFont,
+  logoImage: [
+    "duobwq5xg",
+    "v1747620720/digital-business-card/logo/leid7yrr9f1wljyp2svp.png",
+  ],
+  profileImage: [
+    "duobwq5xg",
+    "v1747137735/business-cards/profile/quspaw8scggryuzskvb1.jpg",
+  ],
+  coverImage: [
+    "duobwq5xg",
+    "v1748320039/digital-business-card/cover/xfnk3hybkdcafo6gnp9d.jpg",
+  ],
+  brandName: "Visiq",
+  imageTransforms: {
+    profile: {
+      scale: 1,
+      positionX: 0,
+      positionY: 0,
+      croppedAreaPixels: {
+        width: 460,
+        height: 460,
+        x: 0,
+        y: 0,
+      },
+      naturalWidth: 460,
+      naturalHeight: 460,
+      croppedImageUrl: "/images/profile-picture.jpeg",
+    },
+    logo: {
+      scale: 1,
+      positionX: 0,
+      positionY: 0,
+      croppedAreaPixels: {
+        width: 456,
+        height: 456,
+        x: 0,
+        y: 0,
+      },
+      naturalWidth: 456,
+      naturalHeight: 456,
+      croppedImageUrl: "/images/company-logo.png",
+    },
+    cover: {
+      scale: 1,
+      positionX: 0,
+      positionY: 0,
+      croppedAreaPixels: {
+        width: 1486,
+        height: 743,
+        x: 0,
+        y: 130,
+      },
+      naturalWidth: 1486,
+      naturalHeight: 1003,
+      croppedImageUrl: "/images/cover-photo.jpg",
+    },
+  },
+};
+
+const demoPersonalInformation: PersonalInformationValues = {
+  fullName: "Hoàng Anh Tuấn",
+  jobTitle: "Software Engineer",
+  department: "Research & Development",
+  company: "NextTech Solutions",
+  accreditations: "MBA, CPA",
+  headline: "Software Engineer with 1+ year of experience.",
+  bio: "Software Engineer with skills in full-stack development, cloud computing, and system design.",
+};
+
+const demoLinks: SerializableLinkType[] = [
+  {
+    id: "1",
+    type: "GitHub",
+    value: "https://github.com/iwmywn",
+    category: "Business",
+  },
+];
+
 export function LandingPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false);
@@ -164,6 +292,15 @@ export function LandingPage() {
   const featuresRef = useRef<HTMLElement>(null);
   const pricingRef = useRef<HTMLElement>(null);
   const testimonialsRef = useRef<HTMLElement>(null);
+  const menuItems = useMemo(
+    () => [
+      { id: "how-it-works", label: "How It Works", ref: howItWorksRef },
+      { id: "features", label: "Features", ref: featuresRef },
+      { id: "pricing", label: "Pricing", ref: pricingRef },
+      { id: "testimonials", label: "Testimonials", ref: testimonialsRef },
+    ],
+    [howItWorksRef, featuresRef, pricingRef, testimonialsRef],
+  );
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -182,97 +319,23 @@ export function LandingPage() {
   );
   const [designActiveTab, setDesignActiveTab] = useState<string>("design");
   const [planActiveTab, setPlanActiveTab] = useState<string>("free");
-  const [cardDesign, setCardDesign] = useState<CardDesignValues>({
-    cardColor: constants.defaultColor,
-    fontFamily: constants.defaultFont,
-    logoImage: [
-      "duobwq5xg",
-      "v1747620720/digital-business-card/logo/leid7yrr9f1wljyp2svp.png",
-    ],
-    profileImage: [
-      "duobwq5xg",
-      "v1747137735/business-cards/profile/quspaw8scggryuzskvb1.jpg",
-    ],
-    coverImage: [
-      "duobwq5xg",
-      "v1748320039/digital-business-card/cover/xfnk3hybkdcafo6gnp9d.jpg",
-    ],
-    brandName: "Visiq",
-    imageTransforms: {
-      profile: {
-        scale: 1,
-        positionX: 0,
-        positionY: 0,
-        croppedAreaPixels: {
-          width: 460,
-          height: 460,
-          x: 0,
-          y: 0,
-        },
-        naturalWidth: 460,
-        naturalHeight: 460,
-        croppedImageUrl: "/images/profile-picture.jpeg",
-      },
-      logo: {
-        scale: 1,
-        positionX: 0,
-        positionY: 0,
-        croppedAreaPixels: {
-          width: 456,
-          height: 456,
-          x: 0,
-          y: 0,
-        },
-        naturalWidth: 456,
-        naturalHeight: 456,
-        croppedImageUrl: "/images/company-logo.png",
-      },
-      cover: {
-        scale: 1,
-        positionX: 0,
-        positionY: 0,
-        croppedAreaPixels: {
-          width: 1486,
-          height: 743,
-          x: 0,
-          y: 130,
-        },
-        naturalWidth: 1486,
-        naturalHeight: 1003,
-        croppedImageUrl: "/images/cover-photo.jpg",
-      },
-    },
-  });
-  const [personalInfo, setPersonalInfo] = useState<PersonalInformationValues>({
-    fullName: "Hoàng Anh Tuấn",
-    jobTitle: "Software Engineer",
-    department: "Research & Development",
-    company: "NextTech Solutions",
-    accreditations: "MBA, CPA",
-    headline: "Software Engineer with 1+ year of experience.",
-    bio: "Software Engineer with skills in full-stack development, cloud computing, and system design.",
-  });
-  const [links, setLinks] = useState<SerializableLinkType[]>([
-    {
-      id: "1",
-      type: "GitHub",
-      value: "https://github.com/iwmywn",
-      category: "Business",
-    },
-  ]);
-  const handleCardDesignUpdate = useCallback((data: CardDesignValues) => {
-    setCardDesign(data);
+  const [cardDesign, setCardDesign] =
+    useState<CardDesignValues>(demoCardDesign);
+  const [personalInfo, setPersonalInfo] = useState<PersonalInformationValues>(
+    demoPersonalInformation,
+  );
+  const [links, setLinks] = useState<SerializableLinkType[]>(demoLinks);
+  const handleCardDesignUpdate = useCallback((values: CardDesignValues) => {
+    setCardDesign(values);
   }, []);
-
   const handlePersonalInfoUpdate = useCallback(
-    (data: PersonalInformationValues) => {
-      setPersonalInfo(data);
+    (values: PersonalInformationValues) => {
+      setPersonalInfo(values);
     },
     [],
   );
-
-  const handleLinksUpdate = useCallback((data: SerializableLinkType[]) => {
-    setLinks(data);
+  const handleLinksUpdate = useCallback((values: SerializableLinkType[]) => {
+    setLinks(values);
   }, []);
 
   const filteredTestimonials = isIPad ? testimonials.slice(0, 6) : testimonials;
@@ -285,19 +348,6 @@ export function LandingPage() {
       });
     }
   };
-
-  const handleMenuClick = (elementRef: RefObject<HTMLElement | null>) => {
-    setIsDrawerOpen(false);
-    scrollToSection(elementRef);
-  };
-
-  const onInit = useCallback((emblaApi: EmblaCarouselType) => {
-    setScrollSnaps(emblaApi.scrollSnapList());
-  }, []);
-
-  const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, []);
 
   const handlePlanActiveTab = (tab: string) => {
     setPlanActiveTab(tab);
@@ -315,6 +365,14 @@ export function LandingPage() {
           : links.slice(0, constants.maxProfessionalLinks),
     );
   };
+
+  const onInit = useCallback((emblaApi: EmblaCarouselType) => {
+    setScrollSnaps(emblaApi.scrollSnapList());
+  }, []);
+
+  const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, []);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -334,22 +392,16 @@ export function LandingPage() {
   useEffect(() => {
     const handleScroll = () => {
       requestAnimationFrame(() => {
-        const sections = [
-          { id: "how-it-works", ref: howItWorksRef },
-          { id: "features", ref: featuresRef },
-          { id: "pricing", ref: pricingRef },
-          { id: "testimonials", ref: testimonialsRef },
-        ];
-
         let found = false;
 
-        for (const section of sections) {
-          const el = section.ref.current;
+        for (const item of menuItems) {
+          const el = item.ref.current;
+
           if (el) {
             const rect = el.getBoundingClientRect();
 
             if (rect.top < window.innerHeight && rect.bottom > 64) {
-              setActiveSection(section.id);
+              setActiveSection(item.id);
               found = true;
               break;
             }
@@ -364,7 +416,7 @@ export function LandingPage() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [menuItems]);
 
   return (
     <>
@@ -385,30 +437,19 @@ export function LandingPage() {
               <span className="sr-only sm:not-sr-only">Visiq</span>
             </Link>
             <nav className="hidden gap-8 lg:flex">
-              <button
-                onClick={() => scrollToSection(howItWorksRef)}
-                className={`text-sm font-medium transition-colors ${activeSection === "how-it-works" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
-              >
-                How It Works
-              </button>
-              <button
-                onClick={() => scrollToSection(featuresRef)}
-                className={`text-sm font-medium transition-colors ${activeSection === "features" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
-              >
-                Features
-              </button>
-              <button
-                onClick={() => scrollToSection(pricingRef)}
-                className={`text-sm font-medium transition-colors ${activeSection === "pricing" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
-              >
-                Pricing
-              </button>
-              <button
-                onClick={() => scrollToSection(testimonialsRef)}
-                className={`text-sm font-medium transition-colors ${activeSection === "testimonials" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
-              >
-                Testimonials
-              </button>
+              {menuItems.map(({ id, label, ref }) => (
+                <button
+                  key={id}
+                  onClick={() => scrollToSection(ref)}
+                  className={`text-sm font-medium transition-colors ${
+                    activeSection === id
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-primary"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </nav>
             <div className="flex items-center gap-4">
               <Button
@@ -961,61 +1002,18 @@ export function LandingPage() {
                   className="border-muted-foreground ml-3 hidden h-6 min-[31.25rem]:block"
                 />
                 <div className="flex items-center gap-1">
-                  <Button variant="ghost" asChild>
-                    <Link
-                      href="https://www.facebook.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <SimpleIconComponent icon={siFacebook} />
-                      <span className="sr-only">Facebook</span>
-                    </Link>
-                  </Button>
-                  <Button variant="ghost" asChild>
-                    <Link
-                      href="https://www.instagram.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <SimpleIconComponent icon={siInstagram} />
-                      <span className="sr-only">Instagram</span>
-                    </Link>
-                  </Button>
-                  <Button variant="ghost" asChild>
-                    <Link
-                      href="https://x.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <SimpleIconComponent icon={siX} />
-                      <span className="sr-only">X</span>
-                    </Link>
-                  </Button>
-                  <Button variant="ghost" asChild>
-                    <Link
-                      href="https://www.linkedin.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="lucide lucide-linkedin-icon lucide-linkedin"
+                  {visiqSocialLinks.map(({ href, label, icon }) => (
+                    <Button key={label} variant="ghost" asChild>
+                      <Link
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                        <rect width="4" height="12" x="2" y="9" />
-                        <circle cx="4" cy="4" r="2" />
-                      </svg>
-                      <span className="sr-only">LinkedIn</span>
-                    </Link>
-                  </Button>
+                        {icon}
+                        <span className="sr-only">{label}</span>
+                      </Link>
+                    </Button>
+                  ))}
                 </div>
               </div>
             </div>
@@ -1038,34 +1036,19 @@ export function LandingPage() {
           </VisuallyHidden>
 
           <div className="space-y-4 px-4 py-2">
-            <Button
-              variant="ghost"
-              onClick={() => handleMenuClick(howItWorksRef)}
-              className="w-full text-base"
-            >
-              How It Works
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => handleMenuClick(featuresRef)}
-              className="w-full text-base"
-            >
-              Features
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => handleMenuClick(pricingRef)}
-              className="w-full text-base"
-            >
-              Pricing
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => handleMenuClick(testimonialsRef)}
-              className="w-full text-base"
-            >
-              Testimonials
-            </Button>
+            {menuItems.map(({ id, label, ref }) => (
+              <Button
+                key={id}
+                variant="ghost"
+                onClick={() => {
+                  setIsDrawerOpen(false);
+                  scrollToSection(ref);
+                }}
+                className="w-full text-base"
+              >
+                {label}
+              </Button>
+            ))}
             <Button
               variant="ghost"
               className="w-full text-base sm:hidden"
