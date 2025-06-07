@@ -49,9 +49,22 @@ interface SimpleIconProps {
   icon: SimpleIcon;
 }
 
-interface IconComponentProps {
-  className?: string;
-}
+export type LinkType = {
+  id: string;
+  type: string;
+  value: string;
+  category: string;
+  icon: ElementType;
+  label?: string;
+};
+
+export type SerializableLinkType = {
+  id: string;
+  type: string;
+  value: string;
+  category: string;
+  label?: string;
+};
 
 export const SimpleIconComponent = ({ icon, className }: SimpleIconProps) => {
   return (
@@ -71,23 +84,6 @@ export const SimpleIconComponent = ({ icon, className }: SimpleIconProps) => {
   );
 };
 
-export type LinkType = {
-  id: string;
-  type: string;
-  value: string;
-  category: string;
-  icon: ElementType;
-  label?: string;
-};
-
-export type SerializableLinkType = {
-  id: string;
-  type: string;
-  value: string;
-  category: string;
-  label?: string;
-};
-
 export function toSerializableLink(link: LinkType): SerializableLinkType {
   /* eslint-disable @typescript-eslint/no-unused-vars */
   const { icon, ...rest } = link;
@@ -104,6 +100,24 @@ export function toLinkType(link: SerializableLinkType): LinkType {
   };
 }
 
+export const LinkedInIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect width="4" height="12" x="2" y="9" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
 export const linkTypes = [
   // General
   { type: "Email", icon: Mail, category: "General" },
@@ -115,304 +129,208 @@ export const linkTypes = [
   // Social
   {
     type: "X",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siX} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siX} />,
     category: "Social",
   },
   {
     type: "Instagram",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siInstagram} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siInstagram} />,
     category: "Social",
   },
   {
     type: "Threads",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siThreads} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siThreads} />,
     category: "Social",
   },
   {
     type: "Bluesky",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siBluesky} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siBluesky} />,
     category: "Social",
   },
   {
     type: "Facebook",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siFacebook} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siFacebook} />,
     category: "Social",
   },
   {
     type: "YouTube",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siYoutube} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siYoutube} />,
     category: "Social",
   },
   {
     type: "Snapchat",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siSnapchat} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siSnapchat} />,
     category: "Social",
   },
   {
     type: "TikTok",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siTiktok} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siTiktok} />,
     category: "Social",
   },
   {
     type: "Twitch",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siTwitch} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siTwitch} />,
     category: "Social",
   },
   {
     type: "Yelp",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siYelp} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siYelp} />,
     category: "Social",
   },
   {
     type: "Pinterest",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siPinterest} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siPinterest} />,
     category: "Social",
   },
   {
     type: "Reddit",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siReddit} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siReddit} />,
     category: "Social",
   },
   {
     type: "Tumblr",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siTumblr} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siTumblr} />,
     category: "Social",
   },
   {
     type: "Quora",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siQuora} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siQuora} />,
     category: "Social",
   },
   {
     type: "RedNote",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siXiaohongshu} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siXiaohongshu} />,
     category: "Social",
   },
 
   // Messaging
   {
     type: "WhatsApp",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siWhatsapp} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siWhatsapp} />,
     category: "Messaging",
   },
   {
     type: "Signal",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siSignal} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siSignal} />,
     category: "Messaging",
   },
   {
     type: "Discord",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siDiscord} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siDiscord} />,
     category: "Messaging",
   },
   {
     type: "Telegram",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siTelegram} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siTelegram} />,
     category: "Messaging",
   },
   {
     type: "WeChat",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siWechat} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siWechat} />,
     category: "Messaging",
   },
   {
     type: "Line",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siLine} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siLine} />,
     category: "Messaging",
   },
   {
     type: "Viber",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siViber} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siViber} />,
     category: "Messaging",
   },
 
   // Business
   {
     type: "GitHub",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siGithub} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siGithub} />,
     category: "Business",
   },
   {
     type: "Calendly",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siCalendly} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siCalendly} />,
     category: "Business",
   },
   {
     type: "Medium",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siMedium} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siMedium} />,
     category: "Business",
   },
   {
     type: "Notion",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siNotion} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siNotion} />,
     category: "Business",
   },
   {
     type: "Slack",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siSlack} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siSlack} />,
     category: "Business",
   },
   {
     type: "Dribbble",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siDribbble} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siDribbble} />,
     category: "Business",
   },
   {
     type: "Figma",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siFigma} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siFigma} />,
     category: "Business",
   },
   {
     type: "LinkedIn",
-    icon: (props: IconComponentProps) => (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="lucide lucide-linkedin-icon lucide-linkedin"
-        {...props}
-      >
-        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-        <rect width="4" height="12" x="2" y="9" />
-        <circle cx="4" cy="4" r="2" />
-      </svg>
-    ),
+    icon: () => LinkedInIcon,
     category: "Business",
   },
 
   // Payment
   {
     type: "PayPal",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siPaypal} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siPaypal} />,
     category: "Payment",
   },
   {
     type: "Venmo",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siVenmo} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siVenmo} />,
     category: "Payment",
   },
   {
     type: "CashApp",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siCashapp} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siCashapp} />,
     category: "Payment",
   },
   {
     type: "Patreon",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siPatreon} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siPatreon} />,
     category: "Payment",
   },
   {
     type: "BuyMeACoffee",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siBuymeacoffee} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siBuymeacoffee} />,
     category: "Payment",
   },
   {
     type: "Ko-fi",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siKofi} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siKofi} />,
     category: "Payment",
   },
   {
     type: "Google Pay",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siGooglepay} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siGooglepay} />,
     category: "Payment",
   },
   {
     type: "Apple Pay",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siApplepay} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siApplepay} />,
     category: "Payment",
   },
   {
     type: "Samsung Pay",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siSamsungpay} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siSamsungpay} />,
     category: "Payment",
   },
   {
     type: "Stripe",
-    icon: (props: IconComponentProps) => (
-      <SimpleIconComponent icon={siStripe} {...props} />
-    ),
+    icon: () => <SimpleIconComponent icon={siStripe} />,
     category: "Payment",
   },
 ];
