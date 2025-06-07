@@ -433,7 +433,7 @@ export function LandingPage() {
             </div>
           </div>
         </header>
-        <main id="landing-page" className="w-full px-6 md:px-8 lg:px-10">
+        <main className="w-full px-6 md:px-8 lg:px-10">
           <section className="bg-secondary dark:bg-card mb-1 flex min-h-screen flex-col items-center justify-center gap-12 px-4 min-[31.25rem]:[clip-path:polygon(0%_15%,100%_0%,100%_85%,0%_100%)] md:px-6 lg:px-8">
             <h1 className="text-center text-[clamp(2.25rem,5vw+1rem,4.5rem)] leading-[1.1] font-black tracking-tight">
               Connect Instantly <br />
