@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -277,19 +277,18 @@ export function LandingPage() {
 
   const filteredTestimonials = isIPad ? testimonials.slice(0, 6) : testimonials;
 
-  const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
+  const scrollToSection = (elementRef: RefObject<HTMLElement | null>) => {
+    if (elementRef.current) {
       window.scrollTo({
-        top: section.offsetTop - 63,
+        top: elementRef.current.offsetTop - 63,
         behavior: "smooth",
       });
     }
   };
 
-  const handleMenuClick = (sectionId: string) => {
+  const handleMenuClick = (elementRef: RefObject<HTMLElement | null>) => {
     setIsDrawerOpen(false);
-    scrollToSection(sectionId);
+    scrollToSection(elementRef);
   };
 
   const onInit = useCallback((emblaApi: EmblaCarouselType) => {
@@ -387,25 +386,25 @@ export function LandingPage() {
             </Link>
             <nav className="hidden gap-8 lg:flex">
               <button
-                onClick={() => scrollToSection("how-it-works")}
+                onClick={() => scrollToSection(howItWorksRef)}
                 className={`text-sm font-medium transition-colors ${activeSection === "how-it-works" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
               >
                 How It Works
               </button>
               <button
-                onClick={() => scrollToSection("features")}
+                onClick={() => scrollToSection(featuresRef)}
                 className={`text-sm font-medium transition-colors ${activeSection === "features" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
               >
                 Features
               </button>
               <button
-                onClick={() => scrollToSection("pricing")}
+                onClick={() => scrollToSection(pricingRef)}
                 className={`text-sm font-medium transition-colors ${activeSection === "pricing" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
               >
                 Pricing
               </button>
               <button
-                onClick={() => scrollToSection("testimonials")}
+                onClick={() => scrollToSection(testimonialsRef)}
                 className={`text-sm font-medium transition-colors ${activeSection === "testimonials" ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
               >
                 Testimonials
@@ -456,7 +455,7 @@ export function LandingPage() {
                 variant="outline"
                 size="lg"
                 className="w-full sm:w-auto"
-                onClick={() => scrollToSection("how-it-works")}
+                onClick={() => scrollToSection(howItWorksRef)}
               >
                 Learn More
               </Button>
@@ -464,7 +463,6 @@ export function LandingPage() {
           </section>
 
           <section
-            id="how-it-works"
             ref={howItWorksRef}
             className="relative py-16 md:py-20 lg:py-24"
           >
@@ -617,7 +615,6 @@ export function LandingPage() {
           </section>
 
           <section
-            id="features"
             ref={featuresRef}
             className="bg-secondary dark:bg-card py-16 [clip-path:polygon(0%_5%,5%_0%,95%_0%,100%_5%,100%_95%,95%_100%,5%_100%,0%_95%)] md:py-20 lg:py-24"
           >
@@ -758,7 +755,6 @@ export function LandingPage() {
           </section>
 
           <section
-            id="pricing"
             ref={pricingRef}
             className="relative py-16 md:py-20 lg:py-24"
           >
@@ -822,7 +818,6 @@ export function LandingPage() {
           </section>
 
           <section
-            id="testimonials"
             key={filteredTestimonials.length}
             ref={testimonialsRef}
             className="bg-secondary dark:bg-card overflow-hidden rounded-[5rem] py-16 md:py-20 lg:py-24"
@@ -918,7 +913,7 @@ export function LandingPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  onClick={() => scrollToSection("pricing")}
+                  onClick={() => scrollToSection(pricingRef)}
                 >
                   View Pricing
                 </Button>
@@ -1045,28 +1040,28 @@ export function LandingPage() {
           <div className="space-y-4 px-4 py-2">
             <Button
               variant="ghost"
-              onClick={() => handleMenuClick("how-it-works")}
+              onClick={() => handleMenuClick(howItWorksRef)}
               className="w-full text-base"
             >
               How It Works
             </Button>
             <Button
               variant="ghost"
-              onClick={() => handleMenuClick("features")}
+              onClick={() => handleMenuClick(featuresRef)}
               className="w-full text-base"
             >
               Features
             </Button>
             <Button
               variant="ghost"
-              onClick={() => handleMenuClick("pricing")}
+              onClick={() => handleMenuClick(pricingRef)}
               className="w-full text-base"
             >
               Pricing
             </Button>
             <Button
               variant="ghost"
-              onClick={() => handleMenuClick("testimonials")}
+              onClick={() => handleMenuClick(testimonialsRef)}
               className="w-full text-base"
             >
               Testimonials
