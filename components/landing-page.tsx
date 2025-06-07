@@ -35,13 +35,13 @@ import { EmblaCarouselType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { CardDesign, CardDesignValues } from "@/components/card-design";
+import { CardDesign, type CardDesignValues } from "@/components/card-design";
 import { Label } from "@/components/ui/label";
 import { LinkedInIcon, SimpleIconComponent } from "@/components/icons";
 import { siFacebook, siInstagram, siX } from "simple-icons";
 import {
   PersonalInformation,
-  PersonalInformationValues,
+  type PersonalInformationValues,
 } from "@/components/personal-information";
 import { Separator } from "@/components/ui/separator";
 import { TermsOfServiceDialog } from "@/components/terms-of-service-dialog";

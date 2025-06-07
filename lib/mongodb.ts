@@ -1,8 +1,8 @@
 import {
-  Collection,
   MongoClient,
-  MongoClientOptions,
-  OptionalId,
+  Collection,
+  type MongoClientOptions,
+  type OptionalId,
 } from "mongodb";
 
 if (!process.env.MONGODB_URI) {
