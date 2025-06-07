@@ -87,7 +87,7 @@ const visiqSocialLinks = [
   },
 ];
 
-const features = [
+const featureItems = [
   {
     icon: QrCode,
     title: "Instant Sharing",
@@ -98,7 +98,7 @@ const features = [
     icon: TabletSmartphone,
     title: "Mobile Optimized",
     description:
-      "Your digital business card looks great on any device, ensuring a professional experience for everyone.",
+      "Deliver a flawless experience on any device with a design that adapts to all screen sizes.",
   },
   {
     icon: Zap,
@@ -116,7 +116,7 @@ const features = [
     icon: LayoutDashboard,
     title: "Customizable Design",
     description:
-      "Choose from multiple themes and customize colors, fonts to match your brand.",
+      "Customize colors, fonts, and more to reflect your personal or business brand.",
   },
   {
     icon: Shield,
@@ -126,7 +126,7 @@ const features = [
   },
 ];
 
-const testimonials = [
+const testimonialItems = [
   {
     name: "Sarah Johnson",
     title: "Marketing Director",
@@ -365,7 +365,9 @@ export function LandingPage() {
     setLinks(values);
   }, []);
 
-  const filteredTestimonials = isIPad ? testimonials.slice(0, 6) : testimonials;
+  const filteredTestimonials = isIPad
+    ? testimonialItems.slice(0, 6)
+    : testimonialItems;
 
   const scrollToSection = (elementRef: RefObject<HTMLElement | null>) => {
     if (elementRef.current) {
@@ -695,7 +697,7 @@ export function LandingPage() {
                 manage your digital presence professionally.
               </p>
               <div className="[&>div]:hover:ring-primary mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 [&>div]:hover:ring-1 [&>div]:hover:ring-offset-1">
-                {features.map(({ icon: Icon, title, description }) => (
+                {featureItems.map(({ icon: Icon, title, description }) => (
                   <Card key={title}>
                     <CardHeader>
                       <Icon className="text-primary mb-2" size={40} />
