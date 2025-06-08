@@ -77,9 +77,9 @@ export function ChangeVisibilityDialog({
             {isUpdating ? (
               <Loading />
             ) : card.isPublic ? (
-              "Make Private"
+              "Make private"
             ) : (
-              "Make Public"
+              "Make public"
             )}
           </Button>
         </DialogFooter>

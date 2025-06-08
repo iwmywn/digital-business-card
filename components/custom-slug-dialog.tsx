@@ -187,7 +187,7 @@ export function CustomSlugDialog({
             />
             <FormButton
               isSubmitting={form.formState.isSubmitting}
-              text="Save Change"
+              text="Save change"
               className="w-full"
             />
           </form>
