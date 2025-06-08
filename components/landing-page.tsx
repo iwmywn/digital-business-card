@@ -802,7 +802,7 @@ export function LandingPage() {
                     {filteredTestimonials.map((testimonial, index) => (
                       <Card
                         key={index}
-                        className={`hover:ring-primary mr-4 min-w-fit transition-all will-change-transform hover:ring-1 hover:ring-offset-1 ${isIPad ? "cursor-pointer" : ""}`}
+                        className={`hover:ring-primary mr-4 min-w-fit hover:ring-1 hover:ring-offset-1 ${isIPad ? "cursor-pointer" : ""}`}
                         style={{ transform: "translate3d(0,0,0)" }}
                       >
                         <CardHeader>
