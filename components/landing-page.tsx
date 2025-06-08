@@ -812,8 +812,8 @@ export function LandingPage() {
                               <Image
                                 src={testimonial.image}
                                 alt={testimonial.name}
-                                width={56}
-                                height={56}
+                                width={isIPad ? 44 : 52}
+                                height={isIPad ? 44 : 52}
                               />
                             </div>
                             <div
