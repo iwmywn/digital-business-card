@@ -372,9 +372,9 @@ export function LandingPage() {
 
   const scrollToSection = (elementRef: RefObject<HTMLElement | null>) => {
     if (elementRef.current) {
-      elementRef.current?.scrollIntoView({
+      window.scrollTo({
+        top: elementRef.current.offsetTop,
         behavior: "smooth",
-        block: "start",
       });
     }
   };
