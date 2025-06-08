@@ -806,7 +806,9 @@ export function LandingPage() {
                       >
                         <CardHeader>
                           <div className="flex items-center gap-4">
-                            <div className="h-14 w-14 overflow-hidden rounded-full">
+                            <div
+                              className={`${isIPad ? "size-11" : "size-13"} shrink-0 overflow-hidden rounded-full`}
+                            >
                               <Image
                                 src={testimonial.image}
                                 alt={testimonial.name}
@@ -814,20 +816,20 @@ export function LandingPage() {
                                 height={56}
                               />
                             </div>
-                            <div className="text-primary">
-                              <CardTitle className="text-lg">
-                                {testimonial.name}
-                              </CardTitle>
+                            <div
+                              className={`text-primary ${isIPad ? "text-base" : "text-lg"}`}
+                            >
+                              <CardTitle>{testimonial.name}</CardTitle>
                               <CardDescription>
                                 {testimonial.title}
                               </CardDescription>
                             </div>
                           </div>
                         </CardHeader>
-                        <CardContent className="max-w-96">
-                          <span className="text-muted-foreground">
-                            &quot;{testimonial.quote}&quot;
-                          </span>
+                        <CardContent
+                          className={`${isIPad ? "text-sm" : "text-base"} text-muted-foreground`}
+                        >
+                          &quot;{testimonial.quote}&quot;
                         </CardContent>
                       </Card>
                     ))}
