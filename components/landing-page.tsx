@@ -132,7 +132,7 @@ const testimonialItems = [
     name: "Sarah Johnson",
     title: "Marketing Director",
     image:
-      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=1974",
+      "https://images.unsplash.com/photo-1529232356377-57971f020a94?q=80&w=1976",
     quote:
       "Visiq has completely transformed how I network at events. No more fumbling for paper cards or running out. I just share my QR code and track who actually views my information.",
   },
