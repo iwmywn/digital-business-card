@@ -327,7 +327,7 @@ export function LandingPage() {
       { id: "pricing", label: "Pricing", ref: pricingRef },
       { id: "testimonials", label: "Testimonials", ref: testimonialsRef },
     ],
-    [howItWorksRef, featuresRef, pricingRef, testimonialsRef],
+    [],
   );
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
@@ -372,9 +372,9 @@ export function LandingPage() {
 
   const scrollToSection = (elementRef: RefObject<HTMLElement | null>) => {
     if (elementRef.current) {
-      window.scrollTo({
-        top: elementRef.current.offsetTop - 63,
+      elementRef.current?.scrollIntoView({
         behavior: "smooth",
+        block: "start",
       });
     }
   };
@@ -422,23 +422,29 @@ export function LandingPage() {
   useEffect(() => {
     const handleScroll = () => {
       requestAnimationFrame(() => {
-        let found = false;
+        let activeFound = false;
 
         for (const item of menuItems) {
           const el = item.ref.current;
 
           if (el) {
             const rect = el.getBoundingClientRect();
+            const intersectionHeight = Math.max(
+              0,
+              Math.min(rect.bottom, window.innerHeight) - Math.max(0, rect.top),
+            );
+            const visiblePercentage =
+              (intersectionHeight / el.offsetHeight) * 100;
 
-            if (rect.top < window.innerHeight && rect.bottom > 64) {
+            if (visiblePercentage >= 20) {
               setActiveSection(item.id);
-              found = true;
+              activeFound = true;
               break;
             }
           }
         }
 
-        if (!found) {
+        if (!activeFound) {
           setActiveSection(null);
         }
       });
@@ -535,7 +541,7 @@ export function LandingPage() {
 
           <section
             ref={howItWorksRef}
-            className="relative py-16 md:py-20 lg:py-24"
+            className="relative flex min-h-screen flex-col items-center justify-center py-16 md:py-20 lg:py-24"
           >
             <div className="flex flex-col gap-6">
               <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
@@ -687,9 +693,9 @@ export function LandingPage() {
 
           <section
             ref={featuresRef}
-            className="bg-secondary dark:bg-card py-16 [clip-path:polygon(0%_5%,5%_0%,95%_0%,100%_5%,100%_95%,95%_100%,5%_100%,0%_95%)] md:py-20 lg:py-24"
+            className="bg-secondary dark:bg-card flex min-h-screen flex-col items-center justify-center py-16 [clip-path:polygon(0%_5%,5%_0%,95%_0%,100%_5%,100%_95%,95%_100%,5%_100%,0%_95%)] md:py-20 lg:py-24"
           >
-            <div className="flex flex-col gap-6 px-4 md:px-6 lg:px-8">
+            <div className="flex w-full flex-col gap-6 px-4 md:px-6 lg:px-8">
               <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
                 Everything You Need in a Digital Business Card
               </h2>
@@ -697,7 +703,7 @@ export function LandingPage() {
                 Visiq provides all the tools you need to create, share, and
                 manage your digital presence professionally.
               </p>
-              <div className="[&>div]:hover:ring-primary mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 [&>div]:hover:ring-1 [&>div]:hover:ring-offset-1">
+              <div className="[&>div]:hover:ring-primary mt-6 grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 [&>div]:hover:ring-1 [&>div]:hover:ring-offset-1">
                 {featureItems.map(({ icon: Icon, title, description }) => (
                   <Card key={title}>
                     <CardHeader>
@@ -713,7 +719,7 @@ export function LandingPage() {
 
           <section
             ref={pricingRef}
-            className="relative py-16 md:py-20 lg:py-24"
+            className="relative flex min-h-screen flex-col items-center justify-center py-16 md:py-20 lg:py-24"
           >
             <div className="flex flex-col gap-6">
               <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
@@ -777,9 +783,11 @@ export function LandingPage() {
           <section
             key={filteredTestimonials.length}
             ref={testimonialsRef}
-            className="bg-secondary dark:bg-card overflow-hidden rounded-[5rem] py-16 md:py-20 lg:py-24"
+            className="bg-secondary dark:bg-card relative flex min-h-screen flex-col items-center justify-center overflow-hidden rounded-[5rem] py-16 md:py-20 lg:py-24"
           >
-            <div className="relative flex flex-col items-center gap-6 [&>h2,p]:mx-4 md:[&>h2,p]:mx-6 lg:[&>h2,p]:mx-8">
+            <div className="from-background pointer-events-none absolute top-0 bottom-0 left-0 z-10 hidden w-20 bg-gradient-to-r to-transparent lg:block" />
+            <div className="from-background pointer-events-none absolute top-0 right-0 bottom-0 z-10 hidden w-20 bg-gradient-to-l to-transparent lg:block" />
+            <div className="flex flex-col items-center gap-6 [&>h2,p]:mx-4 md:[&>h2,p]:mx-6 lg:[&>h2,p]:mx-8">
               <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
                 What Our Customers Say
               </h2>
@@ -788,8 +796,6 @@ export function LandingPage() {
                 enhance their networking.
               </p>
 
-              <div className="from-background pointer-events-none absolute -top-17 -bottom-17 left-0 z-10 hidden w-20 bg-gradient-to-r to-transparent md:-top-21 md:-bottom-21 lg:-top-25 lg:-bottom-25 lg:block" />
-              <div className="from-background pointer-events-none absolute -top-17 right-0 -bottom-17 z-10 hidden w-20 bg-gradient-to-l to-transparent md:-top-21 md:-bottom-21 lg:-top-25 lg:-bottom-25 lg:block" />
               <div className="embla">
                 <div className="embla__viewport" ref={emblaRef}>
                   <div className="embla__container">
