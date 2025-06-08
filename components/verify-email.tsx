@@ -32,13 +32,13 @@ export function VerifyEmail({
   }, [token, email]);
 
   if (isLoading) {
-    return <Loading className="h-8 w-8 border-white border-t-black/10" />;
+    return <Loading className="size-8 border-white border-t-black/10" />;
   }
 
   return (
     <>
       <div className="flex flex-col items-center justify-center gap-4 text-sm">
-        <Icon size={30} />
+        <Icon className="size-[1.875rem]" />
         {message}
       </div>
     </>

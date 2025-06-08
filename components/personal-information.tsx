@@ -80,7 +80,7 @@ export const PersonalInformation = forwardRef(function PersonalInformation(
                         htmlFor="fullName"
                         className="flex items-center gap-2"
                       >
-                        <User className="h-4 w-4" />
+                        <User className="size-4" />
                         Full Name
                       </FormLabel>
                       <FormControl>
@@ -106,7 +106,7 @@ export const PersonalInformation = forwardRef(function PersonalInformation(
                         htmlFor="jobTitle"
                         className="flex items-center gap-2"
                       >
-                        <Briefcase className="h-4 w-4" />
+                        <Briefcase className="size-4" />
                         Job Title
                       </FormLabel>
                       <FormControl>
@@ -135,7 +135,7 @@ export const PersonalInformation = forwardRef(function PersonalInformation(
                         htmlFor="department"
                         className="flex items-center gap-2"
                       >
-                        <Users className="h-4 w-4" />
+                        <Users className="size-4" />
                         Department
                       </FormLabel>
                       <FormControl>
@@ -162,7 +162,7 @@ export const PersonalInformation = forwardRef(function PersonalInformation(
                         htmlFor="company"
                         className="flex items-center gap-2"
                       >
-                        <Building className="h-4 w-4" />
+                        <Building className="size-4" />
                         Company Name
                       </FormLabel>
                       <FormControl>
@@ -189,7 +189,7 @@ export const PersonalInformation = forwardRef(function PersonalInformation(
                     htmlFor="accreditations"
                     className="flex items-center gap-2"
                   >
-                    <Award className="h-4 w-4" />
+                    <Award className="size-4" />
                     Accreditations
                   </FormLabel>
                   <FormControl>
@@ -214,7 +214,7 @@ export const PersonalInformation = forwardRef(function PersonalInformation(
                     htmlFor="headline"
                     className="flex items-center gap-2"
                   >
-                    <FileText className="h-4 w-4" />
+                    <FileText className="size-4" />
                     Headline
                   </FormLabel>
                   <FormControl>
@@ -236,7 +236,7 @@ export const PersonalInformation = forwardRef(function PersonalInformation(
               render={({ field }) => (
                 <FormItem>
                   <FormLabel htmlFor="bio" className="flex items-center gap-2">
-                    <FileEdit className="h-4 w-4" />
+                    <FileEdit className="size-4" />
                     Bio
                   </FormLabel>
                   <FormControl>

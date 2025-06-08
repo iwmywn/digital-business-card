@@ -75,11 +75,11 @@ export function ResetPasswordForm({
   }, [email, token]);
 
   if (isLoading)
-    return <Loading className="h-8 w-8 border-white border-t-black/10" />;
+    return <Loading className="size-8 border-white border-t-black/10" />;
   if (message)
     return (
       <div className="flex flex-col items-center justify-center gap-4 text-sm">
-        <X size={30} />
+        <X className="size-[1.875rem]" />
         {message}
       </div>
     );

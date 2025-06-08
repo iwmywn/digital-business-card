@@ -134,7 +134,7 @@ export function CardManagement() {
 
       <div ref={registerRef} className="flex items-center">
         <div className="relative flex-1">
-          <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
+          <Search className="text-muted-foreground absolute top-2.5 left-2.5 size-4" />
           <Input
             placeholder="Search cards..."
             className="pl-8"
@@ -232,9 +232,9 @@ export function CardManagement() {
                       </span>
                       <span title={card.isPublic ? "Public" : "Private"}>
                         {card.isPublic ? (
-                          <Globe size={14} />
+                          <Globe className="size-[0.875rem]" />
                         ) : (
-                          <Lock size={14} />
+                          <Lock className="size-[0.875rem]" />
                         )}
                       </span>
                     </CardTitle>
@@ -249,7 +249,7 @@ export function CardManagement() {
                               size="icon"
                               className="text-primary hover:bg-primary/5"
                             >
-                              <MoreHorizontal className="h-4 w-4" />
+                              <MoreHorizontal className="size-4" />
                             </Button>
                           </DropdownMenuTrigger>
                         </TooltipTrigger>
@@ -263,7 +263,7 @@ export function CardManagement() {
                         <DropdownMenuItem asChild>
                           {card.editable ? (
                             <Link href={`/edit/${card.dynamicSlug}`}>
-                              <Edit className="mr-2 h-4 w-4" />
+                              <Edit className="mr-2 size-4" />
                               Edit card
                             </Link>
                           ) : (
@@ -271,7 +271,7 @@ export function CardManagement() {
                               className="cursor-not-allowed opacity-50"
                               onClick={() => toast.error(card.message)}
                             >
-                              <Lock className="mr-2 h-4 w-4" />
+                              <Lock className="mr-2 size-4" />
                               Upgrade to edit
                             </div>
                           )}
@@ -284,7 +284,7 @@ export function CardManagement() {
                                 setIsSlugDialogOpen(true);
                               }}
                             >
-                              <LinkIcon className="mr-2 h-4 w-4" />
+                              <LinkIcon className="mr-2 size-4" />
                               Customize link
                             </div>
                           ) : (
@@ -296,7 +296,7 @@ export function CardManagement() {
                                 )
                               }
                             >
-                              <Lock className="mr-2 h-4 w-4" />
+                              <Lock className="mr-2 size-4" />
                               Upgrade to customize
                             </div>
                           )}
@@ -311,12 +311,12 @@ export function CardManagement() {
                             >
                               {card.isPublic ? (
                                 <>
-                                  <Lock className="mr-2 h-4 w-4" />
+                                  <Lock className="mr-2 size-4" />
                                   Make private
                                 </>
                               ) : (
                                 <>
-                                  <Globe className="mr-2 h-4 w-4" />
+                                  <Globe className="mr-2 size-4" />
                                   Make public
                                 </>
                               )}
@@ -330,7 +330,7 @@ export function CardManagement() {
                                 )
                               }
                             >
-                              <Lock className="mr-2 h-4 w-4" />
+                              <Lock className="mr-2 size-4" />
                               Upgrade to change visibility
                             </div>
                           )}
@@ -340,7 +340,7 @@ export function CardManagement() {
                             href={`/card/${card.dynamicSlug}`}
                             target="_blank"
                           >
-                            <Eye className="mr-2 h-4 w-4" />
+                            <Eye className="mr-2 size-4" />
                             View card
                           </Link>
                         </DropdownMenuItem>
@@ -350,7 +350,7 @@ export function CardManagement() {
                             setIsQrDialogOpen(true);
                           }}
                         >
-                          <QrCode className="mr-2 h-4 w-4" />
+                          <QrCode className="mr-2 size-4" />
                           Show QR code
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -359,7 +359,7 @@ export function CardManagement() {
                             setIsShareDialogOpen(true);
                           }}
                         >
-                          <Share2 className="mr-2 h-4 w-4" />
+                          <Share2 className="mr-2 size-4" />
                           Share card
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -369,7 +369,7 @@ export function CardManagement() {
                             setIsDeleteDialogOpen(true);
                           }}
                         >
-                          <Trash2 className="mr-2 h-4 w-4" />
+                          <Trash2 className="mr-2 size-4" />
                           Delete card
                         </DropdownMenuItem>
                       </DropdownMenuContent>

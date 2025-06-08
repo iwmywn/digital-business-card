@@ -701,7 +701,7 @@ export function LandingPage() {
                 {featureItems.map(({ icon: Icon, title, description }) => (
                   <Card key={title}>
                     <CardHeader>
-                      <Icon className="text-primary mb-2" size={40} />
+                      <Icon className="text-primary mb-2 size-10" />
                       <CardTitle>{title}</CardTitle>
                       <CardDescription>{description}</CardDescription>
                     </CardHeader>
@@ -734,7 +734,7 @@ export function LandingPage() {
                     {plan.popular && (
                       <div className="absolute top-0 right-0">
                         <div className="bg-primary text-primary-foreground flex items-center gap-1 rounded-bl-lg px-3 py-1 text-xs font-medium">
-                          <Sparkles className="h-3 w-3" />
+                          <Sparkles className="size-3" />
                           Popular
                         </div>
                       </div>
@@ -755,7 +755,7 @@ export function LandingPage() {
                       <ul className="space-y-2">
                         {plan.features.map((feature) => (
                           <li key={feature} className="flex items-start">
-                            <Check className="text-primary mt-0.5 mr-2 h-4 w-4 flex-shrink-0" />
+                            <Check className="text-primary mt-0.5 mr-2 size-4 flex-shrink-0" />
                             <span className="text-sm">{feature}</span>
                           </li>
                         ))}
@@ -836,10 +836,10 @@ export function LandingPage() {
                   <div
                     key={index}
                     onClick={() => emblaApi?.scrollTo(index)}
-                    className={`group before:border-ring/50 relative flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 before:absolute before:inset-0 before:rounded-full before:border`}
+                    className={`group before:border-ring/50 relative flex size-4 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 before:absolute before:inset-0 before:rounded-full before:border`}
                   >
                     <span
-                      className={`block h-2 w-2 rounded-full transition-colors duration-300 ${index === selectedIndex ? "bg-primary" : ""}`}
+                      className={`block size-2 rounded-full transition-colors duration-300 ${index === selectedIndex ? "bg-primary" : ""}`}
                     />
                   </div>
                 ))}

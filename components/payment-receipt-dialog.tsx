@@ -132,7 +132,7 @@ export function PaymentReceiptDialog({
                   <CardContent className="space-y-6">
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4" />
+                        <User className="size-4" />
                         <h3 className="font-medium">Customer Information</h3>
                       </div>
                       <Table>
@@ -155,7 +155,7 @@ export function PaymentReceiptDialog({
 
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4" />
+                        <MapPin className="size-4" />
                         <h3 className="font-medium">Billing Address</h3>
                       </div>
                       <Table>
@@ -211,7 +211,7 @@ export function PaymentReceiptDialog({
 
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
-                        <CreditCard className="h-4 w-4" />
+                        <CreditCard className="size-4" />
                         <h3 className="font-medium">Payment Method</h3>
                       </div>
                       <Table>
@@ -240,7 +240,7 @@ export function PaymentReceiptDialog({
 
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4" />
+                        <FileText className="size-4" />
                         <h3 className="font-medium">Order Summary</h3>
                       </div>
 

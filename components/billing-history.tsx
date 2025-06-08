@@ -96,7 +96,7 @@ export function BillingHistory({
               </CardDescription>
             </div>
             <div className="relative w-full sm:w-64">
-              <Search className="absolute top-2.5 left-2.5 h-4 w-4 text-gray-400" />
+              <Search className="absolute top-2.5 left-2.5 size-4 text-gray-400" />
               <Input
                 placeholder="Search transactions..."
                 className="pl-8"

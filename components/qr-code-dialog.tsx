@@ -107,7 +107,7 @@ export function QRCodeDialog({
                 />
               ) : (
                 <div className="flex h-48 w-48 items-center justify-center">
-                  <Loading className="h-8 w-8" />
+                  <Loading className="size-8" />
                 </div>
               )}
             </div>

@@ -326,7 +326,7 @@ export function Analytics() {
         <Card className="rounded-lg">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Total Views</CardTitle>
-            <Eye className="text-muted-foreground h-4 w-4" />
+            <Eye className="text-muted-foreground size-4" />
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold">{totalViews}</div>
@@ -349,7 +349,7 @@ export function Analytics() {
         <Card className="rounded-lg">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Total Clicks</CardTitle>
-            <MousePointerClick className="text-muted-foreground h-4 w-4" />
+            <MousePointerClick className="text-muted-foreground size-4" />
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold">{totalClicks}</div>
@@ -374,7 +374,7 @@ export function Analytics() {
             <CardTitle className="text-sm font-medium">
               Click-Through Rate
             </CardTitle>
-            <ChartColumnIncreasing className="text-muted-foreground h-4 w-4" />
+            <ChartColumnIncreasing className="text-muted-foreground size-4" />
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold">{clickThroughRate}%</div>

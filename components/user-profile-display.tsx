@@ -40,11 +40,11 @@ export function UserProfileDisplay({
   const renderGenderIcon = () => {
     switch (profile.gender?.toLowerCase()) {
       case "male":
-        return <Mars className="h-4 w-4 text-blue-500" />;
+        return <Mars className="size-4 text-blue-500" />;
       case "female":
-        return <Venus className="h-4 w-4 text-pink-500" />;
+        return <Venus className="size-4 text-pink-500" />;
       case "non-binary":
-        return <NonBinary className="h-4 w-4 text-purple-500" />;
+        return <NonBinary className="size-4 text-purple-500" />;
       default:
         return null;
     }
@@ -103,7 +103,7 @@ export function UserProfileDisplay({
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="text-muted-foreground mt-2 flex items-center justify-center gap-1.5 text-sm sm:text-base">
-                      <CalendarDays size={14} />
+                      <CalendarDays className="size-[0.875rem]" />
                       <span>{joinedFormatted}</span>
                     </div>
                   </TooltipTrigger>
@@ -158,8 +158,8 @@ export function UserProfileDisplay({
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {profile.jobTitle && (
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
-                  <Briefcase className="text-primary h-4 w-4 sm:h-5 sm:w-5" />
+                <div className="bg-primary/10 flex size-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
+                  <Briefcase className="text-primary size-4 sm:size-5" />
                 </div>
                 <div className="text-sm sm:text-base">
                   <p className="font-medium">Profession</p>
@@ -172,8 +172,8 @@ export function UserProfileDisplay({
 
             {profile.company && (
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
-                  <Building className="text-primary h-4 w-4 sm:h-5 sm:w-5" />
+                <div className="bg-primary/10 flex size-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
+                  <Building className="text-primary size-4 sm:size-5" />
                 </div>
                 <div className="text-sm sm:text-base">
                   <p className="font-medium">Company</p>
@@ -184,8 +184,8 @@ export function UserProfileDisplay({
 
             {profile.website && (
               <div className="flex items-center gap-3 md:col-span-2">
-                <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
-                  <Globe className="text-primary h-4 w-4 sm:h-5 sm:w-5" />
+                <div className="bg-primary/10 flex size-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
+                  <Globe className="text-primary size-4 sm:size-5" />
                 </div>
                 <div className="text-sm sm:text-base">
                   <p className="font-medium">Website</p>
@@ -207,8 +207,8 @@ export function UserProfileDisplay({
 
             {profile.dateOfBirth && (
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 flex h-9 w-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
-                  <CalendarDays className="text-primary h-4 w-4 sm:h-5 sm:w-5" />
+                <div className="bg-primary/10 flex size-9 items-center justify-center rounded-full sm:h-10 sm:w-10">
+                  <CalendarDays className="text-primary size-4 sm:size-5" />
                 </div>
                 <div className="text-sm sm:text-base">
                   <p className="font-medium">Birthday</p>

@@ -31,8 +31,8 @@ export function CurrentPlan() {
                 : `$${selectedPlan.price.toFixed(2)} / month`}
             </CardDescription>
           </div>
-          <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
-            <CheckCircle2 className="text-primary h-6 w-6" />
+          <div className="bg-primary/10 flex size-10 items-center justify-center rounded-full">
+            <CheckCircle2 className="text-primary size-6" />
           </div>
         </div>
       </CardHeader>
@@ -42,7 +42,7 @@ export function CurrentPlan() {
           <ul className="grid gap-1">
             {selectedPlan.features.map((feature: string) => (
               <li key={feature} className="flex items-center text-sm">
-                <CheckCircle2 className="text-primary mr-2 h-4 w-4 flex-shrink-0" />
+                <CheckCircle2 className="text-primary mr-2 size-4 flex-shrink-0" />
                 <span>{feature}</span>
               </li>
             ))}

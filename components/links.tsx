@@ -71,9 +71,9 @@ function SortableLink({
         {...listeners}
         className="cursor-grab touch-manipulation"
       >
-        <GripVertical className="text-muted-foreground h-5 w-5" />
+        <GripVertical className="text-muted-foreground size-5" />
       </div>
-      <IconComponent className="h-5 w-5 flex-shrink-0" />
+      <IconComponent className="size-5 flex-shrink-0" />
       <div className="flex flex-grow flex-col gap-2 sm:flex-row">
         <Input
           placeholder="Custom label (optional)"
@@ -89,7 +89,7 @@ function SortableLink({
         />
       </div>
       <Button variant="ghost" size="icon" onClick={() => removeLink(link.id)}>
-        <Trash2 className="text-destructive focus:text-destructive h-4 w-4" />
+        <Trash2 className="text-destructive focus:text-destructive size-4" />
       </Button>
     </div>
   );

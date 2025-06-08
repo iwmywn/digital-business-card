@@ -164,9 +164,9 @@ export function AccountForm() {
                       {isChecking ? (
                         <Loading className="border-primary border-t-primary-foreground/10" />
                       ) : isUsernameAvailable === true ? (
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="size-4 text-green-500" />
                       ) : isUsernameAvailable === false ? (
-                        <XCircle className="h-4 w-4 text-red-500" />
+                        <XCircle className="size-4 text-red-500" />
                       ) : null}
                     </div>
                   </div>

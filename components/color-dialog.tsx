@@ -62,7 +62,7 @@ export function ColorDialog() {
             <div key={color} className="flex items-center justify-between">
               <span className="font-mono text-sm">{color}</span>
               <div
-                className="h-8 w-8 rounded border"
+                className="size-8 rounded border"
                 style={{ backgroundColor: `var(${color})` }}
               />
             </div>

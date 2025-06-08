@@ -255,7 +255,7 @@ export function InformationForm() {
                     </div>
                   ) : (
                     <div className="flex h-full w-full flex-col items-center justify-center">
-                      <ImageIcon className="h-8 w-8 text-gray-400" />
+                      <ImageIcon className="size-8 text-gray-400" />
                       <span className="mt-1 text-center text-xs text-gray-500">
                         Click to upload
                       </span>
@@ -292,7 +292,7 @@ export function InformationForm() {
                     </div>
                   ) : (
                     <div className="flex h-full w-full flex-col items-center justify-center">
-                      <ImageIcon className="h-8 w-8 text-gray-400" />
+                      <ImageIcon className="size-8 text-gray-400" />
                       <span className="mt-1 text-center text-xs text-gray-500">
                         Click to upload
                       </span>
@@ -401,7 +401,7 @@ export function InformationForm() {
                                   ) : (
                                     <span>Pick a date</span>
                                   )}
-                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                  <CalendarIcon className="ml-auto size-4 opacity-50" />
                                 </Button>
                               </FormControl>
                             </PopoverTrigger>

@@ -32,7 +32,7 @@ export function ThemeToggleSkeleton() {
   return (
     <>
       {[...Array(3)].map((_, i) => (
-        <Skeleton key={i} className="h-7 w-7 rounded-sm" />
+        <Skeleton key={i} className="size-7 rounded-sm" />
       ))}
     </>
   );
@@ -41,14 +41,14 @@ export function ThemeToggleSkeleton() {
 export function UserSkeleton() {
   return (
     <SidebarMenuButton size="lg" disabled>
-      <Avatar className="h-8 w-8 rounded-lg">
+      <Avatar className="size-8 rounded-lg">
         <Skeleton className="h-full w-full rounded-lg" />
       </Avatar>
       <div className="grid flex-1 gap-1 text-left text-sm leading-tight">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-3 w-32" />
       </div>
-      <Skeleton className="ml-auto h-4 w-4" />
+      <Skeleton className="ml-auto size-4" />
     </SidebarMenuButton>
   );
 }
@@ -89,7 +89,7 @@ export function CardSkeleton() {
           <div className="space-y-2">
             {[...Array(2)].map((_, i) => (
               <div key={i} className="flex items-center gap-3">
-                <Skeleton className="h-10 w-10 shrink-0 rounded-full" />
+                <Skeleton className="size-10 shrink-0 rounded-full" />
                 <div className="w-full space-y-1">
                   <Skeleton className="h-4 w-1/3 rounded" />
                   <Skeleton className="h-3 w-2/3 rounded" />
@@ -102,8 +102,8 @@ export function CardSkeleton() {
         <div className="bg-primary/10 flex items-center justify-between px-4 py-3">
           <Skeleton className="bg-primary/10 h-4 w-1/4 rounded" />
           <div className="flex gap-2">
-            <Skeleton className="bg-primary/10 h-8 w-8 rounded-md" />
-            <Skeleton className="bg-primary/10 h-8 w-8 rounded-md" />
+            <Skeleton className="bg-primary/10 size-8 rounded-md" />
+            <Skeleton className="bg-primary/10 size-8 rounded-md" />
           </div>
         </div>
       </div>
@@ -245,7 +245,7 @@ export function AnalyticsSkeleton() {
           <Card className="rounded-lg" key={i}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-4 w-4 rounded-full" />
+              <Skeleton className="size-4 rounded-full" />
             </CardHeader>
             <CardContent className="space-y-2">
               <Skeleton className="h-7 w-24" />
@@ -286,7 +286,7 @@ export function SubscriptionPlansSkeleton() {
       </div>
 
       <div ref={registerRef} className="flex items-start gap-4">
-        <Skeleton className="h-5 w-5 rounded-full" />
+        <Skeleton className="size-5 rounded-full" />
         <div className="w-full space-y-2">
           <Skeleton className="h-4 w-32" />
           <Skeleton className="h-4 w-full" />
@@ -608,7 +608,7 @@ function NotificationPreferencesSkeleton() {
             key={i}
             className="flex flex-row items-start space-x-3 rounded-md border p-4"
           >
-            <Skeleton className="h-5 w-5 rounded-sm" />
+            <Skeleton className="size-5 rounded-sm" />
             <div className="space-y-2">
               <Skeleton className="h-4 w-40" />
               <Skeleton className="h-3 w-64" />
@@ -665,7 +665,7 @@ export function ProfileSkeleton() {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="flex items-center gap-3">
-                <Skeleton className="h-10 w-10 rounded-full" />
+                <Skeleton className="size-10 rounded-full" />
                 <div className="space-y-2">
                   <Skeleton className="h-4 w-24" />
                   <Skeleton className="h-4 w-32" />

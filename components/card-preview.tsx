@@ -41,7 +41,7 @@ export function CardPreview({
     const foundLinkType = linkTypes.find((lt) => lt.type === linkType);
     if (foundLinkType) {
       const IconComponent = foundLinkType.icon;
-      return <IconComponent className="h-6 w-6" />;
+      return <IconComponent className="size-6" />;
     }
     return null;
   };
@@ -187,17 +187,17 @@ export function CardPreview({
             <Button
               size="sm"
               variant="ghost"
-              className="h-8 w-8 p-0 text-white hover:bg-white/20"
+              className="size-8 p-0 text-white hover:bg-white/20"
             >
-              <QrCode className="h-4 w-4" />
+              <QrCode className="size-4" />
               <span className="sr-only">Show QR code</span>
             </Button>
             <Button
               size="sm"
               variant="ghost"
-              className="h-8 w-8 p-0 text-white hover:bg-white/20"
+              className="size-8 p-0 text-white hover:bg-white/20"
             >
-              <Share2 className="h-4 w-4" />
+              <Share2 className="size-4" />
               <span className="sr-only">Share link</span>
             </Button>
           </div>

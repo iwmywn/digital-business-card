@@ -83,7 +83,7 @@ export function SubscriptionPlans() {
             {plan.popular && (
               <div className="absolute top-0 right-0">
                 <div className="bg-primary text-primary-foreground flex items-center gap-1 rounded-bl-lg px-3 py-1 text-xs font-medium">
-                  <Sparkles className="h-3 w-3" />
+                  <Sparkles className="size-3" />
                   Popular
                 </div>
               </div>
@@ -104,7 +104,7 @@ export function SubscriptionPlans() {
               <ul className="space-y-2">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start">
-                    <CheckCircle2 className="text-primary mt-0.5 mr-2 h-4 w-4 flex-shrink-0" />
+                    <CheckCircle2 className="text-primary mt-0.5 mr-2 size-4 flex-shrink-0" />
                     <span className="text-sm">{feature}</span>
                   </li>
                 ))}

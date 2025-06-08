@@ -57,27 +57,27 @@ export function LandingPageThemeToggle() {
         variant={theme === "system" ? "secondary" : "ghost"}
         size="icon"
         onClick={() => setTheme("system")}
-        className="h-7 w-7 rounded-sm"
+        className="size-7 rounded-sm"
       >
-        <Monitor className="h-4 w-4" />
+        <Monitor className="size-4" />
         <span className="sr-only">System theme</span>
       </Button>
       <Button
         variant={theme === "light" ? "secondary" : "ghost"}
         size="icon"
         onClick={() => setTheme("light")}
-        className="h-7 w-7 rounded-sm"
+        className="size-7 rounded-sm"
       >
-        <Sun className="h-4 w-4" />
+        <Sun className="size-4" />
         <span className="sr-only">Light theme</span>
       </Button>
       <Button
         variant={theme === "dark" ? "secondary" : "ghost"}
         size="icon"
         onClick={() => setTheme("dark")}
-        className="h-7 w-7 rounded-sm"
+        className="size-7 rounded-sm"
       >
-        <Moon className="h-4 w-4" />
+        <Moon className="size-4" />
         <span className="sr-only">Dark theme</span>
       </Button>
     </>
