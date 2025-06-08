@@ -787,7 +787,7 @@ export function LandingPage() {
           >
             <div className="from-background pointer-events-none absolute top-0 bottom-0 left-0 z-10 hidden w-20 bg-gradient-to-r to-transparent lg:block" />
             <div className="from-background pointer-events-none absolute top-0 right-0 bottom-0 z-10 hidden w-20 bg-gradient-to-l to-transparent lg:block" />
-            <div className="flex flex-col items-center gap-6 [&>h2,p]:mx-4 md:[&>h2,p]:mx-6 lg:[&>h2,p]:mx-8">
+            <div className="flex flex-col items-center gap-6 [&>h2,p]:mx-10 md:[&>h2,p]:mx-12 lg:[&>h2,p]:mx-14">
               <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
                 What Our Customers Say
               </h2>
