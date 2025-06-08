@@ -543,7 +543,7 @@ export function LandingPage() {
             ref={howItWorksRef}
             className="relative flex min-h-screen flex-col items-center justify-center py-16 md:py-20 lg:py-24"
           >
-            <div className="flex flex-col gap-6">
+            <div className="flex w-full flex-col gap-6">
               <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
                 How It Works
               </h2>
@@ -721,7 +721,7 @@ export function LandingPage() {
             ref={pricingRef}
             className="relative flex min-h-screen flex-col items-center justify-center py-16 md:py-20 lg:py-24"
           >
-            <div className="flex flex-col gap-6">
+            <div className="flex w-full flex-col gap-6">
               <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
                 Simple, Transparent Pricing
               </h2>
