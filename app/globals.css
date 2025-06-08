@@ -143,3 +143,32 @@
     position: static !important;
   }
 }
+
+@layer components {
+  .embla {
+    position: relative;
+    margin-inline: auto;
+    margin-top: calc(var(--spacing) * 6);
+    width: 100%;
+  }
+
+  .embla__viewport {
+    overflow: hidden;
+  }
+
+  .embla__container {
+    display: flex;
+    align-items: stretch;
+    padding-block: calc(var(--spacing) * 1);
+    will-change: transform;
+    touch-action: pan-y pinch-zoom;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+  }
+
+  .embla__slide {
+    margin-right: calc(var(--spacing) * 4);
+    min-width: fit-content;
+    transform: translate3d(0, 0, 0);
+  }
+}
