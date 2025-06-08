@@ -22,9 +22,6 @@ import {
   Shield,
   Sparkles,
   Menu,
-  Monitor,
-  Sun,
-  Moon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -66,7 +63,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useTheme } from "next-themes";
+import { LandingPageThemeToggle } from "@/components/mode-toggle";
 
 const visiqSocialLinks = [
   {
@@ -311,7 +308,6 @@ const demoLinks: SerializableLinkType[] = [
 ];
 
 export function LandingPage() {
-  const { theme, setTheme } = useTheme();
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false);
   const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false);
@@ -932,33 +928,7 @@ export function LandingPage() {
                   className="border-muted-foreground mr-3 hidden h-6 min-[33.75rem]:block"
                 />
                 <div className="flex items-center rounded-sm border">
-                  <Button
-                    variant={theme === "system" ? "secondary" : "ghost"}
-                    size="icon"
-                    onClick={() => setTheme("system")}
-                    className="h-7 w-7 rounded-sm"
-                  >
-                    <Monitor className="h-4 w-4" />
-                    <span className="sr-only">System theme</span>
-                  </Button>
-                  <Button
-                    variant={theme === "light" ? "secondary" : "ghost"}
-                    size="icon"
-                    onClick={() => setTheme("light")}
-                    className="h-7 w-7 rounded-sm"
-                  >
-                    <Sun className="h-4 w-4" />
-                    <span className="sr-only">Light theme</span>
-                  </Button>
-                  <Button
-                    variant={theme === "dark" ? "secondary" : "ghost"}
-                    size="icon"
-                    onClick={() => setTheme("dark")}
-                    className="h-7 w-7 rounded-sm"
-                  >
-                    <Moon className="h-4 w-4" />
-                    <span className="sr-only">Dark theme</span>
-                  </Button>
+                  <LandingPageThemeToggle />
                 </div>
               </div>
             </div>

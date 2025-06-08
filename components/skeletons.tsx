@@ -28,6 +28,16 @@ import {
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 import { Separator } from "@/components/ui/separator";
 
+export function ThemeToggleSkeleton() {
+  return (
+    <>
+      {[...Array(3)].map((_, i) => (
+        <Skeleton key={i} className="h-7 w-7 rounded-sm" />
+      ))}
+    </>
+  );
+}
+
 export function UserSkeleton() {
   return (
     <SidebarMenuButton size="lg" disabled>

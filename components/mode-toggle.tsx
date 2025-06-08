@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +9,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useEffect, useState } from "react";
+import { ThemeToggleSkeleton } from "@/components/skeletons";
 
-export function ModeToggle() {
+export function DashboardThemeToggle() {
   const { setTheme } = useTheme();
 
   return (
@@ -34,5 +36,50 @@ export function ModeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+export function LandingPageThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <ThemeToggleSkeleton />;
+  }
+
+  return (
+    <>
+      <Button
+        variant={theme === "system" ? "secondary" : "ghost"}
+        size="icon"
+        onClick={() => setTheme("system")}
+        className="h-7 w-7 rounded-sm"
+      >
+        <Monitor className="h-4 w-4" />
+        <span className="sr-only">System theme</span>
+      </Button>
+      <Button
+        variant={theme === "light" ? "secondary" : "ghost"}
+        size="icon"
+        onClick={() => setTheme("light")}
+        className="h-7 w-7 rounded-sm"
+      >
+        <Sun className="h-4 w-4" />
+        <span className="sr-only">Light theme</span>
+      </Button>
+      <Button
+        variant={theme === "dark" ? "secondary" : "ghost"}
+        size="icon"
+        onClick={() => setTheme("dark")}
+        className="h-7 w-7 rounded-sm"
+      >
+        <Moon className="h-4 w-4" />
+        <span className="sr-only">Dark theme</span>
+      </Button>
+    </>
   );
 }

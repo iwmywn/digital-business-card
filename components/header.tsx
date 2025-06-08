@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { nav } from "@/components/app-sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { ModeToggle } from "@/components/mode-toggle";
+import { DashboardThemeToggle } from "@/components/mode-toggle";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -82,7 +82,7 @@ export function Header() {
       </div>
       <div className="flex items-center gap-2">
         <ColorDialog />
-        <ModeToggle />
+        <DashboardThemeToggle />
       </div>
     </header>
   );
