@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getCardToViewBySlug } from "@/actions/card";
 import { CardView } from "@/components/card-view";
 import NotFound from "@/app/not-found";
-import { getCloudinaryUrl } from "@/lib/utils";
+import { getPrimaryOgImage, parseFullName } from "@/lib/utils";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { CardSkeleton } from "@/components/skeletons";
@@ -24,18 +24,40 @@ export async function generateMetadata({
     };
   }
 
+  const { profileImage, logoImage, coverImage, imageTransforms } =
+    card.cardDesign;
+  const { jobTitle, company, headline, bio, fullName } = card.personalInfo;
+  const mainImage = getPrimaryOgImage({
+    fullName,
+    profileImage,
+    logoImage,
+    coverImage,
+    imageTransforms,
+  });
+  const { firstName, lastName } = parseFullName(fullName);
+  const jobCompanyPart = jobTitle
+    ? company
+      ? `${jobTitle} at ${company}.`
+      : `${jobTitle}.`
+    : company
+      ? `${company}.`
+      : undefined;
+  const extraInfo = headline || bio || `Digital business card for ${fullName}.`;
+
   return {
-    title: `${card.personalInfo.fullName}'s Digital Business Card`,
-    description:
-      card.personalInfo.headline ||
-      `Digital business card for ${card.personalInfo.fullName}`,
+    title: `${fullName}'s Digital Business Card`,
+    description: `${jobCompanyPart || ""} ${extraInfo}`.trim(),
     openGraph: {
-      images: [
-        getCloudinaryUrl(
-          card.cardDesign.profileImage,
-          card.cardDesign.imageTransforms?.profile,
-        ),
-      ],
+      images: mainImage ? mainImage : [],
+      url: `${process.env.NEXT_PUBLIC_URL}/card/${param.slug}`,
+      type: "profile",
+      siteName: "Visiq",
+      firstName,
+      lastName,
+    },
+    twitter: {
+      images: mainImage ? mainImage : [],
+      site: "@Visiq",
     },
   };
 }

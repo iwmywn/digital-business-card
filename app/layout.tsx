@@ -12,6 +12,14 @@ export const metadata: Metadata = {
   },
   description:
     "Visiq's digital business cards make sharing your contact info a breeze with a simple QR code. They're easy to customize, quick to update, and perfect for making a strong first impression.",
+  openGraph: {
+    url: process.env.NEXT_PUBLIC_URL,
+    siteName: "Visiq",
+    type: "website",
+  },
+  twitter: {
+    site: "@Visiq",
+  },
 };
 
 export default async function RootLayout({

@@ -8,7 +8,10 @@ import {
 } from "@/components/payment-status";
 
 export function generateMetadata(): Metadata {
-  return { title: "Payment Status" };
+  return {
+    title: "Payment Status",
+    description: "View the current status of your payments.",
+  };
 }
 
 export default async function page({

@@ -3,7 +3,7 @@ import { UserProfileDisplay } from "@/components/user-profile-display";
 import NotFound from "@/app/not-found";
 import type { Metadata } from "next";
 import { getCardByUserId } from "@/actions/card";
-import { getCloudinaryUrl } from "@/lib/utils";
+import { getPrimaryOgImage, parseFullName } from "@/lib/utils";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { ProfileSkeleton } from "@/components/skeletons";
@@ -25,18 +25,46 @@ export async function generateMetadata({
     };
   }
 
+  const {
+    jobTitle,
+    company,
+    bio,
+    fullName,
+    profileImage,
+    coverImage,
+    imageTransforms,
+  } = user.profile;
+  const mainImage = getPrimaryOgImage({
+    fullName,
+    profileImage,
+    coverImage,
+    imageTransforms,
+  });
+  const { firstName, lastName } = parseFullName(fullName);
+  const jobCompanyPart = jobTitle
+    ? company
+      ? `${jobTitle} at ${company}.`
+      : `${jobTitle}.`
+    : company
+      ? `${company}.`
+      : undefined;
+  const extraInfo =
+    bio || `Explore ${fullName}'s profile and contact information.`;
+
   return {
-    title: `${user.profile.fullName}'s Profile`,
-    description:
-      user.profile.bio ||
-      `Explore ${user.profile.fullName}'s profile and contact information.`,
+    title: `${fullName}'s Profile`,
+    description: `${jobCompanyPart || ""} ${extraInfo}`.trim(),
     openGraph: {
-      images: [
-        getCloudinaryUrl(
-          user.profile.profileImage,
-          user.profile.imageTransforms?.profile,
-        ),
-      ],
+      images: mainImage ? mainImage : [],
+      url: `${process.env.NEXT_PUBLIC_URL}/profile/${param.slug}`,
+      type: "profile",
+      siteName: "Visiq",
+      firstName,
+      lastName,
+    },
+    twitter: {
+      images: mainImage ? mainImage : [],
+      site: "@Visiq",
     },
   };
 }

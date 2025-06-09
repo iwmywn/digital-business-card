@@ -8,7 +8,7 @@ import { Share2, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { linkTypes, type SerializableLinkType } from "@/components/icons";
 import type { Card as CardType } from "@/lib/definitions";
-import { cn, getColorClass, getFontClass } from "@/lib/utils";
+import { cn, getColorClass, getFontClass, parseFullName } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { getCloudinaryUrl } from "@/lib/utils";
 import { Loading } from "@/components/loading";
@@ -84,21 +84,9 @@ export function CardView({
   };
 
   const generateVCard = (card: CardType) => {
-    const nameParts = card.personalInfo.fullName.trim().split(" ");
-    let lastName = "";
-    let firstName = "";
-    let middleName = "";
-
-    if (nameParts.length === 1) {
-      firstName = nameParts[0];
-    } else if (nameParts.length === 2) {
-      lastName = nameParts[0];
-      firstName = nameParts[1];
-    } else {
-      lastName = nameParts[0];
-      firstName = nameParts[nameParts.length - 1];
-      middleName = nameParts.slice(1, -1).join(" ");
-    }
+    const { firstName, middleName, lastName } = parseFullName(
+      card.personalInfo.fullName,
+    );
 
     const vCard = [
       "BEGIN:VCARD",

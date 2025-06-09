@@ -20,7 +20,10 @@ export function getFontClass(value: string) {
   );
 }
 
-export function getCloudinaryUrl(path?: Image, transform?: ImageTransform) {
+export function getCloudinaryUrl(
+  path?: Image,
+  transform?: ImageTransform,
+): string {
   if (transform?.croppedImageUrl) return transform.croppedImageUrl;
   if (!path) return "/placeholder.svg";
 
@@ -93,4 +96,69 @@ export function someRight<T>(
     if (predicate(arr[i])) return true;
   }
   return false;
+}
+
+export function getPrimaryOgImage({
+  fullName,
+  profileImage,
+  logoImage,
+  coverImage,
+  imageTransforms,
+}: {
+  fullName: string;
+  profileImage?: Image;
+  logoImage?: Image;
+  coverImage?: Image;
+  imageTransforms?: {
+    logo?: ImageTransform;
+    profile?: ImageTransform;
+    cover?: ImageTransform;
+  };
+}): { url: string; alt: string } | null {
+  if (profileImage) {
+    return {
+      url: getCloudinaryUrl(profileImage, imageTransforms?.profile),
+      alt: `${fullName}'s profile picture`,
+    };
+  }
+
+  if (logoImage) {
+    return {
+      url: getCloudinaryUrl(logoImage, imageTransforms?.logo),
+      alt: `${fullName}'s company logo`,
+    };
+  }
+
+  if (coverImage) {
+    return {
+      url: getCloudinaryUrl(coverImage, imageTransforms?.cover),
+      alt: `${fullName}'s cover photo`,
+    };
+  }
+
+  return null;
+}
+
+export function parseFullName(fullName: string): {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+} {
+  const nameParts = fullName.trim().split(/\s+/);
+
+  let firstName = "";
+  let middleName = "";
+  let lastName = "";
+
+  if (nameParts.length === 1) {
+    firstName = nameParts[0];
+  } else if (nameParts.length === 2) {
+    [lastName, firstName] = nameParts;
+  } else {
+    lastName = nameParts[0];
+    firstName = nameParts[nameParts.length - 1];
+    middleName = nameParts.slice(1, -1).join(" ");
+  }
+
+  return { firstName, middleName, lastName };
 }
