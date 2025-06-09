@@ -26,7 +26,8 @@ export async function generateMetadata({
 
   const { profileImage, logoImage, coverImage, imageTransforms } =
     card.cardDesign;
-  const { jobTitle, company, headline, bio, fullName } = card.personalInfo;
+  const { jobTitle, company, headline, bio, fullName } =
+    card.personalInformation;
   const mainImage = getPrimaryOgImage({
     fullName,
     profileImage,

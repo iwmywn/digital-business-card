@@ -17,7 +17,7 @@ import { cardSlugSchema } from "@/schemas";
 type ImageKey = "logoImage" | "profileImage" | "coverImage";
 export async function saveCard(
   cardDesign: CardDesignValues,
-  personalInfo: PersonalInformationValues,
+  personalInformation: PersonalInformationValues,
   links: SerializableLinkType[],
   isPublic: boolean,
   cardId?: string,
@@ -111,7 +111,7 @@ export async function saveCard(
         {
           $set: {
             cardDesign: updatedCardDesign,
-            personalInfo,
+            personalInformation,
             links,
             isPublic,
             updatedAt: new Date(),
@@ -132,7 +132,7 @@ export async function saveCard(
       const result = await cardCollection.insertOne({
         userId,
         cardDesign: updatedCardDesign,
-        personalInfo,
+        personalInformation,
         links,
         isPublic,
         views: 0,

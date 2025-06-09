@@ -302,7 +302,7 @@ export function Analytics() {
               <SelectItem value="all">All Cards</SelectItem>
               {cards.map((card) => (
                 <SelectItem key={card._id} value={card._id}>
-                  {card.personalInfo.fullName}
+                  {card.personalInformation.fullName}
                 </SelectItem>
               ))}
             </SelectContent>

@@ -39,7 +39,7 @@ type BaseCard<T> = {
   userId: string;
   slug?: string;
   cardDesign: CardDesignValues;
-  personalInfo: PersonalInformationValues;
+  personalInformation: PersonalInformationValues;
   links: SerializableLinkType[];
   isPublic: boolean;
   views: number;

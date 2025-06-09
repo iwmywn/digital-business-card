@@ -70,7 +70,7 @@ export function CardView({
 
       const link = document.createElement("a");
       link.href = url;
-      link.download = `${card.personalInfo.fullName.replace(/\s+/g, "_")}.vcf`;
+      link.download = `${card.personalInformation.fullName.replace(/\s+/g, "_")}.vcf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -85,13 +85,13 @@ export function CardView({
 
   const generateVCard = (card: CardType) => {
     const { firstName, middleName, lastName } = parseFullName(
-      card.personalInfo.fullName,
+      card.personalInformation.fullName,
     );
 
     const vCard = [
       "BEGIN:VCARD",
       "VERSION:3.0",
-      `FN:${card.personalInfo.fullName}`,
+      `FN:${card.personalInformation.fullName}`,
       `N:${lastName};${firstName};${middleName};;`,
     ];
 
@@ -101,17 +101,19 @@ export function CardView({
     //   );
     // }
 
-    if (card.personalInfo.jobTitle) {
-      vCard.push(`TITLE:${card.personalInfo.jobTitle}`);
+    if (card.personalInformation.jobTitle) {
+      vCard.push(`TITLE:${card.personalInformation.jobTitle}`);
     }
 
-    if (card.personalInfo.company) {
-      vCard.push(`ORG:${card.personalInfo.company}`);
+    if (card.personalInformation.company) {
+      vCard.push(`ORG:${card.personalInformation.company}`);
     }
 
     const noteParts = [];
-    if (card.personalInfo.headline) noteParts.push(card.personalInfo.headline);
-    if (card.personalInfo.bio) noteParts.push(card.personalInfo.bio);
+    if (card.personalInformation.headline)
+      noteParts.push(card.personalInformation.headline);
+    if (card.personalInformation.bio)
+      noteParts.push(card.personalInformation.bio);
     if (noteParts.length > 0) {
       vCard.push(`NOTE:${noteParts.join("\\n")}`);
     }
@@ -265,44 +267,44 @@ export function CardView({
 
               <div className="w-full space-y-1">
                 <h2 className="text-[1.75rem] leading-snug font-bold wrap-anywhere text-black">
-                  {card.personalInfo.fullName}
+                  {card.personalInformation.fullName}
                 </h2>
-                {card.personalInfo.jobTitle && (
+                {card.personalInformation.jobTitle && (
                   <p className="text-xl leading-tight font-semibold wrap-anywhere text-gray-800">
-                    {card.personalInfo.jobTitle}
+                    {card.personalInformation.jobTitle}
                   </p>
                 )}
-                {card.personalInfo.department && (
+                {card.personalInformation.department && (
                   <p className="text-lg leading-tight font-medium wrap-anywhere text-gray-700">
-                    {card.personalInfo.department}
+                    {card.personalInformation.department}
                   </p>
                 )}
-                {card.personalInfo.company && (
+                {card.personalInformation.company && (
                   <p className="text-base wrap-anywhere text-gray-600">
-                    {card.personalInfo.company}
+                    {card.personalInformation.company}
                   </p>
                 )}
-                {card.personalInfo.accreditations && (
+                {card.personalInformation.accreditations && (
                   <p className="text-base wrap-anywhere text-gray-500 italic">
-                    {card.personalInfo.accreditations}
+                    {card.personalInformation.accreditations}
                   </p>
                 )}
               </div>
 
-              {card.personalInfo.headline && (
+              {card.personalInformation.headline && (
                 <>
                   <Separator className="bg-black/15" />
                   <p className="text-base leading-snug wrap-anywhere text-gray-700 italic">
-                    {card.personalInfo.headline}
+                    {card.personalInformation.headline}
                   </p>
                 </>
               )}
 
-              {card.personalInfo.bio && (
+              {card.personalInformation.bio && (
                 <>
                   <Separator className="bg-black/15" />
                   <p className="text-base leading-relaxed wrap-anywhere text-gray-700">
-                    {card.personalInfo.bio}
+                    {card.personalInformation.bio}
                   </p>
                 </>
               )}

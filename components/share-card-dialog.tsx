@@ -33,7 +33,7 @@ export function ShareCardDialog({
   setOpen: (open: boolean) => void;
 }) {
   const cardUrl = `${process.env.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`;
-  const cardTitle = `Check out ${card.personalInfo.fullName}'s digital business card`;
+  const cardTitle = `Check out ${card.personalInformation.fullName}'s digital business card`;
 
   const shareHandlers = {
     whatsapp: () => {

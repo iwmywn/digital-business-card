@@ -75,7 +75,7 @@ export function DeleteCardDialog({
           </div>
           <div>
             <h4 className="text-base font-medium">
-              {card.personalInfo.fullName}
+              {card.personalInformation.fullName}
             </h4>
             <p className="text-muted-foreground text-sm">
               Created on {formatDate(card.createdAt, true)}

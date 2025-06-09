@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -37,12 +37,13 @@ export function EditCard({ card }: { card: CardType }) {
   const [cardDesign, setCardDesign] = useState<CardDesignValues>(
     card.cardDesign,
   );
-  const [personalInfo, setPersonalInfo] = useState<PersonalInformationValues>(
-    card.personalInfo,
-  );
+  const [personalInformation, setPersonalInformation] =
+    useState<PersonalInformationValues>(card.personalInformation);
   const [isPublic, setIsPublic] = useState<boolean>(card.isPublic);
   const [links, setLinks] = useState<SerializableLinkType[]>(card.links);
-  const personalInfoRef = useRef<{ validate: () => Promise<boolean> }>(null);
+  const personalInformationRef = useRef<{ validate: () => Promise<boolean> }>(
+    null,
+  );
   const cardDesignRef = useRef<{ validate: () => Promise<boolean> }>(null);
   const { cardResponse, mutate, cards, isCardLoading, isCardError } = useCard();
   const { isUserError, isUserLoading, user } = useUser();
@@ -54,7 +55,7 @@ export function EditCard({ card }: { card: CardType }) {
       brandName: cardDesign.brandName,
     });
     const parsedPersonalInfoValues =
-      personalInformationSchema.safeParse(personalInfo);
+      personalInformationSchema.safeParse(personalInformation);
 
     if (!parsedCardDesignValue.success) {
       setActiveTab("design");
@@ -68,7 +69,7 @@ export function EditCard({ card }: { card: CardType }) {
     if (!parsedPersonalInfoValues.success) {
       setActiveTab("personal-information");
       setTimeout(async () => {
-        await personalInfoRef.current?.validate();
+        await personalInformationRef.current?.validate();
       }, 0);
       return;
     }
@@ -86,7 +87,7 @@ export function EditCard({ card }: { card: CardType }) {
 
     const { success, error } = await saveCard(
       cardDesign,
-      personalInfo,
+      personalInformation,
       links,
       isPublic,
       card._id,
@@ -102,7 +103,7 @@ export function EditCard({ card }: { card: CardType }) {
             ? {
                 ...c,
                 cardDesign,
-                personalInfo,
+                personalInformation,
                 links,
                 isPublic,
                 updatedAt: new Date(),
@@ -116,21 +117,6 @@ export function EditCard({ card }: { card: CardType }) {
 
     setIsSubmitting(false);
   }
-
-  const handleCardDesignUpdate = useCallback((values: CardDesignValues) => {
-    setCardDesign(values);
-  }, []);
-
-  const handlePersonalInfoUpdate = useCallback(
-    (values: PersonalInformationValues) => {
-      setPersonalInfo(values);
-    },
-    [],
-  );
-
-  const handleLinksUpdate = useCallback((values: SerializableLinkType[]) => {
-    setLinks(values);
-  }, []);
 
   useEffect(() => {
     if (
@@ -181,7 +167,7 @@ export function EditCard({ card }: { card: CardType }) {
         <div className="sticky">
           <CardPreview
             cardDesign={cardDesign}
-            personalInfo={personalInfo}
+            personalInformation={personalInformation}
             links={links}
           />
         </div>
@@ -221,7 +207,7 @@ export function EditCard({ card }: { card: CardType }) {
 
               <TabsContent value="design" className="space-y-4 pt-4">
                 <CardDesign
-                  onSave={handleCardDesignUpdate}
+                  onSave={setCardDesign}
                   initialValues={cardDesign}
                   currentUserPlan={user?.currentPlan}
                   ref={cardDesignRef}
@@ -233,15 +219,15 @@ export function EditCard({ card }: { card: CardType }) {
                 className="space-y-4 pt-4"
               >
                 <PersonalInformation
-                  onSave={handlePersonalInfoUpdate}
-                  initialValues={personalInfo}
-                  ref={personalInfoRef}
+                  onSave={setPersonalInformation}
+                  initialValues={personalInformation}
+                  ref={personalInformationRef}
                 />
               </TabsContent>
 
               <TabsContent value="links" className="space-y-4 pt-4">
                 <Links
-                  onSave={handleLinksUpdate}
+                  onSave={setLinks}
                   initialLinks={links}
                   currentUserPlan={user?.currentPlan}
                 />
@@ -253,7 +239,7 @@ export function EditCard({ card }: { card: CardType }) {
             <div className="sticky top-[7.75rem] space-y-4">
               <CardPreview
                 cardDesign={cardDesign}
-                personalInfo={personalInfo}
+                personalInformation={personalInformation}
                 links={links}
               />
             </div>

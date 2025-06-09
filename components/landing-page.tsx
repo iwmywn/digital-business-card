@@ -349,22 +349,9 @@ export function LandingPage() {
   const [planActiveTab, setPlanActiveTab] = useState<string>("free");
   const [cardDesign, setCardDesign] =
     useState<CardDesignValues>(demoCardDesign);
-  const [personalInfo, setPersonalInfo] = useState<PersonalInformationValues>(
-    demoPersonalInformation,
-  );
+  const [personalInformation, setPersonalInformation] =
+    useState<PersonalInformationValues>(demoPersonalInformation);
   const [links, setLinks] = useState<SerializableLinkType[]>(demoLinks);
-  const handleCardDesignUpdate = useCallback((values: CardDesignValues) => {
-    setCardDesign(values);
-  }, []);
-  const handlePersonalInfoUpdate = useCallback(
-    (values: PersonalInformationValues) => {
-      setPersonalInfo(values);
-    },
-    [],
-  );
-  const handleLinksUpdate = useCallback((values: SerializableLinkType[]) => {
-    setLinks(values);
-  }, []);
 
   const filteredTestimonials = isIPad
     ? testimonialItems.slice(0, 6)
@@ -635,7 +622,7 @@ export function LandingPage() {
                         <TabsContent value="design" className="space-y-4 pt-4">
                           <CardDesign
                             key={planActiveTab}
-                            onSave={handleCardDesignUpdate}
+                            onSave={setCardDesign}
                             initialValues={cardDesign}
                             publicPlan={
                               planActiveTab as "free" | "basic" | "professional"
@@ -648,15 +635,15 @@ export function LandingPage() {
                           className="space-y-4 pt-4"
                         >
                           <PersonalInformation
-                            onSave={handlePersonalInfoUpdate}
-                            initialValues={personalInfo}
+                            onSave={setPersonalInformation}
+                            initialValues={personalInformation}
                           />
                         </TabsContent>
 
                         <TabsContent value="links" className="space-y-4 pt-4">
                           <Links
                             key={planActiveTab}
-                            onSave={handleLinksUpdate}
+                            onSave={setLinks}
                             initialLinks={links}
                             publicPlan={
                               planActiveTab as "free" | "basic" | "professional"
@@ -676,7 +663,7 @@ export function LandingPage() {
                 <div className="w-full lg:sticky lg:top-16">
                   <CardPreview
                     cardDesign={cardDesign}
-                    personalInfo={personalInfo}
+                    personalInformation={personalInformation}
                     links={links}
                   />
                 </div>
@@ -962,7 +949,7 @@ export function LandingPage() {
             <DrawerTitle>Navigate</DrawerTitle>
           </VisuallyHidden>
 
-          <div className="space-y-4 px-4 py-2">
+          <nav className="space-y-4 px-4 py-2">
             {menuItems.map(({ id, label, ref }) => (
               <Button
                 key={id}
@@ -992,7 +979,7 @@ export function LandingPage() {
             >
               <Link href="/signup">Get Started</Link>
             </Button>
-          </div>
+          </nav>
         </DrawerContent>
       </Drawer>
     </>

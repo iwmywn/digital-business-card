@@ -82,7 +82,7 @@ export function CardManagement() {
   const { user, isUserLoading, isUserError } = useUser();
   const { cards, isCardLoading, isCardError } = useCard();
   const filteredCards = cards.filter((card) =>
-    card.personalInfo.fullName
+    card.personalInformation.fullName
       .toLowerCase()
       .includes(searchQuery.toLowerCase()),
   );
@@ -228,7 +228,7 @@ export function CardManagement() {
                   <div className="min-w-0 flex-1">
                     <CardTitle className="flex items-center gap-2">
                       <span className="max-w-[calc(100%-4.625rem)] truncate">
-                        {card.personalInfo.fullName}
+                        {card.personalInformation.fullName}
                       </span>
                       <span title={card.isPublic ? "Public" : "Private"}>
                         {card.isPublic ? (

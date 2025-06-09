@@ -13,13 +13,13 @@ import { getCloudinaryUrl } from "@/lib/utils";
 
 interface CardPreviewProps {
   cardDesign: CardDesignValues;
-  personalInfo: PersonalInformationValues;
+  personalInformation: PersonalInformationValues;
   links: SerializableLinkType[];
 }
 
 export function CardPreview({
   cardDesign,
-  personalInfo,
+  personalInformation,
   links,
 }: CardPreviewProps) {
   const colorClass = getColorClass(cardDesign.cardColor);
@@ -116,33 +116,33 @@ export function CardPreview({
 
           <div className="w-full space-y-1">
             <h2 className="text-[1.75rem] leading-snug font-bold wrap-anywhere text-black">
-              {personalInfo.fullName || "Full Name"}
+              {personalInformation.fullName || "Full Name"}
             </h2>
             <p className="text-xl leading-tight font-semibold wrap-anywhere text-gray-800">
-              {personalInfo.jobTitle || "Job Title"}
+              {personalInformation.jobTitle || "Job Title"}
             </p>
             <p className="text-lg leading-tight font-medium wrap-anywhere text-gray-700">
-              {personalInfo.department || "Department"}
+              {personalInformation.department || "Department"}
             </p>
             <p className="text-base wrap-anywhere text-gray-600">
-              {personalInfo.company || "Company Name"}
+              {personalInformation.company || "Company Name"}
             </p>
             <p className="text-base wrap-anywhere text-gray-500 italic">
-              {personalInfo.accreditations || "Accreditations"}
+              {personalInformation.accreditations || "Accreditations"}
             </p>
           </div>
 
           <Separator className="bg-black/15" />
 
           <p className="text-base leading-snug wrap-anywhere text-gray-700 italic">
-            {personalInfo.headline ||
+            {personalInformation.headline ||
               "A brief headline about who you are - your role, passion, or goal."}
           </p>
 
           <Separator className="bg-black/15" />
 
           <p className="text-base leading-relaxed wrap-anywhere text-gray-700">
-            {personalInfo.bio ||
+            {personalInformation.bio ||
               "Tell a little about yourself: your background, experience, or what makes you unique."}
           </p>
 
