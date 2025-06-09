@@ -238,7 +238,7 @@ const subscriptionPlans = [
   {
     id: "basic",
     name: "Basic",
-    price: 4.99,
+    price: 5.99,
     features: [
       `Create up to ${maxBasicCards} digital business cards`,
       "Unlock additional themes",
