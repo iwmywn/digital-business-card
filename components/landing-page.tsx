@@ -816,11 +816,15 @@ export function LandingPage() {
                                 height={isIPad ? 44 : 52}
                               />
                             </div>
-                            <div
-                              className={`text-primary ${isIPad ? "text-base" : "text-lg"}`}
-                            >
-                              <CardTitle>{testimonial.name}</CardTitle>
-                              <CardDescription>
+                            <div>
+                              <CardTitle
+                                className={`text-primary ${isIPad ? "text-base" : "text-lg"}`}
+                              >
+                                {testimonial.name}
+                              </CardTitle>
+                              <CardDescription
+                                className={`${isIPad ? "" : "text-base"}`}
+                              >
                                 {testimonial.title}
                               </CardDescription>
                             </div>
