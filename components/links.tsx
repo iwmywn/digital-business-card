@@ -146,7 +146,7 @@ export function Links({
     }
 
     const newLink = {
-      id: nanoid(),
+      id: nanoid(5),
       type,
       value: "",
       category,
