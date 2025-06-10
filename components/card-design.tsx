@@ -181,12 +181,7 @@ export const CardDesign = forwardRef(function CardDesign(
       return;
     }
 
-    const allowedExtensions = [".jpg", ".jpeg", ".png"];
-    const fileExtension = file.name
-      .toLowerCase()
-      .slice(file.name.lastIndexOf("."));
-
-    if (!allowedExtensions.includes(fileExtension)) {
+    if (!file.type.match(/image\/(jpg|jpeg|png)/)) {
       toast.error("Only JPG, JPEG and PNG images are allowed!");
       fileInput.value = "";
       return;
@@ -305,7 +300,7 @@ export const CardDesign = forwardRef(function CardDesign(
                   <input
                     id="logo-image"
                     type="file"
-                    accept=".jpg,.jpeg,.png"
+                    accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
                     className="hidden"
                     onChange={(e) => handleImageUpload(e, "logo")}
                   />
@@ -344,7 +339,7 @@ export const CardDesign = forwardRef(function CardDesign(
                   <input
                     id="profile-image"
                     type="file"
-                    accept=".jpg,.jpeg,.png"
+                    accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
                     className="hidden"
                     onChange={(e) => handleImageUpload(e, "profile")}
                   />
@@ -383,7 +378,7 @@ export const CardDesign = forwardRef(function CardDesign(
                   <input
                     id="cover-image"
                     type="file"
-                    accept=".jpg,.jpeg,.png"
+                    accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
                     className="hidden"
                     onChange={(e) => handleImageUpload(e, "cover")}
                   />

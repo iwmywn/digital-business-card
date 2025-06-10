@@ -142,12 +142,7 @@ export function InformationForm() {
       return;
     }
 
-    const allowedExtensions = [".jpg", ".jpeg", ".png"];
-    const fileExtension = file.name
-      .toLowerCase()
-      .slice(file.name.lastIndexOf("."));
-
-    if (!allowedExtensions.includes(fileExtension)) {
+    if (!file.type.match(/image\/(jpg|jpeg|png)/)) {
       toast.error("Only JPG, JPEG and PNG images are allowed!");
       fileInput.value = "";
       return;
@@ -265,7 +260,7 @@ export function InformationForm() {
                 <input
                   id="profile-image"
                   type="file"
-                  accept=".jpg,.jpeg,.png"
+                  accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
                   className="hidden"
                   onChange={(e) => handleImageUpload(e, "profile")}
                 />
@@ -302,7 +297,7 @@ export function InformationForm() {
                 <input
                   id="cover-image"
                   type="file"
-                  accept=".jpg,.jpeg,.png"
+                  accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
                   className="hidden"
                   onChange={(e) => handleImageUpload(e, "cover")}
                 />
