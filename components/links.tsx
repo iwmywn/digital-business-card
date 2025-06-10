@@ -33,6 +33,7 @@ import {
 import { toLinkType } from "@/components/icons";
 import * as constants from "@/constants";
 import { toast } from "sonner";
+import { nanoid } from "nanoid";
 
 function SortableLink({
   link,
@@ -76,12 +77,14 @@ function SortableLink({
       <IconComponent className="size-5 flex-shrink-0" />
       <div className="flex flex-grow flex-col gap-2 sm:flex-row">
         <Input
+          id={link.id + "Label"}
           placeholder="Custom label (optional)"
           value={link.label || ""}
           onChange={(e) => updateLink(link.id, "label", e.target.value)}
           className="flex-grow sm:w-1/2"
         />
         <Input
+          id={link.id + "Value"}
           placeholder={`Enter your ${link.type}`}
           value={link.value}
           onChange={(e) => updateLink(link.id, "value", e.target.value)}
@@ -143,7 +146,7 @@ export function Links({
     }
 
     const newLink = {
-      id: Date.now().toString(),
+      id: nanoid(),
       type,
       value: "",
       category,
