@@ -377,7 +377,7 @@ export function CardView({
 
           <div
             ref={saveButtonRef}
-            className={`${showGradient ? "bg-gradient-to-t from-white to-transparent" : ""} sticky right-0 bottom-0 left-0 z-50 flex items-center justify-center py-4 transition-all duration-200`}
+            className={`${showGradient ? "bg-[linear-gradient(to_top,theme(colors.white),transparent)]" : ""} sticky right-0 bottom-0 left-0 z-50 flex items-center justify-center py-4 transition-all duration-200`}
           >
             <button
               onClick={handleSaveContact}

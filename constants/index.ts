@@ -106,118 +106,140 @@ const allColorOptions = [
   {
     value: "forest",
     label: "Forest",
-    color: "bg-gradient-to-r from-lime-400 via-emerald-500 to-green-600",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.lime.400),theme(colors.emerald.500),theme(colors.green.600))]",
   },
   {
     value: "ocean",
     label: "Ocean",
-    color: "bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.cyan.400),theme(colors.blue.500),theme(colors.indigo.500))]",
   },
   {
     value: "aurora",
     label: "Aurora",
-    color: "bg-gradient-to-r from-green-300 via-blue-500 to-purple-600",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.green.300),theme(colors.blue.500),theme(colors.purple.600))]",
   },
   {
     value: "dusk",
     label: "Dusk",
-    color: "bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.indigo.400),theme(colors.purple.500),theme(colors.pink.500))]",
   },
   {
     value: "rainbow",
     label: "Rainbow",
     color:
-      "bg-[linear-gradient(to_right,_#f87171,_#fb923c,_#facc15,_#4ade80,_#60a5fa,_#6366f1,_#a855f7)]",
+      "bg-[linear-gradient(to_right,theme(colors.red.400),theme(colors.orange.400),theme(colors.yellow.300),theme(colors.emerald.400),theme(colors.blue.400),theme(colors.indigo.500),theme(colors.purple.500))]",
   },
   {
     value: "sunset",
     label: "Sunset",
-    color: "bg-gradient-to-r from-rose-400 via-red-400 to-orange-400",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.rose.400),theme(colors.red.400),theme(colors.orange.400))]",
   },
   {
     value: "flamingo",
     label: "Flamingo",
-    color: "bg-gradient-to-r from-pink-400 via-red-400 to-yellow-400",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.pink.400),theme(colors.red.400),theme(colors.yellow.400))]",
   },
   {
     value: "lava",
     label: "Lava",
-    color: "bg-gradient-to-r from-red-600 via-orange-600 to-yellow-500",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.red.600),theme(colors.orange.600),theme(colors.yellow.500))]",
   },
   {
     value: "berry",
     label: "Berry",
-    color: "bg-gradient-to-r from-purple-700 via-pink-600 to-red-500",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.purple.700),theme(colors.pink.600),theme(colors.red.500))]",
   },
   {
     value: "twilight",
     label: "Twilight",
-    color: "bg-gradient-to-r from-violet-500 via-indigo-500 to-blue-500",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.violet.500),theme(colors.indigo.500),theme(colors.blue.500))]",
   },
   {
     value: "nebula",
     label: "Nebula",
-    color: "bg-gradient-to-r from-purple-800 via-indigo-700 to-blue-600",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.purple.800),theme(colors.indigo.700),theme(colors.blue.600))]",
   },
   {
     value: "jungle",
     label: "Jungle",
-    color: "bg-gradient-to-r from-green-900 via-emerald-800 to-lime-700",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.green.900),theme(colors.emerald.800),theme(colors.lime.700))]",
   },
   {
     value: "coffee",
     label: "Coffee",
-    color: "bg-gradient-to-r from-yellow-900 via-amber-800 to-orange-900",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.yellow.900),theme(colors.amber.800),theme(colors.orange.900))]",
   },
   {
     value: "rust",
     label: "Rust",
-    color: "bg-gradient-to-r from-red-900 via-orange-800 to-amber-700",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.red.900),theme(colors.orange.800),theme(colors.amber.700))]",
   },
   {
     value: "velvet",
     label: "Velvet",
-    color: "bg-gradient-to-r from-purple-900 via-rose-900 to-red-900",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.purple.900),theme(colors.rose.900),theme(colors.red.900))]",
   },
   {
     value: "deepsea",
     label: "Deep Sea",
-    color: "bg-gradient-to-r from-cyan-900 via-blue-900 to-indigo-900",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.cyan.900),theme(colors.blue.900),theme(colors.indigo.900))]",
   },
   {
     value: "mystic",
     label: "Mystic",
-    color: "bg-gradient-to-r from-gray-700 via-purple-800 to-indigo-800",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.gray.700),theme(colors.purple.800),theme(colors.indigo.800))]",
   },
   {
     value: "space",
     label: "Space",
-    color: "bg-gradient-to-r from-gray-800 via-purple-900 to-indigo-900",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.gray.800),theme(colors.purple.900),theme(colors.indigo.900))]",
   },
   {
     value: "galaxy",
     label: "Galaxy",
-    color: "bg-gradient-to-r from-indigo-800 via-purple-900 to-black",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.indigo.800),theme(colors.purple.900),black)]",
   },
   {
     value: "midnight",
     label: "Midnight",
-    color: "bg-gradient-to-r from-gray-900 via-indigo-900 to-black",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.gray.900),theme(colors.indigo.900),black)]",
   },
   {
     value: "ash",
     label: "Ash",
-    color: "bg-gradient-to-r from-gray-600 via-gray-700 to-gray-800",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.gray.600),theme(colors.gray.700),theme(colors.gray.800))]",
   },
   {
     value: "charcoal",
     label: "Charcoal",
-    color: "bg-gradient-to-r from-zinc-700 via-gray-800 to-zinc-900",
+    color:
+      "bg-[linear-gradient(to_right,theme(colors.zinc.700),theme(colors.gray.800),theme(colors.zinc.900))]",
   },
   {
     value: "noir",
     label: "Noir",
-    color: "bg-gradient-to-r from-black via-zinc-800 to-neutral-800",
+    color:
+      "bg-[linear-gradient(to_right,black,theme(colors.zinc.800),theme(colors.neutral.800))]",
   },
 ];
 

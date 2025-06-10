@@ -772,8 +772,8 @@ export function LandingPage() {
             ref={testimonialsRef}
             className="bg-secondary dark:bg-card relative flex min-h-screen flex-col items-center justify-center overflow-hidden rounded-[5rem] py-16 md:py-20 lg:py-24"
           >
-            <div className="from-background pointer-events-none absolute top-0 bottom-0 left-0 z-10 hidden w-20 bg-gradient-to-r to-transparent lg:block" />
-            <div className="from-background pointer-events-none absolute top-0 right-0 bottom-0 z-10 hidden w-20 bg-gradient-to-l to-transparent lg:block" />
+            <div className="bg-[linear-gradient(to_right,theme(colors.background),transparent)] pointer-events-none absolute top-0 bottom-0 left-0 z-10 hidden w-20 lg:block" />
+            <div className="bg-[linear-gradient(to_left,theme(colors.background),transparent)] pointer-events-none absolute top-0 right-0 bottom-0 z-10 hidden w-20 lg:block" />
             <div className="flex flex-col items-center gap-6 [&>h2,p]:mx-10 md:[&>h2,p]:mx-12 lg:[&>h2,p]:mx-14">
               <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
                 What Our Customers Say
