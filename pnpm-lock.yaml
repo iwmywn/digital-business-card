@@ -21,8 +21,8 @@ importers:
         specifier: 4.6.2
         version: 4.6.2
       '@hookform/resolvers':
-        specifier: 5.0.1
-        version: 5.0.1(react-hook-form@7.57.0(react@19.1.0))
+        specifier: 5.1.1
+        version: 5.1.1(react-hook-form@7.57.0(react@19.1.0))
       '@radix-ui/react-accordion':
         specifier: 1.2.11
         version: 1.2.11(@types/react-dom@19.1.3(@types/react@19.1.3))(@types/react@19.1.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -141,14 +141,14 @@ importers:
         specifier: 2.15.3
         version: 2.15.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       simple-icons:
-        specifier: 15.0.0
-        version: 15.0.0
+        specifier: 15.1.0
+        version: 15.1.0
       sonner:
         specifier: 2.0.5
         version: 2.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       stripe:
         specifier: 18.2.1
-        version: 18.2.1(@types/node@22.15.17)
+        version: 18.2.1(@types/node@24.0.0)
       swr:
         specifier: 2.3.3
         version: 2.3.3(react@19.1.0)
@@ -162,8 +162,8 @@ importers:
         specifier: 1.1.2
         version: 1.1.2(@types/react-dom@19.1.3(@types/react@19.1.3))(@types/react@19.1.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zod:
-        specifier: 3.25.56
-        version: 3.25.56
+        specifier: 3.25.57
+        version: 3.25.57
     devDependencies:
       '@eslint/eslintrc':
         specifier: '3'
@@ -178,8 +178,8 @@ importers:
         specifier: '4'
         version: 4.1.6
       '@types/node':
-        specifier: '22'
-        version: 22.15.17
+        specifier: '24'
+        version: 24.0.0
       '@types/nodemailer':
         specifier: 6.4.17
         version: 6.4.17
@@ -342,8 +342,8 @@ packages:
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
 
-  '@hookform/resolvers@5.0.1':
-    resolution: {integrity: sha512-u/+Jp83luQNx9AdyW2fIPGY6Y7NG68eN2ZW8FOJYL+M0i4s49+refdJdOp/A9n9HFQtQs3HIDHQvX3ZET2o7YA==}
+  '@hookform/resolvers@5.1.1':
+    resolution: {integrity: sha512-J/NVING3LMAEvexJkyTLjruSm7aOFx7QX21pzkiJfMoNG0wl5aFEjLTl7ay7IQb9EWY6AkrBy7tHL2Alijpdcg==}
     peerDependencies:
       react-hook-form: ^7.55.0
 
@@ -1271,8 +1271,8 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
-  '@types/node@22.15.17':
-    resolution: {integrity: sha512-wIX2aSZL5FE+MR0JlvF87BNVrtFWf6AE6rxSE9X7OwnVvoyCQjpzSRJ+M87se/4QCkCiebQAqrJ0y6fwIyi7nw==}
+  '@types/node@24.0.0':
+    resolution: {integrity: sha512-yZQa2zm87aRVcqDyH5+4Hv9KYgSdgwX1rFnGvpbzMaC7YAljmhBET93TPiTd3ObwTL+gSpIzPKg5BqVxdCvxKg==}
 
   '@types/nodemailer@6.4.17':
     resolution: {integrity: sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==}
@@ -3195,8 +3195,8 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
-  simple-icons@15.0.0:
-    resolution: {integrity: sha512-r6iy7Oqu13XZZ0IFcoqZnNkb8dqJwc+lyZW6KV/C/cbCJVMEMmPKNlntMrOfzVzzx+Uj8p9m13vOHWzU29jCVw==}
+  simple-icons@15.1.0:
+    resolution: {integrity: sha512-7wj0OeOJvGSgNEIrMm1MGhoX7CEV5R+T0Q5HmXzfakrue84qCZNV9l9eG092c14BbiuGgljdwFkLy3rQQaDJyg==}
     engines: {node: '>=0.12.18'}
 
   simple-swizzle@0.2.2:
@@ -3404,8 +3404,8 @@ packages:
   uncrypto@0.1.3:
     resolution: {integrity: sha512-Ql87qFHB3s/De2ClA9e0gsnS6zXG27SkTiSJwjCc9MebbfapQfuPzumMIUMi38ezPZVNFcHI9sUIepeQfw8J8Q==}
 
-  undici-types@6.21.0:
-    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+  undici-types@7.8.0:
+    resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
   universal-user-agent@7.0.2:
     resolution: {integrity: sha512-0JCqzSKnStlRRQfCdowvqy3cy0Dvtlb8xecj/H8JFZuCze4rwjPZQOgvFvn0Ws/usCHQFGpyr+pB9adaGwXn4Q==}
@@ -3538,8 +3538,8 @@ packages:
     peerDependencies:
       zod: ^3.24.1
 
-  zod@3.25.56:
-    resolution: {integrity: sha512-rd6eEF3BTNvQnR2e2wwolfTmUTnp70aUTqr0oaGbHifzC3BKJsoV+Gat8vxUMR1hwOKBs6El+qWehrHbCpW6SQ==}
+  zod@3.25.57:
+    resolution: {integrity: sha512-6tgzLuwVST5oLUxXTmBqoinKMd3JeesgbgseXeFasKKj8Q1FCZrHnbqJOyiEvr4cVAlbug+CgIsmJ8cl/pU5FA==}
 
 snapshots:
 
@@ -3667,7 +3667,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@hookform/resolvers@5.0.1(react-hook-form@7.57.0(react@19.1.0))':
+  '@hookform/resolvers@5.1.1(react-hook-form@7.57.0(react@19.1.0))':
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.57.0(react@19.1.0)
@@ -3801,8 +3801,8 @@ snapshots:
       express-rate-limit: 7.5.0(express@5.1.0)
       pkce-challenge: 5.0.0
       raw-body: 3.0.0
-      zod: 3.25.56
-      zod-to-json-schema: 3.24.5(zod@3.25.56)
+      zod: 3.25.57
+      zod-to-json-schema: 3.24.5(zod@3.25.57)
     transitivePeerDependencies:
       - supports-color
 
@@ -4553,17 +4553,17 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
-  '@types/node@22.15.17':
+  '@types/node@24.0.0':
     dependencies:
-      undici-types: 6.21.0
+      undici-types: 7.8.0
 
   '@types/nodemailer@6.4.17':
     dependencies:
-      '@types/node': 22.15.17
+      '@types/node': 24.0.0
 
   '@types/qrcode@1.5.5':
     dependencies:
-      '@types/node': 22.15.17
+      '@types/node': 24.0.0
 
   '@types/react-dom@19.1.3(@types/react@19.1.3)':
     dependencies:
@@ -5418,7 +5418,7 @@ snapshots:
       minimatch: 3.1.2
       natural-compare: 1.4.0
       optionator: 0.9.4
-      zod: 3.25.56
+      zod: 3.25.57
     optionalDependencies:
       jiti: 2.4.2
     transitivePeerDependencies:
@@ -6606,7 +6606,7 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
-  simple-icons@15.0.0: {}
+  simple-icons@15.1.0: {}
 
   simple-swizzle@0.2.2:
     dependencies:
@@ -6716,11 +6716,11 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  stripe@18.2.1(@types/node@22.15.17):
+  stripe@18.2.1(@types/node@24.0.0):
     dependencies:
       qs: 6.14.0
     optionalDependencies:
-      '@types/node': 22.15.17
+      '@types/node': 24.0.0
 
   styled-jsx@5.1.6(react@19.1.0):
     dependencies:
@@ -6840,7 +6840,7 @@ snapshots:
 
   uncrypto@0.1.3: {}
 
-  undici-types@6.21.0: {}
+  undici-types@7.8.0: {}
 
   universal-user-agent@7.0.2: {}
 
@@ -7018,8 +7018,8 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod-to-json-schema@3.24.5(zod@3.25.56):
+  zod-to-json-schema@3.24.5(zod@3.25.57):
     dependencies:
-      zod: 3.25.56
+      zod: 3.25.57
 
-  zod@3.25.56: {}
+  zod@3.25.57: {}
