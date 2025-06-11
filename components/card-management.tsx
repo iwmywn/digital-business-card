@@ -48,10 +48,9 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export function getImageUrl(
-  card: CardType | null,
+  card: CardType,
   type: "logo" | "profile" | "cover",
 ) {
-  if (!card) return "/placeholder.svg";
   const transform = card.cardDesign.imageTransforms?.[type];
 
   let imageUrl;
