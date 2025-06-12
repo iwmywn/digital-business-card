@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  RefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -307,6 +300,13 @@ const demoLinks: SerializableLinkType[] = [
   },
 ];
 
+const menuItems = [
+  { id: "how-it-works", label: "How It Works" },
+  { id: "features", label: "Features" },
+  { id: "pricing", label: "Pricing" },
+  { id: "testimonials", label: "Testimonials" },
+];
+
 export function LandingPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false);
@@ -316,19 +316,6 @@ export function LandingPage() {
   const isIPad = useMediaQuery("(max-width: 1024px)");
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
-  const howItWorksRef = useRef<HTMLElement>(null);
-  const featuresRef = useRef<HTMLElement>(null);
-  const pricingRef = useRef<HTMLElement>(null);
-  const testimonialsRef = useRef<HTMLElement>(null);
-  const menuItems = useMemo(
-    () => [
-      { id: "how-it-works", label: "How It Works", ref: howItWorksRef },
-      { id: "features", label: "Features", ref: featuresRef },
-      { id: "pricing", label: "Pricing", ref: pricingRef },
-      { id: "testimonials", label: "Testimonials", ref: testimonialsRef },
-    ],
-    [],
-  );
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -357,12 +344,10 @@ export function LandingPage() {
     ? testimonialItems.slice(0, 6)
     : testimonialItems;
 
-  const scrollToSection = (elementRef: RefObject<HTMLElement | null>) => {
-    if (elementRef.current) {
-      window.scrollTo({
-        top: elementRef.current.offsetTop,
-        behavior: "smooth",
-      });
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -412,7 +397,7 @@ export function LandingPage() {
         let activeFound = false;
 
         for (const item of menuItems) {
-          const el = item.ref.current;
+          const el = document.getElementById(item.id);
 
           if (el) {
             const rect = el.getBoundingClientRect();
@@ -439,7 +424,7 @@ export function LandingPage() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [menuItems]);
+  }, []);
 
   return (
     <>
@@ -460,10 +445,10 @@ export function LandingPage() {
               <span className="sr-only sm:not-sr-only">Visiq</span>
             </Link>
             <nav className="hidden gap-8 lg:flex">
-              {menuItems.map(({ id, label, ref }) => (
+              {menuItems.map(({ id, label }) => (
                 <button
                   key={id}
-                  onClick={() => scrollToSection(ref)}
+                  onClick={() => scrollToSection(id)}
                   className={`text-sm font-medium transition-colors ${
                     activeSection === id
                       ? "text-primary"
@@ -519,7 +504,7 @@ export function LandingPage() {
                 variant="outline"
                 size="lg"
                 className="w-full sm:w-auto"
-                onClick={() => scrollToSection(howItWorksRef)}
+                onClick={() => scrollToSection("how-it-works")}
               >
                 Learn More
               </Button>
@@ -527,7 +512,7 @@ export function LandingPage() {
           </section>
 
           <section
-            ref={howItWorksRef}
+            id="how-it-works"
             className="relative flex min-h-screen flex-col items-center justify-center py-16 md:py-20 lg:py-24"
           >
             <div className="flex w-full flex-col gap-6">
@@ -679,7 +664,7 @@ export function LandingPage() {
           </section>
 
           <section
-            ref={featuresRef}
+            id="features"
             className="bg-secondary dark:bg-card flex min-h-screen flex-col items-center justify-center py-16 [clip-path:polygon(0%_5%,5%_0%,95%_0%,100%_5%,100%_95%,95%_100%,5%_100%,0%_95%)] md:py-20 lg:py-24"
           >
             <div className="flex w-full flex-col gap-6 px-4 md:px-6 lg:px-8">
@@ -705,7 +690,7 @@ export function LandingPage() {
           </section>
 
           <section
-            ref={pricingRef}
+            id="pricing"
             className="relative flex min-h-screen flex-col items-center justify-center py-16 md:py-20 lg:py-24"
           >
             <div className="flex w-full flex-col gap-6">
@@ -769,7 +754,7 @@ export function LandingPage() {
 
           <section
             key={filteredTestimonials.length}
-            ref={testimonialsRef}
+            id="testimonials"
             className="bg-secondary dark:bg-card relative flex min-h-screen flex-col items-center justify-center overflow-hidden rounded-[5rem] py-16 md:py-20 lg:py-24"
           >
             <div className="bg-[linear-gradient(to_right,theme(colors.background),transparent)] pointer-events-none absolute top-0 bottom-0 left-0 z-10 hidden w-20 lg:block" />
@@ -861,7 +846,7 @@ export function LandingPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  onClick={() => scrollToSection(pricingRef)}
+                  onClick={() => scrollToSection("pricing")}
                 >
                   View Pricing
                 </Button>
@@ -950,13 +935,13 @@ export function LandingPage() {
           </VisuallyHidden>
 
           <nav className="space-y-4 px-4 py-2">
-            {menuItems.map(({ id, label, ref }) => (
+            {menuItems.map(({ id, label }) => (
               <Button
                 key={id}
                 variant="ghost"
                 onClick={() => {
                   setIsDrawerOpen(false);
-                  scrollToSection(ref);
+                  scrollToSection(id);
                 }}
                 className="w-full text-base"
               >
