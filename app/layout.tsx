@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TopProgressBar } from "@/components/top-progress-bar";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: {
@@ -32,6 +33,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${nunito.className}`}>
         <SpeedInsights />
+        <Analytics />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
