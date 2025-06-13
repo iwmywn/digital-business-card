@@ -16,11 +16,11 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ContactDialog } from "@/components/contact-dialog";
-import { FAQDialog } from "@/components/faq-dialog";
+import { ContactDialog } from "@/components/support/contact-dialog";
+import { FAQDialog } from "@/components/support/faq-dialog";
 import { useState } from "react";
-import { TermsOfServiceDialog } from "@/components/terms-of-service-dialog";
-import { PrivacyPolicyDialog } from "@/components/privacy-policy-dialog";
+import { TermsOfServiceDialog } from "@/components/policy/terms-of-service-dialog";
+import { PrivacyPolicyDialog } from "@/components/policy/privacy-policy-dialog";
 
 interface NavItem {
   title: string;

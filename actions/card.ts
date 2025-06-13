@@ -4,14 +4,14 @@ import { ObjectId } from "mongodb";
 import { getCardCollection, getUserCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
-import type { CardDesignValues } from "@/components/card-design";
-import type { PersonalInformationValues } from "@/components/personal-information";
+import type { CardDesignValues } from "@/components/card/card-design";
+import type { PersonalInformationValues } from "@/components/card/personal-information";
 import type { SerializableLinkType } from "@/components/icons";
 import type { Card } from "@/lib/definitions";
 import * as constants from "@/constants";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { extractCloudinaryPath, someRight } from "@/lib/utils";
-import type { SlugFormValues } from "@/components/custom-slug-dialog";
+import type { SlugFormValues } from "@/components/card/custom-slug-dialog";
 import { cardSlugSchema } from "@/schemas";
 
 type ImageKey = "logoImage" | "profileImage" | "coverImage";

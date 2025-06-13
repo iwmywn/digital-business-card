@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { type ImageTransform } from "@/components/image-editor-dialog";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import type { Image } from "@/components/card-design";
+import type { Image } from "@/components/card/card-design";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

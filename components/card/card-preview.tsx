@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import type { CardDesignValues } from "@/components/card-design";
-import type { PersonalInformationValues } from "@/components/personal-information";
+import type { CardDesignValues } from "@/components/card/card-design";
+import type { PersonalInformationValues } from "@/components/card/personal-information";
 import type { SerializableLinkType } from "@/components/icons";
 import { QrCode, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";

@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { FormLink } from "@/components/form-link";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { ReCaptchaDialog } from "@/components/recaptcha-dialog";
+import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog";
 import { emailSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { forgotPassword } from "@/actions/auth";

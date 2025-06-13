@@ -5,7 +5,7 @@ import { getCardCollection, getUserCollection } from "@/lib/collections";
 import { session } from "@/lib/session";
 import { getUserById } from "@/lib/data";
 import { getPaymentDetails } from "@/actions/stripe";
-import { ReceiptData } from "@/components/payment-receipt-dialog";
+import { ReceiptData } from "@/components/subscription/payment-receipt-dialog";
 
 export async function switchToPlan(planId: "free" | "basic" | "professional") {
   try {

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Bug } from "lucide-react";
 import { EmptyState } from "@/components/empty-state";
-import { BugReportDialog } from "@/components/bug-report-dialog";
+import { BugReportDialog } from "@/components/support/bug-report-dialog";
 
 export function generateMetadata(): Metadata {
   return { title: "Home" };

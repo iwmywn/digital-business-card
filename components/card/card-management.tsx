@@ -33,13 +33,13 @@ import { getCloudinaryUrl, getColorClass, getFontClass } from "@/lib/utils";
 import { CardManagementSkeleton } from "@/components/skeletons";
 import { useCard, useUser } from "@/lib/swr";
 import { EmptyState } from "@/components/empty-state";
-import { QRCodeDialog } from "@/components/qr-code-dialog";
-import { ShareCardDialog } from "@/components/share-card-dialog";
-import { DeleteCardDialog } from "@/components/delete-card-dialog";
+import { QRCodeDialog } from "@/components/card/qr-code-dialog";
+import { ShareCardDialog } from "@/components/card/share-card-dialog";
+import { DeleteCardDialog } from "@/components/card/delete-card-dialog";
 import { formatDate } from "@/lib/utils";
-import { CustomSlugDialog } from "@/components/custom-slug-dialog";
+import { CustomSlugDialog } from "@/components/card/custom-slug-dialog";
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
-import { ChangeVisibilityDialog } from "@/components/change-visibility-dialog";
+import { ChangeVisibilityDialog } from "@/components/card/change-visibility-dialog";
 import {
   Tooltip,
   TooltipContent,

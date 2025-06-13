@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CardManagement } from "@/components/card-management";
+import { CardManagement } from "@/components/card/card-management";
 
 export const metadata: Metadata = {
   title: "Card Management",

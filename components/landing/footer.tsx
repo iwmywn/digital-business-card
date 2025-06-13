@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { TermsOfServiceDialog } from "@/components/terms-of-service-dialog";
-import { PrivacyPolicyDialog } from "@/components/privacy-policy-dialog";
-import { FAQDialog } from "@/components/faq-dialog";
+import { TermsOfServiceDialog } from "@/components/policy/terms-of-service-dialog";
+import { PrivacyPolicyDialog } from "@/components/policy/privacy-policy-dialog";
+import { FAQDialog } from "@/components/support/faq-dialog";
 import { Separator } from "@/components/ui/separator";
 import { LandingPageThemeToggle } from "@/components/mode-toggle";
 import { useState } from "react";

@@ -12,8 +12,8 @@ import { cn, getColorClass, getFontClass, parseFullName } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { getCloudinaryUrl } from "@/lib/utils";
 import { Loading } from "@/components/loading";
-import { QRCodeDialog } from "@/components/qr-code-dialog";
-import { ShareCardDialog } from "@/components/share-card-dialog";
+import { QRCodeDialog } from "@/components/card/qr-code-dialog";
+import { ShareCardDialog } from "@/components/card/share-card-dialog";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 export function CardView({

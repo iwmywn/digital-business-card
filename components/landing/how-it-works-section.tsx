@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Links } from "@/components/links";
+import { Links } from "@/components/card/links";
 import {
   Select,
   SelectContent,
@@ -11,13 +11,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { CardDesign, type CardDesignValues } from "@/components/card-design";
+import {
+  CardDesign,
+  type CardDesignValues,
+} from "@/components/card/card-design";
 import {
   PersonalInformation,
   type PersonalInformationValues,
-} from "@/components/personal-information";
+} from "@/components/card/personal-information";
 import type { SerializableLinkType } from "@/components/icons";
-import { CardPreview } from "@/components/card-preview";
+import { CardPreview } from "@/components/card/card-preview";
 import * as constants from "@/constants";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";

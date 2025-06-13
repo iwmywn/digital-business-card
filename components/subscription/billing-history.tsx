@@ -20,10 +20,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { PaymentReceiptDialog } from "@/components/payment-receipt-dialog";
+import { PaymentReceiptDialog } from "@/components/subscription/payment-receipt-dialog";
 import { getPaymentHistoryDetails } from "@/actions/plan";
 import { toast } from "sonner";
-import { ReceiptData } from "@/components/payment-receipt-dialog";
+import { ReceiptData } from "@/components/subscription/payment-receipt-dialog";
 import { useSubscription } from "@/lib/swr";
 import { EmptyState } from "@/components/empty-state";
 import { formatDate } from "@/lib/utils";

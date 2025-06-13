@@ -11,11 +11,11 @@ import {
 import { ObjectId } from "mongodb";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import bcrypt from "bcryptjs";
-import type { ProfileFormValues } from "@/components/information-form";
+import type { ProfileFormValues } from "@/components/settings/information-form";
 import { extractCloudinaryPath } from "@/lib/utils";
 import type { ImageTransform } from "@/components/image-editor-dialog";
-import type { SettingsFormValues } from "@/components/account-form";
-import type { NotificationSettingsFormValues } from "@/components/notification-settings";
+import type { SettingsFormValues } from "@/components/settings/account-form";
+import type { NotificationSettingsFormValues } from "@/components/settings/notification-settings";
 
 type ImageKey = "profileImage" | "coverImage";
 export async function updateProfile(

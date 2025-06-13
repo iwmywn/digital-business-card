@@ -1,4 +1,4 @@
-import { PrivateForm } from "@/components/private-form";
+import { PrivateForm } from "@/components/auth/private-form";
 import type { Metadata } from "next";
 
 export function generateMetadata(): Metadata {

@@ -1,4 +1,4 @@
-import { SignUpForm } from "@/components/signup-form";
+import { SignUpForm } from "@/components/auth/signup-form";
 import type { Metadata } from "next";
 
 export function generateMetadata(): Metadata {

@@ -1,8 +1,8 @@
 "use client";
 
-import { InformationForm } from "@/components/information-form";
-import { AccountForm } from "@/components/account-form";
-import { NotificationSettings } from "@/components/notification-settings";
+import { InformationForm } from "@/components/settings/information-form";
+import { AccountForm } from "@/components/settings/account-form";
+import { NotificationSettings } from "@/components/settings/notification-settings";
 import { useUser } from "@/lib/swr";
 import { useEffect } from "react";
 import { toast } from "sonner";

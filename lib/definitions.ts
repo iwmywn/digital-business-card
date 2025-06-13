@@ -1,7 +1,7 @@
 import type { ObjectId } from "mongodb";
 import type { SerializableLinkType } from "@/components/icons";
-import type { PersonalInformationValues } from "@/components/personal-information";
-import type { CardDesignValues, Image } from "@/components/card-design";
+import type { PersonalInformationValues } from "@/components/card/personal-information";
+import type { CardDesignValues, Image } from "@/components/card/card-design";
 import type { ImageTransform } from "@/components/image-editor-dialog";
 
 type BasePrivateToken<T> = {

@@ -5,22 +5,24 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import { CardDesign, type CardDesignValues } from "@/components/card-design";
+import {
+  CardDesign,
+  type CardDesignValues,
+} from "@/components/card/card-design";
 import {
   PersonalInformation,
   type PersonalInformationValues,
-} from "@/components/personal-information";
-import { Links } from "@/components/links";
-import { CardPreview } from "@/components/card-preview";
+} from "@/components/card/personal-information";
+import { Links } from "@/components/card/links";
+import { CardPreview } from "@/components/card/card-preview";
 import { saveCard } from "@/actions/card";
 import type { SerializableLinkType } from "@/components/icons";
+import type { Card as CardType } from "@/lib/definitions";
 import { useCard, useUser } from "@/lib/swr";
-import { CreateCardSkeleton } from "@/components/skeletons";
 import { Loading } from "@/components/loading";
-import * as constants from "@/constants";
 import { brandNameSchema, personalInformationSchema } from "@/schemas";
+import { CreateCardSkeleton } from "@/components/skeletons";
+import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -29,40 +31,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function CreateCard() {
+export function EditCard({ card }: { card: CardType }) {
   const router = useRouter();
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<string>("design");
   const [previewMode, setPreviewMode] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [cardDesign, setCardDesign] = useState<CardDesignValues>({
-    cardColor: constants.defaultColor,
-    fontFamily: constants.defaultFont,
-    logoImage: undefined,
-    profileImage: undefined,
-    coverImage: undefined,
-    brandName: "Visiq",
-  });
+  const [cardDesign, setCardDesign] = useState<CardDesignValues>(
+    card.cardDesign,
+  );
   const [personalInformation, setPersonalInformation] =
-    useState<PersonalInformationValues>({
-      fullName: "",
-      jobTitle: "",
-      department: "",
-      company: "",
-      accreditations: "",
-      headline: "",
-      bio: "",
-    });
-  const [links, setLinks] = useState<SerializableLinkType[]>([]);
+    useState<PersonalInformationValues>(card.personalInformation);
+  const [isPublic, setIsPublic] = useState<boolean>(card.isPublic);
+  const [links, setLinks] = useState<SerializableLinkType[]>(card.links);
   const personalInformationRef = useRef<{ validate: () => Promise<boolean> }>(
     null,
   );
   const cardDesignRef = useRef<{ validate: () => Promise<boolean> }>(null);
-  const { cardResponse, cards, isCardLoading, isCardError, mutate } = useCard();
+  const { cardResponse, mutate, cards, isCardLoading, isCardError } = useCard();
   const { isUserError, isUserLoading, user } = useUser();
-  const [isPublic, setIsPublic] = useState<boolean>(true);
 
-  async function handleCreateCard() {
+  async function handleUpdateCard() {
     if (isSubmitting) return;
 
     const parsedCardDesignValue = brandNameSchema.safeParse({
@@ -104,6 +93,7 @@ export function CreateCard() {
       personalInformation,
       links,
       isPublic,
+      card._id,
     );
 
     if (error || !success) {
@@ -111,29 +101,18 @@ export function CreateCard() {
     } else {
       mutate({
         ...cardResponse,
-        cards: [
-          ...cards,
-          {
-            _id: "temp",
-            userId: "temp",
-            slug: "temp",
-            cardDesign,
-            personalInformation,
-            links,
-            isPublic,
-            views: 0,
-            clicks: 0,
-            viewHistory: [],
-            clickHistory: [],
-            viewFingerprint: {},
-            clickFingerprint: {},
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            editable: true,
-            message: undefined,
-            dynamicSlug: "temp",
-          },
-        ],
+        cards: cards.map((c) =>
+          c._id === card._id
+            ? {
+                ...c,
+                cardDesign,
+                personalInformation,
+                links,
+                isPublic,
+                updatedAt: new Date(),
+              }
+            : c,
+        ),
       });
       toast.success(success);
       router.push("/management");
@@ -161,12 +140,12 @@ export function CreateCard() {
       <div className="bg-primary-foreground/75 sticky top-[3.25rem] z-50 flex flex-col gap-6 backdrop-blur-xs backdrop-saturate-150 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold">
-            {previewMode ? "Card Preview" : "Create Card"}
+            {previewMode ? "Card Preview" : "Edit Card"}
           </h2>
           <p className="text-muted-foreground text-sm">
             {previewMode
               ? "Preview how your digital business card will look."
-              : "Design your digital business card."}
+              : "Update your digital business card design."}
           </p>
         </div>
         <div className="flex flex-wrap items-center justify-end gap-2">
@@ -178,21 +157,14 @@ export function CreateCard() {
           <Button onClick={() => setPreviewMode(!previewMode)}>
             {previewMode ? "Back to editor" : "Preview card"}
           </Button>
-          {!isCardError && (
-            <Button onClick={handleCreateCard} disabled={isSubmitting}>
-              {isSubmitting ? <Loading /> : "Create card"}
-            </Button>
-          )}
+          <Button onClick={handleUpdateCard} disabled={isSubmitting}>
+            {isSubmitting ? <Loading /> : "Save changes"}
+          </Button>
+          <Button asChild>
+            <Link href="/management">Discard changes</Link>
+          </Button>
         </div>
       </div>
-
-      {isCardError && (
-        <Alert variant="destructive">
-          <AlertCircle />
-          <AlertTitle>Card Limit Reached</AlertTitle>
-          <AlertDescription>{isCardError}</AlertDescription>
-        </Alert>
-      )}
 
       {previewMode ? (
         <div className="sticky">

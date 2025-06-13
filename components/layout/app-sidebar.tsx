@@ -6,8 +6,8 @@ import {
   ChartColumnIncreasing,
   CreditCard,
 } from "lucide-react";
-import { Nav } from "@/components/nav";
-import { NavUser } from "@/components/nav-user";
+import { Nav } from "@/components/layout/nav";
+import { NavUser } from "@/components/layout/nav-user";
 import {
   Sidebar,
   SidebarContent,

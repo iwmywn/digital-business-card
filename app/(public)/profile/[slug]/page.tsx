@@ -1,5 +1,5 @@
 import { getUserBySlug } from "@/lib/data";
-import { UserProfileDisplay } from "@/components/user-profile-display";
+import { UserProfileDisplay } from "@/components/settings/user-profile-display";
 import NotFound from "@/app/not-found";
 import type { Metadata } from "next";
 import { getCardByUserId } from "@/actions/card";

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { ResetPasswordForm } from "@/components/reset-password-form";
-import { VerifyEmail } from "@/components/verify-email";
+import { ResetPasswordForm } from "@/components/auth/reset-password-form";
+import { VerifyEmail } from "@/components/auth/verify-email";
 import NotFound from "@/app/not-found";
 
 export async function generateMetadata({

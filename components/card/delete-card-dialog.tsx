@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { Loading } from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { useCard } from "@/lib/swr";
-import { getImageUrl } from "@/components/card-management";
+import { getImageUrl } from "@/components/card/card-management";
 import { deleteCard } from "@/actions/card";
 import { useState } from "react";
 import { formatDate } from "@/lib/utils";

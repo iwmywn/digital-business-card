@@ -1,11 +1,11 @@
 "use server";
 
 import { createStripeCustomer } from "@/actions/stripe";
-import type { EmailFormValues } from "@/components/forgot-password-form";
-import type { PrivateFormValues } from "@/components/private-form";
-import type { ResetPasswordFormValues } from "@/components/reset-password-form";
-import type { SignInFormValues } from "@/components/signin-form";
-import type { SignUpFormValues } from "@/components/signup-form";
+import type { EmailFormValues } from "@/components/auth/forgot-password-form";
+import type { PrivateFormValues } from "@/components/auth/private-form";
+import type { ResetPasswordFormValues } from "@/components/auth/reset-password-form";
+import type { SignInFormValues } from "@/components/auth/signin-form";
+import type { SignUpFormValues } from "@/components/auth/signup-form";
 import {
   getPrivateTokenCollection,
   getUserCollection,

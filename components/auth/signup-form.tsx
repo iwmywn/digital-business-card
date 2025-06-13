@@ -26,12 +26,12 @@ import { PhoneInput } from "@/components/ui/phone-input";
 import { FormLink } from "@/components/form-link";
 import { signUpSchema } from "@/schemas";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { ReCaptchaDialog } from "@/components/recaptcha-dialog";
+import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog";
 import { FormButton } from "@/components/form-button";
 import { signUp } from "@/actions/auth";
 import { useRouter } from "next/navigation";
-import { TermsOfServiceDialog } from "@/components/terms-of-service-dialog";
-import { PrivacyPolicyDialog } from "@/components/privacy-policy-dialog";
+import { TermsOfServiceDialog } from "@/components/policy/terms-of-service-dialog";
+import { PrivacyPolicyDialog } from "@/components/policy/privacy-policy-dialog";
 
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getCardToViewBySlug } from "@/actions/card";
-import { CardView } from "@/components/card-view";
+import { CardView } from "@/components/card/card-view";
 import NotFound from "@/app/not-found";
 import { getPrimaryOgImage, parseFullName } from "@/lib/utils";
 import { connection } from "next/server";

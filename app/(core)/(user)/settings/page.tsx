@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Settings } from "@/components/settings";
+import { Settings } from "@/components/settings/settings";
 
 export const metadata: Metadata = {
   title: "Account Settings",

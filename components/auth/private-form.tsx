@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { ReCaptchaDialog } from "@/components/recaptcha-dialog";
+import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog";
 import { tokenSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
 import { FormLink } from "@/components/form-link";

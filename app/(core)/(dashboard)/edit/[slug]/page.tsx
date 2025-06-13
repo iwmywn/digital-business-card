@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EditCard } from "@/components/edit-card";
+import { EditCard } from "@/components/card/edit-card";
 import { getCardToEditBySlug } from "@/actions/card";
 import { EmptyState } from "@/components/empty-state";
 import { Ghost } from "lucide-react";

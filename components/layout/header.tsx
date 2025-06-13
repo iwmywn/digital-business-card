@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { nav } from "@/components/app-sidebar";
+import { nav } from "@/components/layout/app-sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { DashboardThemeToggle } from "@/components/mode-toggle";
 import {
@@ -39,7 +39,9 @@ const ColorDialog =
   process.env.NODE_ENV === "development"
     ? dynamic(
         () =>
-          import("@/components/color-dialog").then((mod) => mod.ColorDialog),
+          import("@/components/layout/color-dialog").then(
+            (mod) => mod.ColorDialog,
+          ),
         { ssr: false },
       )
     : () => null;

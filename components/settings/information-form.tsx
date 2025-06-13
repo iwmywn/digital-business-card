@@ -48,7 +48,7 @@ import {
 } from "@/components/image-editor-dialog";
 import { useUser } from "@/lib/swr";
 import Image from "next/image";
-import type { Image as ImageType } from "@/components/card-design";
+import type { Image as ImageType } from "@/components/card/card-design";
 import Link from "next/link";
 
 export type ProfileFormValues = z.infer<typeof publicProfileSchema>;

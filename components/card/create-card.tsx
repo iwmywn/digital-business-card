@@ -5,21 +5,25 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { CardDesign, type CardDesignValues } from "@/components/card-design";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import {
+  CardDesign,
+  type CardDesignValues,
+} from "@/components/card/card-design";
 import {
   PersonalInformation,
   type PersonalInformationValues,
-} from "@/components/personal-information";
-import { Links } from "@/components/links";
-import { CardPreview } from "@/components/card-preview";
+} from "@/components/card/personal-information";
+import { Links } from "@/components/card/links";
+import { CardPreview } from "@/components/card/card-preview";
 import { saveCard } from "@/actions/card";
 import type { SerializableLinkType } from "@/components/icons";
-import type { Card as CardType } from "@/lib/definitions";
 import { useCard, useUser } from "@/lib/swr";
-import { Loading } from "@/components/loading";
-import { brandNameSchema, personalInformationSchema } from "@/schemas";
 import { CreateCardSkeleton } from "@/components/skeletons";
-import Link from "next/link";
+import { Loading } from "@/components/loading";
+import * as constants from "@/constants";
+import { brandNameSchema, personalInformationSchema } from "@/schemas";
 import {
   Select,
   SelectContent,
@@ -28,27 +32,40 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function EditCard({ card }: { card: CardType }) {
+export function CreateCard() {
   const router = useRouter();
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<string>("design");
   const [previewMode, setPreviewMode] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [cardDesign, setCardDesign] = useState<CardDesignValues>(
-    card.cardDesign,
-  );
+  const [cardDesign, setCardDesign] = useState<CardDesignValues>({
+    cardColor: constants.defaultColor,
+    fontFamily: constants.defaultFont,
+    logoImage: undefined,
+    profileImage: undefined,
+    coverImage: undefined,
+    brandName: "Visiq",
+  });
   const [personalInformation, setPersonalInformation] =
-    useState<PersonalInformationValues>(card.personalInformation);
-  const [isPublic, setIsPublic] = useState<boolean>(card.isPublic);
-  const [links, setLinks] = useState<SerializableLinkType[]>(card.links);
+    useState<PersonalInformationValues>({
+      fullName: "",
+      jobTitle: "",
+      department: "",
+      company: "",
+      accreditations: "",
+      headline: "",
+      bio: "",
+    });
+  const [links, setLinks] = useState<SerializableLinkType[]>([]);
   const personalInformationRef = useRef<{ validate: () => Promise<boolean> }>(
     null,
   );
   const cardDesignRef = useRef<{ validate: () => Promise<boolean> }>(null);
-  const { cardResponse, mutate, cards, isCardLoading, isCardError } = useCard();
+  const { cardResponse, cards, isCardLoading, isCardError, mutate } = useCard();
   const { isUserError, isUserLoading, user } = useUser();
+  const [isPublic, setIsPublic] = useState<boolean>(true);
 
-  async function handleUpdateCard() {
+  async function handleCreateCard() {
     if (isSubmitting) return;
 
     const parsedCardDesignValue = brandNameSchema.safeParse({
@@ -90,7 +107,6 @@ export function EditCard({ card }: { card: CardType }) {
       personalInformation,
       links,
       isPublic,
-      card._id,
     );
 
     if (error || !success) {
@@ -98,18 +114,29 @@ export function EditCard({ card }: { card: CardType }) {
     } else {
       mutate({
         ...cardResponse,
-        cards: cards.map((c) =>
-          c._id === card._id
-            ? {
-                ...c,
-                cardDesign,
-                personalInformation,
-                links,
-                isPublic,
-                updatedAt: new Date(),
-              }
-            : c,
-        ),
+        cards: [
+          ...cards,
+          {
+            _id: "temp",
+            userId: "temp",
+            slug: "temp",
+            cardDesign,
+            personalInformation,
+            links,
+            isPublic,
+            views: 0,
+            clicks: 0,
+            viewHistory: [],
+            clickHistory: [],
+            viewFingerprint: {},
+            clickFingerprint: {},
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            editable: true,
+            message: undefined,
+            dynamicSlug: "temp",
+          },
+        ],
       });
       toast.success(success);
       router.push("/management");
@@ -137,12 +164,12 @@ export function EditCard({ card }: { card: CardType }) {
       <div className="bg-primary-foreground/75 sticky top-[3.25rem] z-50 flex flex-col gap-6 backdrop-blur-xs backdrop-saturate-150 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold">
-            {previewMode ? "Card Preview" : "Edit Card"}
+            {previewMode ? "Card Preview" : "Create Card"}
           </h2>
           <p className="text-muted-foreground text-sm">
             {previewMode
               ? "Preview how your digital business card will look."
-              : "Update your digital business card design."}
+              : "Design your digital business card."}
           </p>
         </div>
         <div className="flex flex-wrap items-center justify-end gap-2">
@@ -154,14 +181,21 @@ export function EditCard({ card }: { card: CardType }) {
           <Button onClick={() => setPreviewMode(!previewMode)}>
             {previewMode ? "Back to editor" : "Preview card"}
           </Button>
-          <Button onClick={handleUpdateCard} disabled={isSubmitting}>
-            {isSubmitting ? <Loading /> : "Save changes"}
-          </Button>
-          <Button asChild>
-            <Link href="/management">Discard changes</Link>
-          </Button>
+          {!isCardError && (
+            <Button onClick={handleCreateCard} disabled={isSubmitting}>
+              {isSubmitting ? <Loading /> : "Create card"}
+            </Button>
+          )}
         </div>
       </div>
+
+      {isCardError && (
+        <Alert variant="destructive">
+          <AlertCircle />
+          <AlertTitle>Card Limit Reached</AlertTitle>
+          <AlertDescription>{isCardError}</AlertDescription>
+        </Alert>
+      )}
 
       {previewMode ? (
         <div className="sticky">
