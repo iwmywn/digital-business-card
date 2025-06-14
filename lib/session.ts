@@ -5,11 +5,10 @@ import { cache } from "react";
 interface UserSession {
   userId: string;
   expires: Date;
-  isSignedIn: boolean;
 }
 
 interface PrivateSession {
-  hasPrivateAccess: boolean;
+  expires: Date;
 }
 
 const sevenDays = 7 * 24 * 60 * 60;
@@ -51,7 +50,6 @@ const session = {
       const s = await session.user.get();
       s.userId = userId;
       s.expires = new Date(Date.now() + sevenDays * 1000);
-      s.isSignedIn = true;
       await s.save();
     },
     update: async () => {
@@ -69,7 +67,7 @@ const session = {
     get: cache(async () => getSession<PrivateSession>(sessionOptions.private)),
     create: async () => {
       const s = await session.private.get();
-      s.hasPrivateAccess = true;
+      s.expires = new Date(Date.now() + twohours * 1000);
       await s.save();
     },
     delete: async () => {

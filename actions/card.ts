@@ -23,10 +23,10 @@ export async function saveCard(
   cardId?: string,
 ) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const existingUser = await getUserById(userId);
@@ -169,8 +169,8 @@ export async function getCardToEditBySlug(slug: string) {
       session.user.get(),
     ]);
 
-    if (!currentUser.isSignedIn || !currentUser.userId) {
-      return { error: "Unauthorized!" };
+    if (!currentUser.userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const [card, cards, existingUser] = await Promise.all([
@@ -207,8 +207,7 @@ export async function getCardToEditBySlug(slug: string) {
       };
     }
 
-    const isOwner =
-      currentUser?.isSignedIn && currentUser.userId === card.userId;
+    const isOwner = currentUser.userId === card.userId;
 
     if (!isOwner) {
       return { error: "This card belongs to another user." };
@@ -255,8 +254,8 @@ export async function getCardToViewBySlug(slug: string) {
       session.user.get(),
       getUserById(card.userId),
     ]);
-    const isOwner =
-      currentUser?.isSignedIn && currentUser.userId === card.userId;
+
+    const isOwner = currentUser.userId === card.userId;
 
     if (!existingUser) return { error: "User not found!" };
 
@@ -435,10 +434,10 @@ export async function getCardByUserId(userId: string) {
 
 export async function deleteCard(cardId: string) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
     const cardCollection = await getCardCollection();
 
@@ -468,7 +467,7 @@ export async function trackCardClick(
   linkType: string,
 ) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
     const cardCollection = await getCardCollection();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -482,7 +481,7 @@ export async function trackCardClick(
 
     if (
       card.clickFingerprint?.[todayStr]?.[visitorId]?.includes(linkType) ||
-      (isSignedIn && userId && userId === card?.userId)
+      (userId && userId === card?.userId)
     ) {
       return { error: undefined };
     }
@@ -539,7 +538,7 @@ export async function trackCardClick(
 
 export async function trackCardView(cardId: string, visitorId: string) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
     const cardCollection = await getCardCollection();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -553,7 +552,7 @@ export async function trackCardView(cardId: string, visitorId: string) {
 
     if (
       card.viewFingerprint?.[todayStr]?.includes(visitorId) ||
-      (isSignedIn && userId && userId === card?.userId)
+      (userId && userId === card?.userId)
     ) {
       return { error: undefined };
     }
@@ -610,10 +609,10 @@ export async function trackCardView(cardId: string, visitorId: string) {
 
 export async function checkSlug(slug: string, cardId: string) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const cardCollection = await getCardCollection();
@@ -636,10 +635,10 @@ export async function checkSlug(slug: string, cardId: string) {
 
 export async function updateSlug(values: SlugFormValues, cardId: string) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const parsedValues = cardSlugSchema.safeParse(values);
@@ -697,10 +696,10 @@ export async function updateSlug(values: SlugFormValues, cardId: string) {
 
 export async function updateCardVisibility(cardId: string, isPublic: boolean) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const existingUser = await getUserById(userId);
@@ -730,10 +729,10 @@ export async function updateCardVisibility(cardId: string, isPublic: boolean) {
 
 export async function getCards() {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const existingUser = await getUserById(userId);

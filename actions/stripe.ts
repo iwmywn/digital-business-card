@@ -19,10 +19,10 @@ export async function createCheckoutSession(priceId: string, planId: string) {
       return { error: "Invalid plan ID!" };
     }
 
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const existingUser = await getUserById(userId);

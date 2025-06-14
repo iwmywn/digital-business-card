@@ -45,16 +45,19 @@ export async function middleware(req: NextRequest) {
   const { nextUrl, cookies } = req;
   const { pathname } = nextUrl;
 
-  const private_session = cookies.get("private_session")?.value;
-
   if (siteConfig.privateMode) {
+    const private_session = cookies.get("private_session")?.value;
+
     if (!private_session) {
       return redirectIfNotPrivateRoute(nextUrl);
     }
 
-    const { hasPrivateAccess } = await session.private.get();
+    const { expires } = await session.private.get();
+    const expiresIn = new Date(expires).getTime() - Date.now();
 
-    if (!hasPrivateAccess) {
+    if (expiresIn < 0) {
+      await session.private.delete();
+
       return redirectIfNotPrivateRoute(nextUrl);
     }
 
@@ -85,9 +88,12 @@ export async function middleware(req: NextRequest) {
     return redirectIfProtectedRoute(nextUrl);
   }
 
-  const { isSignedIn, expires } = await session.user.get();
+  const { userId, expires } = await session.user.get();
+  const expiresIn = new Date(expires).getTime() - Date.now();
 
-  if (!isSignedIn) {
+  if (!userId || expiresIn < 0) {
+    await session.user.delete();
+
     return redirectIfProtectedRoute(nextUrl);
   }
 
@@ -97,8 +103,6 @@ export async function middleware(req: NextRequest) {
   ) {
     return redirectTo(routes.DEFAULT_SIGNIN_REDIRECT, nextUrl);
   }
-
-  const expiresIn = new Date(expires).getTime() - Date.now();
 
   if (expiresIn < 24 * 60 * 60 * 1000) {
     await session.user.update();

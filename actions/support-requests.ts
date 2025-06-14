@@ -10,10 +10,10 @@ import * as constants from "@/constants";
 
 export async function submitContact(values: ContactFormValues) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const existingUser = await getUserById(userId);
@@ -68,10 +68,10 @@ export async function submitContact(values: ContactFormValues) {
 
 export async function submitIssue(values: BugReportFormValues) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const parsedValues = bugReportSchema.safeParse(values);

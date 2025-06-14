@@ -26,10 +26,10 @@ export async function updateProfile(
   },
 ) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const parsedValues = publicProfileSchema.safeParse(values);
@@ -123,10 +123,10 @@ export async function updateProfile(
 
 export async function checkUsername(username: string) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const userCollection = await getUserCollection();
@@ -149,10 +149,10 @@ export async function checkUsername(username: string) {
 
 export async function updateAccount(values: SettingsFormValues) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const parsedValues = accountSchema.safeParse(values);
@@ -227,10 +227,10 @@ export async function updateNotificationSettings(
   values: NotificationSettingsFormValues,
 ) {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const parsedValues = notificationSettingsSchema.safeParse(values);

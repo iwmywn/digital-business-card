@@ -9,10 +9,10 @@ import { ReceiptData } from "@/components/subscription/payment-receipt-dialog";
 
 export async function switchToPlan(planId: "free" | "basic" | "professional") {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const existingUser = await getUserById(userId);
@@ -86,10 +86,10 @@ export async function getPaymentHistoryDetails(
   error?: string;
 }> {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const existingUser = await getUserById(userId);
@@ -117,10 +117,10 @@ export async function getPaymentHistoryDetails(
 
 export async function getSubscriptionPlans() {
   try {
-    const { isSignedIn, userId } = await session.user.get();
+    const { userId } = await session.user.get();
 
-    if (!isSignedIn || !userId) {
-      return { error: "Unauthorized!" };
+    if (!userId) {
+      return { error: "Unauthorized! Please reload the page and try again." };
     }
 
     const existingUser = await getUserById(userId);
