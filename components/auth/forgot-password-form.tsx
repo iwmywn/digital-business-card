@@ -31,7 +31,7 @@ import { forgotPassword } from "@/actions/auth";
 export type EmailFormValues = z.infer<typeof emailSchema>;
 
 export function ForgotPasswordForm() {
-  const [isRecaptchaOpen, setIsRecaptchaOpen] = useState<boolean>(false);
+  const [isReCaptchaOpen, setIsReCaptchaOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const isProcessingRef = useRef<boolean>(false);
@@ -70,7 +70,7 @@ export function ForgotPasswordForm() {
       if (isProcessingRef.current) return;
 
       if (!recaptchaToken) {
-        setIsRecaptchaOpen(true);
+        setIsReCaptchaOpen(true);
         return;
       }
 
@@ -131,8 +131,8 @@ export function ForgotPasswordForm() {
       </Card>
 
       <ReCaptchaDialog
-        open={isRecaptchaOpen}
-        setOpen={setIsRecaptchaOpen}
+        open={isReCaptchaOpen}
+        setOpen={setIsReCaptchaOpen}
         setRecaptchaToken={(token) => setRecaptchaToken(token)}
       />
     </>
