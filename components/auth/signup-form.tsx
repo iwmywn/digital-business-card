@@ -37,9 +37,9 @@ export type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUpForm() {
   const router = useRouter();
+  const [isRecaptchaOpen, setIsRecaptchaOpen] = useState<boolean>(false);
   const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
-  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const isProcessingRef = useRef<boolean>(false);
@@ -73,7 +73,6 @@ export function SignUpForm() {
 
       setIsLoading(false);
       setRecaptchaToken(null);
-      setShowCaptcha(false);
       isProcessingRef.current = false;
     },
     [form, router],
@@ -84,7 +83,7 @@ export function SignUpForm() {
       if (isProcessingRef.current) return;
 
       if (!recaptchaToken) {
-        setShowCaptcha(true);
+        setIsRecaptchaOpen(true);
         return;
       }
 
@@ -245,13 +244,11 @@ export function SignUpForm() {
         </CardContent>
       </Card>
 
-      {showCaptcha && (
-        <ReCaptchaDialog
-          onClose={() => setShowCaptcha(false)}
-          setRecaptchaToken={(token) => setRecaptchaToken(token)}
-        />
-      )}
-
+      <ReCaptchaDialog
+        open={isRecaptchaOpen}
+        setOpen={setIsRecaptchaOpen}
+        setRecaptchaToken={(token) => setRecaptchaToken(token)}
+      />
       <TermsOfServiceDialog open={isTermsOpen} setOpen={setIsTermsOpen} />
       <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />
     </>

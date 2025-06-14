@@ -32,7 +32,7 @@ import { useRouter } from "next/navigation";
 export type PrivateFormValues = z.infer<typeof tokenSchema>;
 
 export function PrivateForm() {
-  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
+  const [isRecaptchaOpen, setIsRecaptchaOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const isProcessingRef = useRef<boolean>(false);
@@ -66,7 +66,6 @@ export function PrivateForm() {
 
       setIsLoading(false);
       setRecaptchaToken(null);
-      setShowCaptcha(false);
       isProcessingRef.current = false;
     },
     [form, router],
@@ -77,7 +76,7 @@ export function PrivateForm() {
       if (isProcessingRef.current) return;
 
       if (!recaptchaToken) {
-        setShowCaptcha(true);
+        setIsRecaptchaOpen(true);
         return;
       }
 
@@ -143,12 +142,11 @@ export function PrivateForm() {
         </CardContent>
       </Card>
 
-      {showCaptcha && (
-        <ReCaptchaDialog
-          onClose={() => setShowCaptcha(false)}
-          setRecaptchaToken={(token) => setRecaptchaToken(token)}
-        />
-      )}
+      <ReCaptchaDialog
+        open={isRecaptchaOpen}
+        setOpen={setIsRecaptchaOpen}
+        setRecaptchaToken={(token) => setRecaptchaToken(token)}
+      />
     </>
   );
 }

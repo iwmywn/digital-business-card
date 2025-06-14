@@ -4,14 +4,17 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Dispatch, SetStateAction } from "react";
 
 interface ReCaptchaPopupProps {
-  onClose: () => void;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   setRecaptchaToken: (token: string | null) => void;
 }
 
 export function ReCaptchaDialog({
-  onClose,
+  open,
+  setOpen,
   setRecaptchaToken,
 }: ReCaptchaPopupProps) {
   const handleRecaptchaChange = async (token: string | null) => {
@@ -21,16 +24,16 @@ export function ReCaptchaDialog({
     }
 
     setRecaptchaToken(token);
-    onClose();
+    setOpen(false);
   };
 
   const handleDialogClose = () => {
     toast.error("Please complete the CAPTCHA!");
-    onClose();
+    setOpen(false);
   };
 
   return (
-    <Dialog open={true} onOpenChange={handleDialogClose}>
+    <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogContent className="w-fit">
         <VisuallyHidden>
           <DialogTitle>CAPTCHA verification</DialogTitle>
