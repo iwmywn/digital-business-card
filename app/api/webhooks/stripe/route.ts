@@ -1,3 +1,5 @@
+"use server";
+
 import type { NextRequest } from "next/server";
 import Stripe from "stripe";
 import { createResponse } from "@/app/api/utils";
