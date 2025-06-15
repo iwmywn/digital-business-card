@@ -55,7 +55,7 @@ export async function middleware(req: NextRequest) {
     const { expires } = await session.private.get();
     const expiresIn = new Date(expires).getTime() - Date.now();
 
-    if (expiresIn < 0) {
+    if (!expires || expiresIn < 0) {
       await session.private.delete();
 
       return redirectIfNotPrivateRoute(nextUrl);
@@ -91,7 +91,7 @@ export async function middleware(req: NextRequest) {
   const { userId, expires } = await session.user.get();
   const expiresIn = new Date(expires).getTime() - Date.now();
 
-  if (!userId || expiresIn < 0) {
+  if (!userId || !expires || expiresIn < 0) {
     await session.user.delete();
 
     return redirectIfProtectedRoute(nextUrl);
