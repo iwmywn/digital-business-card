@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ButtonProps } from "react-day-picker";
 import { Loading } from "@/components/loading";
 
 export function FormButton({
@@ -12,7 +11,7 @@ export function FormButton({
   isSubmitting: boolean;
   text: string;
   className?: string;
-} & ButtonProps) {
+} & React.ComponentProps<"button">) {
   return (
     <Button
       className={cn(className)}
