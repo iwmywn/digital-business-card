@@ -41,7 +41,7 @@ export function CardPreview({
     const foundLinkType = linkTypes.find((lt) => lt.type === linkType);
     if (foundLinkType) {
       const IconComponent = foundLinkType.icon;
-      return <IconComponent className="size-6" />;
+      return <IconComponent />;
     }
     return null;
   };
@@ -156,7 +156,7 @@ export function CardPreview({
                     className="flex items-center gap-3 text-base"
                   >
                     <div
-                      className={`${colorClass} flex items-center justify-center rounded-full p-2 text-white`}
+                      className={`${colorClass} flex items-center justify-center rounded-full p-2 text-white [&>svg]:size-6 [&>svg]:flex-shrink-0`}
                     >
                       {getIconComponent(link.type)}
                     </div>

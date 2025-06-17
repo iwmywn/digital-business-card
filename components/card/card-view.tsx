@@ -144,7 +144,7 @@ export function CardView({
     const foundLinkType = linkTypes.find((lt) => lt.type === linkType);
     if (foundLinkType) {
       const IconComponent = foundLinkType.icon;
-      return <IconComponent className="size-6" />;
+      return <IconComponent />;
     }
     return null;
   };
@@ -320,7 +320,7 @@ export function CardView({
                         onClick={() => handleLinkClick(link)}
                       >
                         <div
-                          className={`${colorClass} flex items-center justify-center rounded-full p-2 text-white`}
+                          className={`${colorClass} flex items-center justify-center rounded-full p-2 text-white [&>svg]:size-6 [&>svg]:flex-shrink-0`}
                         >
                           {isLoading[link.id] ? (
                             <Loading className="size-6 border-white border-t-black/10" />
