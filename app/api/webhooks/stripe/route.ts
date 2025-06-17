@@ -40,10 +40,7 @@ export async function POST(req: NextRequest) {
 
         if (!userId || !planId) {
           console.error("Missing user ID or plan ID!");
-          return createResponse(
-            { received: true, warning: "Missing user ID or plan ID!" },
-            200,
-          );
+          return createResponse({ error: "Missing user ID or plan ID!" }, 400);
         }
 
         const paymentIntentId =
@@ -53,10 +50,7 @@ export async function POST(req: NextRequest) {
 
         if (!paymentIntentId) {
           console.error("Missing payment intent ID!");
-          return createResponse(
-            { received: true, warning: "Missing payment intent ID!" },
-            200,
-          );
+          return createResponse({ error: "Missing payment intent ID!" }, 400);
         }
 
         const amount = checkoutSession.amount_total
@@ -72,7 +66,7 @@ export async function POST(req: NextRequest) {
 
         if (error) {
           console.error(`Error processing payment: ${error}`);
-          return createResponse({ received: true, warning: error }, 200);
+          return createResponse({ error: error }, 500);
         }
 
         return createResponse({ received: true, status: "processed" }, 200);
@@ -83,8 +77,8 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error(`Error processing webhook: ${error}`);
     return createResponse(
-      { received: true, error: "Failed to process webhook!" },
-      200,
+      { error: "Internal server error while processing webhook." },
+      500,
     );
   }
 }
