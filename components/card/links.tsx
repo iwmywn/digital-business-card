@@ -74,7 +74,9 @@ function SortableLink({
       >
         <GripVertical className="text-muted-foreground size-5" />
       </div>
-      <IconComponent className="size-5 flex-shrink-0" />
+      <div className="[&>svg]:size-5 [&>svg]:flex-shrink-0">
+        <IconComponent />
+      </div>
       <div className="flex flex-grow flex-col gap-2 sm:flex-row">
         <Input
           id={link.id + "Label"}
