@@ -50,6 +50,7 @@ import { useUser } from "@/lib/swr";
 import Image from "next/image";
 import type { Image as ImageType } from "@/components/card/card-design";
 import Link from "next/link";
+import { Label } from "@/components/ui/label";
 
 export type ProfileFormValues = z.infer<typeof publicProfileSchema>;
 
@@ -233,7 +234,9 @@ export function InformationForm() {
           <div className="flex flex-col items-center justify-center gap-6">
             <div className="flex flex-col items-center gap-6 sm:flex-row sm:gap-12">
               <div className="flex w-40 flex-col items-center gap-2">
-                <p className="text-sm">Profile Picture</p>
+                <Label htmlFor="profile-image" className="text-sm">
+                  Cover Photo
+                </Label>
                 <div
                   className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
                   onClick={() => handleImageClick("profile")}
@@ -259,6 +262,7 @@ export function InformationForm() {
                 </div>
                 <input
                   id="profile-image"
+                  name="profile-image"
                   type="file"
                   accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
                   className="hidden"
@@ -270,7 +274,9 @@ export function InformationForm() {
               </div>
 
               <div className="flex w-40 flex-col items-center gap-2">
-                <p className="text-sm">Cover Photo</p>
+                <Label htmlFor="cover-image" className="text-sm">
+                  Cover Photo
+                </Label>
                 <div
                   className="relative flex h-20 w-40 cursor-pointer items-center justify-center overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
                   onClick={() => handleImageClick("cover")}
@@ -296,6 +302,7 @@ export function InformationForm() {
                 </div>
                 <input
                   id="cover-image"
+                  name="cover-image"
                   type="file"
                   accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
                   className="hidden"

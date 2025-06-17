@@ -151,7 +151,9 @@ export function HowItWorksSection() {
         <div className="mt-6 grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
           <div className="w-full space-y-6 lg:sticky lg:top-16 lg:col-span-2">
             <div className="space-y-3">
-              <Label className="text-base">Subscription Plans</Label>
+              <Label className="text-base" asChild>
+                <div>Subscription Plans</div>
+              </Label>
               <Tabs
                 value={planActiveTab}
                 onValueChange={(tab) => handlePlanActiveTab(tab)}

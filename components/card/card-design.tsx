@@ -267,12 +267,14 @@ export const CardDesign = forwardRef(function CardDesign(
       <Card className="rounded-lg">
         <CardContent className="space-y-6">
           <div className="space-y-3">
-            <Label className="text-base leading-none font-semibold">
-              Images
+            <Label className="text-base" asChild>
+              <div>Images</div>
             </Label>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div className="flex flex-col items-center space-y-3">
-                <Label className="text-sm">Company Logo</Label>
+                <Label htmlFor="logo-image" className="text-sm">
+                  Company Logo
+                </Label>
                 <div className="flex flex-col items-center gap-2">
                   <div
                     className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
@@ -299,6 +301,7 @@ export const CardDesign = forwardRef(function CardDesign(
                   </div>
                   <input
                     id="logo-image"
+                    name="logo-image"
                     type="file"
                     accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
                     className="hidden"
@@ -311,7 +314,9 @@ export const CardDesign = forwardRef(function CardDesign(
               </div>
 
               <div className="flex flex-col items-center space-y-3">
-                <Label className="text-sm">Profile Picture</Label>
+                <Label htmlFor="profile-image" className="text-sm">
+                  Profile Picture
+                </Label>
                 <div className="flex flex-col items-center gap-2">
                   <div
                     className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
@@ -338,6 +343,7 @@ export const CardDesign = forwardRef(function CardDesign(
                   </div>
                   <input
                     id="profile-image"
+                    name="profile-image"
                     type="file"
                     accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
                     className="hidden"
@@ -350,7 +356,9 @@ export const CardDesign = forwardRef(function CardDesign(
               </div>
 
               <div className="flex flex-col items-center space-y-3">
-                <Label className="text-sm">Cover Photo</Label>
+                <Label htmlFor="cover-image" className="text-sm">
+                  Cover Photo
+                </Label>
                 <div className="flex flex-col items-center gap-2">
                   <div
                     className="relative flex h-20 w-40 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
@@ -377,6 +385,7 @@ export const CardDesign = forwardRef(function CardDesign(
                   </div>
                   <input
                     id="cover-image"
+                    name="cover-image"
                     type="file"
                     accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
                     className="hidden"
@@ -391,7 +400,9 @@ export const CardDesign = forwardRef(function CardDesign(
           </div>
 
           <div className="space-y-3">
-            <Label className="text-base">Card Color</Label>
+            <Label className="text-base" asChild>
+              <div>Card Color</div>
+            </Label>
             <div className="flex flex-wrap gap-3">
               {colorOptions.map((color) => (
                 <button
@@ -407,7 +418,9 @@ export const CardDesign = forwardRef(function CardDesign(
           </div>
 
           <div className="space-y-3">
-            <Label className="text-base">Font Family</Label>
+            <Label className="text-base" asChild>
+              <div>Font Family</div>
+            </Label>
             <Select value={fontFamily} onValueChange={setFontFamily}>
               <SelectTrigger
                 className={`${selectedFont.className} w-full`}
