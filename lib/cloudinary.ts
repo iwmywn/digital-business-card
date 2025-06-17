@@ -4,7 +4,7 @@ import { checkEnv, extractCloudinaryPath } from "@/lib/utils";
 
 export async function uploadToCloudinary(
   imageData: string,
-  folder = "business-cards",
+  folder: string,
 ): Promise<
   | {
       path: string;
