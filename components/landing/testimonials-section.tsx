@@ -165,7 +165,7 @@ export function TestimonialsSection() {
     <section
       key={filteredTestimonials.length}
       id="testimonials"
-      className="bg-secondary dark:bg-card relative flex min-h-screen flex-col items-center justify-center overflow-hidden rounded-[5rem] py-16 md:py-20 lg:py-24"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden py-16 md:py-20 lg:py-24"
     >
       <div className="bg-[linear-gradient(to_right,theme(colors.background),transparent)] pointer-events-none absolute top-0 bottom-0 left-0 z-10 hidden w-20 lg:block" />
       <div className="bg-[linear-gradient(to_left,theme(colors.background),transparent)] pointer-events-none absolute top-0 right-0 bottom-0 z-10 hidden w-20 lg:block" />

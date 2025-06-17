@@ -1,3 +1,4 @@
+import { Spotlight } from "@/components/ui/spotlight";
 import { Header } from "@/components/landing/header";
 import { HeroSection } from "@/components/landing/hero-section";
 import { HowItWorksSection } from "@/components/landing/how-it-works-section";
@@ -9,24 +10,27 @@ import { Foorter } from "@/components/landing/footer";
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen" data-vaul-drawer-wrapper>
-      <Header />
+    <>
+      <Spotlight />
+      <div className="min-h-screen" data-vaul-drawer-wrapper>
+        <Header />
 
-      <main className="w-full px-6 md:px-8 lg:px-10">
-        <HeroSection />
+        <main className="w-full px-6 md:px-8 lg:px-10">
+          <HeroSection />
 
-        <HowItWorksSection />
+          <HowItWorksSection />
 
-        <FeaturesSection />
+          <FeaturesSection />
 
-        <PricingSection />
+          <PricingSection />
 
-        <TestimonialsSection />
+          <TestimonialsSection />
 
-        <CTASection />
-      </main>
+          <CTASection />
+        </main>
 
-      <Foorter />
-    </div>
+        <Foorter />
+      </div>
+    </>
   );
 }

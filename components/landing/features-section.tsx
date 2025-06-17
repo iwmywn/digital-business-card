@@ -56,7 +56,7 @@ export function FeaturesSection() {
   return (
     <section
       id="features"
-      className="bg-secondary dark:bg-card flex min-h-screen flex-col items-center justify-center py-16 [clip-path:polygon(0%_5%,5%_0%,95%_0%,100%_5%,100%_95%,95%_100%,5%_100%,0%_95%)] md:py-20 lg:py-24"
+      className="flex min-h-screen flex-col items-center justify-center py-16 md:py-20 lg:py-24"
     >
       <div className="flex w-full flex-col gap-6 px-4 md:px-6 lg:px-8">
         <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
