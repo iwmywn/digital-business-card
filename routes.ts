@@ -1,3 +1,4 @@
+const landingRoute = "/";
 const authRoutes = ["/signin", "/signup", "/forgot-password", "/email-handler"];
 const signInRoute = "/signin";
 const DEFAULT_SIGNIN_REDIRECT = "/home";
@@ -25,4 +26,5 @@ export {
   privateRoute,
   ignoredRoutes,
   signInRoute,
+  landingRoute,
 };

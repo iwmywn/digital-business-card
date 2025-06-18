@@ -11,7 +11,7 @@ function redirectIfProtectedRoute(nextUrl: NextURL) {
 
   if (routes.protectedRoutes.some((route) => pathname.startsWith(route))) {
     const redirectUrl = new URL(routes.signInRoute, nextUrl);
-    if (pathname !== "/") {
+    if (pathname !== routes.landingRoute) {
       redirectUrl.searchParams.set("next", pathname + search);
     }
     return NextResponse.redirect(redirectUrl);
@@ -28,7 +28,7 @@ function redirectIfNotPrivateRoute(nextUrl: NextURL) {
     !routes.ignoredRoutes.some((route) => pathname.startsWith(route))
   ) {
     const redirectUrl = new URL(routes.privateRoute, nextUrl);
-    if (pathname !== "/") {
+    if (pathname !== routes.landingRoute) {
       redirectUrl.searchParams.set("next", pathname + search);
     }
     return NextResponse.redirect(redirectUrl);
@@ -98,7 +98,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (
-    pathname === "/" ||
+    pathname === routes.landingRoute ||
     routes.authRoutes.some((route) => pathname.startsWith(route))
   ) {
     return redirectTo(routes.DEFAULT_SIGNIN_REDIRECT, nextUrl);
