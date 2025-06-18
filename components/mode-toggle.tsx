@@ -26,12 +26,15 @@ export function DashboardThemeToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
+          <Sun />
           Light
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
+          <Moon />
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
+          <Monitor />
           System
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -59,7 +62,7 @@ export function LandingPageThemeToggle() {
         onClick={() => setTheme("system")}
         className="size-7 rounded-sm"
       >
-        <Monitor className="size-4" />
+        <Monitor />
         <span className="sr-only">System theme</span>
       </Button>
       <Button
@@ -68,7 +71,7 @@ export function LandingPageThemeToggle() {
         onClick={() => setTheme("light")}
         className="size-7 rounded-sm"
       >
-        <Sun className="size-4" />
+        <Sun />
         <span className="sr-only">Light theme</span>
       </Button>
       <Button
@@ -77,7 +80,7 @@ export function LandingPageThemeToggle() {
         onClick={() => setTheme("dark")}
         className="size-7 rounded-sm"
       >
-        <Moon className="size-4" />
+        <Moon />
         <span className="sr-only">Dark theme</span>
       </Button>
     </>
