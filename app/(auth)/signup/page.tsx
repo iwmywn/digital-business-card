@@ -1,4 +1,5 @@
 import { SignUpForm } from "@/components/auth/signup-form";
+import { EmailNoticeBanner } from "@/components/auth/email-notice-banner";
 import type { Metadata } from "next";
 
 export function generateMetadata(): Metadata {
@@ -6,5 +7,10 @@ export function generateMetadata(): Metadata {
 }
 
 export default function page() {
-  return <SignUpForm />;
+  return (
+    <div className="space-y-6">
+      <EmailNoticeBanner />
+      <SignUpForm />
+    </div>
+  );
 }
