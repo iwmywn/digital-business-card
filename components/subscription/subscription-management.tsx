@@ -12,6 +12,7 @@ import { SubscriptionPlans } from "@/components/subscription/subscription-plans"
 import { BillingHistory } from "@/components/subscription/billing-history";
 import { SubscriptionPlansSkeleton } from "@/components/skeletons";
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
+import { SubscriptionNoticeBanner } from "@/components/subscription/subscription-notice-banner";
 
 export function SubscriptionManagement() {
   const { isSubScriptionLoading, isSubscriptionError } = useSubscription();
@@ -54,6 +55,7 @@ export function SubscriptionManagement() {
         </TabsList>
         <TabsContent value="plans" className="mt-4 space-y-6">
           <CurrentPlan />
+          <SubscriptionNoticeBanner />
           <SubscriptionPlans />
         </TabsContent>
         <TabsContent value="history" className="mt-4">
