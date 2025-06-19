@@ -541,6 +541,7 @@ export function InformationForm() {
       </Card>
 
       <ImageEditorDialog
+        key={currentImageType}
         open={imageEditorOpen}
         onOpenChange={setImageEditorOpen}
         imageType={currentImageType}

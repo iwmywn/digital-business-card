@@ -110,64 +110,28 @@ export function ImageEditorDialog({
     return imageUrl;
   }, [imageUrl, cloudinaryName]);
 
-  const [crop, setCrop] = useState({
-    x: initialTransform?.positionX ?? 0,
-    y: initialTransform?.positionY ?? 0,
+  const [crop, setCrop] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
   });
-  const [zoom, setZoom] = useState(initialTransform?.scale ?? 1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  } | null>(initialTransform?.croppedAreaPixels ?? null);
-  const [naturalSize, setNaturalSize] = useState<{
-    width: number;
-    height: number;
-  } | null>(
-    initialTransform?.naturalWidth && initialTransform?.naturalHeight
-      ? {
-          width: initialTransform.naturalWidth,
-          height: initialTransform.naturalHeight,
-        }
-      : null,
-  );
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  useEffect(() => {
-    if (open && initialTransform) {
-      setCrop({
-        x: initialTransform.positionX ?? 0,
-        y: initialTransform.positionY ?? 0,
-      });
-      setZoom(initialTransform.scale ?? 1);
-      setCroppedAreaPixels(initialTransform.croppedAreaPixels ?? null);
-    } else if (open) {
-      setCrop({ x: 0, y: 0 });
-      setZoom(1);
-      setCroppedAreaPixels(null);
-    }
-  }, [open, initialTransform]);
-
-  const getAspectRatio = () => {
-    if (imageType === "cover") return 2 / 1;
-    if (imageType === "logo" || imageType === "profile") return 1;
-    return 1;
-  };
-
-  useEffect(() => {
-    if (processedImageUrl && open) {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => {
-        setNaturalSize({
-          width: img.naturalWidth,
-          height: img.naturalHeight,
-        });
-      };
-      img.src = processedImageUrl;
-    }
-  }, [processedImageUrl, open]);
+  const [zoom, setZoom] = useState<number>(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<
+    | {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+      }
+    | undefined
+  >(undefined);
+  const [naturalSize, setNaturalSize] = useState<
+    | {
+        width: number;
+        height: number;
+      }
+    | undefined
+  >(undefined);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   interface Area {
     x: number;
@@ -218,9 +182,40 @@ export function ImageEditorDialog({
     onDelete(imageType);
   };
 
+  const getAspectRatio = () => {
+    if (imageType === "cover") return 2 / 1;
+    if (imageType === "logo" || imageType === "profile") return 1;
+    return 1;
+  };
+
   const getCropShape = () => {
     return imageType === "profile" ? "round" : "rect";
   };
+
+  useEffect(() => {
+    if (open && initialTransform) {
+      setCrop({
+        x: initialTransform.positionX,
+        y: initialTransform.positionY,
+      });
+      setZoom(initialTransform.scale);
+      setCroppedAreaPixels(initialTransform.croppedAreaPixels);
+    }
+  }, [open, initialTransform]);
+
+  useEffect(() => {
+    if (open && processedImageUrl) {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        setNaturalSize({
+          width: img.naturalWidth,
+          height: img.naturalHeight,
+        });
+      };
+      img.src = processedImageUrl;
+    }
+  }, [open, processedImageUrl]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

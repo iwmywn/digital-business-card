@@ -474,6 +474,7 @@ export const CardDesign = forwardRef(function CardDesign(
       </Card>
 
       <ImageEditorDialog
+        key={currentImageType}
         open={imageEditorOpen}
         onOpenChange={setImageEditorOpen}
         imageType={currentImageType}
