@@ -75,7 +75,9 @@ export function ResetPasswordForm({
   }, [email, token]);
 
   if (isLoading)
-    return <Loading className="size-8 border-white border-t-black/10" />;
+    return (
+      <Loading className="border-primary border-t-primary-foreground/10 size-8" />
+    );
   if (message)
     return (
       <div className="flex flex-col items-center justify-center gap-4 text-sm">
