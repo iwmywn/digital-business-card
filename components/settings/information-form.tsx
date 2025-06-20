@@ -540,19 +540,19 @@ export function InformationForm() {
         </CardContent>
       </Card>
 
-      <ImageEditorDialog
-        key={currentImageType}
-        open={imageEditorOpen}
-        onOpenChange={setImageEditorOpen}
-        imageType={currentImageType}
-        imageUrl={tempImage}
-        cloudinaryName={cloudinaryName}
-        initialTransform={
-          currentImageType ? imageTransforms[currentImageType] : undefined
-        }
-        onSave={handleSaveImage}
-        onDelete={handleDeleteImage}
-      />
+      {imageEditorOpen && (
+        <ImageEditorDialog
+          onOpenChange={setImageEditorOpen}
+          imageType={currentImageType}
+          imageUrl={tempImage}
+          cloudinaryName={cloudinaryName}
+          initialTransform={
+            currentImageType ? imageTransforms[currentImageType] : undefined
+          }
+          onSave={handleSaveImage}
+          onDelete={handleDeleteImage}
+        />
+      )}
     </>
   );
 }

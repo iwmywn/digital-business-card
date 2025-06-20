@@ -9,8 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from "react";
 import { ThemeToggleSkeleton } from "@/components/skeletons";
+import { useMounted } from "@/hooks/use-mounted";
 
 export function DashboardThemeToggle() {
   const { setTheme } = useTheme();
@@ -44,11 +44,7 @@ export function DashboardThemeToggle() {
 
 export function LandingPageThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState<boolean>(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useMounted();
 
   if (!mounted) {
     return <ThemeToggleSkeleton />;

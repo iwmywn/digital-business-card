@@ -31,7 +31,6 @@ export type ImageTransform = {
 };
 
 interface ImageEditorProps {
-  open: boolean;
   onOpenChange: (open: boolean) => void;
   imageType?: "logo" | "profile" | "cover";
   imageUrl: string | null;
@@ -89,7 +88,6 @@ async function getCroppedImg(
 }
 
 export function ImageEditorDialog({
-  open,
   onOpenChange,
   imageType,
   imageUrl,
@@ -111,10 +109,10 @@ export function ImageEditorDialog({
   }, [imageUrl, cloudinaryName]);
 
   const [crop, setCrop] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
+    x: initialTransform?.positionX ?? 0,
+    y: initialTransform?.positionY ?? 0,
   });
-  const [zoom, setZoom] = useState<number>(1);
+  const [zoom, setZoom] = useState<number>(initialTransform?.scale ?? 1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<
     | {
         x: number;
@@ -123,7 +121,7 @@ export function ImageEditorDialog({
         height: number;
       }
     | undefined
-  >(undefined);
+  >(initialTransform?.croppedAreaPixels);
   const [naturalSize, setNaturalSize] = useState<
     | {
         width: number;
@@ -193,18 +191,7 @@ export function ImageEditorDialog({
   };
 
   useEffect(() => {
-    if (open && initialTransform) {
-      setCrop({
-        x: initialTransform.positionX,
-        y: initialTransform.positionY,
-      });
-      setZoom(initialTransform.scale);
-      setCroppedAreaPixels(initialTransform.croppedAreaPixels);
-    }
-  }, [open, initialTransform]);
-
-  useEffect(() => {
-    if (open && processedImageUrl) {
+    if (processedImageUrl) {
       const img = new Image();
       img.crossOrigin = "anonymous";
       img.onload = () => {
@@ -215,10 +202,10 @@ export function ImageEditorDialog({
       };
       img.src = processedImageUrl;
     }
-  }, [open, processedImageUrl]);
+  }, [processedImageUrl]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog defaultOpen={true} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>
