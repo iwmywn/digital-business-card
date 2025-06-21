@@ -56,7 +56,7 @@ const demoCardDesign: CardDesignValues = {
       },
       naturalWidth: 460,
       naturalHeight: 460,
-      croppedImageUrl: "/images/profile-picture.jpeg",
+      croppedImageUrl: "/images/demo/profile-picture.jpeg",
     },
     logo: {
       scale: 1,
@@ -70,7 +70,7 @@ const demoCardDesign: CardDesignValues = {
       },
       naturalWidth: 456,
       naturalHeight: 456,
-      croppedImageUrl: "/images/company-logo.png",
+      croppedImageUrl: "/images/demo/company-logo.png",
     },
     cover: {
       scale: 1,
@@ -84,7 +84,7 @@ const demoCardDesign: CardDesignValues = {
       },
       naturalWidth: 1486,
       naturalHeight: 1003,
-      croppedImageUrl: "/images/cover-photo.jpg",
+      croppedImageUrl: "/images/demo/cover-photo.jpg",
     },
   },
 };
