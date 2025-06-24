@@ -3,7 +3,7 @@
 For package management, we use pnpm instead of npm or yarn. You can install it by running:
 
 ```bash
-npm i -g pnpm@10.12.2
+npm i -g pnpm@10.12.3
 ```
 
 ### 1. Clone the Project
