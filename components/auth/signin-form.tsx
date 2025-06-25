@@ -47,10 +47,14 @@ export function SignInForm() {
       toast.error(error);
     } else {
       const searchParams = new URLSearchParams(window.location.search);
-      const callbackUrl = searchParams.get("next") || "/home";
+      let callbackUrl = searchParams.get("next");
+
+      if (window.location.hash) {
+        callbackUrl = callbackUrl + window.location.hash;
+      }
 
       form.reset();
-      router.push(callbackUrl);
+      router.push(callbackUrl || "/home");
     }
   }
 

@@ -58,10 +58,14 @@ export function PrivateForm() {
       } else {
         toast.success(success);
         const searchParams = new URLSearchParams(window.location.search);
-        const callbackUrl = searchParams.get("next") || "/";
+        let callbackUrl = searchParams.get("next");
+
+        if (window.location.hash) {
+          callbackUrl = callbackUrl + window.location.hash;
+        }
 
         form.reset();
-        router.push(callbackUrl);
+        router.push(callbackUrl || "/");
       }
 
       setIsLoading(false);
