@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { Ghost } from "lucide-react";
-import { EmptyState } from "@/components/empty-state";
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateHeader,
+  EmptyStateDescription,
+  EmptyStateAction,
+} from "@/components/ui/empty-state";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "NOT FOUND",
@@ -9,13 +17,19 @@ export const metadata: Metadata = {
 
 export default function NotFound({ className }: { className?: string }) {
   return (
-    <EmptyState
-      icon={<Ghost />}
-      title="THE PAGE YOU ARE LOOKING FOR COULD NOT BE FOUND"
-      message="This page does not exist."
-      linkHref="/home"
-      linkLabel="Go home"
-      className={cn("min-h-screen border-none", className)}
-    />
+    <EmptyState className={cn("min-h-screen border-none", className)}>
+      <EmptyStateIcon>
+        <Ghost />
+      </EmptyStateIcon>
+      <EmptyStateHeader>
+        THE PAGE YOU ARE LOOKING FOR COULD NOT BE FOUND
+      </EmptyStateHeader>
+      <EmptyStateDescription>This page does not exist.</EmptyStateDescription>
+      <EmptyStateAction>
+        <Button asChild>
+          <Link href="/home">Go home</Link>
+        </Button>
+      </EmptyStateAction>
+    </EmptyState>
   );
 }

@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
-import { EmptyState } from "@/components/empty-state";
 import { BellOff } from "lucide-react";
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateHeader,
+  EmptyStateDescription,
+} from "@/components/ui/empty-state";
 
 export const metadata: Metadata = {
   title: "Notifications",
@@ -10,11 +15,14 @@ export const metadata: Metadata = {
 
 export default function page() {
   return (
-    <EmptyState
-      icon={<BellOff />}
-      title="NO NOTIFICATIONS (WIP)"
-      message="You're all caught up! There are no new notifications at the moment."
-      className="min-h-[calc(100vh-4.83rem)]"
-    />
+    <EmptyState className="min-h-[calc(100vh-4.83rem)]">
+      <EmptyStateIcon>
+        <BellOff />
+      </EmptyStateIcon>
+      <EmptyStateHeader>NO NOTIFICATIONS (WIP)</EmptyStateHeader>
+      <EmptyStateDescription>
+        You&apos;re all caught up! There are no new notifications at the moment.
+      </EmptyStateDescription>
+    </EmptyState>
   );
 }

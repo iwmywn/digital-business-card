@@ -114,7 +114,7 @@ const testimonialItems = [
 ];
 
 export function TestimonialsSection() {
-  const isIPad = useMediaQuery("(max-width: 1024px)");
+  const isIPad = useMediaQuery("(max-width: 1023px)");
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const [emblaRef, emblaApi] = useEmblaCarousel(

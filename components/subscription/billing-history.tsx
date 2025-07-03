@@ -25,9 +25,15 @@ import { getPaymentHistoryDetails } from "@/actions/plan";
 import { toast } from "sonner";
 import { ReceiptData } from "@/components/subscription/payment-receipt-dialog";
 import { useSubscription } from "@/lib/swr";
-import { EmptyState } from "@/components/empty-state";
 import { formatDate } from "@/lib/utils";
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateHeader,
+  EmptyStateDescription,
+} from "@/components/ui/empty-state";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface BillingHistoryProps extends HTMLAttributes<HTMLDivElement> {
   calculatedHeight: number;
@@ -37,6 +43,7 @@ export function BillingHistory({
   calculatedHeight,
   ...props
 }: BillingHistoryProps) {
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
   const [receiptData, setReceiptData] = useState<ReceiptData | null>(null);
@@ -109,21 +116,23 @@ export function BillingHistory({
         <CardContent>
           {filteredHistory.length === 0 ? (
             <EmptyState
-              icon={<Receipt />}
-              title="NO TRANSACTIONS FOUND"
-              message={
-                paymentHistory.length === 0
-                  ? "You haven't made any payments yet."
-                  : "We couldn't find any transactions matching your search. Try a different search term."
-              }
               className="border border-dashed"
               style={{
-                minHeight:
-                  window.innerWidth < 768
-                    ? "250px"
-                    : `calc(100vh - ${calculatedHeight}px - ${calculatedBillingHistoryHeight}px - 13.9375rem)`,
+                minHeight: isMobile
+                  ? "250px"
+                  : `calc(100vh - ${calculatedHeight}px - ${calculatedBillingHistoryHeight}px - 13.9375rem)`,
               }}
-            />
+            >
+              <EmptyStateIcon>
+                <Receipt />
+              </EmptyStateIcon>
+              <EmptyStateHeader>NO TRANSACTIONS FOUND</EmptyStateHeader>
+              <EmptyStateDescription>
+                {paymentHistory.length === 0
+                  ? "You haven't made any payments yet."
+                  : "We couldn't find any transactions matching your search. Try a different search term."}
+              </EmptyStateDescription>
+            </EmptyState>
           ) : (
             <div
               className="overflow-auto [&>div]:overflow-x-visible!"

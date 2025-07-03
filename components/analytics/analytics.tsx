@@ -30,8 +30,17 @@ import { useEffect, useState } from "react";
 import { useCard, useUser } from "@/lib/swr";
 import { AnalyticsSkeleton } from "@/components/skeletons";
 import { toast } from "sonner";
-import { EmptyState } from "@/components/empty-state";
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateHeader,
+  EmptyStateDescription,
+  EmptyStateAction,
+} from "@/components/ui/empty-state";
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const chartConfig = {
   views: {
@@ -45,6 +54,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function Analytics() {
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const [dateRange, setDateRange] = useState<string>("7days");
   const [selectedCard, setSelectedCard] = useState<string>("all");
   const [analyticsData, setAnalyticsData] = useState<
@@ -256,28 +266,40 @@ export function Analytics() {
 
   if (user?.currentPlan === "free") {
     return (
-      <EmptyState
-        icon={<ChartColumnIncreasing />}
-        title="UNLOCK ANALYTICS"
-        message="Upgrade to our basic or professional plan to access analytics for your
-          digital business cards."
-        linkHref="/subscription"
-        linkLabel="Go to subscription"
-        className="min-h-[calc(100vh-4.83rem)]"
-      />
+      <EmptyState className="min-h-[calc(100vh-4.83rem)]">
+        <EmptyStateIcon>
+          <ChartColumnIncreasing />
+        </EmptyStateIcon>
+        <EmptyStateHeader>UNLOCK ANALYTICS</EmptyStateHeader>
+        <EmptyStateDescription>
+          Upgrade to our basic or professional plan to access analytics for your
+          digital business cards.
+        </EmptyStateDescription>
+        <EmptyStateAction>
+          <Button asChild>
+            <Link href="/subscription">Go to subscription</Link>
+          </Button>
+        </EmptyStateAction>
+      </EmptyState>
     );
   }
 
   if (cards.length === 0) {
     return (
-      <EmptyState
-        icon={<ChartColumnIncreasing />}
-        title="NO CARDS YET"
-        message="Create a digital business card to start tracking your analytics."
-        linkHref="/create"
-        linkLabel="Create your first card"
-        className="min-h-[calc(100vh-4.83rem)]"
-      />
+      <EmptyState className="min-h-[calc(100vh-4.83rem)]">
+        <EmptyStateIcon>
+          <ChartColumnIncreasing />
+        </EmptyStateIcon>
+        <EmptyStateHeader>NO CARDS YET</EmptyStateHeader>
+        <EmptyStateDescription>
+          Create a digital business card to start tracking your analytics.
+        </EmptyStateDescription>
+        <EmptyStateAction>
+          <Button asChild>
+            <Link href="/create">Create your first card</Link>
+          </Button>
+        </EmptyStateAction>
+      </EmptyState>
     );
   }
 
@@ -405,28 +427,34 @@ export function Analytics() {
         <CardContent>
           {user?.currentPlan === "basic" ? (
             <EmptyState
-              icon={<ChartColumnIncreasing />}
-              title="UNLOCK ANALYTICS"
-              message="Upgrade to our professional plan to access detailed analytics
-                  for your digital business cards."
-              linkHref="/subscription"
-              linkLabel="Go to subscription"
               style={{
-                height:
-                  window.innerWidth < 768
-                    ? "250px"
-                    : `calc(100vh - ${calculatedHeight}px - 12.4375rem)`,
+                height: isMobile
+                  ? "250px"
+                  : `calc(100vh - ${calculatedHeight}px - 12.4375rem)`,
               }}
-            />
+            >
+              <EmptyStateIcon>
+                <ChartColumnIncreasing />
+              </EmptyStateIcon>
+              <EmptyStateHeader>UNLOCK ANALYTICS</EmptyStateHeader>
+              <EmptyStateDescription>
+                Upgrade to our professional plan to access detailed analytics
+                for your digital business cards.
+              </EmptyStateDescription>
+              <EmptyStateAction>
+                <Button asChild>
+                  <Link href="/subscription">Go to subscription</Link>
+                </Button>
+              </EmptyStateAction>
+            </EmptyState>
           ) : (
             <ChartContainer
               config={chartConfig}
               className="aspect-auto w-full"
               style={{
-                height:
-                  window.innerWidth < 768
-                    ? "250px"
-                    : `calc(100vh - ${calculatedHeight}px - 12.4375rem)`,
+                height: isMobile
+                  ? "250px"
+                  : `calc(100vh - ${calculatedHeight}px - 12.4375rem)`,
               }}
             >
               <AreaChart data={analyticsData}>

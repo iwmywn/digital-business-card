@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
 import { Separator } from "@/components/ui/separator";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export function ThemeToggleSkeleton() {
   return (
@@ -222,6 +223,7 @@ export function CardManagementSkeleton() {
 }
 
 export function AnalyticsSkeleton() {
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const { registerRef, calculatedHeight } = useDynamicHeightAuto();
 
   return (
@@ -264,10 +266,9 @@ export function AnalyticsSkeleton() {
           <Skeleton
             className="w-full rounded-md"
             style={{
-              height:
-                typeof window !== "undefined" && window.innerWidth < 768
-                  ? "250px"
-                  : `calc(100vh - ${calculatedHeight}px - 12.4375rem)`,
+              height: isMobile
+                ? "250px"
+                : `calc(100vh - ${calculatedHeight}px - 12.4375rem)`,
             }}
           />
         </CardContent>

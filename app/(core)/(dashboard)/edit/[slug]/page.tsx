@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
 import { EditCard } from "@/components/card/edit-card";
 import { getCardToEditBySlug } from "@/actions/card";
-import { EmptyState } from "@/components/empty-state";
 import { Ghost } from "lucide-react";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { CreateCardSkeleton } from "@/components/skeletons";
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateHeader,
+  EmptyStateDescription,
+  EmptyStateAction,
+} from "@/components/ui/empty-state";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export async function generateMetadata({
   params,
@@ -54,14 +62,18 @@ async function EditCardContent({
 
   if (error || !card) {
     return (
-      <EmptyState
-        icon={<Ghost />}
-        title="OOPS! AN ERROR OCCURRED"
-        message={error}
-        linkHref="/home"
-        linkLabel="Go home"
-        className="min-h-[calc(100vh-4.83rem)]"
-      />
+      <EmptyState className="min-h-[calc(100vh-4.83rem)]">
+        <EmptyStateIcon>
+          <Ghost />
+        </EmptyStateIcon>
+        <EmptyStateHeader>OOPS! AN ERROR OCCURRED</EmptyStateHeader>
+        <EmptyStateDescription>{error}</EmptyStateDescription>
+        <EmptyStateAction>
+          <Button asChild>
+            <Link href="/home">Go home</Link>
+          </Button>
+        </EmptyStateAction>
+      </EmptyState>
     );
   }
 

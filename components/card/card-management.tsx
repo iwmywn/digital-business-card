@@ -32,7 +32,6 @@ import type { Card as CardType } from "@/lib/definitions";
 import { getCloudinaryUrl, getColorClass, getFontClass } from "@/lib/utils";
 import { CardManagementSkeleton } from "@/components/skeletons";
 import { useCard, useUser } from "@/lib/swr";
-import { EmptyState } from "@/components/empty-state";
 import { QRCodeDialog } from "@/components/card/qr-code-dialog";
 import { ShareCardDialog } from "@/components/card/share-card-dialog";
 import { DeleteCardDialog } from "@/components/card/delete-card-dialog";
@@ -46,6 +45,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateHeader,
+  EmptyStateDescription,
+} from "@/components/ui/empty-state";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export function getImageUrl(
   card: CardType,
@@ -63,6 +69,7 @@ export function getImageUrl(
 }
 
 export function CardManagement() {
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCard, setSelectedCard] = useState<
     | (CardType & {
@@ -145,20 +152,22 @@ export function CardManagement() {
 
       {filteredCards.length === 0 ? (
         <EmptyState
-          icon={<Search />}
-          title="NO CARDS FOUND"
-          message={
-            cards.length === 0
-              ? "You haven't created any cards yet."
-              : "We couldn't find any cards matching your search. Try a different search term."
-          }
           style={{
-            minHeight:
-              window.innerWidth < 768
-                ? "250px"
-                : `calc(100vh - ${calculatedHeight}px - 9.33rem)`,
+            minHeight: isMobile
+              ? "250px"
+              : `calc(100vh - ${calculatedHeight}px - 9.33rem)`,
           }}
-        />
+        >
+          <EmptyStateIcon>
+            <Search />
+          </EmptyStateIcon>
+          <EmptyStateHeader>NO CARDS FOUND</EmptyStateHeader>
+          <EmptyStateDescription>
+            {cards.length === 0
+              ? "You haven't created any cards yet."
+              : "We couldn't find any cards matching your search. Try a different search term."}
+          </EmptyStateDescription>
+        </EmptyState>
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredCards.map((card) => (
