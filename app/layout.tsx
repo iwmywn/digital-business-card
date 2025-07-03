@@ -32,8 +32,6 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${nunito.className}`}>
-        <SpeedInsights />
-        <Analytics />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -43,6 +41,8 @@ export default async function RootLayout({
           <TopProgressBar />
           <Toaster richColors closeButton />
           {children}
+          <SpeedInsights />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
