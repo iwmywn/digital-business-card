@@ -13,13 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { FormLink } from "@/components/form-link";
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -87,48 +80,38 @@ export function ForgotPasswordForm() {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Forgot Password</CardTitle>
-          <CardDescription>
-            Enter your email address to receive a password reset link.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid gap-4">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="email">Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="email"
-                          placeholder="johndoe@mail.com"
-                          type="email"
-                          autoComplete="email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormButton
-                  isSubmitting={isLoading || form.formState.isSubmitting}
-                  text="Send reset link"
-                />
-                <FormLink href="/signin" side="center">
-                  Back to sign in
-                </FormLink>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid gap-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel htmlFor="email">Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="email"
+                      placeholder="johndoe@mail.com"
+                      type="email"
+                      autoComplete="email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormButton
+              isSubmitting={isLoading || form.formState.isSubmitting}
+              text="Send reset link"
+            />
+            <FormLink href="/signin" side="center">
+              Back to sign in
+            </FormLink>
+          </div>
+        </form>
+      </Form>
 
       <ReCaptchaDialog
         open={isReCaptchaOpen}

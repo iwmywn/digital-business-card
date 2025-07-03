@@ -13,13 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { PasswordInput } from "@/components/ui/password-input";
 import { resetPasswordSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
@@ -87,68 +80,58 @@ export function ResetPasswordForm({
     );
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-xl">Reset Password</CardTitle>
-        <CardDescription>
-          Enter your new password to reset your password.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid gap-4">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="password">New Password</FormLabel>
-                    <FormControl>
-                      <PasswordInput
-                        id="password"
-                        placeholder="********"
-                        autoComplete="new-password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="grid gap-4">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="grid gap-2">
+                <FormLabel htmlFor="password">New Password</FormLabel>
+                <FormControl>
+                  <PasswordInput
+                    id="password"
+                    placeholder="********"
+                    autoComplete="new-password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="confirmPassword">
-                      Confirm Password
-                    </FormLabel>
-                    <FormControl>
-                      <PasswordInput
-                        id="confirmPassword"
-                        placeholder="********"
-                        autoComplete="new-password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem className="grid gap-2">
+                <FormLabel htmlFor="confirmPassword">
+                  Confirm Password
+                </FormLabel>
+                <FormControl>
+                  <PasswordInput
+                    id="confirmPassword"
+                    placeholder="********"
+                    autoComplete="new-password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormButton
-                isSubmitting={form.formState.isSubmitting}
-                text="Reset password"
-              />
-              <FormLink href="/signin" side="center">
-                Back to sign in
-              </FormLink>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+          <FormButton
+            isSubmitting={form.formState.isSubmitting}
+            text="Reset password"
+          />
+          <FormLink href="/signin" side="center">
+            Back to sign in
+          </FormLink>
+        </div>
+      </form>
+    </Form>
   );
 }

@@ -5,13 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Form,
   FormControl,
   FormField,
@@ -51,10 +44,25 @@ import Image from "next/image";
 import type { Image as ImageType } from "@/components/card/card-design";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
+import { InformationSkeleton } from "@/components/skeletons";
 
 export type ProfileFormValues = z.infer<typeof publicProfileSchema>;
 
-export function InformationForm() {
+export function InformationSetting() {
+  const { isUserError, isUserLoading } = useUser();
+
+  useEffect(() => {
+    if (isUserError && !isUserLoading) toast.error(isUserError);
+  }, [isUserError, isUserLoading]);
+
+  if (isUserLoading) {
+    return <InformationSkeleton />;
+  }
+
+  return <InformationForm />;
+}
+
+function InformationForm() {
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [imageEditorOpen, setImageEditorOpen] = useState<boolean>(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
@@ -225,293 +233,106 @@ export function InformationForm() {
 
   return (
     <>
-      <Card className="rounded-lg">
-        <CardHeader>
-          <CardTitle className="text-xl">Public Profile</CardTitle>
-          <CardDescription>Update your profile information.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="flex flex-col items-center justify-center gap-6">
-            <div className="flex flex-col items-center gap-6 sm:flex-row sm:gap-12">
-              <div className="flex w-40 flex-col items-center gap-2">
-                <Label htmlFor="profile-image" className="text-sm">
-                  Cover Photo
-                </Label>
-                <div
-                  className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
-                  onClick={() => handleImageClick("profile")}
-                >
-                  {profileImage ? (
-                    <div className="relative h-full w-full">
-                      <Image
-                        src={getImageUrl("profile")}
-                        alt="Profile picture"
-                        fill
-                        sizes="80px"
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center">
-                      <ImageIcon className="size-8 text-gray-400" />
-                      <span className="mt-1 text-center text-xs text-gray-500">
-                        Click to upload
-                      </span>
-                    </div>
-                  )}
+      <div className="flex flex-col items-center justify-center gap-6">
+        <div className="flex flex-col items-center gap-6 sm:flex-row sm:gap-12">
+          <div className="flex w-40 flex-col items-center gap-2">
+            <Label htmlFor="profile-image" className="text-sm">
+              Cover Photo
+            </Label>
+            <div
+              className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
+              onClick={() => handleImageClick("profile")}
+            >
+              {profileImage ? (
+                <div className="relative h-full w-full">
+                  <Image
+                    src={getImageUrl("profile")}
+                    alt="Profile picture"
+                    fill
+                    sizes="80px"
+                    style={{ objectFit: "cover" }}
+                  />
                 </div>
-                <input
-                  id="profile-image"
-                  name="profile-image"
-                  type="file"
-                  accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
-                  className="hidden"
-                  onChange={(e) => handleImageUpload(e, "profile")}
-                />
-                <p className="text-muted-foreground text-center text-xs">
-                  {profileImage ? "Click to edit" : "Square, 400x400px"}
-                </p>
-              </div>
-
-              <div className="flex w-40 flex-col items-center gap-2">
-                <Label htmlFor="cover-image" className="text-sm">
-                  Cover Photo
-                </Label>
-                <div
-                  className="relative flex h-20 w-40 cursor-pointer items-center justify-center overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
-                  onClick={() => handleImageClick("cover")}
-                >
-                  {coverImage ? (
-                    <div className="relative h-full w-full">
-                      <Image
-                        src={getImageUrl("cover")}
-                        alt="Cover photo"
-                        fill
-                        sizes="160px"
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center">
-                      <ImageIcon className="size-8 text-gray-400" />
-                      <span className="mt-1 text-center text-xs text-gray-500">
-                        Click to upload
-                      </span>
-                    </div>
-                  )}
+              ) : (
+                <div className="flex h-full w-full flex-col items-center justify-center">
+                  <ImageIcon className="size-8 text-gray-400" />
+                  <span className="mt-1 text-center text-xs text-gray-500">
+                    Click to upload
+                  </span>
                 </div>
-                <input
-                  id="cover-image"
-                  name="cover-image"
-                  type="file"
-                  accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
-                  className="hidden"
-                  onChange={(e) => handleImageUpload(e, "cover")}
-                />
-                <p className="text-muted-foreground text-center text-xs">
-                  {profileImage ? "Click to edit" : "800x400px, 2:1 ratio"}
-                </p>
-              </div>
+              )}
             </div>
+            <input
+              id="profile-image"
+              name="profile-image"
+              type="file"
+              accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
+              className="hidden"
+              onChange={(e) => handleImageUpload(e, "profile")}
+            />
+            <p className="text-muted-foreground text-center text-xs">
+              {profileImage ? "Click to edit" : "Square, 400x400px"}
+            </p>
+          </div>
 
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="w-full space-y-4"
-              >
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <FormField
-                      control={form.control}
-                      name="fullName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel htmlFor="fullName">Full Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              id="fullName"
-                              placeholder="Your name"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <FormField
-                      control={form.control}
-                      name="gender"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel htmlFor="gender">Gender</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger id="gender" className="w-full">
-                                <SelectValue placeholder="Select gender" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="male">Male</SelectItem>
-                              <SelectItem value="female">Female</SelectItem>
-                              <SelectItem value="non-binary">
-                                Non-binary
-                              </SelectItem>
-                              <SelectItem value="prefer-not-to-say">
-                                Prefer not to say
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+          <div className="flex w-40 flex-col items-center gap-2">
+            <Label htmlFor="cover-image" className="text-sm">
+              Cover Photo
+            </Label>
+            <div
+              className="relative flex h-20 w-40 cursor-pointer items-center justify-center overflow-hidden border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100"
+              onClick={() => handleImageClick("cover")}
+            >
+              {coverImage ? (
+                <div className="relative h-full w-full">
+                  <Image
+                    src={getImageUrl("cover")}
+                    alt="Cover photo"
+                    fill
+                    sizes="160px"
+                    style={{ objectFit: "cover" }}
+                  />
                 </div>
-
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <FormField
-                      control={form.control}
-                      name="dateOfBirth"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                          <FormLabel htmlFor="dateOfBirth">
-                            Date Of Birth
-                          </FormLabel>
-                          <Popover
-                            open={showCalendar}
-                            onOpenChange={setShowCalendar}
-                          >
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <Button
-                                  id="dateOfBirth"
-                                  variant={"outline"}
-                                  className={cn(
-                                    "truncate pl-3 text-left font-normal",
-                                    !field.value && "text-muted-foreground",
-                                  )}
-                                >
-                                  {field.value ? (
-                                    format(new Date(field.value), "MM/dd/yyyy")
-                                  ) : (
-                                    <span>Pick a date</span>
-                                  )}
-                                  <CalendarIcon className="ml-auto size-4 opacity-50" />
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent
-                              className="w-auto p-2"
-                              align="start"
-                            >
-                              <CalendarComponent
-                                mode="single"
-                                selected={
-                                  field.value
-                                    ? new Date(field.value)
-                                    : undefined
-                                }
-                                onSelect={(day) => {
-                                  field.onChange(
-                                    day ? format(day, "MM/dd/yyyy") : undefined,
-                                  );
-                                  setShowCalendar(false);
-                                }}
-                                disabled={(date) =>
-                                  date > new Date() ||
-                                  date < new Date("1900-01-01")
-                                }
-                                autoFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <FormField
-                      control={form.control}
-                      name="jobTitle"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel htmlFor="jobTitle">Job Title</FormLabel>
-                          <FormControl>
-                            <Input
-                              id="jobTitle"
-                              placeholder="Your job title"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+              ) : (
+                <div className="flex h-full w-full flex-col items-center justify-center">
+                  <ImageIcon className="size-8 text-gray-400" />
+                  <span className="mt-1 text-center text-xs text-gray-500">
+                    Click to upload
+                  </span>
                 </div>
+              )}
+            </div>
+            <input
+              id="cover-image"
+              name="cover-image"
+              type="file"
+              accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png"
+              className="hidden"
+              onChange={(e) => handleImageUpload(e, "cover")}
+            />
+            <p className="text-muted-foreground text-center text-xs">
+              {profileImage ? "Click to edit" : "800x400px, 2:1 ratio"}
+            </p>
+          </div>
+        </div>
 
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <FormField
-                      control={form.control}
-                      name="company"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel htmlFor="company">Company</FormLabel>
-                          <FormControl>
-                            <Input
-                              id="company"
-                              placeholder="Your company"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <FormField
-                      control={form.control}
-                      name="website"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel htmlFor="website">Website</FormLabel>
-                          <FormControl>
-                            <Input
-                              id="website"
-                              placeholder="https://example.com"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full space-y-4"
+          >
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
                 <FormField
                   control={form.control}
-                  name="bio"
+                  name="fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="bio">Bio</FormLabel>
+                      <FormLabel htmlFor="fullName">Full Name</FormLabel>
                       <FormControl>
-                        <Textarea
-                          id="bio"
-                          placeholder="Tell us a little bit about yourself"
-                          className="resize-none"
+                        <Input
+                          id="fullName"
+                          placeholder="Your name"
                           {...field}
                         />
                       </FormControl>
@@ -519,26 +340,195 @@ export function InformationForm() {
                     </FormItem>
                   )}
                 />
+              </div>
 
-                <div className="flex flex-row-reverse gap-2">
-                  <FormButton
-                    isSubmitting={form.formState.isSubmitting}
-                    text="Save changes"
-                  />
-                  <Button asChild>
-                    <Link
-                      href={`/profile/${user?.username || user?._id}`}
-                      target="_blank"
-                    >
-                      View public profile
-                    </Link>
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </div>
-        </CardContent>
-      </Card>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="gender"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="gender">Gender</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger id="gender" className="w-full">
+                            <SelectValue placeholder="Select gender" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="male">Male</SelectItem>
+                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="non-binary">Non-binary</SelectItem>
+                          <SelectItem value="prefer-not-to-say">
+                            Prefer not to say
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="dateOfBirth"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel htmlFor="dateOfBirth">Date Of Birth</FormLabel>
+                      <Popover
+                        open={showCalendar}
+                        onOpenChange={setShowCalendar}
+                      >
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              id="dateOfBirth"
+                              variant={"outline"}
+                              className={cn(
+                                "truncate pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground",
+                              )}
+                            >
+                              {field.value ? (
+                                format(new Date(field.value), "MM/dd/yyyy")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto size-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-2" align="start">
+                          <CalendarComponent
+                            mode="single"
+                            selected={
+                              field.value ? new Date(field.value) : undefined
+                            }
+                            onSelect={(day) => {
+                              field.onChange(
+                                day ? format(day, "MM/dd/yyyy") : undefined,
+                              );
+                              setShowCalendar(false);
+                            }}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            autoFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="jobTitle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="jobTitle">Job Title</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="jobTitle"
+                          placeholder="Your job title"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="company"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="company">Company</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="company"
+                          placeholder="Your company"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="website"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="website">Website</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="website"
+                          placeholder="https://example.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            <FormField
+              control={form.control}
+              name="bio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="bio">Bio</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      id="bio"
+                      placeholder="Tell us a little bit about yourself"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex flex-row-reverse gap-2">
+              <FormButton
+                isSubmitting={form.formState.isSubmitting}
+                text="Save changes"
+              />
+              <Button asChild>
+                <Link
+                  href={`/profile/${user?.username || user?._id}`}
+                  target="_blank"
+                >
+                  View public profile
+                </Link>
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
 
       {imageEditorOpen && (
         <ImageEditorDialog

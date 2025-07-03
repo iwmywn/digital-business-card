@@ -13,13 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { FormLink } from "@/components/form-link";
@@ -59,71 +52,61 @@ export function SignInForm() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-xl">Sign In</CardTitle>
-        <CardDescription>
-          Enter your email and password to sign in to your account.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid gap-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="email">Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="email"
-                        placeholder="johndoe@mail.com"
-                        type="email"
-                        autoComplete="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <div className="flex items-center justify-between">
-                      <FormLabel htmlFor="password">Password</FormLabel>
-                    </div>
-                    <FormControl>
-                      <PasswordInput
-                        id="password"
-                        placeholder="********"
-                        autoComplete="current-password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormLink href="/forgot-password" side="right">
-                Forgot your password?
-              </FormLink>
-              <FormButton
-                isSubmitting={form.formState.isSubmitting}
-                text="Sign in"
-              />
-            </div>
-          </form>
-        </Form>
-        <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <FormLink href="/signup">Sign up</FormLink>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="grid gap-4">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="grid gap-2">
+                <FormLabel htmlFor="email">Email</FormLabel>
+                <FormControl>
+                  <Input
+                    id="email"
+                    placeholder="johndoe@mail.com"
+                    type="email"
+                    autoComplete="email"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="grid gap-2">
+                <div className="flex items-center justify-between">
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                </div>
+                <FormControl>
+                  <PasswordInput
+                    id="password"
+                    placeholder="********"
+                    autoComplete="current-password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormLink href="/forgot-password" side="right">
+            Forgot your password?
+          </FormLink>
+          <FormButton
+            isSubmitting={form.formState.isSubmitting}
+            text="Sign in"
+          />
+          <div className="text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <FormLink href="/signup">Sign up</FormLink>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      </form>
+    </Form>
   );
 }

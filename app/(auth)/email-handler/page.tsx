@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 import { VerifyEmail } from "@/components/auth/verify-email";
 import NotFound from "@/app/not-found";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export async function generateMetadata({
   searchParams,
@@ -34,6 +41,18 @@ export default async function page({
   if (mode === "verifyEmail")
     return <VerifyEmail token={token} email={email} />;
   else if (mode === "resetPassword")
-    return <ResetPasswordForm token={token} email={email} />;
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Reset Password</CardTitle>
+          <CardDescription>
+            Enter your new password to reset your password.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResetPasswordForm token={token} email={email} />
+        </CardContent>
+      </Card>
+    );
   else return <NotFound />;
 }

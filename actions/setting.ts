@@ -5,7 +5,7 @@ import { getUserById } from "@/lib/data";
 import { session } from "@/lib/session";
 import {
   accountSchema,
-  notificationSettingsSchema,
+  notificationSchema,
   publicProfileSchema,
 } from "@/schemas";
 import { ObjectId } from "mongodb";
@@ -15,7 +15,7 @@ import type { ProfileFormValues } from "@/components/settings/information-form";
 import { extractCloudinaryPath } from "@/lib/utils";
 import type { ImageTransform } from "@/components/image-editor-dialog";
 import type { SettingsFormValues } from "@/components/settings/account-form";
-import type { NotificationSettingsFormValues } from "@/components/settings/notification-settings";
+import type { NotificationFormValues } from "@/components/settings/notification-form";
 
 type ImageKey = "profileImage" | "coverImage";
 export async function updateProfile(
@@ -224,7 +224,7 @@ export async function updateAccount(values: SettingsFormValues) {
 }
 
 export async function updateNotificationSettings(
-  values: NotificationSettingsFormValues,
+  values: NotificationFormValues,
 ) {
   try {
     const { userId } = await session.user.get();
@@ -233,7 +233,7 @@ export async function updateNotificationSettings(
       return { error: "Unauthorized! Please reload the page and try again." };
     }
 
-    const parsedValues = notificationSettingsSchema.safeParse(values);
+    const parsedValues = notificationSchema.safeParse(values);
 
     if (!parsedValues.success) {
       return { error: "Invalid data provided!" };

@@ -13,19 +13,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog";
 import { tokenSchema } from "@/schemas";
 import { FormButton } from "@/components/form-button";
-import { FormLink } from "@/components/form-link";
 import { signInPrivate } from "@/actions/auth";
 import { useRouter } from "next/navigation";
 
@@ -97,54 +89,35 @@ export function PrivateForm() {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Secure Access</CardTitle>
-          <CardDescription>
-            Please contact{" "}
-            <FormLink
-              href="https://github.com/iwmywn"
-              target="_blank"
-              className="text-foreground/85"
-              rel="noopener noreferrer"
-            >
-              the administrator
-            </FormLink>{" "}
-            to receive your access token.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid gap-4">
-                <FormField
-                  control={form.control}
-                  name="token"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="token">Token</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="token"
-                          placeholder="w6k4SNxs6tUYqetKg7sSFCD/Ac/YUTDStuQgbF92+M8="
-                          type="text"
-                          autoComplete="off"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormButton
-                  isSubmitting={isLoading || form.formState.isSubmitting}
-                  text="Submit"
-                />
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid gap-4">
+            <FormField
+              control={form.control}
+              name="token"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel htmlFor="token">Token</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="token"
+                      placeholder="w6k4SNxs6tUYqetKg7sSFCD/Ac/YUTDStuQgbF92+M8="
+                      type="text"
+                      autoComplete="off"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormButton
+              isSubmitting={isLoading || form.formState.isSubmitting}
+              text="Submit"
+            />
+          </div>
+        </form>
+      </Form>
 
       <ReCaptchaDialog
         open={isReCaptchaOpen}

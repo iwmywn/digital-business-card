@@ -238,7 +238,7 @@ const accountSchema = z
     }
   });
 
-const notificationSettingsSchema = z.object({
+const notificationSchema = z.object({
   email: z.boolean(),
   cardView: z.boolean(),
   marketing: z.boolean(),
@@ -408,7 +408,7 @@ export {
   contactSchema,
   publicProfileSchema,
   accountSchema,
-  notificationSettingsSchema,
+  notificationSchema,
   personalInformationSchema,
   cardSlugSchema,
   brandNameSchema,
