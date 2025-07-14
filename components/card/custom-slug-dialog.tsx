@@ -96,7 +96,7 @@ export function CustomSlugDialog({
     const parsedValue = cardSlugSchema.safeParse({ slug });
 
     if (!parsedValue.success) {
-      const errorMessages = parsedValue.error.errors
+      const errorMessages = parsedValue.error.issues
         .map((err) => err.message)
         .join(" ");
 

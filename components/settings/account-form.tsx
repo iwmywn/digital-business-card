@@ -101,7 +101,7 @@ export function AccountForm() {
     const parsedValue = usernameSchema.safeParse({ username });
 
     if (!parsedValue.success) {
-      const errorMessages = parsedValue.error.errors
+      const errorMessages = parsedValue.error.issues
         .map((err) => err.message)
         .join(" ");
 
