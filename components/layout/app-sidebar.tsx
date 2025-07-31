@@ -1,26 +1,27 @@
-"use client";
+"use client"
 
+import { useEffect } from "react"
+import Image from "next/image"
+import Link from "next/link"
 import {
   BadgePlus,
-  Kanban,
   ChartColumnIncreasing,
   CreditCard,
-} from "lucide-react";
-import { Nav } from "@/components/layout/nav";
-import { NavUser } from "@/components/layout/nav-user";
+  Kanban,
+} from "lucide-react"
+import { toast } from "sonner"
+
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarMenuButton,
-} from "@/components/ui/sidebar";
-import Link from "next/link";
-import Image from "next/image";
-import { useUser } from "@/lib/swr";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useEffect } from "react";
-import { toast } from "sonner";
+} from "@/components/ui/sidebar"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Nav } from "@/components/layout/nav"
+import { NavUser } from "@/components/layout/nav-user"
+import { useUser } from "@/lib/swr"
 
 export const nav = [
   {
@@ -43,14 +44,14 @@ export const nav = [
     url: "/subscription",
     icon: CreditCard,
   },
-];
+]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user, isUserLoading, isUserError } = useUser();
+  const { user, isUserLoading, isUserError } = useUser()
 
   useEffect(() => {
-    if (isUserError && !isUserLoading) toast.error(isUserError);
-  }, [isUserError, isUserLoading]);
+    if (isUserError && !isUserLoading) toast.error(isUserError)
+  }, [isUserError, isUserLoading])
 
   return (
     <Sidebar
@@ -89,5 +90,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser />
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

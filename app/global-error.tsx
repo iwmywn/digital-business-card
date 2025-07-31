@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { nunito } from "@/app/fonts";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
+import { nunito } from "@/app/fonts"
 
 export default function GlobalError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }) {
   return (
     <html>
@@ -20,5 +20,5 @@ export default function GlobalError({
         </main>
       </body>
     </html>
-  );
+  )
 }

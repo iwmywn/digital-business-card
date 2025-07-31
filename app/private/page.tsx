@@ -1,16 +1,17 @@
-import { PrivateForm } from "@/components/auth/private-form";
-import type { Metadata } from "next";
+import type { Metadata } from "next"
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { FormLink } from "@/components/form-link";
+} from "@/components/ui/card"
+import { PrivateForm } from "@/components/auth/private-form"
+import { FormLink } from "@/components/form-link"
 
 export function generateMetadata(): Metadata {
-  return { title: "Private" };
+  return { title: "Private" }
 }
 
 export default function page() {
@@ -39,5 +40,5 @@ export default function page() {
         </Card>
       </div>
     </main>
-  );
+  )
 }

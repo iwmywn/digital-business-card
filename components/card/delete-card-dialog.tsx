@@ -1,3 +1,9 @@
+import { useState } from "react"
+import Image from "next/image"
+import { toast } from "sonner"
+
+import { deleteCard } from "@/actions/card"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -5,17 +11,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Card as CardType } from "@/lib/definitions";
-import Image from "next/image";
-import { toast } from "sonner";
-import { Loading } from "@/components/loading";
-import { Button } from "@/components/ui/button";
-import { useCard } from "@/lib/swr";
-import { getImageUrl } from "@/components/card/card-management";
-import { deleteCard } from "@/actions/card";
-import { useState } from "react";
-import { formatDate } from "@/lib/utils";
+} from "@/components/ui/dialog"
+import { getImageUrl } from "@/components/card/card-management"
+import { Loading } from "@/components/loading"
+import { Card as CardType } from "@/lib/definitions"
+import { useCard } from "@/lib/swr"
+import { formatDate } from "@/lib/utils"
 
 export function DeleteCardDialog({
   card,
@@ -23,33 +24,33 @@ export function DeleteCardDialog({
   setOpen,
 }: {
   card: CardType & {
-    editable: boolean;
-    message?: string;
-    dynamicSlug: string;
-  };
-  open: boolean;
-  setOpen: (open: boolean) => void;
+    editable: boolean
+    message?: string
+    dynamicSlug: string
+  }
+  open: boolean
+  setOpen: (open: boolean) => void
 }) {
-  const { cardResponse, cards, mutate } = useCard();
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const { cardResponse, cards, mutate } = useCard()
+  const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
   async function handleDeleteCard() {
-    setIsDeleting(true);
+    setIsDeleting(true)
 
-    const { success, error } = await deleteCard(card._id);
+    const { success, error } = await deleteCard(card._id)
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
       mutate({
         ...cardResponse,
         cards: cards.filter((c) => c._id !== card._id),
-      });
-      setOpen(false);
-      toast.success(success);
+      })
+      setOpen(false)
+      toast.success(success)
     }
 
-    setIsDeleting(false);
+    setIsDeleting(false)
   }
 
   return (
@@ -100,5 +101,5 @@ export function DeleteCardDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

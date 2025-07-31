@@ -1,109 +1,110 @@
-"use server";
+"use server"
 
-import { ObjectId } from "mongodb";
-import { getCardCollection, getUserCollection } from "@/lib/collections";
-import { session } from "@/lib/session";
-import { getUserById } from "@/lib/data";
-import type { CardDesignValues } from "@/components/card/card-design";
-import type { PersonalInformationValues } from "@/components/card/personal-information";
-import type { SerializableLinkType } from "@/components/icons";
-import type { Card } from "@/lib/definitions";
-import * as constants from "@/constants";
-import { uploadToCloudinary } from "@/lib/cloudinary";
-import { extractCloudinaryPath, someRight } from "@/lib/utils";
-import type { SlugFormValues } from "@/components/card/custom-slug-dialog";
-import { cardSlugSchema } from "@/schemas";
+import * as constants from "@/constants"
+import { cardSlugSchema } from "@/schemas"
+import { ObjectId } from "mongodb"
 
-type ImageKey = "logoImage" | "profileImage" | "coverImage";
+import type { CardDesignValues } from "@/components/card/card-design"
+import type { SlugFormValues } from "@/components/card/custom-slug-dialog"
+import type { PersonalInformationValues } from "@/components/card/personal-information"
+import type { SerializableLinkType } from "@/components/icons"
+import { uploadToCloudinary } from "@/lib/cloudinary"
+import { getCardCollection, getUserCollection } from "@/lib/collections"
+import { getUserById } from "@/lib/data"
+import type { Card } from "@/lib/definitions"
+import { session } from "@/lib/session"
+import { extractCloudinaryPath, someRight } from "@/lib/utils"
+
+type ImageKey = "logoImage" | "profileImage" | "coverImage"
 export async function saveCard(
   cardDesign: CardDesignValues,
   personalInformation: PersonalInformationValues,
   links: SerializableLinkType[],
   isPublic: boolean,
-  cardId?: string,
+  cardId?: string
 ) {
   try {
-    const { userId } = await session.user.get();
+    const { userId } = await session.user.get()
 
     if (!userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
 
-    const existingUser = await getUserById(userId);
+    const existingUser = await getUserById(userId)
 
-    if (!existingUser) return { error: "User not found!" };
+    if (!existingUser) return { error: "User not found!" }
 
-    const updatedCardDesign = { ...cardDesign };
+    const updatedCardDesign = { ...cardDesign }
 
     if (updatedCardDesign.imageTransforms?.logo) {
-      updatedCardDesign.imageTransforms.logo.croppedImageUrl = null;
+      updatedCardDesign.imageTransforms.logo.croppedImageUrl = null
     }
     if (updatedCardDesign.imageTransforms?.cover) {
-      updatedCardDesign.imageTransforms.cover.croppedImageUrl = null;
+      updatedCardDesign.imageTransforms.cover.croppedImageUrl = null
     }
     if (updatedCardDesign.imageTransforms?.profile) {
-      updatedCardDesign.imageTransforms.profile.croppedImageUrl = null;
+      updatedCardDesign.imageTransforms.profile.croppedImageUrl = null
     }
 
-    const imageKeys: ImageKey[] = ["logoImage", "profileImage", "coverImage"];
+    const imageKeys: ImageKey[] = ["logoImage", "profileImage", "coverImage"]
 
     for (const key of imageKeys) {
-      const image = cardDesign[key];
-      const folder = key.replace("Image", "");
+      const image = cardDesign[key]
+      const folder = key.replace("Image", "")
 
-      if (!image) continue;
+      if (!image) continue
 
       if (image[1].startsWith("data:")) {
-        const { path, error } = await uploadToCloudinary(image[1], folder);
+        const { path, error } = await uploadToCloudinary(image[1], folder)
         if (error || !path) {
-          return { error };
+          return { error }
         } else {
-          updatedCardDesign[key] = [image[0], path];
+          updatedCardDesign[key] = [image[0], path]
         }
       } else if (image[1].startsWith("https://")) {
-        const { path, error } = extractCloudinaryPath(image[1]);
+        const { path, error } = extractCloudinaryPath(image[1])
         if (error || !path) {
-          return { error: error };
+          return { error: error }
         } else {
-          updatedCardDesign[key] = [image[0], path];
+          updatedCardDesign[key] = [image[0], path]
         }
       }
     }
 
-    const cardCollection = await getCardCollection();
-    const { currentPlan } = existingUser;
-    let maxCards = constants.maxFreeCards;
+    const cardCollection = await getCardCollection()
+    const { currentPlan } = existingUser
+    let maxCards = constants.maxFreeCards
 
     if (currentPlan === "basic") {
-      maxCards = constants.maxBasicCards;
+      maxCards = constants.maxBasicCards
     } else if (currentPlan === "professional") {
-      maxCards = constants.maxProfessionalCards;
+      maxCards = constants.maxProfessionalCards
     }
 
     if (cardId) {
       const cards = await cardCollection
         .find({ userId })
         .sort({ createdAt: 1 })
-        .toArray();
+        .toArray()
       const editableCard = cards.find(
-        (c, idx) => c._id.toString() === cardId && idx < maxCards,
-      );
+        (c, idx) => c._id.toString() === cardId && idx < maxCards
+      )
 
       if (!editableCard) {
         return {
           error: `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s)!`,
-        };
+        }
       }
 
       const existingCard = await cardCollection.findOne({
         _id: new ObjectId(cardId),
         userId,
-      });
+      })
 
       if (!existingCard) {
         return {
           error: "Card not found or you don't have permission to edit it!",
-        };
+        }
       }
 
       await cardCollection.updateOne(
@@ -116,18 +117,18 @@ export async function saveCard(
             isPublic,
             updatedAt: new Date(),
           },
-        },
-      );
+        }
+      )
     } else {
-      const cardCount = await cardCollection.countDocuments({ userId });
+      const cardCount = await cardCollection.countDocuments({ userId })
 
       if (cardCount >= maxCards) {
         return {
           error: `You've reached the maximum number of cards (${maxCards}) allowed on your ${currentPlan} plan!`,
-        };
+        }
       }
 
-      const now = new Date();
+      const now = new Date()
 
       const result = await cardCollection.insertOne({
         userId,
@@ -143,34 +144,34 @@ export async function saveCard(
         clickFingerprint: {},
         createdAt: now,
         updatedAt: now,
-      });
+      })
 
       if (!result.acknowledged)
-        return { error: "Card creation failed! Try again later." };
+        return { error: "Card creation failed! Try again later." }
     }
 
     return {
       success: "Card saved.",
       error: undefined,
-    };
+    }
   } catch (error) {
-    console.error("Error saving card:", error);
-    return { error: "Failed to save card! Please try again later." };
+    console.error("Error saving card:", error)
+    return { error: "Failed to save card! Please try again later." }
   }
 }
 
 export async function getCardToEditBySlug(slug: string) {
   try {
     const isValidObjectId =
-      ObjectId.isValid(slug) && new ObjectId(slug).toString() === slug;
-    const query = isValidObjectId ? { _id: new ObjectId(slug) } : { slug };
+      ObjectId.isValid(slug) && new ObjectId(slug).toString() === slug
+    const query = isValidObjectId ? { _id: new ObjectId(slug) } : { slug }
     const [cardCollection, currentUser] = await Promise.all([
       getCardCollection(),
       session.user.get(),
-    ]);
+    ])
 
     if (!currentUser.userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
 
     const [card, cards, existingUser] = await Promise.all([
@@ -180,51 +181,51 @@ export async function getCardToEditBySlug(slug: string) {
         .sort({ createdAt: 1 })
         .toArray(),
       getUserById(currentUser.userId),
-    ]);
+    ])
 
     if (!card) {
-      return { error: "Card not found!" };
+      return { error: "Card not found!" }
     }
 
-    if (!existingUser) return { error: "User not found!" };
+    if (!existingUser) return { error: "User not found!" }
 
-    const { currentPlan } = existingUser;
-    let maxCards = constants.maxFreeCards;
+    const { currentPlan } = existingUser
+    let maxCards = constants.maxFreeCards
 
     if (currentPlan === "basic") {
-      maxCards = constants.maxBasicCards;
+      maxCards = constants.maxBasicCards
     } else if (currentPlan === "professional") {
-      maxCards = constants.maxProfessionalCards;
+      maxCards = constants.maxProfessionalCards
     }
 
     const editableCard = cards.find(
-      (c, idx) => c._id.toString() === card._id.toString() && idx < maxCards,
-    );
+      (c, idx) => c._id.toString() === card._id.toString() && idx < maxCards
+    )
 
     if (!editableCard) {
       return {
         error: `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s)!`,
-      };
+      }
     }
 
-    const isOwner = currentUser.userId === card.userId;
+    const isOwner = currentUser.userId === card.userId
 
     if (!isOwner) {
-      return { error: "This card belongs to another user." };
+      return { error: "This card belongs to another user." }
     }
 
-    const now = new Date();
+    const now = new Date()
     const validProfessionalPlan = existingUser.purchasedPlans?.find(
       (plan) =>
         currentPlan === plan.planId &&
         plan.planId === "professional" &&
-        new Date(plan.expiresAt) > now,
-    );
+        new Date(plan.expiresAt) > now
+    )
 
     if (!validProfessionalPlan && !isValidObjectId) {
       return {
         error: "Upgrade our professional plan to access via slug.",
-      };
+      }
     }
 
     return {
@@ -232,86 +233,86 @@ export async function getCardToEditBySlug(slug: string) {
         ...card,
         _id: card._id.toString(),
       } as Card,
-    };
+    }
   } catch (error) {
-    console.error("Error getting card slug:", error);
-    return { error: "Failed to get card slug! Please try again later." };
+    console.error("Error getting card slug:", error)
+    return { error: "Failed to get card slug! Please try again later." }
   }
 }
 
 export async function getCardToViewBySlug(slug: string) {
   try {
     const isValidObjectId =
-      ObjectId.isValid(slug) && new ObjectId(slug).toString() === slug;
-    const query = isValidObjectId ? { _id: new ObjectId(slug) } : { slug };
-    const card = await (await getCardCollection()).findOne(query);
+      ObjectId.isValid(slug) && new ObjectId(slug).toString() === slug
+    const query = isValidObjectId ? { _id: new ObjectId(slug) } : { slug }
+    const card = await (await getCardCollection()).findOne(query)
 
     if (!card) {
-      return { error: "Card not found!" };
+      return { error: "Card not found!" }
     }
 
     const [currentUser, existingUser] = await Promise.all([
       session.user.get(),
       getUserById(card.userId),
-    ]);
+    ])
 
-    const isOwner = currentUser.userId === card.userId;
+    const isOwner = currentUser.userId === card.userId
 
-    if (!existingUser) return { error: "User not found!" };
+    if (!existingUser) return { error: "User not found!" }
 
-    let { slug: dynamicSlug } = card;
-    const { currentPlan } = existingUser;
-    const now = new Date();
+    let { slug: dynamicSlug } = card
+    const { currentPlan } = existingUser
+    const now = new Date()
     const validBaiscPlan = existingUser.purchasedPlans?.find(
       (plan) =>
         currentPlan === plan.planId &&
         plan.planId === "basic" &&
-        new Date(plan.expiresAt) > now,
-    );
+        new Date(plan.expiresAt) > now
+    )
     const validProfessionalPlan = existingUser.purchasedPlans?.find(
       (plan) =>
         currentPlan === plan.planId &&
         plan.planId === "professional" &&
-        new Date(plan.expiresAt) > now,
-    );
+        new Date(plan.expiresAt) > now
+    )
     dynamicSlug =
       dynamicSlug && currentPlan === "professional"
         ? dynamicSlug
-        : card._id.toString();
+        : card._id.toString()
 
     if (!validProfessionalPlan && !isValidObjectId) {
       return {
         error: "Upgrade our professional plan to access via slug.",
-      };
+      }
     }
 
-    const usedFont = card.cardDesign.fontFamily;
-    const usedColor = card.cardDesign.cardColor;
+    const usedFont = card.cardDesign.fontFamily
+    const usedColor = card.cardDesign.cardColor
 
-    let fontTier: "free" | "basic" | "all" | undefined;
+    let fontTier: "free" | "basic" | "all" | undefined
     if (someRight(constants.freeFontOptions, (f) => f.value === usedFont)) {
-      fontTier = "free";
+      fontTier = "free"
     } else if (
       someRight(constants.basicFontOptions, (f) => f.value === usedFont)
     ) {
-      fontTier = "basic";
+      fontTier = "basic"
     } else if (
       someRight(constants.allFontOptions, (f) => f.value === usedFont)
     ) {
-      fontTier = "all";
+      fontTier = "all"
     }
 
-    let colorTier: "free" | "basic" | "all" | undefined;
+    let colorTier: "free" | "basic" | "all" | undefined
     if (someRight(constants.freeColorOptions, (c) => c.value === usedColor)) {
-      colorTier = "free";
+      colorTier = "free"
     } else if (
       someRight(constants.basicColorOptions, (c) => c.value === usedColor)
     ) {
-      colorTier = "basic";
+      colorTier = "basic"
     } else if (
       someRight(constants.allColorOptions, (c) => c.value === usedColor)
     ) {
-      colorTier = "all";
+      colorTier = "all"
     }
 
     if (
@@ -319,10 +320,10 @@ export async function getCardToViewBySlug(slug: string) {
       currentPlan === "free"
     ) {
       if (fontTier === "basic") {
-        card.cardDesign.fontFamily = constants.defaultFont;
+        card.cardDesign.fontFamily = constants.defaultFont
       }
       if (colorTier === "basic") {
-        card.cardDesign.cardColor = constants.defaultColor;
+        card.cardDesign.cardColor = constants.defaultColor
       }
     }
 
@@ -332,20 +333,20 @@ export async function getCardToViewBySlug(slug: string) {
       currentPlan === "basic"
     ) {
       if (fontTier === "all") {
-        card.cardDesign.fontFamily = constants.defaultFont;
+        card.cardDesign.fontFamily = constants.defaultFont
       }
       if (colorTier === "all") {
-        card.cardDesign.cardColor = constants.defaultColor;
+        card.cardDesign.cardColor = constants.defaultColor
       }
     }
 
     if (!validProfessionalPlan) {
-      card.cardDesign.brandName = "Visiq";
+      card.cardDesign.brandName = "Visiq"
 
       if (currentPlan === "basic") {
-        card.links = card.links.slice(0, constants.maxBasicLinks);
+        card.links = card.links.slice(0, constants.maxBasicLinks)
       } else {
-        card.links = card.links.slice(0, constants.maxFreeLinks);
+        card.links = card.links.slice(0, constants.maxFreeLinks)
       }
     }
 
@@ -358,15 +359,15 @@ export async function getCardToViewBySlug(slug: string) {
           message: "",
           dynamicSlug,
         } as Card & {
-          editable: boolean;
-          message?: string;
-          dynamicSlug: string;
+          editable: boolean
+          message?: string
+          dynamicSlug: string
         },
-      };
+      }
     }
 
     if (validProfessionalPlan && !card.isPublic) {
-      return { error: "This card is private." };
+      return { error: "This card is private." }
     }
 
     return {
@@ -377,14 +378,14 @@ export async function getCardToViewBySlug(slug: string) {
         message: "",
         dynamicSlug,
       } as Card & {
-        editable: boolean;
-        message?: string;
-        dynamicSlug: string;
+        editable: boolean
+        message?: string
+        dynamicSlug: string
       },
-    };
+    }
   } catch (error) {
-    console.error("Error getting card slug:", error);
-    return { error: "Failed to get card slug! Please try again later." };
+    console.error("Error getting card slug:", error)
+    return { error: "Failed to get card slug! Please try again later." }
   }
 }
 
@@ -394,103 +395,101 @@ export async function getCardByUserId(userId: string) {
       await getUserCollection()
     ).findOne({
       _id: new ObjectId(userId),
-    });
+    })
 
-    if (!existingUser) return { error: "User not found!" };
+    if (!existingUser) return { error: "User not found!" }
 
     const allCards = await (await getCardCollection())
       .find({ userId })
       .sort({ createdAt: 1 })
-      .toArray();
+      .toArray()
 
-    const { currentPlan } = existingUser;
-    const now = new Date();
+    const { currentPlan } = existingUser
+    const now = new Date()
     const validProfessionalPlan = existingUser.purchasedPlans?.find(
       (plan) =>
         currentPlan === plan.planId &&
         plan.planId === "professional" &&
-        new Date(plan.expiresAt) > now,
-    );
+        new Date(plan.expiresAt) > now
+    )
 
     const filteredCards = validProfessionalPlan
       ? allCards.filter((card) => card.isPublic)
-      : allCards;
+      : allCards
 
     const slugs = filteredCards.map((card) => {
-      let { slug: dynamicSlug } = card;
+      let { slug: dynamicSlug } = card
       dynamicSlug =
-        dynamicSlug && validProfessionalPlan
-          ? dynamicSlug
-          : card._id.toString();
-      return dynamicSlug;
-    });
+        dynamicSlug && validProfessionalPlan ? dynamicSlug : card._id.toString()
+      return dynamicSlug
+    })
 
-    return slugs;
+    return slugs
   } catch (error) {
-    console.error("Error getting card:", error);
-    return { error: "Failed to get card! Please try again later." };
+    console.error("Error getting card:", error)
+    return { error: "Failed to get card! Please try again later." }
   }
 }
 
 export async function deleteCard(cardId: string) {
   try {
-    const { userId } = await session.user.get();
+    const { userId } = await session.user.get()
 
     if (!userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
-    const cardCollection = await getCardCollection();
+    const cardCollection = await getCardCollection()
 
     const existingCard = await cardCollection.findOne({
       _id: new ObjectId(cardId),
       userId,
-    });
+    })
 
     if (!existingCard) {
       return {
         error: "Card not found or you don't have permission to delete it!",
-      };
+      }
     }
 
-    await cardCollection.deleteOne({ _id: new ObjectId(cardId) });
+    await cardCollection.deleteOne({ _id: new ObjectId(cardId) })
 
-    return { success: "Card deleted." };
+    return { success: "Card deleted." }
   } catch (error) {
-    console.error("Error deleting card:", error);
-    return { error: "Failed to delete card! Please try again later." };
+    console.error("Error deleting card:", error)
+    return { error: "Failed to delete card! Please try again later." }
   }
 }
 
 export async function trackCardClick(
   cardId: string,
   visitorId: string,
-  linkType: string,
+  linkType: string
 ) {
   try {
-    const { userId } = await session.user.get();
-    const cardCollection = await getCardCollection();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
-    const todayStr = today.toISOString().split("T")[0];
-    const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
+    const { userId } = await session.user.get()
+    const cardCollection = await getCardCollection()
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000)
+    const todayStr = today.toISOString().split("T")[0]
+    const card = await cardCollection.findOne({ _id: new ObjectId(cardId) })
 
     if (!card) {
-      return { error: "Card not found" };
+      return { error: "Card not found" }
     }
 
     if (
       card.clickFingerprint?.[todayStr]?.[visitorId]?.includes(linkType) ||
       (userId && userId === card?.userId)
     ) {
-      return { error: undefined };
+      return { error: undefined }
     }
 
     if (
       card.clickHistory &&
       card.clickHistory.some((entry: { date: Date; count: number }) => {
-        const entryDate = new Date(entry.date);
-        return entryDate >= today && entryDate < tomorrow;
+        const entryDate = new Date(entry.date)
+        return entryDate >= today && entryDate < tomorrow
       })
     ) {
       await cardCollection.updateOne(
@@ -509,8 +508,8 @@ export async function trackCardClick(
           $addToSet: {
             [`clickFingerprint.${todayStr}.${visitorId}`]: linkType,
           },
-        },
-      );
+        }
+      )
     } else {
       await cardCollection.updateOne(
         { _id: new ObjectId(cardId) },
@@ -525,43 +524,43 @@ export async function trackCardClick(
           $set: {
             [`clickFingerprint.${todayStr}.${visitorId}`]: [linkType],
           },
-        },
-      );
+        }
+      )
     }
 
-    return { error: undefined };
+    return { error: undefined }
   } catch (error) {
-    console.error("Error tracking click:", error);
-    return { error: "Failed to track click! Please try again later." };
+    console.error("Error tracking click:", error)
+    return { error: "Failed to track click! Please try again later." }
   }
 }
 
 export async function trackCardView(cardId: string, visitorId: string) {
   try {
-    const { userId } = await session.user.get();
-    const cardCollection = await getCardCollection();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
-    const todayStr = today.toISOString().split("T")[0];
-    const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
+    const { userId } = await session.user.get()
+    const cardCollection = await getCardCollection()
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000)
+    const todayStr = today.toISOString().split("T")[0]
+    const card = await cardCollection.findOne({ _id: new ObjectId(cardId) })
 
     if (!card) {
-      return { error: "Card not found" };
+      return { error: "Card not found" }
     }
 
     if (
       card.viewFingerprint?.[todayStr]?.includes(visitorId) ||
       (userId && userId === card?.userId)
     ) {
-      return { error: undefined };
+      return { error: undefined }
     }
 
     if (
       card.viewHistory &&
       card.viewHistory.some((entry: { date: Date; count: number }) => {
-        const entryDate = new Date(entry.date);
-        return entryDate >= today && entryDate < tomorrow;
+        const entryDate = new Date(entry.date)
+        return entryDate >= today && entryDate < tomorrow
       })
     ) {
       await cardCollection.updateOne(
@@ -580,8 +579,8 @@ export async function trackCardView(cardId: string, visitorId: string) {
           $addToSet: {
             [`viewFingerprint.${todayStr}`]: visitorId,
           },
-        },
-      );
+        }
+      )
     } else {
       await cardCollection.updateOne(
         { _id: new ObjectId(cardId) },
@@ -596,85 +595,85 @@ export async function trackCardView(cardId: string, visitorId: string) {
           $set: {
             [`viewFingerprint.${todayStr}`]: [visitorId],
           },
-        },
-      );
+        }
+      )
     }
 
-    return { error: undefined };
+    return { error: undefined }
   } catch (error) {
-    console.error("Error tracking view:", error);
-    return { error: "Failed to track view! Please try again later." };
+    console.error("Error tracking view:", error)
+    return { error: "Failed to track view! Please try again later." }
   }
 }
 
 export async function checkSlug(slug: string, cardId: string) {
   try {
-    const { userId } = await session.user.get();
+    const { userId } = await session.user.get()
 
     if (!userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
 
-    const cardCollection = await getCardCollection();
+    const cardCollection = await getCardCollection()
 
     const existingCard = await cardCollection.findOne({
       slug,
       _id: { $ne: new ObjectId(cardId) },
-    });
+    })
 
     if (existingCard) {
-      return { error: `Slug '${slug}' is not available!` };
+      return { error: `Slug '${slug}' is not available!` }
     }
 
-    return { error: undefined };
+    return { error: undefined }
   } catch (error) {
-    console.error("Error checking slug:", error);
-    return { error: "Failed to check slug! Please try again later." };
+    console.error("Error checking slug:", error)
+    return { error: "Failed to check slug! Please try again later." }
   }
 }
 
 export async function updateSlug(values: SlugFormValues, cardId: string) {
   try {
-    const { userId } = await session.user.get();
+    const { userId } = await session.user.get()
 
     if (!userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
 
-    const parsedValues = cardSlugSchema.safeParse(values);
+    const parsedValues = cardSlugSchema.safeParse(values)
 
     if (!parsedValues.success) {
-      return { error: "Invalid data provided!" };
+      return { error: "Invalid data provided!" }
     }
 
-    const existingUser = await getUserById(userId);
+    const existingUser = await getUserById(userId)
 
-    if (!existingUser) return { error: "User not found!" };
+    if (!existingUser) return { error: "User not found!" }
     if (existingUser.currentPlan !== "professional")
       return {
         error: "Upgrade to our professional plan to customize this card link!",
-      };
+      }
 
-    const { slug } = parsedValues.data;
-    const cardCollection = await getCardCollection();
-    const card = await cardCollection.findOne({ _id: new ObjectId(cardId) });
+    const { slug } = parsedValues.data
+    const cardCollection = await getCardCollection()
+    const card = await cardCollection.findOne({ _id: new ObjectId(cardId) })
 
     if (!card) {
-      return { error: "Card not found!" };
+      return { error: "Card not found!" }
     }
 
     if (slug) {
-      const { error } = await checkSlug(slug, cardId);
+      const { error } = await checkSlug(slug, cardId)
 
       if (error) {
-        return { error: error };
+        return { error: error }
       }
     }
 
-    const isSame = slug === card.slug;
+    const isSame = slug === card.slug
 
     if (isSame) {
-      return { success: "No change was made." };
+      return { success: "No change was made." }
     }
 
     await cardCollection.updateOne(
@@ -684,87 +683,87 @@ export async function updateSlug(values: SlugFormValues, cardId: string) {
           slug,
           updatedAt: new Date(),
         },
-      },
-    );
+      }
+    )
 
-    return { success: "Your slug has been changed." };
+    return { success: "Your slug has been changed." }
   } catch (error) {
-    console.error("Error updating slug:", error);
-    return { error: "Failed to update slug! Please try again later." };
+    console.error("Error updating slug:", error)
+    return { error: "Failed to update slug! Please try again later." }
   }
 }
 
 export async function updateCardVisibility(cardId: string, isPublic: boolean) {
   try {
-    const { userId } = await session.user.get();
+    const { userId } = await session.user.get()
 
     if (!userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
 
-    const existingUser = await getUserById(userId);
+    const existingUser = await getUserById(userId)
 
-    if (!existingUser) return { error: "User not found!" };
+    if (!existingUser) return { error: "User not found!" }
     if (existingUser.currentPlan !== "professional")
       return {
         error:
           "Upgrade to our professional plan to change this card visibility!",
-      };
+      }
 
-    const cardCollection = await getCardCollection();
+    const cardCollection = await getCardCollection()
 
     await cardCollection.updateOne(
       { _id: new ObjectId(cardId) },
-      { $set: { isPublic, updatedAt: new Date() } },
-    );
+      { $set: { isPublic, updatedAt: new Date() } }
+    )
 
-    return { success: "Your card visibility has been updated." };
+    return { success: "Your card visibility has been updated." }
   } catch (error) {
-    console.error("Error updating card visibility:", error);
+    console.error("Error updating card visibility:", error)
     return {
       error: "Failed to update card visibility! Please try again later.",
-    };
+    }
   }
 }
 
 export async function getCards() {
   try {
-    const { userId } = await session.user.get();
+    const { userId } = await session.user.get()
 
     if (!userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
 
-    const existingUser = await getUserById(userId);
+    const existingUser = await getUserById(userId)
 
-    if (!existingUser) return { error: "User not found!" };
+    if (!existingUser) return { error: "User not found!" }
 
-    const { currentPlan } = existingUser;
-    const cardCollection = await getCardCollection();
+    const { currentPlan } = existingUser
+    const cardCollection = await getCardCollection()
     const [cardCount, cards] = await Promise.all([
       cardCollection.countDocuments({ userId }),
       cardCollection.find({ userId }).sort({ createdAt: 1 }).toArray(),
-    ]);
+    ])
 
-    let maxCards = constants.maxFreeCards;
+    let maxCards = constants.maxFreeCards
 
     if (currentPlan === "basic") {
-      maxCards = constants.maxBasicCards;
+      maxCards = constants.maxBasicCards
     } else if (currentPlan === "professional") {
-      maxCards = constants.maxProfessionalCards;
+      maxCards = constants.maxProfessionalCards
     }
 
     const enhancedCards = cards.map((c, idx) => {
-      const editable = idx < maxCards;
+      const editable = idx < maxCards
       const message = editable
         ? undefined
-        : `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s)!`;
-      let { slug: dynamicSlug } = c;
+        : `Your ${currentPlan} plan only allows editing the first ${maxCards} card(s)!`
+      let { slug: dynamicSlug } = c
 
       dynamicSlug =
         dynamicSlug && currentPlan === "professional"
           ? dynamicSlug
-          : c._id.toString();
+          : c._id.toString()
 
       return {
         ...c,
@@ -772,28 +771,28 @@ export async function getCards() {
         editable,
         message,
         dynamicSlug,
-      };
+      }
     }) as (Card & {
-      editable: boolean;
-      message?: string;
-      dynamicSlug: string;
-    })[];
+      editable: boolean
+      message?: string
+      dynamicSlug: string
+    })[]
 
     if (cardCount >= maxCards) {
       return {
         error: `You've reached the maximum number of cards (${maxCards}) allowed on your ${currentPlan} plan!`,
         cards: enhancedCards,
-      };
+      }
     }
 
     return {
       error: undefined,
       cards: enhancedCards,
-    };
+    }
   } catch (error) {
-    console.error("Error getting card:", error);
+    console.error("Error getting card:", error)
     return {
       error: "Failed to get card! Please try again later.",
-    };
+    }
   }
 }

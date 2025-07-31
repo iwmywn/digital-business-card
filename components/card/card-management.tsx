@@ -1,22 +1,26 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+import Image from "next/image"
+import Link from "next/link"
 import {
   Edit,
-  Trash2,
-  Share2,
-  MoreHorizontal,
   Eye,
-  Search,
-  Lock,
   Globe,
-  QrCode,
-  Link as LinkIcon,
   Info,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+  Link as LinkIcon,
+  Lock,
+  MoreHorizontal,
+  QrCode,
+  Search,
+  Share2,
+  Trash2,
+} from "lucide-react"
+import { toast } from "sonner"
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,75 +28,76 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { toast } from "sonner";
-import Image from "next/image";
-import Link from "next/link";
-import type { Card as CardType } from "@/lib/definitions";
-import { getCloudinaryUrl, getColorClass, getFontClass } from "@/lib/utils";
-import { CardManagementSkeleton } from "@/components/skeletons";
-import { useCard, useUser } from "@/lib/swr";
-import { QRCodeDialog } from "@/components/card/qr-code-dialog";
-import { ShareCardDialog } from "@/components/card/share-card-dialog";
-import { DeleteCardDialog } from "@/components/card/delete-card-dialog";
-import { formatDate } from "@/lib/utils";
-import { CustomSlugDialog } from "@/components/card/custom-slug-dialog";
-import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
-import { ChangeVisibilityDialog } from "@/components/card/change-visibility-dialog";
+} from "@/components/ui/dropdown-menu"
+import {
+  EmptyState,
+  EmptyStateDescription,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from "@/components/ui/empty-state"
+import { Input } from "@/components/ui/input"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+} from "@/components/ui/tooltip"
+import { ChangeVisibilityDialog } from "@/components/card/change-visibility-dialog"
+import { CustomSlugDialog } from "@/components/card/custom-slug-dialog"
+import { DeleteCardDialog } from "@/components/card/delete-card-dialog"
+import { QRCodeDialog } from "@/components/card/qr-code-dialog"
+import { ShareCardDialog } from "@/components/card/share-card-dialog"
+import { CardManagementSkeleton } from "@/components/skeletons"
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import type { Card as CardType } from "@/lib/definitions"
+import { useCard, useUser } from "@/lib/swr"
 import {
-  EmptyState,
-  EmptyStateIcon,
-  EmptyStateHeader,
-  EmptyStateDescription,
-} from "@/components/ui/empty-state";
-import { useMediaQuery } from "@/hooks/use-media-query";
+  formatDate,
+  getCloudinaryUrl,
+  getColorClass,
+  getFontClass,
+} from "@/lib/utils"
 
 export function getImageUrl(
   card: CardType,
-  type: "logo" | "profile" | "cover",
+  type: "logo" | "profile" | "cover"
 ) {
-  const transform = card.cardDesign.imageTransforms?.[type];
+  const transform = card.cardDesign.imageTransforms?.[type]
 
-  let imageUrl;
+  let imageUrl
 
-  if (type === "logo") imageUrl = card.cardDesign.logoImage;
-  if (type === "profile") imageUrl = card.cardDesign.profileImage;
-  if (type === "cover") imageUrl = card.cardDesign.coverImage;
+  if (type === "logo") imageUrl = card.cardDesign.logoImage
+  if (type === "profile") imageUrl = card.cardDesign.profileImage
+  if (type === "cover") imageUrl = card.cardDesign.coverImage
 
-  return getCloudinaryUrl(imageUrl, transform);
+  return getCloudinaryUrl(imageUrl, transform)
 }
 
 export function CardManagement() {
-  const isMobile = useMediaQuery("(max-width: 767px)");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const isMobile = useMediaQuery("(max-width: 767px)")
+  const [searchQuery, setSearchQuery] = useState<string>("")
   const [selectedCard, setSelectedCard] = useState<
     | (CardType & {
-        editable: boolean;
-        message?: string;
-        dynamicSlug: string;
+        editable: boolean
+        message?: string
+        dynamicSlug: string
       })
     | null
-  >(null);
-  const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false);
-  const [isShareDialogOpen, setIsShareDialogOpen] = useState<boolean>(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-  const [isSlugDialogOpen, setIsSlugDialogOpen] = useState<boolean>(false);
+  >(null)
+  const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false)
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState<boolean>(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false)
+  const [isSlugDialogOpen, setIsSlugDialogOpen] = useState<boolean>(false)
   const [isVisibilityDialogOpen, setIsVisibilityDialogOpen] =
-    useState<boolean>(false);
-  const { user, isUserLoading, isUserError } = useUser();
-  const { cards, isCardLoading, isCardError } = useCard();
+    useState<boolean>(false)
+  const { user, isUserLoading, isUserError } = useUser()
+  const { cards, isCardLoading, isCardError } = useCard()
   const filteredCards = cards.filter((card) =>
     card.personalInformation.fullName
       .toLowerCase()
-      .includes(searchQuery.toLowerCase()),
-  );
-  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
+      .includes(searchQuery.toLowerCase())
+  )
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto()
 
   useEffect(() => {
     if (
@@ -100,11 +105,11 @@ export function CardManagement() {
       !isCardError.includes("You've reached the maximum number of cards") &&
       !isCardLoading
     )
-      toast.error(isCardError);
-    if (isUserError && !isUserLoading) toast.error(isUserError);
-  }, [isCardError, isUserError, isUserLoading, isCardLoading]);
+      toast.error(isCardError)
+    if (isUserError && !isUserLoading) toast.error(isUserError)
+  }, [isCardError, isUserError, isUserLoading, isCardLoading])
 
-  if (isCardLoading || isUserLoading) return <CardManagementSkeleton />;
+  if (isCardLoading || isUserLoading) return <CardManagementSkeleton />
 
   return (
     <div className="space-y-6">
@@ -288,8 +293,8 @@ export function CardManagement() {
                           {user?.currentPlan === "professional" ? (
                             <div
                               onClick={() => {
-                                setSelectedCard(card);
-                                setIsSlugDialogOpen(true);
+                                setSelectedCard(card)
+                                setIsSlugDialogOpen(true)
                               }}
                             >
                               <LinkIcon className="mr-2 size-4" />
@@ -300,7 +305,7 @@ export function CardManagement() {
                               className="cursor-not-allowed opacity-50"
                               onClick={() =>
                                 toast.error(
-                                  "Upgrade to our professional plan to customize this card link!",
+                                  "Upgrade to our professional plan to customize this card link!"
                                 )
                               }
                             >
@@ -313,8 +318,8 @@ export function CardManagement() {
                           {user?.currentPlan === "professional" ? (
                             <div
                               onClick={() => {
-                                setSelectedCard(card);
-                                setIsVisibilityDialogOpen(true);
+                                setSelectedCard(card)
+                                setIsVisibilityDialogOpen(true)
                               }}
                             >
                               {card.isPublic ? (
@@ -334,7 +339,7 @@ export function CardManagement() {
                               className="cursor-not-allowed opacity-50"
                               onClick={() =>
                                 toast.error(
-                                  "Upgrade to our professional plan to change this card visibility!",
+                                  "Upgrade to our professional plan to change this card visibility!"
                                 )
                               }
                             >
@@ -354,8 +359,8 @@ export function CardManagement() {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => {
-                            setSelectedCard(card);
-                            setIsQrDialogOpen(true);
+                            setSelectedCard(card)
+                            setIsQrDialogOpen(true)
                           }}
                         >
                           <QrCode className="mr-2 size-4" />
@@ -363,8 +368,8 @@ export function CardManagement() {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => {
-                            setSelectedCard(card);
-                            setIsShareDialogOpen(true);
+                            setSelectedCard(card)
+                            setIsShareDialogOpen(true)
                           }}
                         >
                           <Share2 className="mr-2 size-4" />
@@ -373,8 +378,8 @@ export function CardManagement() {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           onClick={() => {
-                            setSelectedCard(card);
-                            setIsDeleteDialogOpen(true);
+                            setSelectedCard(card)
+                            setIsDeleteDialogOpen(true)
                           }}
                         >
                           <Trash2 className="mr-2 size-4" />
@@ -438,5 +443,5 @@ export function CardManagement() {
         />
       )}
     </div>
-  );
+  )
 }

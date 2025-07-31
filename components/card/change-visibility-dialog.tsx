@@ -1,5 +1,10 @@
-"use client";
+"use client"
 
+import { useState } from "react"
+import { toast } from "sonner"
+
+import { updateCardVisibility } from "@/actions/card"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -7,14 +12,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Card as CardType } from "@/lib/definitions";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useCard } from "@/lib/swr";
-import { updateCardVisibility } from "@/actions/card";
-import { Loading } from "@/components/loading";
+} from "@/components/ui/dialog"
+import { Loading } from "@/components/loading"
+import { Card as CardType } from "@/lib/definitions"
+import { useCard } from "@/lib/swr"
 
 export function ChangeVisibilityDialog({
   card,
@@ -22,38 +23,38 @@ export function ChangeVisibilityDialog({
   setOpen,
 }: {
   card: CardType & {
-    editable: boolean;
-    message?: string;
-    dynamicSlug: string;
-  };
-  open: boolean;
-  setOpen: (open: boolean) => void;
+    editable: boolean
+    message?: string
+    dynamicSlug: string
+  }
+  open: boolean
+  setOpen: (open: boolean) => void
 }) {
-  const [isUpdating, setIsUpdating] = useState<boolean>(false);
-  const { cardResponse, cards, mutate } = useCard();
+  const [isUpdating, setIsUpdating] = useState<boolean>(false)
+  const { cardResponse, cards, mutate } = useCard()
 
   async function handleVisibilityChange() {
-    setIsUpdating(true);
+    setIsUpdating(true)
 
     const { success, error } = await updateCardVisibility(
       card._id,
-      !card.isPublic,
-    );
+      !card.isPublic
+    )
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
       mutate({
         ...cardResponse,
         cards: cards.map((c) =>
-          c._id === card._id ? { ...c, isPublic: !card.isPublic } : c,
+          c._id === card._id ? { ...c, isPublic: !card.isPublic } : c
         ),
-      });
-      setOpen(false);
-      toast.success(success);
+      })
+      setOpen(false)
+      toast.success(success)
     }
 
-    setIsUpdating(false);
+    setIsUpdating(false)
   }
 
   return (
@@ -85,5 +86,5 @@ export function ChangeVisibilityDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

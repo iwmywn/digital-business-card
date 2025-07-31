@@ -1,68 +1,69 @@
-"use client";
+"use client"
 
-import { useState, useCallback, useEffect, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { Label } from "@/components/ui/label";
+import { useCallback, useEffect, useMemo, useState } from "react"
+import Cropper from "react-easy-crop"
+
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import Cropper from "react-easy-crop";
-import { Loading } from "@/components/loading";
-import { getCloudinaryUrl } from "@/lib/utils";
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Slider } from "@/components/ui/slider"
+import { Loading } from "@/components/loading"
+import { getCloudinaryUrl } from "@/lib/utils"
 
 export type ImageTransform = {
-  scale: number;
-  positionX: number;
-  positionY: number;
+  scale: number
+  positionX: number
+  positionY: number
   croppedAreaPixels?: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-  naturalWidth?: number;
-  naturalHeight?: number;
-  croppedImageUrl?: string | null;
-};
+    x: number
+    y: number
+    width: number
+    height: number
+  }
+  naturalWidth?: number
+  naturalHeight?: number
+  croppedImageUrl?: string | null
+}
 
 interface ImageEditorProps {
-  onOpenChange: (open: boolean) => void;
-  imageType?: "logo" | "profile" | "cover";
-  imageUrl: string | null;
-  cloudinaryName: string | null;
-  initialTransform?: ImageTransform;
-  onSave: (transform: ImageTransform, imageType?: string) => void;
-  onDelete: (imageType?: string) => void;
+  onOpenChange: (open: boolean) => void
+  imageType?: "logo" | "profile" | "cover"
+  imageUrl: string | null
+  cloudinaryName: string | null
+  initialTransform?: ImageTransform
+  onSave: (transform: ImageTransform, imageType?: string) => void
+  onDelete: (imageType?: string) => void
 }
 
 const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
-    const image = new Image();
-    image.crossOrigin = "anonymous";
-    image.addEventListener("load", () => resolve(image));
-    image.addEventListener("error", (error) => reject(error));
-    image.src = url;
-  });
+    const image = new Image()
+    image.crossOrigin = "anonymous"
+    image.addEventListener("load", () => resolve(image))
+    image.addEventListener("error", (error) => reject(error))
+    image.src = url
+  })
 
 async function getCroppedImg(
   imageSrc: string,
-  pixelCrop: { x: number; y: number; width: number; height: number },
+  pixelCrop: { x: number; y: number; width: number; height: number }
 ) {
-  const image = await createImage(imageSrc);
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
+  const image = await createImage(imageSrc)
+  const canvas = document.createElement("canvas")
+  const ctx = canvas.getContext("2d")
 
   if (!ctx) {
-    return null;
+    return null
   }
 
-  canvas.width = pixelCrop.width;
-  canvas.height = pixelCrop.height;
+  canvas.width = pixelCrop.width
+  canvas.height = pixelCrop.height
 
   ctx.drawImage(
     image,
@@ -73,18 +74,18 @@ async function getCroppedImg(
     0,
     0,
     pixelCrop.width,
-    pixelCrop.height,
-  );
+    pixelCrop.height
+  )
 
   return new Promise<string>((resolve) => {
     canvas.toBlob((file) => {
       if (file) {
-        resolve(URL.createObjectURL(file));
+        resolve(URL.createObjectURL(file))
       } else {
-        resolve("");
+        resolve("")
       }
-    }, "image/jpeg");
-  });
+    }, "image/jpeg")
+  })
 }
 
 export function ImageEditorDialog({
@@ -103,58 +104,58 @@ export function ImageEditorDialog({
       !imageUrl.startsWith("data:") &&
       !imageUrl.startsWith("https://")
     ) {
-      return getCloudinaryUrl([cloudinaryName, imageUrl]);
+      return getCloudinaryUrl([cloudinaryName, imageUrl])
     }
-    return imageUrl;
-  }, [imageUrl, cloudinaryName]);
+    return imageUrl
+  }, [imageUrl, cloudinaryName])
 
   const [crop, setCrop] = useState<{ x: number; y: number }>({
     x: initialTransform?.positionX ?? 0,
     y: initialTransform?.positionY ?? 0,
-  });
-  const [zoom, setZoom] = useState<number>(initialTransform?.scale ?? 1);
+  })
+  const [zoom, setZoom] = useState<number>(initialTransform?.scale ?? 1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<
     | {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
+        x: number
+        y: number
+        width: number
+        height: number
       }
     | undefined
-  >(initialTransform?.croppedAreaPixels);
+  >(initialTransform?.croppedAreaPixels)
   const [naturalSize, setNaturalSize] = useState<
     | {
-        width: number;
-        height: number;
+        width: number
+        height: number
       }
     | undefined
-  >(undefined);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  >(undefined)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   interface Area {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+    x: number
+    y: number
+    width: number
+    height: number
   }
 
   const onCropComplete = useCallback(
     (croppedArea: Area, croppedAreaPixels: Area) => {
-      setCroppedAreaPixels(croppedAreaPixels);
+      setCroppedAreaPixels(croppedAreaPixels)
     },
-    [],
-  );
+    []
+  )
 
   const saveImage = async () => {
     if (!imageType || !croppedAreaPixels || !naturalSize || !processedImageUrl)
-      return;
+      return
 
-    setIsProcessing(true);
+    setIsProcessing(true)
     try {
       const croppedImageUrl = await getCroppedImg(
         processedImageUrl,
-        croppedAreaPixels,
-      );
+        croppedAreaPixels
+      )
 
       onSave(
         {
@@ -166,43 +167,43 @@ export function ImageEditorDialog({
           naturalHeight: naturalSize.height,
           croppedImageUrl: croppedImageUrl || undefined,
         },
-        imageType,
-      );
+        imageType
+      )
     } catch (error) {
-      console.error("Error generating cropped image:", error);
+      console.error("Error generating cropped image:", error)
     } finally {
-      setIsProcessing(false);
+      setIsProcessing(false)
     }
-  };
+  }
 
   const deleteImage = () => {
-    if (!imageType) return;
-    onDelete(imageType);
-  };
+    if (!imageType) return
+    onDelete(imageType)
+  }
 
   const getAspectRatio = () => {
-    if (imageType === "cover") return 2 / 1;
-    if (imageType === "logo" || imageType === "profile") return 1;
-    return 1;
-  };
+    if (imageType === "cover") return 2 / 1
+    if (imageType === "logo" || imageType === "profile") return 1
+    return 1
+  }
 
   const getCropShape = () => {
-    return imageType === "profile" ? "round" : "rect";
-  };
+    return imageType === "profile" ? "round" : "rect"
+  }
 
   useEffect(() => {
     if (processedImageUrl) {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
+      const img = new Image()
+      img.crossOrigin = "anonymous"
       img.onload = () => {
         setNaturalSize({
           width: img.naturalWidth,
           height: img.naturalHeight,
-        });
-      };
-      img.src = processedImageUrl;
+        })
+      }
+      img.src = processedImageUrl
     }
-  }, [processedImageUrl]);
+  }, [processedImageUrl])
 
   return (
     <Dialog defaultOpen={true} onOpenChange={onOpenChange}>
@@ -273,5 +274,5 @@ export function ImageEditorDialog({
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

@@ -1,15 +1,16 @@
-import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
-import type { Metadata } from "next";
+import type { Metadata } from "next"
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
+import { ForgotPasswordForm } from "@/components/auth/forgot-password-form"
 
 export function generateMetadata(): Metadata {
-  return { title: "Forgot password" };
+  return { title: "Forgot password" }
 }
 
 export default function page() {
@@ -25,5 +26,5 @@ export default function page() {
         <ForgotPasswordForm />
       </CardContent>
     </Card>
-  );
+  )
 }

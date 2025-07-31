@@ -1,17 +1,18 @@
-import type { Metadata } from "next";
-import { BellOff } from "lucide-react";
+import type { Metadata } from "next"
+import { BellOff } from "lucide-react"
+
 import {
   EmptyState,
-  EmptyStateIcon,
-  EmptyStateHeader,
   EmptyStateDescription,
-} from "@/components/ui/empty-state";
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from "@/components/ui/empty-state"
 
 export const metadata: Metadata = {
   title: "Notifications",
   description:
     "View updates, alerts, and important messages related to your digital business card.",
-};
+}
 
 export default function page() {
   return (
@@ -24,5 +25,5 @@ export default function page() {
         You&apos;re all caught up! There are no new notifications at the moment.
       </EmptyStateDescription>
     </EmptyState>
-  );
+  )
 }

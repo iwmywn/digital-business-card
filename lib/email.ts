@@ -1,6 +1,6 @@
-import nodemailer from "nodemailer";
+import nodemailer from "nodemailer"
 
-type EmailMode = "verifyEmail" | "resetPassword";
+type EmailMode = "verifyEmail" | "resetPassword"
 
 export async function sendEmail(email: string, token: string, mode: EmailMode) {
   const transporter = nodemailer.createTransport({
@@ -10,18 +10,18 @@ export async function sendEmail(email: string, token: string, mode: EmailMode) {
       user: process.env.EMAIL_SERVER_USER,
       pass: process.env.EMAIL_SERVER_PASSWORD,
     },
-  });
+  })
 
-  const emailHandlerUrl = `${process.env.NEXT_PUBLIC_URL}/email-handler?mode=${mode}&email=${email}&token=${token}`;
+  const emailHandlerUrl = `${process.env.NEXT_PUBLIC_URL}/email-handler?mode=${mode}&email=${email}&token=${token}`
   const subject =
     mode === "verifyEmail"
       ? "Verify your Visiq account"
-      : "Reset your Visiq password";
+      : "Reset your Visiq password"
   const message =
     mode === "verifyEmail"
       ? "Thank you for joining Visiq! We just need one final step from you - please confirm your email address by clicking the button below to verify it and get started."
-      : "No one likes being locked out of their account, and we're here to help. Just click the button below to get started. If you didn't request a password reset, feel free to ignore this email.";
-  const btnText = mode === "verifyEmail" ? "Verify" : "Reset your password";
+      : "No one likes being locked out of their account, and we're here to help. Just click the button below to get started. If you didn't request a password reset, feel free to ignore this email."
+  const btnText = mode === "verifyEmail" ? "Verify" : "Reset your password"
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
@@ -54,7 +54,7 @@ export async function sendEmail(email: string, token: string, mode: EmailMode) {
       </tr>
     </table>
     `,
-  });
+  })
 }
 
 export async function sendEmailWithRetry(
@@ -62,25 +62,25 @@ export async function sendEmailWithRetry(
   token: string,
   mode: EmailMode,
   maxRetries = 3,
-  delayMs = 1000,
+  delayMs = 1000
 ) {
-  let attempt = 0;
+  let attempt = 0
 
   while (attempt < maxRetries) {
     try {
-      await sendEmail(email, token, mode);
-      return { error: undefined };
+      await sendEmail(email, token, mode)
+      return { error: undefined }
     } catch (error) {
-      attempt++;
-      console.error(`Failed to send email (attempt ${attempt}):`, error);
+      attempt++
+      console.error(`Failed to send email (attempt ${attempt}):`, error)
 
       if (attempt === maxRetries) {
-        return { error: "Failed to send email! Please try again later." };
+        return { error: "Failed to send email! Please try again later." }
       }
 
-      await new Promise((res) => setTimeout(res, delayMs));
+      await new Promise((res) => setTimeout(res, delayMs))
     }
   }
 
-  return { error: "Unexpected error in email retry logic!" };
+  return { error: "Unexpected error in email retry logic!" }
 }

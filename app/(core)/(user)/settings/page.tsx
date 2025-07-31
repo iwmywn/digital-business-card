@@ -1,20 +1,21 @@
-import type { Metadata } from "next";
+import type { Metadata } from "next"
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { InformationSetting } from "@/components/settings/information-form";
-import { AccountSetting } from "@/components/settings/account-form";
-import { NotificationSetting } from "@/components/settings/notification-form";
+} from "@/components/ui/card"
+import { AccountSetting } from "@/components/settings/account-form"
+import { InformationSetting } from "@/components/settings/information-form"
+import { NotificationSetting } from "@/components/settings/notification-form"
 
 export const metadata: Metadata = {
   title: "Account Settings",
   description:
     "Manage your account information, update your password, and configure notification preferences.",
-};
+}
 
 export default function page() {
   return (
@@ -53,5 +54,5 @@ export default function page() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

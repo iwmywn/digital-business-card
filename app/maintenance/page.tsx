@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 
 export function generateMetadata(): Metadata {
-  return { title: "Maintenance", description: "Website is under maintenance" };
+  return { title: "Maintenance", description: "Website is under maintenance" }
 }
 
 export default function page() {
@@ -9,5 +9,5 @@ export default function page() {
     <main className="flex min-h-screen items-center justify-center text-4xl font-black">
       Be right back!
     </main>
-  );
+  )
 }

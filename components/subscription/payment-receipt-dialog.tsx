@@ -1,12 +1,18 @@
-"use client";
+"use client"
 
-import { CreditCard, FileText, MapPin, User } from "lucide-react";
+import { SetStateAction } from "react"
+import { CreditCard, FileText, MapPin, User } from "lucide-react"
+import type Stripe from "stripe"
+
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   Table,
   TableBody,
@@ -15,60 +21,50 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import type Stripe from "stripe";
-import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { SetStateAction } from "react";
-import { PaymentReceiptDialogSkeleton } from "@/components/skeletons";
-import { formatDate } from "@/lib/utils";
+} from "@/components/ui/table"
+import { PaymentReceiptDialogSkeleton } from "@/components/skeletons"
+import { formatDate } from "@/lib/utils"
 
 export interface ReceiptData {
   paymentIntent: {
-    id: string;
-    amount: number;
-    status: Stripe.PaymentIntent.Status;
-    created: string;
-  };
+    id: string
+    amount: number
+    status: Stripe.PaymentIntent.Status
+    created: string
+  }
   customer: {
-    name: string;
-    email: string;
+    name: string
+    email: string
     address: {
-      line1: string;
-      line2: string;
-      city: string;
-      state: string;
-      postal_code: string;
-      country: string;
-    };
-  };
+      line1: string
+      line2: string
+      city: string
+      state: string
+      postal_code: string
+      country: string
+    }
+  }
   paymentMethod: {
-    type: string;
+    type: string
     card: {
-      brand: string;
-      last4: string;
-      expMonth: string;
-      expYear: string;
-    };
-  };
+      brand: string
+      last4: string
+      expMonth: string
+      expYear: string
+    }
+  }
   lineItems: {
-    description: string | null;
-    quantity: number | null;
-    amount: number;
-  }[];
+    description: string | null
+    quantity: number | null
+    amount: number
+  }[]
 }
 
 interface PaymentReceiptProps {
-  selectedPayment: string | null;
-  setSelectedPayment: (value: SetStateAction<string | null>) => void;
-  isReceiptLoading: boolean;
-  receiptData: ReceiptData | null;
+  selectedPayment: string | null
+  setSelectedPayment: (value: SetStateAction<string | null>) => void
+  isReceiptLoading: boolean
+  receiptData: ReceiptData | null
 }
 
 export function PaymentReceiptDialog({
@@ -80,15 +76,15 @@ export function PaymentReceiptDialog({
   const getStatusColor = (status: string) => {
     switch (status) {
       case "succeeded":
-        return "bg-green-400";
+        return "bg-green-400"
       case "processing":
-        return "bg-yellow-400";
+        return "bg-yellow-400"
       case "requires_payment_method":
-        return "bg-red-400";
+        return "bg-red-400"
       default:
-        return "bg-gray-400";
+        return "bg-gray-400"
     }
-  };
+  }
 
   return (
     <>
@@ -294,5 +290,5 @@ export function PaymentReceiptDialog({
         </DialogContent>
       </Dialog>
     </>
-  );
+  )
 }

@@ -1,4 +1,10 @@
-"use client";
+"use client"
+
+import { useCallback, useEffect, useState } from "react"
+import Image from "next/image"
+import { EmblaCarouselType } from "embla-carousel"
+import AutoScroll from "embla-carousel-auto-scroll"
+import useEmblaCarousel from "embla-carousel-react"
 
 import {
   Card,
@@ -6,13 +12,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { EmblaCarouselType } from "embla-carousel";
-import useEmblaCarousel from "embla-carousel-react";
-import AutoScroll from "embla-carousel-auto-scroll";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
+} from "@/components/ui/card"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 const testimonialItems = [
   {
@@ -111,12 +112,12 @@ const testimonialItems = [
     quote:
       "The technical implementation of Visiq is impressive. As a developer, I appreciate the attention to detail and the seamless user experience they've created.",
   },
-];
+]
 
 export function TestimonialsSection() {
-  const isIPad = useMediaQuery("(max-width: 1023px)");
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const isIPad = useMediaQuery("(max-width: 1023px)")
+  const [selectedIndex, setSelectedIndex] = useState<number>(0)
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([])
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -131,35 +132,35 @@ export function TestimonialsSection() {
             stopOnInteraction: false,
             stopOnMouseEnter: true,
           }),
-        ],
-  );
+        ]
+  )
 
   const filteredTestimonials = isIPad
     ? testimonialItems.slice(0, 6)
-    : testimonialItems;
+    : testimonialItems
 
   const onInit = useCallback((emblaApi: EmblaCarouselType) => {
-    setScrollSnaps(emblaApi.scrollSnapList());
-  }, []);
+    setScrollSnaps(emblaApi.scrollSnapList())
+  }, [])
 
   const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, []);
+    setSelectedIndex(emblaApi.selectedScrollSnap())
+  }, [])
 
   useEffect(() => {
-    if (!emblaApi) return;
+    if (!emblaApi) return
 
-    onInit(emblaApi);
-    onSelect(emblaApi);
-    emblaApi.on("reInit", onInit).on("reInit", onSelect).on("select", onSelect);
+    onInit(emblaApi)
+    onSelect(emblaApi)
+    emblaApi.on("reInit", onInit).on("reInit", onSelect).on("select", onSelect)
 
     return () => {
       emblaApi
         .off("reInit", onInit)
         .off("reInit", onSelect)
-        .off("select", onSelect);
-    };
-  }, [emblaApi, onInit, onSelect]);
+        .off("select", onSelect)
+    }
+  }, [emblaApi, onInit, onSelect])
 
   return (
     <section
@@ -240,5 +241,5 @@ export function TestimonialsSection() {
         </div>
       )}
     </section>
-  );
+  )
 }

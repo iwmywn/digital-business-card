@@ -1,19 +1,20 @@
-"use client";
+"use client"
 
-import { Monitor, Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
+import { Monitor, Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
+
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ThemeToggleSkeleton } from "@/components/skeletons";
-import { useMounted } from "@/hooks/use-mounted";
+} from "@/components/ui/dropdown-menu"
+import { ThemeToggleSkeleton } from "@/components/skeletons"
+import { useMounted } from "@/hooks/use-mounted"
 
 export function DashboardThemeToggle() {
-  const { setTheme } = useTheme();
+  const { setTheme } = useTheme()
 
   return (
     <DropdownMenu>
@@ -39,15 +40,15 @@ export function DashboardThemeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }
 
 export function LandingPageThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const mounted = useMounted();
+  const { theme, setTheme } = useTheme()
+  const mounted = useMounted()
 
   if (!mounted) {
-    return <ThemeToggleSkeleton />;
+    return <ThemeToggleSkeleton />
   }
 
   return (
@@ -80,5 +81,5 @@ export function LandingPageThemeToggle() {
         <span className="sr-only">Dark theme</span>
       </Button>
     </>
-  );
+  )
 }

@@ -1,16 +1,26 @@
-"use client";
+"use client"
 
-import { useState, useMemo, HTMLAttributes } from "react";
-import { Receipt, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { HTMLAttributes, useMemo, useState } from "react"
+import { Receipt, Search } from "lucide-react"
+import { toast } from "sonner"
+
+import { getPaymentHistoryDetails } from "@/actions/plan"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/card"
+import {
+  EmptyState,
+  EmptyStateDescription,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from "@/components/ui/empty-state"
+import { Input } from "@/components/ui/input"
 import {
   Table,
   TableBody,
@@ -18,78 +28,71 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { PaymentReceiptDialog } from "@/components/subscription/payment-receipt-dialog";
-import { getPaymentHistoryDetails } from "@/actions/plan";
-import { toast } from "sonner";
-import { ReceiptData } from "@/components/subscription/payment-receipt-dialog";
-import { useSubscription } from "@/lib/swr";
-import { formatDate } from "@/lib/utils";
-import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
+} from "@/components/ui/table"
 import {
-  EmptyState,
-  EmptyStateIcon,
-  EmptyStateHeader,
-  EmptyStateDescription,
-} from "@/components/ui/empty-state";
-import { useMediaQuery } from "@/hooks/use-media-query";
+  PaymentReceiptDialog,
+  ReceiptData,
+} from "@/components/subscription/payment-receipt-dialog"
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import { useSubscription } from "@/lib/swr"
+import { formatDate } from "@/lib/utils"
 
 interface BillingHistoryProps extends HTMLAttributes<HTMLDivElement> {
-  calculatedHeight: number;
+  calculatedHeight: number
 }
 
 export function BillingHistory({
   calculatedHeight,
   ...props
 }: BillingHistoryProps) {
-  const isMobile = useMediaQuery("(max-width: 767px)");
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
-  const [receiptData, setReceiptData] = useState<ReceiptData | null>(null);
-  const [isReceiptLoading, setIsReceiptLoading] = useState<boolean>(false);
-  const { paymentHistory } = useSubscription();
+  const isMobile = useMediaQuery("(max-width: 767px)")
+  const [searchQuery, setSearchQuery] = useState<string>("")
+  const [selectedPayment, setSelectedPayment] = useState<string | null>(null)
+  const [receiptData, setReceiptData] = useState<ReceiptData | null>(null)
+  const [isReceiptLoading, setIsReceiptLoading] = useState<boolean>(false)
+  const { paymentHistory } = useSubscription()
   const filteredHistory = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    if (query === "") return paymentHistory;
+    const query = searchQuery.trim().toLowerCase()
+    if (query === "") return paymentHistory
     return paymentHistory.filter(
       (payment) =>
         payment.paymentIntentId.toLowerCase().includes(query) ||
         payment.planId.toLowerCase().includes(query) ||
-        payment.status.toLowerCase().includes(query),
-    );
-  }, [searchQuery, paymentHistory]);
+        payment.status.toLowerCase().includes(query)
+    )
+  }, [searchQuery, paymentHistory])
   const { registerRef, calculatedHeight: calculatedBillingHistoryHeight } =
-    useDynamicHeightAuto();
+    useDynamicHeightAuto()
 
   const handleViewReceipt = async (paymentIntentId: string) => {
-    setSelectedPayment(paymentIntentId);
-    setIsReceiptLoading(true);
+    setSelectedPayment(paymentIntentId)
+    setIsReceiptLoading(true)
 
-    const { data, error } = await getPaymentHistoryDetails(paymentIntentId);
+    const { data, error } = await getPaymentHistoryDetails(paymentIntentId)
 
     if (error || !data) {
-      toast.error(error);
-      setSelectedPayment(null);
+      toast.error(error)
+      setSelectedPayment(null)
     } else {
-      setReceiptData(data);
+      setReceiptData(data)
     }
 
-    setIsReceiptLoading(false);
-  };
+    setIsReceiptLoading(false)
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "succeeded":
-        return "bg-green-400";
+        return "bg-green-400"
       case "processing":
-        return "bg-yellow-400";
+        return "bg-yellow-400"
       case "requires_payment_method":
-        return "bg-red-400";
+        return "bg-red-400"
       default:
-        return "bg-gray-400";
+        return "bg-gray-400"
     }
-  };
+  }
 
   return (
     <>
@@ -194,5 +197,5 @@ export function BillingHistory({
         receiptData={receiptData}
       />
     </>
-  );
+  )
 }

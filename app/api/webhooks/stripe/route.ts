@@ -1,84 +1,85 @@
-"use server";
+"use server"
 
-import type { NextRequest } from "next/server";
-import Stripe from "stripe";
-import { createResponse } from "@/app/api/utils";
-import { processSuccessfulPayment } from "@/actions/stripe-utils";
+import type { NextRequest } from "next/server"
+import Stripe from "stripe"
+
+import { processSuccessfulPayment } from "@/actions/stripe-utils"
+import { createResponse } from "@/app/api/utils"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-06-30.basil",
-});
+})
 
 export async function POST(req: NextRequest) {
-  const payload = await req.text();
-  const signature = req.headers.get("stripe-signature") || "";
+  const payload = await req.text()
+  const signature = req.headers.get("stripe-signature") || ""
 
-  let event: Stripe.Event;
+  let event: Stripe.Event
 
   try {
     event = stripe.webhooks.constructEvent(
       payload,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!,
-    );
+      process.env.STRIPE_WEBHOOK_SECRET!
+    )
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : "Unknown error";
-    console.error(`Webhook signature verification failed: ${errorMessage}`);
-    return createResponse({ error: `Webhook Error: ${errorMessage}` }, 400);
+    const errorMessage = err instanceof Error ? err.message : "Unknown error"
+    console.error(`Webhook signature verification failed: ${errorMessage}`)
+    return createResponse({ error: `Webhook Error: ${errorMessage}` }, 400)
   }
 
   try {
     if (event.type === "checkout.session.completed") {
-      const checkoutSession = event.data.object as Stripe.Checkout.Session;
+      const checkoutSession = event.data.object as Stripe.Checkout.Session
 
       if (checkoutSession.payment_status === "paid") {
-        const userId = checkoutSession.metadata?.userId;
+        const userId = checkoutSession.metadata?.userId
         const planId = checkoutSession.metadata?.planId as
           | "basic"
           | "professional"
-          | undefined;
+          | undefined
 
         if (!userId || !planId) {
-          console.error("Missing user ID or plan ID!");
-          return createResponse({ error: "Missing user ID or plan ID!" }, 400);
+          console.error("Missing user ID or plan ID!")
+          return createResponse({ error: "Missing user ID or plan ID!" }, 400)
         }
 
         const paymentIntentId =
           typeof checkoutSession.payment_intent === "string"
             ? checkoutSession.payment_intent
-            : checkoutSession.payment_intent?.id;
+            : checkoutSession.payment_intent?.id
 
         if (!paymentIntentId) {
-          console.error("Missing payment intent ID!");
-          return createResponse({ error: "Missing payment intent ID!" }, 400);
+          console.error("Missing payment intent ID!")
+          return createResponse({ error: "Missing payment intent ID!" }, 400)
         }
 
         const amount = checkoutSession.amount_total
           ? checkoutSession.amount_total / 100
-          : 0;
+          : 0
 
         const { error } = await processSuccessfulPayment({
           userId,
           planId,
           paymentIntentId,
           amount,
-        });
+        })
 
         if (error) {
-          console.error(`Error processing payment: ${error}`);
-          return createResponse({ error: error }, 500);
+          console.error(`Error processing payment: ${error}`)
+          return createResponse({ error: error }, 500)
         }
 
-        return createResponse({ received: true, status: "processed" }, 200);
+        return createResponse({ received: true, status: "processed" }, 200)
       }
     }
 
-    return createResponse({ received: true }, 200);
+    return createResponse({ received: true }, 200)
   } catch (error) {
-    console.error(`Error processing webhook: ${error}`);
+    console.error(`Error processing webhook: ${error}`)
     return createResponse(
       { error: "Internal server error while processing webhook." },
-      500,
-    );
+      500
+    )
   }
 }

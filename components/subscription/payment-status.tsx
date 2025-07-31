@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { CheckCircle, ShieldAlert, XCircle } from "lucide-react";
-import Link from "next/link";
+import Link from "next/link"
+import { CheckCircle, ShieldAlert, XCircle } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 
 function PaymentStatusUI({
   icon,
@@ -9,11 +10,11 @@ function PaymentStatusUI({
   title,
   message,
 }: {
-  icon: React.ReactNode;
-  iconColor: string;
-  iconBg: string;
-  title: string;
-  message: React.ReactNode;
+  icon: React.ReactNode
+  iconColor: string
+  iconBg: string
+  title: string
+  message: React.ReactNode
 }) {
   return (
     <div className="flex min-h-[calc(100vh-4.83rem)] flex-col items-center justify-center gap-2 rounded-lg border border-dashed px-6 text-center md:px-16">
@@ -26,13 +27,13 @@ function PaymentStatusUI({
         <Link href="/subscription">Return to subscription</Link>
       </Button>
     </div>
-  );
+  )
 }
 
 export function PaymentSuccessUI({
   successMessage,
 }: {
-  successMessage: string;
+  successMessage: string
 }) {
   return (
     <PaymentStatusUI
@@ -42,7 +43,7 @@ export function PaymentSuccessUI({
       title="Payment Successful!"
       message={successMessage}
     />
-  );
+  )
 }
 
 export function UnauthorizedAccessUI() {
@@ -54,7 +55,7 @@ export function UnauthorizedAccessUI() {
       title="Unauthorized Access"
       message="This payment session belongs to another user account. If you believe this is a mistake, please contact our customer support."
     />
-  );
+  )
 }
 
 export function PaymentErrorUI({ errorMessage }: { errorMessage?: string }) {
@@ -72,5 +73,5 @@ export function PaymentErrorUI({ errorMessage }: { errorMessage?: string }) {
         </>
       }
     />
-  );
+  )
 }

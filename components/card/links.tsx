@@ -1,48 +1,49 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Trash2, GripVertical } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { useEffect, useState } from "react"
+import * as constants from "@/constants"
 import {
-  DndContext,
   closestCenter,
+  DndContext,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
-} from "@dnd-kit/core";
+} from "@dnd-kit/core"
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+} from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import { GripVertical, Trash2 } from "lucide-react"
+import { nanoid } from "nanoid"
+import { toast } from "sonner"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
 import {
-  linkTypes,
   categories,
+  linkTypes,
+  toLinkType,
+  toSerializableLink,
   type LinkType,
   type SerializableLinkType,
-  toSerializableLink,
-} from "@/components/icons";
-import { toLinkType } from "@/components/icons";
-import * as constants from "@/constants";
-import { toast } from "sonner";
-import { nanoid } from "nanoid";
+} from "@/components/icons"
 
 function SortableLink({
   link,
   updateLink,
   removeLink,
 }: {
-  link: LinkType;
-  updateLink: (id: string, field: string, value: string) => void;
-  removeLink: (id: string) => void;
+  link: LinkType
+  updateLink: (id: string, field: string, value: string) => void
+  removeLink: (id: string) => void
 }) {
   const {
     attributes,
@@ -51,15 +52,15 @@ function SortableLink({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: link.id });
+  } = useSortable({ id: link.id })
 
-  const IconComponent = link.icon;
+  const IconComponent = link.icon
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 10 : 1,
     opacity: isDragging ? 0.8 : 1,
-  };
+  }
 
   return (
     <div
@@ -97,14 +98,14 @@ function SortableLink({
         <Trash2 className="text-destructive focus:text-destructive size-4" />
       </Button>
     </div>
-  );
+  )
 }
 
 const maxLinksByPlan: Record<string, number> = {
   free: constants.maxFreeLinks,
   basic: constants.maxBasicLinks,
   professional: constants.maxProfessionalLinks,
-};
+}
 
 export function Links({
   onSave,
@@ -112,16 +113,16 @@ export function Links({
   publicPlan,
   currentUserPlan,
 }: {
-  onSave: (links: SerializableLinkType[]) => void;
-  initialLinks?: SerializableLinkType[];
-  publicPlan?: "free" | "basic" | "professional";
-  currentUserPlan?: "free" | "basic" | "professional";
+  onSave: (links: SerializableLinkType[]) => void
+  initialLinks?: SerializableLinkType[]
+  publicPlan?: "free" | "basic" | "professional"
+  currentUserPlan?: "free" | "basic" | "professional"
 }) {
   const [links, setLinks] = useState<LinkType[]>(() => {
-    return initialLinks.map((link) => toLinkType(link));
-  });
-  const effectivePlan = publicPlan ?? currentUserPlan;
-  const maxLinks = maxLinksByPlan[effectivePlan ?? "free"];
+    return initialLinks.map((link) => toLinkType(link))
+  })
+  const effectivePlan = publicPlan ?? currentUserPlan
+  const maxLinks = maxLinksByPlan[effectivePlan ?? "free"]
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -131,20 +132,20 @@ export function Links({
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  );
+    })
+  )
 
   useEffect(() => {
-    const serializableLinks = links.map(toSerializableLink);
-    onSave(serializableLinks);
-  }, [links, onSave]);
+    const serializableLinks = links.map(toSerializableLink)
+    onSave(serializableLinks)
+  }, [links, onSave])
 
   const addLink = (type: string, category: string, icon: React.ElementType) => {
     if (links.length >= maxLinks) {
       toast.warning(
-        `Your ${effectivePlan} plan allows up to ${maxLinks} links.`,
-      );
-      return;
+        `Your ${effectivePlan} plan allows up to ${maxLinks} links.`
+      )
+      return
     }
 
     const newLink = {
@@ -154,34 +155,32 @@ export function Links({
       category,
       icon,
       label: "",
-    };
-    setLinks([...links, newLink]);
-  };
+    }
+    setLinks([...links, newLink])
+  }
 
   const updateLink = (id: string, field: string, value: string) => {
     setLinks(
-      links.map((link) =>
-        link.id === id ? { ...link, [field]: value } : link,
-      ),
-    );
-  };
+      links.map((link) => (link.id === id ? { ...link, [field]: value } : link))
+    )
+  }
 
   const removeLink = (id: string) => {
-    setLinks(links.filter((link) => link.id !== id));
-  };
+    setLinks(links.filter((link) => link.id !== id))
+  }
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
+    const { active, over } = event
 
     if (over && active.id !== over.id) {
       setLinks((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
+        const oldIndex = items.findIndex((item) => item.id === active.id)
+        const newIndex = items.findIndex((item) => item.id === over.id)
 
-        return arrayMove(items, oldIndex, newIndex);
-      });
+        return arrayMove(items, oldIndex, newIndex)
+      })
     }
-  };
+  }
 
   return (
     <Card className="max-h-screen overflow-y-auto rounded-lg">
@@ -227,7 +226,7 @@ export function Links({
               {linkTypes
                 .filter((linkType) => linkType.category === category)
                 .map((linkType) => {
-                  const IconComponent = linkType.icon;
+                  const IconComponent = linkType.icon
 
                   return (
                     <Button
@@ -244,7 +243,7 @@ export function Links({
                         {linkType.type}
                       </span>
                     </Button>
-                  );
+                  )
                 })}
             </div>
 
@@ -253,5 +252,5 @@ export function Links({
         ))}
       </CardContent>
     </Card>
-  );
+  )
 }

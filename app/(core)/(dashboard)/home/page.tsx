@@ -1,16 +1,17 @@
-import type { Metadata } from "next";
-import { Bug } from "lucide-react";
-import { BugReportDialog } from "@/components/support/bug-report-dialog";
+import type { Metadata } from "next"
+import { Bug } from "lucide-react"
+
 import {
   EmptyState,
-  EmptyStateIcon,
-  EmptyStateHeader,
-  EmptyStateDescription,
   EmptyStateAction,
-} from "@/components/ui/empty-state";
+  EmptyStateDescription,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from "@/components/ui/empty-state"
+import { BugReportDialog } from "@/components/support/bug-report-dialog"
 
 export function generateMetadata(): Metadata {
-  return { title: "Home" };
+  return { title: "Home" }
 }
 
 export default function page() {
@@ -28,5 +29,5 @@ export default function page() {
         <BugReportDialog />
       </EmptyStateAction>
     </EmptyState>
-  );
+  )
 }

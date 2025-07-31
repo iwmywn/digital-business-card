@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { nav } from "@/components/layout/app-sidebar";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { DashboardThemeToggle } from "@/components/mode-toggle";
+import dynamic from "next/dynamic"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Slash } from "lucide-react"
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,9 +12,10 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Slash } from "lucide-react";
-import dynamic from "next/dynamic";
+} from "@/components/ui/breadcrumb"
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import { nav } from "@/components/layout/app-sidebar"
+import { DashboardThemeToggle } from "@/components/mode-toggle"
 
 const other = [
   {
@@ -33,26 +34,26 @@ const other = [
     title: "Notifications",
     url: "/notifications",
   },
-];
+]
 
 const ColorDialog =
   process.env.NODE_ENV === "development"
     ? dynamic(
         () =>
           import("@/components/layout/color-dialog").then(
-            (mod) => mod.ColorDialog,
+            (mod) => mod.ColorDialog
           ),
-        { ssr: false },
+        { ssr: false }
       )
-    : () => null;
+    : () => null
 
 export function Header() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
-  const allNavItems = [...nav, ...other];
+  const allNavItems = [...nav, ...other]
   const foundItem = allNavItems.find(
-    (item) => item.url === pathname || pathname.startsWith(item.url),
-  );
+    (item) => item.url === pathname || pathname.startsWith(item.url)
+  )
 
   return (
     <header className="bg-primary-foreground/75 sticky top-0 z-50 flex shrink-0 items-center justify-between py-2 backdrop-blur-xs backdrop-saturate-150">
@@ -87,5 +88,5 @@ export function Header() {
         <DashboardThemeToggle />
       </div>
     </header>
-  );
+  )
 }

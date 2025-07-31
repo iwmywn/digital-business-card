@@ -1,31 +1,31 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { ShieldCheck } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSubscription } from "@/lib/swr";
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { CurrentPlan } from "@/components/subscription/current-plan";
-import { SubscriptionPlans } from "@/components/subscription/subscription-plans";
-import { BillingHistory } from "@/components/subscription/billing-history";
-import { SubscriptionPlansSkeleton } from "@/components/skeletons";
-import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
-import { SubscriptionNoticeBanner } from "@/components/subscription/subscription-notice-banner";
+import { useEffect, useState } from "react"
+import { ShieldCheck } from "lucide-react"
+import { toast } from "sonner"
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { SubscriptionPlansSkeleton } from "@/components/skeletons"
+import { BillingHistory } from "@/components/subscription/billing-history"
+import { CurrentPlan } from "@/components/subscription/current-plan"
+import { SubscriptionNoticeBanner } from "@/components/subscription/subscription-notice-banner"
+import { SubscriptionPlans } from "@/components/subscription/subscription-plans"
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto"
+import { useSubscription } from "@/lib/swr"
 
 export function SubscriptionManagement() {
-  const { isSubScriptionLoading, isSubscriptionError } = useSubscription();
-  const [activeTab, setActiveTab] = useState<string>("plans");
-  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
+  const { isSubScriptionLoading, isSubscriptionError } = useSubscription()
+  const [activeTab, setActiveTab] = useState<string>("plans")
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto()
 
   useEffect(() => {
     if (isSubscriptionError && !isSubScriptionLoading)
-      toast.error(isSubscriptionError);
-  }, [isSubscriptionError, isSubScriptionLoading]);
+      toast.error(isSubscriptionError)
+  }, [isSubscriptionError, isSubScriptionLoading])
 
   if (isSubScriptionLoading) {
-    return <SubscriptionPlansSkeleton />;
+    return <SubscriptionPlansSkeleton />
   }
 
   return (
@@ -68,5 +68,5 @@ export function SubscriptionManagement() {
         </TabsContent>
       </Tabs>
     </div>
-  );
+  )
 }

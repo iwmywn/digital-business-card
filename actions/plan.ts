@@ -1,29 +1,30 @@
-"use server";
+"use server"
 
-import { ObjectId } from "mongodb";
-import { getCardCollection, getUserCollection } from "@/lib/collections";
-import { session } from "@/lib/session";
-import { getUserById } from "@/lib/data";
-import { getPaymentDetails } from "@/actions/stripe";
-import { ReceiptData } from "@/components/subscription/payment-receipt-dialog";
+import { ObjectId } from "mongodb"
+
+import { getPaymentDetails } from "@/actions/stripe"
+import { ReceiptData } from "@/components/subscription/payment-receipt-dialog"
+import { getCardCollection, getUserCollection } from "@/lib/collections"
+import { getUserById } from "@/lib/data"
+import { session } from "@/lib/session"
 
 export async function switchToPlan(planId: "free" | "basic" | "professional") {
   try {
-    const { userId } = await session.user.get();
+    const { userId } = await session.user.get()
 
     if (!userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
 
-    const existingUser = await getUserById(userId);
+    const existingUser = await getUserById(userId)
 
-    if (!existingUser) return { error: "User not found!" };
+    if (!existingUser) return { error: "User not found!" }
 
-    const now = new Date();
+    const now = new Date()
     const [userCollection, cardCollection] = await Promise.all([
       getUserCollection(),
       getCardCollection(),
-    ]);
+    ])
 
     if (planId === "free") {
       await Promise.all([
@@ -35,30 +36,30 @@ export async function switchToPlan(planId: "free" | "basic" | "professional") {
               planExpiresAt: undefined,
               updatedAt: now,
             },
-          },
+          }
         ),
         cardCollection.updateMany(
           { userId },
-          { $set: { isPublic: true, updatedAt: now } },
+          { $set: { isPublic: true, updatedAt: now } }
         ),
-      ]);
+      ])
 
-      return { error: undefined };
+      return { error: undefined }
     }
 
     const validPlan = existingUser.purchasedPlans?.find(
-      (plan) => plan.planId === planId && new Date(plan.expiresAt) > now,
-    );
+      (plan) => plan.planId === planId && new Date(plan.expiresAt) > now
+    )
 
     if (!validPlan) {
-      return { error: "Plan not purchased or expired!" };
+      return { error: "Plan not purchased or expired!" }
     }
 
     if (planId === "basic") {
       cardCollection.updateMany(
         { userId },
-        { $set: { isPublic: true, updatedAt: now } },
-      );
+        { $set: { isPublic: true, updatedAt: now } }
+      )
     }
 
     await userCollection.updateOne(
@@ -69,81 +70,80 @@ export async function switchToPlan(planId: "free" | "basic" | "professional") {
           planExpiresAt: validPlan.expiresAt,
           updatedAt: now,
         },
-      },
-    );
+      }
+    )
 
-    return { error: undefined };
+    return { error: undefined }
   } catch (error) {
-    console.error("Error switching plan:", error);
-    return { error: "Failed to switch plan! Please try again later." };
+    console.error("Error switching plan:", error)
+    return { error: "Failed to switch plan! Please try again later." }
   }
 }
 
 export async function getPaymentHistoryDetails(
-  paymentIntentId: string,
+  paymentIntentId: string
 ): Promise<{
-  data?: ReceiptData;
-  error?: string;
+  data?: ReceiptData
+  error?: string
 }> {
   try {
-    const { userId } = await session.user.get();
+    const { userId } = await session.user.get()
 
     if (!userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
 
-    const existingUser = await getUserById(userId);
+    const existingUser = await getUserById(userId)
 
     if (!existingUser) {
-      return { error: "User not found!" };
+      return { error: "User not found!" }
     }
 
     const paymentRecord = existingUser.paymentHistory?.find(
-      (payment) => payment.paymentIntentId === paymentIntentId,
-    );
+      (payment) => payment.paymentIntentId === paymentIntentId
+    )
 
     if (!paymentRecord) {
-      return { error: "Payment record not found!" };
+      return { error: "Payment record not found!" }
     }
 
-    const paymentDetails = await getPaymentDetails(paymentIntentId);
+    const paymentDetails = await getPaymentDetails(paymentIntentId)
 
-    return paymentDetails;
+    return paymentDetails
   } catch (error) {
-    console.error("Error getting receipt details:", error);
-    return { error: "Failed to get receipt details! Please try again later." };
+    console.error("Error getting receipt details:", error)
+    return { error: "Failed to get receipt details! Please try again later." }
   }
 }
 
 export async function getSubscriptionPlans() {
   try {
-    const { userId } = await session.user.get();
+    const { userId } = await session.user.get()
 
     if (!userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
 
-    const existingUser = await getUserById(userId);
+    const existingUser = await getUserById(userId)
 
-    if (!existingUser) return { error: "User not found!" };
+    if (!existingUser) return { error: "User not found!" }
 
-    const now = new Date();
+    const now = new Date()
     const validBasicPlan = existingUser.purchasedPlans?.find(
-      (plan) => plan.planId === "basic" && new Date(plan.expiresAt) > now,
-    );
+      (plan) => plan.planId === "basic" && new Date(plan.expiresAt) > now
+    )
     const validProfessionalPlan = existingUser.purchasedPlans?.find(
-      (plan) =>
-        plan.planId === "professional" && new Date(plan.expiresAt) > now,
-    );
+      (plan) => plan.planId === "professional" && new Date(plan.expiresAt) > now
+    )
 
     if (existingUser.planExpiresAt) {
-      const expirationDate = new Date(existingUser.planExpiresAt);
+      const expirationDate = new Date(existingUser.planExpiresAt)
 
       if (now > expirationDate) {
         const [userCollection, cardCollection] = await Promise.all([
           getUserCollection(),
           getCardCollection(),
-        ]);
+        ])
 
         await Promise.all([
           userCollection.updateOne(
@@ -154,13 +154,13 @@ export async function getSubscriptionPlans() {
                 planExpiresAt: undefined,
                 updatedAt: now,
               },
-            },
+            }
           ),
           cardCollection.updateMany(
             { userId },
-            { $set: { isPublic: true, updatedAt: now } },
+            { $set: { isPublic: true, updatedAt: now } }
           ),
-        ]);
+        ])
 
         return {
           basic: {
@@ -176,7 +176,7 @@ export async function getSubscriptionPlans() {
               : null,
           },
           paymentHistory: existingUser.paymentHistory,
-        };
+        }
       }
     }
 
@@ -192,9 +192,9 @@ export async function getSubscriptionPlans() {
           : null,
       },
       paymentHistory: existingUser.paymentHistory,
-    };
+    }
   } catch (error) {
-    console.error("Error getting plan status: ", error);
-    return { error: "Failed to get plan status! Please try again later." };
+    console.error("Error getting plan status: ", error)
+    return { error: "Failed to get plan status! Please try again later." }
   }
 }

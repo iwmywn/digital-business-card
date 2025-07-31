@@ -1,17 +1,18 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react"
+import Link from "next/link"
+
+import { Button } from "@/components/ui/button"
 
 export default function Error({
   error,
 }: {
-  error: Error & { digest?: string };
+  error: Error & { digest?: string }
 }) {
   useEffect(() => {
-    console.error(error);
-  }, [error]);
+    console.error(error)
+  }, [error])
 
   return (
     <div className="flex h-screen flex-col items-center justify-center gap-2 px-6 text-center md:px-16">
@@ -20,5 +21,5 @@ export default function Error({
         <Link href="/home">Go home</Link>
       </Button>
     </div>
-  );
+  )
 }

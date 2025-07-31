@@ -1,43 +1,44 @@
-"use client";
+"use client"
 
+import { useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
   CircleHelpIcon,
   Contact,
-  ReceiptText,
   GlobeLock,
+  ReceiptText,
   type LucideIcon,
-} from "lucide-react";
+} from "lucide-react"
+
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ContactDialog } from "@/components/support/contact-dialog";
-import { FAQDialog } from "@/components/support/faq-dialog";
-import { useState } from "react";
-import { TermsOfServiceDialog } from "@/components/policy/terms-of-service-dialog";
-import { PrivacyPolicyDialog } from "@/components/policy/privacy-policy-dialog";
+} from "@/components/ui/sidebar"
+import { PrivacyPolicyDialog } from "@/components/policy/privacy-policy-dialog"
+import { TermsOfServiceDialog } from "@/components/policy/terms-of-service-dialog"
+import { ContactDialog } from "@/components/support/contact-dialog"
+import { FAQDialog } from "@/components/support/faq-dialog"
 
 interface NavItem {
-  title: string;
-  url: string;
-  icon: LucideIcon;
+  title: string
+  url: string
+  icon: LucideIcon
 }
 
 interface NavProps {
-  nav: NavItem[];
+  nav: NavItem[]
 }
 
 export function Nav({ nav }: NavProps) {
-  const pathname = usePathname();
-  const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false);
-  const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false);
-  const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
-  const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
+  const pathname = usePathname()
+  const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false)
+  const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false)
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false)
+  const [isContactOpen, setIsContactOpen] = useState<boolean>(false)
 
   return (
     <>
@@ -45,7 +46,7 @@ export function Nav({ nav }: NavProps) {
         <SidebarGroupContent>
           <SidebarMenu>
             {nav.map((item) => {
-              const isActive = pathname === item.url;
+              const isActive = pathname === item.url
 
               return (
                 <SidebarMenuItem key={item.title}>
@@ -60,7 +61,7 @@ export function Nav({ nav }: NavProps) {
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              );
+              )
             })}
           </SidebarMenu>
         </SidebarGroupContent>
@@ -113,5 +114,5 @@ export function Nav({ nav }: NavProps) {
       <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />
       <ContactDialog open={isContactOpen} setOpen={setIsContactOpen} />
     </>
-  );
+  )
 }

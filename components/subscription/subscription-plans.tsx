@@ -1,7 +1,14 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { CheckCircle2, Sparkles } from "lucide-react";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { subscriptionPlans } from "@/constants"
+import { CheckCircle2, Sparkles } from "lucide-react"
+import { toast } from "sonner"
+
+import { switchToPlan } from "@/actions/plan"
+import { createCheckoutSession } from "@/actions/stripe"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,71 +16,65 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { createCheckoutSession } from "@/actions/stripe";
-import { switchToPlan } from "@/actions/plan";
-import { subscriptionPlans } from "@/constants";
-import { useSubscription, useUser } from "@/lib/swr";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { Loading } from "@/components/loading";
-import { formatDate } from "@/lib/utils";
+} from "@/components/ui/card"
+import { Loading } from "@/components/loading"
+import { useSubscription, useUser } from "@/lib/swr"
+import { formatDate } from "@/lib/utils"
 
 export function SubscriptionPlans() {
-  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
-  const { basic, professional } = useSubscription();
-  const { userResponse, user, mutate } = useUser();
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({})
+  const { basic, professional } = useSubscription()
+  const { userResponse, user, mutate } = useUser()
+  const router = useRouter()
 
   async function handleSubscribe(priceId: string, planId: string) {
-    setIsLoading((prev) => ({ ...prev, [planId]: true }));
+    setIsLoading((prev) => ({ ...prev, [planId]: true }))
 
-    const { error, url } = await createCheckoutSession(priceId, planId);
+    const { error, url } = await createCheckoutSession(priceId, planId)
 
     if (error || !url) {
-      toast.error(error);
+      toast.error(error)
     } else {
-      router.push(url);
+      router.push(url)
     }
-    setIsLoading((prev) => ({ ...prev, [planId]: false }));
+    setIsLoading((prev) => ({ ...prev, [planId]: false }))
   }
 
   async function handleSwitchPlan(planId: "free" | "basic" | "professional") {
-    setIsLoading((prev) => ({ ...prev, [planId]: true }));
+    setIsLoading((prev) => ({ ...prev, [planId]: true }))
 
-    const { error } = await switchToPlan(planId);
+    const { error } = await switchToPlan(planId)
 
     if (error) {
-      toast.error(error);
+      toast.error(error)
     } else {
       if (userResponse?.user) {
         mutate({
           ...userResponse,
           user: { ...userResponse.user, currentPlan: planId },
-        });
+        })
       }
     }
-    setIsLoading((prev) => ({ ...prev, [planId]: false }));
+    setIsLoading((prev) => ({ ...prev, [planId]: false }))
   }
 
   return (
     <div className="flex flex-col flex-wrap gap-6 min-[25rem]:flex-row">
       {subscriptionPlans.map((plan) => {
-        const isCurrentPlan = user?.currentPlan === plan.id;
+        const isCurrentPlan = user?.currentPlan === plan.id
         const isAccessible =
           plan.id === "basic"
             ? basic.hasAccess
             : plan.id === "professional"
               ? professional.hasAccess
-              : true;
+              : true
 
         const expirationDate =
           plan.id === "basic"
             ? basic.expiresAt
             : plan.id === "professional"
               ? professional.expiresAt
-              : null;
+              : null
 
         return (
           <Card
@@ -127,7 +128,7 @@ export function SubscriptionPlans() {
                     className="w-full"
                     onClick={() =>
                       handleSwitchPlan(
-                        plan.id as "free" | "basic" | "professional",
+                        plan.id as "free" | "basic" | "professional"
                       )
                     }
                     disabled={isLoading[plan.id]}
@@ -148,8 +149,8 @@ export function SubscriptionPlans() {
               </div>
             </CardFooter>
           </Card>
-        );
+        )
       })}
     </div>
-  );
+  )
 }

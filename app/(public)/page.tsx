@@ -1,12 +1,12 @@
-import { Spotlight } from "@/components/ui/spotlight";
-import { Header } from "@/components/landing/header";
-import { HeroSection } from "@/components/landing/hero-section";
-import { HowItWorksSection } from "@/components/landing/how-it-works-section";
-import { FeaturesSection } from "@/components/landing/features-section";
-import { PricingSection } from "@/components/landing/pricing-section";
-import { TestimonialsSection } from "@/components/landing/testimonials-section";
-import { CTASection } from "@/components/landing/cta-section";
-import { Foorter } from "@/components/landing/footer";
+import { Spotlight } from "@/components/ui/spotlight"
+import { CTASection } from "@/components/landing/cta-section"
+import { FeaturesSection } from "@/components/landing/features-section"
+import { Foorter } from "@/components/landing/footer"
+import { Header } from "@/components/landing/header"
+import { HeroSection } from "@/components/landing/hero-section"
+import { HowItWorksSection } from "@/components/landing/how-it-works-section"
+import { PricingSection } from "@/components/landing/pricing-section"
+import { TestimonialsSection } from "@/components/landing/testimonials-section"
 
 export default function page() {
   return (
@@ -32,5 +32,5 @@ export default function page() {
         <Foorter />
       </div>
     </>
-  );
+  )
 }

@@ -1,7 +1,13 @@
-"use client";
+"use client"
 
-import { Settings, Bell, ChevronsUpDown, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { Bell, ChevronsUpDown, LogOut, Settings } from "lucide-react"
+import { toast } from "sonner"
+
+import { signOut } from "@/actions/auth"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,47 +16,42 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { useUser } from "@/lib/swr";
-import { UserSkeleton } from "@/components/skeletons";
-import { toast } from "sonner";
-import Link from "next/link";
-import { signOut } from "@/actions/auth";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { getCloudinaryUrl } from "@/lib/utils";
+} from "@/components/ui/sidebar"
+import { UserSkeleton } from "@/components/skeletons"
+import { useUser } from "@/lib/swr"
+import { getCloudinaryUrl } from "@/lib/utils"
 
 export function NavUser() {
-  const { isMobile } = useSidebar();
-  const { user, isUserLoading, isUserError } = useUser();
-  const router = useRouter();
+  const { isMobile } = useSidebar()
+  const { user, isUserLoading, isUserError } = useUser()
+  const router = useRouter()
   const avatar = getCloudinaryUrl(
     user?.profile?.profileImage,
-    user?.profile?.imageTransforms?.profile,
-  );
+    user?.profile?.imageTransforms?.profile
+  )
 
   async function onSignOut() {
-    const { success, error } = await signOut();
+    const { success, error } = await signOut()
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
-      toast.success(success);
-      router.push("/");
+      toast.success(success)
+      router.push("/")
     }
   }
 
   useEffect(() => {
-    if (isUserError && !isUserLoading) toast.error(isUserError);
-  }, [isUserError, isUserLoading]);
+    if (isUserError && !isUserLoading) toast.error(isUserError)
+  }, [isUserError, isUserLoading])
 
-  if (isUserLoading) return <UserSkeleton />;
+  if (isUserLoading) return <UserSkeleton />
 
   return (
     <SidebarMenu>
@@ -119,5 +120,5 @@ export function NavUser() {
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  );
+  )
 }

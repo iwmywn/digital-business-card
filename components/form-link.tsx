@@ -1,16 +1,17 @@
-import { cn } from "@/lib/utils";
-import Link, { LinkProps } from "next/link";
-import { AnchorHTMLAttributes, ReactNode } from "react";
+import { AnchorHTMLAttributes, ReactNode } from "react"
+import Link, { LinkProps } from "next/link"
+
+import { cn } from "@/lib/utils"
 
 type FormLinkProps = Omit<
   AnchorHTMLAttributes<HTMLAnchorElement>,
   keyof LinkProps
 > &
   LinkProps & {
-    side?: "none" | "left" | "right" | "center";
-    children: ReactNode;
-    className?: string;
-  };
+    side?: "none" | "left" | "right" | "center"
+    children: ReactNode
+    className?: string
+  }
 
 export function FormLink({
   href,
@@ -27,11 +28,11 @@ export function FormLink({
         side === "left" && "mr-auto",
         side === "right" && "ml-auto",
         side === "center" && "mx-auto",
-        className,
+        className
       )}
       {...props}
     >
       {children}
     </Link>
-  );
+  )
 }

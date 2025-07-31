@@ -1,20 +1,19 @@
+import { useEffect, useState } from "react"
+import { cardSlugSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { CheckCircle, XCircle } from "lucide-react"
+import { useForm, useWatch } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
+
+import { checkSlug, updateSlug } from "@/actions/card"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Card as CardType } from "@/lib/definitions";
-import { toast } from "sonner";
-import { Loading } from "@/components/loading";
-import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { cardSlugSchema } from "@/schemas";
-import { useForm, useWatch } from "react-hook-form";
-import type { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useDebounce } from "@/hooks/use-debounce";
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -22,13 +21,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { CheckCircle, XCircle } from "lucide-react";
-import { FormButton } from "@/components/form-button";
-import { checkSlug, updateSlug } from "@/actions/card";
-import { useCard } from "@/lib/swr";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { FormButton } from "@/components/form-button"
+import { Loading } from "@/components/loading"
+import { useDebounce } from "@/hooks/use-debounce"
+import { Card as CardType } from "@/lib/definitions"
+import { useCard } from "@/lib/swr"
 
-export type SlugFormValues = z.infer<typeof cardSlugSchema>;
+export type SlugFormValues = z.infer<typeof cardSlugSchema>
 
 export function CustomSlugDialog({
   card,
@@ -36,35 +37,35 @@ export function CustomSlugDialog({
   setOpen,
 }: {
   card: CardType & {
-    editable: boolean;
-    message?: string;
-    dynamicSlug: string;
-  };
-  open: boolean;
-  setOpen: (open: boolean) => void;
+    editable: boolean
+    message?: string
+    dynamicSlug: string
+  }
+  open: boolean
+  setOpen: (open: boolean) => void
 }) {
   const form = useForm<SlugFormValues>({
     resolver: zodResolver(cardSlugSchema),
     defaultValues: {
       slug: card.dynamicSlug === card._id ? "" : card.dynamicSlug,
     },
-  });
-  const [isChecking, setIsChecking] = useState<boolean>(false);
-  const [isSlugAvailable, setIsSlugAvailable] = useState<boolean | null>(null);
+  })
+  const [isChecking, setIsChecking] = useState<boolean>(false)
+  const [isSlugAvailable, setIsSlugAvailable] = useState<boolean | null>(null)
   const debouncedSlug = useDebounce(
     useWatch({
       control: form.control,
       name: "slug",
     }),
-    500,
-  );
-  const { cardResponse, mutate, cards } = useCard();
+    500
+  )
+  const { cardResponse, mutate, cards } = useCard()
 
   async function onSubmit(values: SlugFormValues) {
-    const { success, error } = await updateSlug(values, card._id);
+    const { success, error } = await updateSlug(values, card._id)
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
       mutate({
         ...cardResponse,
@@ -76,72 +77,72 @@ export function CustomSlugDialog({
                 dynamicSlug: debouncedSlug ?? c._id,
                 updatedAt: new Date(),
               }
-            : c,
+            : c
         ),
-      });
-      setOpen(false);
-      toast.success(success);
+      })
+      setOpen(false)
+      toast.success(success)
     }
   }
 
   useEffect(() => {
-    const slug = debouncedSlug?.trim();
+    const slug = debouncedSlug?.trim()
 
     if (!slug) {
-      setIsSlugAvailable(null);
-      form.clearErrors("slug");
-      return;
+      setIsSlugAvailable(null)
+      form.clearErrors("slug")
+      return
     }
 
-    const parsedValue = cardSlugSchema.safeParse({ slug });
+    const parsedValue = cardSlugSchema.safeParse({ slug })
 
     if (!parsedValue.success) {
       const errorMessages = parsedValue.error.issues
         .map((err) => err.message)
-        .join(" ");
+        .join(" ")
 
       form.setError("slug", {
         type: "manual",
         message: errorMessages,
-      });
+      })
 
-      setIsSlugAvailable(false);
-      return;
+      setIsSlugAvailable(false)
+      return
     }
 
-    setIsChecking(true);
+    setIsChecking(true)
     checkSlug(slug, card._id)
       .then((res) => {
         if (res?.error) {
           form.setError("slug", {
             type: "manual",
             message: res.error,
-          });
-          setIsSlugAvailable(false);
+          })
+          setIsSlugAvailable(false)
         } else {
-          form.clearErrors("slug");
-          setIsSlugAvailable(true);
+          form.clearErrors("slug")
+          setIsSlugAvailable(true)
         }
       })
       .catch(() => {
         form.setError("slug", {
           type: "manual",
           message: "Something went wrong! Please try again.",
-        });
-        setIsSlugAvailable(null);
+        })
+        setIsSlugAvailable(null)
       })
       .finally(() => {
-        setIsChecking(false);
-      });
-  }, [debouncedSlug, form, card._id]);
+        setIsChecking(false)
+      })
+  }, [debouncedSlug, form, card._id])
 
   useEffect(() => {
     if (open) {
       form.reset({
         slug: card.dynamicSlug === card._id ? "" : card.dynamicSlug,
-      });
+      })
     }
-  }, [open, card.dynamicSlug, card._id, form]);
+  }, [open, card.dynamicSlug, card._id, form])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -194,5 +195,5 @@ export function CustomSlugDialog({
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

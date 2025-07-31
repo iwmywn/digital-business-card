@@ -1,9 +1,14 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import type { z } from "zod";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useEffect } from "react"
+import { notificationSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
+
+import { updateNotificationSettings } from "@/actions/setting"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
   FormControl,
@@ -11,33 +16,29 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "@/components/ui/form";
-import { toast } from "sonner";
-import { FormButton } from "@/components/form-button";
-import { notificationSchema } from "@/schemas";
-import { updateNotificationSettings } from "@/actions/setting";
-import { useUser } from "@/lib/swr";
-import { useEffect } from "react";
-import { NotificationPreferencesSkeleton } from "@/components/skeletons";
+} from "@/components/ui/form"
+import { FormButton } from "@/components/form-button"
+import { NotificationPreferencesSkeleton } from "@/components/skeletons"
+import { useUser } from "@/lib/swr"
 
-export type NotificationFormValues = z.infer<typeof notificationSchema>;
+export type NotificationFormValues = z.infer<typeof notificationSchema>
 
 export function NotificationSetting() {
-  const { isUserError, isUserLoading } = useUser();
+  const { isUserError, isUserLoading } = useUser()
 
   useEffect(() => {
-    if (isUserError && !isUserLoading) toast.error(isUserError);
-  }, [isUserError, isUserLoading]);
+    if (isUserError && !isUserLoading) toast.error(isUserError)
+  }, [isUserError, isUserLoading])
 
   if (isUserLoading) {
-    return <NotificationPreferencesSkeleton />;
+    return <NotificationPreferencesSkeleton />
   }
 
-  return <NotificationForm />;
+  return <NotificationForm />
 }
 
 function NotificationForm() {
-  const { user, userResponse, mutate } = useUser();
+  const { user, userResponse, mutate } = useUser()
   const form = useForm<NotificationFormValues>({
     resolver: zodResolver(notificationSchema),
     defaultValues: {
@@ -46,20 +47,20 @@ function NotificationForm() {
       marketing: user?.notificationSettings.marketing,
       security: user?.notificationSettings.security,
     },
-  });
+  })
 
   async function onNotificationSubmit(values: NotificationFormValues) {
-    const { success, error } = await updateNotificationSettings(values);
+    const { success, error } = await updateNotificationSettings(values)
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
-      toast.success(success);
+      toast.success(success)
       if (userResponse?.user) {
         mutate({
           ...userResponse,
           user: { ...userResponse.user, notificationSettings: values },
-        });
+        })
       }
     }
   }
@@ -165,5 +166,5 @@ function NotificationForm() {
         </div>
       </form>
     </Form>
-  );
+  )
 }

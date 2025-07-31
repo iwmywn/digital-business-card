@@ -1,49 +1,50 @@
-import type { Metadata } from "next";
-import { getCardToViewBySlug } from "@/actions/card";
-import { CardView } from "@/components/card/card-view";
-import NotFound from "@/app/not-found";
-import { getPrimaryOgImage, parseFullName } from "@/lib/utils";
-import { connection } from "next/server";
-import { Suspense } from "react";
-import { CardSkeleton } from "@/components/skeletons";
+import { Suspense } from "react"
+import type { Metadata } from "next"
+import { connection } from "next/server"
+
+import { getCardToViewBySlug } from "@/actions/card"
+import { CardView } from "@/components/card/card-view"
+import { CardSkeleton } from "@/components/skeletons"
+import { getPrimaryOgImage, parseFullName } from "@/lib/utils"
+import NotFound from "@/app/not-found"
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  await connection();
+  await connection()
 
-  const param = await params;
-  const { card, error } = await getCardToViewBySlug(param.slug);
+  const param = await params
+  const { card, error } = await getCardToViewBySlug(param.slug)
 
   if (error || !card) {
     return {
       title: "Card Not Found",
       description: "The requested digital business card could not be found.",
-    };
+    }
   }
 
   const { profileImage, logoImage, coverImage, imageTransforms } =
-    card.cardDesign;
+    card.cardDesign
   const { jobTitle, company, headline, bio, fullName } =
-    card.personalInformation;
+    card.personalInformation
   const mainImage = getPrimaryOgImage({
     fullName,
     profileImage,
     logoImage,
     coverImage,
     imageTransforms,
-  });
-  const { firstName, lastName } = parseFullName(fullName);
+  })
+  const { firstName, lastName } = parseFullName(fullName)
   const jobCompanyPart = jobTitle
     ? company
       ? `${jobTitle} at ${company}.`
       : `${jobTitle}.`
     : company
       ? `${company}.`
-      : undefined;
-  const extraInfo = headline || bio || `Digital business card for ${fullName}.`;
+      : undefined
+  const extraInfo = headline || bio || `Digital business card for ${fullName}.`
 
   return {
     title: `${fullName}'s Digital Business Card`,
@@ -60,13 +61,13 @@ export async function generateMetadata({
       images: mainImage ? mainImage : [],
       site: "@Visiq",
     },
-  };
+  }
 }
 
 export default function page({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }) {
   return (
     <Suspense
@@ -78,26 +79,26 @@ export default function page({
     >
       <ViewCardContent params={params} />
     </Suspense>
-  );
+  )
 }
 
 async function ViewCardContent({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }) {
-  await connection();
+  await connection()
 
-  const param = await params;
-  const { card, error } = await getCardToViewBySlug(param.slug);
+  const param = await params
+  const { card, error } = await getCardToViewBySlug(param.slug)
 
   if (error || !card) {
-    return <NotFound />;
+    return <NotFound />
   }
 
-  return <CardView card={card} />;
+  return <CardView card={card} />
 }
 
 export function generateStaticParams() {
-  return [{ slug: "iwmywn" }];
+  return [{ slug: "iwmywn" }]
 }

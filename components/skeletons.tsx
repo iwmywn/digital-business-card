@@ -1,14 +1,15 @@
-"use client";
+"use client"
 
-import { SidebarMenuButton } from "@/components/ui/sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Separator } from "@/components/ui/separator"
+import { SidebarMenuButton } from "@/components/ui/sidebar"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,
   TableBody,
@@ -17,15 +18,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import {
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
-import { Separator } from "@/components/ui/separator";
-import { useMediaQuery } from "@/hooks/use-media-query";
+} from "@/components/ui/table"
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 export function ThemeToggleSkeleton() {
   return (
@@ -34,7 +29,7 @@ export function ThemeToggleSkeleton() {
         <Skeleton key={i} className="size-7 rounded-sm" />
       ))}
     </>
-  );
+  )
 }
 
 export function UserSkeleton() {
@@ -49,7 +44,7 @@ export function UserSkeleton() {
       </div>
       <Skeleton className="ml-auto size-4" />
     </SidebarMenuButton>
-  );
+  )
 }
 
 export function CardSkeleton() {
@@ -107,7 +102,7 @@ export function CardSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export function CreateCardSkeleton() {
@@ -182,7 +177,7 @@ export function CreateCardSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export function CardManagementSkeleton() {
@@ -217,12 +212,12 @@ export function CardManagementSkeleton() {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 export function AnalyticsSkeleton() {
-  const isMobile = useMediaQuery("(max-width: 767px)");
-  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
+  const isMobile = useMediaQuery("(max-width: 767px)")
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto()
 
   return (
     <div className="space-y-6">
@@ -272,11 +267,11 @@ export function AnalyticsSkeleton() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
 
 export function SubscriptionPlansSkeleton() {
-  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto()
   return (
     <div className="space-y-6">
       <div ref={registerRef} className="space-y-1">
@@ -324,7 +319,7 @@ export function SubscriptionPlansSkeleton() {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 export function PaymentReceiptDialogSkeleton() {
@@ -474,7 +469,7 @@ export function PaymentReceiptDialogSkeleton() {
         </CardFooter>
       </Card>
     </>
-  );
+  )
 }
 
 export function InformationSkeleton() {
@@ -515,7 +510,7 @@ export function InformationSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export function AccountSkeleton() {
@@ -553,7 +548,7 @@ export function AccountSkeleton() {
         <Skeleton className="h-10 w-36" />
       </div>
     </div>
-  );
+  )
 }
 
 export function NotificationPreferencesSkeleton() {
@@ -575,7 +570,7 @@ export function NotificationPreferencesSkeleton() {
         <Skeleton className="h-10 w-36" />
       </div>
     </div>
-  );
+  )
 }
 
 export function ProfileSkeleton() {
@@ -631,5 +626,5 @@ export function ProfileSkeleton() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

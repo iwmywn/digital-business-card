@@ -1,6 +1,7 @@
-import { AlertTriangle } from "lucide-react";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { FormLink } from "@/components/form-link";
+import { AlertTriangle } from "lucide-react"
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { FormLink } from "@/components/form-link"
 
 export function SubscriptionNoticeBanner() {
   return (
@@ -20,5 +21,5 @@ export function SubscriptionNoticeBanner() {
         .
       </AlertDescription>
     </Alert>
-  );
+  )
 }

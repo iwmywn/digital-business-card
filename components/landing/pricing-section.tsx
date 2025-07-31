@@ -1,4 +1,8 @@
-import { subscriptionPlans } from "@/constants";
+import Link from "next/link"
+import { subscriptionPlans } from "@/constants"
+import { Check, Sparkles } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -6,10 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Check, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+} from "@/components/ui/card"
 
 export function PricingSection() {
   return (
@@ -75,5 +76,5 @@ export function PricingSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }

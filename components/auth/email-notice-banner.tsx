@@ -1,6 +1,7 @@
-import { Info } from "lucide-react";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { FormLink } from "@/components/form-link";
+import { Info } from "lucide-react"
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { FormLink } from "@/components/form-link"
 
 export function EmailNoticeBanner() {
   return (
@@ -21,5 +22,5 @@ export function EmailNoticeBanner() {
         .
       </AlertDescription>
     </Alert>
-  );
+  )
 }

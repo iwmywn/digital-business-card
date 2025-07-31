@@ -1,10 +1,13 @@
-"use client";
+"use client"
 
-import type { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { useRouter } from "next/navigation"
+import { signInSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
 
+import { signIn } from "@/actions/auth"
 import {
   Form,
   FormControl,
@@ -12,16 +15,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
-import { FormLink } from "@/components/form-link";
-import { signInSchema } from "@/schemas";
-import { FormButton } from "@/components/form-button";
-import { signIn } from "@/actions/auth";
-import { useRouter } from "next/navigation";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
+import { FormButton } from "@/components/form-button"
+import { FormLink } from "@/components/form-link"
 
-export type SignInFormValues = z.infer<typeof signInSchema>;
+export type SignInFormValues = z.infer<typeof signInSchema>
 
 export function SignInForm() {
   const form = useForm<SignInFormValues>({
@@ -30,24 +30,24 @@ export function SignInForm() {
       email: "",
       password: "",
     },
-  });
-  const router = useRouter();
+  })
+  const router = useRouter()
 
   async function onSubmit(values: SignInFormValues) {
-    const { error } = await signIn(values);
+    const { error } = await signIn(values)
 
     if (error) {
-      toast.error(error);
+      toast.error(error)
     } else {
-      const searchParams = new URLSearchParams(window.location.search);
-      let callbackUrl = searchParams.get("next");
+      const searchParams = new URLSearchParams(window.location.search)
+      let callbackUrl = searchParams.get("next")
 
       if (window.location.hash) {
-        callbackUrl = callbackUrl + window.location.hash;
+        callbackUrl = callbackUrl + window.location.hash
       }
 
-      form.reset();
-      router.push(callbackUrl || "/home");
+      form.reset()
+      router.push(callbackUrl || "/home")
     }
   }
 
@@ -108,5 +108,5 @@ export function SignInForm() {
         </div>
       </form>
     </Form>
-  );
+  )
 }

@@ -1,15 +1,16 @@
-"use client";
+"use client"
 
-import ReCAPTCHA from "react-google-recaptcha";
-import { toast } from "sonner";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
+import ReCAPTCHA from "react-google-recaptcha"
+import { toast } from "sonner"
+
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 
 interface ReCaptchaPopupProps {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  setRecaptchaToken: (token: string | null) => void;
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+  setRecaptchaToken: (token: string | null) => void
 }
 
 export function ReCaptchaDialog({
@@ -19,18 +20,18 @@ export function ReCaptchaDialog({
 }: ReCaptchaPopupProps) {
   const handleRecaptchaChange = async (token: string | null) => {
     if (!token) {
-      toast.error("CAPTCHA verification failed! Please try again.");
-      return;
+      toast.error("CAPTCHA verification failed! Please try again.")
+      return
     }
 
-    setRecaptchaToken(token);
-    setOpen(false);
-  };
+    setRecaptchaToken(token)
+    setOpen(false)
+  }
 
   const handleDialogClose = () => {
-    toast.error("Please complete the CAPTCHA!");
-    setOpen(false);
-  };
+    toast.error("Please complete the CAPTCHA!")
+    setOpen(false)
+  }
 
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
@@ -46,5 +47,5 @@ export function ReCaptchaDialog({
         />
       </DialogContent>
     </Dialog>
-  );
+  )
 }

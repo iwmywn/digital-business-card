@@ -1,11 +1,15 @@
-import type { Metadata } from "next";
-import { nunito } from "@/app/fonts";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { TopProgressBar } from "@/components/top-progress-bar";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/next";
+import type { Metadata } from "next"
+
+import { nunito } from "@/app/fonts"
+
+import "./globals.css"
+
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
+import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from "@/components/theme-provider"
+import { TopProgressBar } from "@/components/top-progress-bar"
 
 export const metadata: Metadata = {
   title: {
@@ -22,12 +26,12 @@ export const metadata: Metadata = {
   twitter: {
     site: "@Visiq",
   },
-};
+}
 
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -46,5 +50,5 @@ export default async function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

@@ -1,23 +1,24 @@
+import { Mail } from "lucide-react"
+import { siWhatsapp, siX } from "simple-icons"
+
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Card as CardType } from "@/lib/definitions";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { handleCopyLink } from "@/lib/utils";
-import { SimpleIconComponent } from "@/components/icons";
-import { siWhatsapp, siX } from "simple-icons";
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Mail } from "lucide-react";
+} from "@/components/ui/tooltip"
+import { SimpleIconComponent } from "@/components/icons"
+import { Card as CardType } from "@/lib/definitions"
+import { handleCopyLink } from "@/lib/utils"
 
 export function ShareCardDialog({
   card,
@@ -25,34 +26,34 @@ export function ShareCardDialog({
   setOpen,
 }: {
   card: CardType & {
-    editable: boolean;
-    message?: string;
-    dynamicSlug: string;
-  };
-  open: boolean;
-  setOpen: (open: boolean) => void;
+    editable: boolean
+    message?: string
+    dynamicSlug: string
+  }
+  open: boolean
+  setOpen: (open: boolean) => void
 }) {
-  const cardUrl = `${process.env.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`;
-  const cardTitle = `Check out ${card.personalInformation.fullName}'s digital business card`;
+  const cardUrl = `${process.env.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`
+  const cardTitle = `Check out ${card.personalInformation.fullName}'s digital business card`
 
   const shareHandlers = {
     whatsapp: () => {
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(cardTitle + " " + cardUrl)}`;
-      window.open(url, "_blank", "noopener, noreferrer");
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(cardTitle + " " + cardUrl)}`
+      window.open(url, "_blank", "noopener, noreferrer")
     },
 
     email: () => {
-      const subject = cardTitle;
-      const body = `Hi,\n\nTake a look at this digital business card:\n\n${cardUrl}\n\nBest regards,`;
-      const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.open(mailtoLink, "_blank");
+      const subject = cardTitle
+      const body = `Hi,\n\nTake a look at this digital business card:\n\n${cardUrl}\n\nBest regards,`
+      const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      window.open(mailtoLink, "_blank")
     },
 
     x: () => {
-      const url = `https://x.com/intent/post?url=${encodeURIComponent(cardUrl)}&text=${encodeURIComponent(cardTitle)}`;
-      window.open(url, "_blank", "noopener, noreferrer");
+      const url = `https://x.com/intent/post?url=${encodeURIComponent(cardUrl)}&text=${encodeURIComponent(cardTitle)}`
+      window.open(url, "_blank", "noopener, noreferrer")
     },
-  };
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -121,5 +122,5 @@ export function ShareCardDialog({
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

@@ -1,99 +1,105 @@
-"use client";
+"use client"
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { trackCardClick, trackCardView } from "@/actions/card";
-import { toast } from "sonner";
-import { Share2, QrCode } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { linkTypes, type SerializableLinkType } from "@/components/icons";
-import type { Card as CardType } from "@/lib/definitions";
-import { cn, getColorClass, getFontClass, parseFullName } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { getCloudinaryUrl } from "@/lib/utils";
-import { Loading } from "@/components/loading";
-import { QRCodeDialog } from "@/components/card/qr-code-dialog";
-import { ShareCardDialog } from "@/components/card/share-card-dialog";
-import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
+import FingerprintJS from "@fingerprintjs/fingerprintjs"
+import { QrCode, Share2 } from "lucide-react"
+import { toast } from "sonner"
+
+import { trackCardClick, trackCardView } from "@/actions/card"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { QRCodeDialog } from "@/components/card/qr-code-dialog"
+import { ShareCardDialog } from "@/components/card/share-card-dialog"
+import { linkTypes, type SerializableLinkType } from "@/components/icons"
+import { Loading } from "@/components/loading"
+import type { Card as CardType } from "@/lib/definitions"
+import {
+  cn,
+  getCloudinaryUrl,
+  getColorClass,
+  getFontClass,
+  parseFullName,
+} from "@/lib/utils"
 
 export function CardView({
   card,
 }: {
   card: CardType & {
-    editable: boolean;
-    message?: string;
-    dynamicSlug: string;
-  };
+    editable: boolean
+    message?: string
+    dynamicSlug: string
+  }
 }) {
-  const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false);
-  const [isShareDialogOpen, setIsShareDialogOpen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
-  const [showGradient, setShowGradient] = useState<boolean>(false);
-  const saveButtonRef = useRef<HTMLDivElement | null>(null);
-  const footerRef = useRef<HTMLDivElement | null>(null);
+  const [isQrDialogOpen, setIsQrDialogOpen] = useState<boolean>(false)
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({})
+  const [showGradient, setShowGradient] = useState<boolean>(false)
+  const saveButtonRef = useRef<HTMLDivElement | null>(null)
+  const footerRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    (async () => {
-      const fp = await FingerprintJS.load();
-      const result = await fp.get();
-      const visitorId = result.visitorId;
+    ;(async () => {
+      const fp = await FingerprintJS.load()
+      const result = await fp.get()
+      const visitorId = result.visitorId
 
-      await trackCardView(card._id, visitorId);
-    })();
-  }, [card._id]);
+      await trackCardView(card._id, visitorId)
+    })()
+  }, [card._id])
 
   useEffect(() => {
     const handleScroll = () => {
-      const saveBtn = saveButtonRef.current;
-      const share = footerRef.current;
+      const saveBtn = saveButtonRef.current
+      const share = footerRef.current
 
       if (saveBtn && share) {
-        const saveBottom = saveBtn.getBoundingClientRect().bottom;
-        const shareBottom = share.getBoundingClientRect().bottom;
+        const saveBottom = saveBtn.getBoundingClientRect().bottom
+        const shareBottom = share.getBoundingClientRect().bottom
 
-        setShowGradient(saveBottom < shareBottom);
+        setShowGradient(saveBottom < shareBottom)
       }
-    };
+    }
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
+    handleScroll()
+    window.addEventListener("scroll", handleScroll)
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   const handleSaveContact = async () => {
     try {
-      const vCardData = generateVCard(card);
-      const blob = new Blob([vCardData], { type: "text/vcard;charset=utf-8" });
-      const url = window.URL.createObjectURL(blob);
+      const vCardData = generateVCard(card)
+      const blob = new Blob([vCardData], { type: "text/vcard;charset=utf-8" })
+      const url = window.URL.createObjectURL(blob)
 
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${card.personalInformation.fullName.replace(/\s+/g, "_")}.vcf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const link = document.createElement("a")
+      link.href = url
+      link.download = `${card.personalInformation.fullName.replace(/\s+/g, "_")}.vcf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
 
-      window.URL.revokeObjectURL(url);
-      toast.info("Contact saved.");
+      window.URL.revokeObjectURL(url)
+      toast.info("Contact saved.")
     } catch (error) {
-      console.error("Error saving contact:", error);
-      toast.error("Failed to save contact! Please try again later.");
+      console.error("Error saving contact:", error)
+      toast.error("Failed to save contact! Please try again later.")
     }
-  };
+  }
 
   const generateVCard = (card: CardType) => {
     const { firstName, middleName, lastName } = parseFullName(
-      card.personalInformation.fullName,
-    );
+      card.personalInformation.fullName
+    )
 
     const vCard = [
       "BEGIN:VCARD",
       "VERSION:3.0",
       `FN:${card.personalInformation.fullName}`,
       `N:${lastName};${firstName};${middleName};;`,
-    ];
+    ]
 
     // if (card.cardDesign.profileImage) {
     //   vCard.push(
@@ -102,88 +108,88 @@ export function CardView({
     // }
 
     if (card.personalInformation.jobTitle) {
-      vCard.push(`TITLE:${card.personalInformation.jobTitle}`);
+      vCard.push(`TITLE:${card.personalInformation.jobTitle}`)
     }
 
     if (card.personalInformation.company) {
-      vCard.push(`ORG:${card.personalInformation.company}`);
+      vCard.push(`ORG:${card.personalInformation.company}`)
     }
 
-    const noteParts = [];
+    const noteParts = []
     if (card.personalInformation.headline)
-      noteParts.push(card.personalInformation.headline);
+      noteParts.push(card.personalInformation.headline)
     if (card.personalInformation.bio)
-      noteParts.push(card.personalInformation.bio);
+      noteParts.push(card.personalInformation.bio)
     if (noteParts.length > 0) {
-      vCard.push(`NOTE:${noteParts.join("\\n")}`);
+      vCard.push(`NOTE:${noteParts.join("\\n")}`)
     }
 
     card.links?.forEach((link: SerializableLinkType) => {
       switch (link.type) {
         case "Email":
-          vCard.push(`EMAIL;TYPE=${link.label || link.type}:${link.value}`);
-          break;
+          vCard.push(`EMAIL;TYPE=${link.label || link.type}:${link.value}`)
+          break
         case "Phone":
-          vCard.push(`TEL;TYPE=${link.label || link.type}:${link.value}`);
-          break;
+          vCard.push(`TEL;TYPE=${link.label || link.type}:${link.value}`)
+          break
         case "Address":
-          vCard.push(`ADR;TYPE=${link.label || link.type}:;;${link.value};;;;`);
-          break;
+          vCard.push(`ADR;TYPE=${link.label || link.type}:;;${link.value};;;;`)
+          break
         default:
-          vCard.push(`URL;TYPE=${link.label || link.type}:${link.value}`);
+          vCard.push(`URL;TYPE=${link.label || link.type}:${link.value}`)
       }
-    });
+    })
 
-    vCard.push("END:VCARD");
-    return vCard.join("\r\n");
-  };
-  const fontClass = getFontClass(card.cardDesign.fontFamily);
-  const colorClass = getColorClass(card.cardDesign.cardColor);
+    vCard.push("END:VCARD")
+    return vCard.join("\r\n")
+  }
+  const fontClass = getFontClass(card.cardDesign.fontFamily)
+  const colorClass = getColorClass(card.cardDesign.cardColor)
 
   const getIconComponent = (linkType: string) => {
-    const foundLinkType = linkTypes.find((lt) => lt.type === linkType);
+    const foundLinkType = linkTypes.find((lt) => lt.type === linkType)
     if (foundLinkType) {
-      const IconComponent = foundLinkType.icon;
-      return <IconComponent />;
+      const IconComponent = foundLinkType.icon
+      return <IconComponent />
     }
-    return null;
-  };
+    return null
+  }
 
   async function handleLinkClick(link: SerializableLinkType) {
-    setIsLoading((prev) => ({ ...prev, [link.id]: true }));
+    setIsLoading((prev) => ({ ...prev, [link.id]: true }))
 
-    const fp = await FingerprintJS.load();
-    const result = await fp.get();
-    const visitorId = result.visitorId;
-    await trackCardClick(card._id, visitorId, link.type);
+    const fp = await FingerprintJS.load()
+    const result = await fp.get()
+    const visitorId = result.visitorId
+    await trackCardClick(card._id, visitorId, link.type)
 
-    let url = link.value;
+    let url = link.value
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
       if (link.type === "Email") {
-        url = `mailto:${url}`;
+        url = `mailto:${url}`
       } else if (link.type === "Phone") {
-        url = `tel:${url}`;
+        url = `tel:${url}`
       } else if (link.type === "Address") {
-        url = `https://maps.google.com/?q=${encodeURIComponent(url)}`;
+        url = `https://maps.google.com/?q=${encodeURIComponent(url)}`
       }
     }
 
-    window.open(url, "_blank", "noopener, noreferrer");
+    window.open(url, "_blank", "noopener, noreferrer")
 
-    setIsLoading((prev) => ({ ...prev, [link.id]: false }));
+    setIsLoading((prev) => ({ ...prev, [link.id]: false }))
   }
 
   const getImageUrl = (type: "logo" | "profile" | "cover") => {
-    const transform = card.cardDesign.imageTransforms?.[type];
+    const transform = card.cardDesign.imageTransforms?.[type]
 
-    let imageUrl;
+    let imageUrl
 
-    if (type === "logo") imageUrl = card.cardDesign.logoImage;
-    if (type === "profile") imageUrl = card.cardDesign.profileImage;
-    if (type === "cover") imageUrl = card.cardDesign.coverImage;
+    if (type === "logo") imageUrl = card.cardDesign.logoImage
+    if (type === "profile") imageUrl = card.cardDesign.profileImage
+    if (type === "cover") imageUrl = card.cardDesign.coverImage
 
-    return getCloudinaryUrl(imageUrl, transform);
-  };
+    return getCloudinaryUrl(imageUrl, transform)
+  }
 
   return (
     <>
@@ -384,7 +390,7 @@ export function CardView({
               className={cn(
                 "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap text-white shadow-xs transition-all duration-500 outline-none hover:opacity-80 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 has-[>svg]:px-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
                 colorClass,
-                showGradient ? "px-7 py-3.5" : "px-14 py-7 text-base",
+                showGradient ? "px-7 py-3.5" : "px-14 py-7 text-base"
               )}
             >
               Save Contact
@@ -405,5 +411,5 @@ export function CardView({
         setOpen={(val) => setIsShareDialogOpen(val)}
       />
     </>
-  );
+  )
 }

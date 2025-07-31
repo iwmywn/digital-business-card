@@ -1,17 +1,18 @@
 import {
-  QrCode,
-  TabletSmartphone,
-  Zap,
   FileChartLine,
   LayoutDashboard,
+  QrCode,
   Shield,
-} from "lucide-react";
+  TabletSmartphone,
+  Zap,
+} from "lucide-react"
+
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 
 const featureItems = [
   {
@@ -50,7 +51,7 @@ const featureItems = [
     description:
       "Control who sees your information with advanced privacy settings and permissions.",
   },
-];
+]
 
 export function FeaturesSection() {
   return (
@@ -79,5 +80,5 @@ export function FeaturesSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }

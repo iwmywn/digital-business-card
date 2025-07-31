@@ -1,8 +1,9 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { HeaderNav } from "@/components/landing/header-nav";
-import { MenuToggleButton } from "@/components/landing/menu-toggle-button";
+import Image from "next/image"
+import Link from "next/link"
+
+import { Button } from "@/components/ui/button"
+import { HeaderNav } from "@/components/landing/header-nav"
+import { MenuToggleButton } from "@/components/landing/menu-toggle-button"
 
 export function Header() {
   return (
@@ -40,5 +41,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  );
+  )
 }

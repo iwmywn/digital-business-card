@@ -1,10 +1,14 @@
-"use client";
+"use client"
 
-import type { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { useCallback, useEffect, useRef, useState } from "react"
+import { useRouter } from "next/navigation"
+import { signUpSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
 
+import { signUp } from "@/actions/auth"
 import {
   Form,
   FormControl,
@@ -12,30 +16,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
-import { PhoneInput } from "@/components/ui/phone-input";
-import { FormLink } from "@/components/form-link";
-import { signUpSchema } from "@/schemas";
-import { useState, useEffect, useCallback, useRef } from "react";
-import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog";
-import { FormButton } from "@/components/form-button";
-import { signUp } from "@/actions/auth";
-import { useRouter } from "next/navigation";
-import { TermsOfServiceDialog } from "@/components/policy/terms-of-service-dialog";
-import { PrivacyPolicyDialog } from "@/components/policy/privacy-policy-dialog";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
+import { PhoneInput } from "@/components/ui/phone-input"
+import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog"
+import { FormButton } from "@/components/form-button"
+import { FormLink } from "@/components/form-link"
+import { PrivacyPolicyDialog } from "@/components/policy/privacy-policy-dialog"
+import { TermsOfServiceDialog } from "@/components/policy/terms-of-service-dialog"
 
-export type SignUpFormValues = z.infer<typeof signUpSchema>;
+export type SignUpFormValues = z.infer<typeof signUpSchema>
 
 export function SignUpForm() {
-  const router = useRouter();
-  const [isReCaptchaOpen, setIsReCaptchaOpen] = useState<boolean>(false);
-  const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false);
-  const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const isProcessingRef = useRef<boolean>(false);
+  const router = useRouter()
+  const [isReCaptchaOpen, setIsReCaptchaOpen] = useState<boolean>(false)
+  const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false)
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
+  const isProcessingRef = useRef<boolean>(false)
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -45,51 +45,51 @@ export function SignUpForm() {
       password: "",
       confirmPassword: "",
     },
-  });
+  })
 
   const processSignUp = useCallback(
     async (values: SignUpFormValues, token: string) => {
-      if (isProcessingRef.current) return;
+      if (isProcessingRef.current) return
 
-      isProcessingRef.current = true;
-      setIsLoading(true);
+      isProcessingRef.current = true
+      setIsLoading(true)
 
-      const { success, error } = await signUp(values, token);
+      const { success, error } = await signUp(values, token)
 
       if (error || !success) {
-        toast.error(error);
+        toast.error(error)
       } else {
-        toast.success(success);
-        form.reset();
-        router.push("/signin");
+        toast.success(success)
+        form.reset()
+        router.push("/signin")
       }
 
-      setIsLoading(false);
-      setRecaptchaToken(null);
-      isProcessingRef.current = false;
+      setIsLoading(false)
+      setRecaptchaToken(null)
+      isProcessingRef.current = false
     },
-    [form, router],
-  );
+    [form, router]
+  )
 
   const onSubmit = useCallback(
     async (values: SignUpFormValues) => {
-      if (isProcessingRef.current) return;
+      if (isProcessingRef.current) return
 
       if (!recaptchaToken) {
-        setIsReCaptchaOpen(true);
-        return;
+        setIsReCaptchaOpen(true)
+        return
       }
 
-      await processSignUp(values, recaptchaToken);
+      await processSignUp(values, recaptchaToken)
     },
-    [recaptchaToken, processSignUp],
-  );
+    [recaptchaToken, processSignUp]
+  )
 
   useEffect(() => {
     if (recaptchaToken && !isProcessingRef.current) {
-      processSignUp(form.getValues(), recaptchaToken);
+      processSignUp(form.getValues(), recaptchaToken)
     }
-  }, [recaptchaToken, form, processSignUp]);
+  }, [recaptchaToken, form, processSignUp])
 
   return (
     <>
@@ -189,9 +189,9 @@ export function SignUpForm() {
               <FormLink
                 href="#"
                 onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsTermsOpen(true);
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setIsTermsOpen(true)
                 }}
                 className="text-foreground"
               >
@@ -201,9 +201,9 @@ export function SignUpForm() {
               <FormLink
                 href="#"
                 onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsPrivacyOpen(true);
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setIsPrivacyOpen(true)
                 }}
                 className="text-foreground"
               >
@@ -232,5 +232,5 @@ export function SignUpForm() {
       <TermsOfServiceDialog open={isTermsOpen} setOpen={setIsTermsOpen} />
       <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />
     </>
-  );
+  )
 }

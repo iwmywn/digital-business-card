@@ -1,46 +1,47 @@
-"use client";
+"use client"
 
-import { Eye, MousePointerClick, ChartColumnIncreasing } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { ChartColumnIncreasing, Eye, MousePointerClick } from "lucide-react"
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { toast } from "sonner"
+
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart"
+import {
+  EmptyState,
+  EmptyStateAction,
+  EmptyStateDescription,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from "@/components/ui/empty-state"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import { cn } from "@/lib/utils";
-import type { Card as CardType } from "@/lib/definitions";
-import { useEffect, useState } from "react";
-import { useCard, useUser } from "@/lib/swr";
-import { AnalyticsSkeleton } from "@/components/skeletons";
-import { toast } from "sonner";
-import {
-  EmptyState,
-  EmptyStateIcon,
-  EmptyStateHeader,
-  EmptyStateDescription,
-  EmptyStateAction,
-} from "@/components/ui/empty-state";
-import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { useMediaQuery } from "@/hooks/use-media-query";
+} from "@/components/ui/select"
+import { AnalyticsSkeleton } from "@/components/skeletons"
+import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import type { Card as CardType } from "@/lib/definitions"
+import { useCard, useUser } from "@/lib/swr"
+import { cn } from "@/lib/utils"
 
 const chartConfig = {
   views: {
@@ -51,217 +52,215 @@ const chartConfig = {
     label: "Clicks",
     color: "var(--chart-2)",
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 export function Analytics() {
-  const isMobile = useMediaQuery("(max-width: 767px)");
-  const [dateRange, setDateRange] = useState<string>("7days");
-  const [selectedCard, setSelectedCard] = useState<string>("all");
+  const isMobile = useMediaQuery("(max-width: 767px)")
+  const [dateRange, setDateRange] = useState<string>("7days")
+  const [selectedCard, setSelectedCard] = useState<string>("all")
   const [analyticsData, setAnalyticsData] = useState<
     {
-      date: string;
-      views: number;
-      clicks: number;
+      date: string
+      views: number
+      clicks: number
     }[]
-  >([]);
-  const [totalViews, setTotalViews] = useState<number>(0);
-  const [totalClicks, setTotalClicks] = useState<number>(0);
-  const [clickThroughRate, setClickThroughRate] = useState<number>(0);
-  const [viewsChange, setViewsChange] = useState<number>(0);
-  const [clicksChange, setClicksChange] = useState<number>(0);
-  const [ctrChange, setCtrChange] = useState<number>(0);
-  const { user, isUserLoading, isUserError } = useUser();
-  const { cards, isCardLoading, isCardError } = useCard();
-  const { registerRef, calculatedHeight } = useDynamicHeightAuto();
+  >([])
+  const [totalViews, setTotalViews] = useState<number>(0)
+  const [totalClicks, setTotalClicks] = useState<number>(0)
+  const [clickThroughRate, setClickThroughRate] = useState<number>(0)
+  const [viewsChange, setViewsChange] = useState<number>(0)
+  const [clicksChange, setClicksChange] = useState<number>(0)
+  const [ctrChange, setCtrChange] = useState<number>(0)
+  const { user, isUserLoading, isUserError } = useUser()
+  const { cards, isCardLoading, isCardError } = useCard()
+  const { registerRef, calculatedHeight } = useDynamicHeightAuto()
 
   useEffect(() => {
-    if (cards.length === 0) return;
+    if (cards.length === 0) return
 
     const filteredCards =
       selectedCard === "all"
         ? cards
-        : cards.filter((card) => card._id === selectedCard);
+        : cards.filter((card) => card._id === selectedCard)
 
     const calculatePercentageChanges = () => {
       if (filteredCards.length === 0) {
-        setViewsChange(0);
-        setClicksChange(0);
-        setCtrChange(0);
-        return;
+        setViewsChange(0)
+        setClicksChange(0)
+        setCtrChange(0)
+        return
       }
 
-      const now = new Date();
-      const currentPeriodStart = new Date();
-      const previousPeriodStart = new Date();
+      const now = new Date()
+      const currentPeriodStart = new Date()
+      const previousPeriodStart = new Date()
 
       if (dateRange === "24hours") {
-        currentPeriodStart.setDate(now.getDate() - 1);
-        previousPeriodStart.setDate(now.getDate() - 2);
+        currentPeriodStart.setDate(now.getDate() - 1)
+        previousPeriodStart.setDate(now.getDate() - 2)
       } else if (dateRange === "7days") {
-        currentPeriodStart.setDate(now.getDate() - 7);
-        previousPeriodStart.setDate(now.getDate() - 14);
+        currentPeriodStart.setDate(now.getDate() - 7)
+        previousPeriodStart.setDate(now.getDate() - 14)
       } else if (dateRange === "30days") {
-        currentPeriodStart.setDate(now.getDate() - 30);
-        previousPeriodStart.setDate(now.getDate() - 60);
+        currentPeriodStart.setDate(now.getDate() - 30)
+        previousPeriodStart.setDate(now.getDate() - 60)
       } else {
-        currentPeriodStart.setTime(filteredCards[0].createdAt.getTime());
+        currentPeriodStart.setTime(filteredCards[0].createdAt.getTime())
 
-        const currentPeriodLength =
-          now.getTime() - currentPeriodStart.getTime();
+        const currentPeriodLength = now.getTime() - currentPeriodStart.getTime()
         previousPeriodStart.setTime(
-          currentPeriodStart.getTime() - currentPeriodLength,
-        );
+          currentPeriodStart.getTime() - currentPeriodLength
+        )
       }
 
-      let currentViews = 0;
-      let currentClicks = 0;
-      let previousViews = 0;
-      let previousClicks = 0;
+      let currentViews = 0
+      let currentClicks = 0
+      let previousViews = 0
+      let previousClicks = 0
 
       filteredCards.forEach((card) => {
-        (card.viewHistory || []).forEach(
+        ;(card.viewHistory || []).forEach(
           (view: { date: Date; count: number }) => {
-            const viewDate = new Date(view.date);
+            const viewDate = new Date(view.date)
             if (viewDate >= currentPeriodStart && viewDate <= now) {
-              currentViews += view.count;
+              currentViews += view.count
             } else if (
               viewDate >= previousPeriodStart &&
               viewDate < currentPeriodStart
             ) {
-              previousViews += view.count;
+              previousViews += view.count
             }
-          },
-        );
-
-        (card.clickHistory || []).forEach(
+          }
+        )
+        ;(card.clickHistory || []).forEach(
           (click: { date: Date; count: number }) => {
-            const clickDate = new Date(click.date);
+            const clickDate = new Date(click.date)
             if (clickDate >= currentPeriodStart && clickDate <= now) {
-              currentClicks += click.count;
+              currentClicks += click.count
             } else if (
               clickDate >= previousPeriodStart &&
               clickDate < currentPeriodStart
             ) {
-              previousClicks += click.count;
+              previousClicks += click.count
             }
-          },
-        );
-      });
+          }
+        )
+      })
 
       const viewsChangePercent =
         previousViews === 0
           ? currentViews > 0
             ? 100
             : 0
-          : ((currentViews - previousViews) / previousViews) * 100;
+          : ((currentViews - previousViews) / previousViews) * 100
 
       const clicksChangePercent =
         previousClicks === 0
           ? currentClicks > 0
             ? 100
             : 0
-          : ((currentClicks - previousClicks) / previousClicks) * 100;
+          : ((currentClicks - previousClicks) / previousClicks) * 100
 
       const currentCTR =
-        currentViews === 0 ? 0 : (currentClicks / currentViews) * 100;
+        currentViews === 0 ? 0 : (currentClicks / currentViews) * 100
       const previousCTR =
-        previousViews === 0 ? 0 : (previousClicks / previousViews) * 100;
+        previousViews === 0 ? 0 : (previousClicks / previousViews) * 100
 
       const ctrChangePercent =
         previousCTR === 0
           ? currentCTR > 0
             ? 100
             : 0
-          : ((currentCTR - previousCTR) / previousCTR) * 100;
+          : ((currentCTR - previousCTR) / previousCTR) * 100
 
-      setTotalViews(currentViews);
-      setTotalClicks(currentClicks);
-      setClickThroughRate(Math.round(currentCTR));
-      setViewsChange(Number.parseFloat(viewsChangePercent.toFixed(1)));
-      setClicksChange(Number.parseFloat(clicksChangePercent.toFixed(1)));
-      setCtrChange(Number.parseFloat(ctrChangePercent.toFixed(1)));
-    };
+      setTotalViews(currentViews)
+      setTotalClicks(currentClicks)
+      setClickThroughRate(Math.round(currentCTR))
+      setViewsChange(Number.parseFloat(viewsChangePercent.toFixed(1)))
+      setClicksChange(Number.parseFloat(clicksChangePercent.toFixed(1)))
+      setCtrChange(Number.parseFloat(ctrChangePercent.toFixed(1)))
+    }
 
-    calculatePercentageChanges();
+    calculatePercentageChanges()
 
     if (user?.currentPlan === "professional") {
-      generateChartData(filteredCards, dateRange);
+      generateChartData(filteredCards, dateRange)
     }
-  }, [cards, dateRange, selectedCard, user?.currentPlan]);
+  }, [cards, dateRange, selectedCard, user?.currentPlan])
 
   const generateChartData = (cards: CardType[], range: string) => {
     if (cards.length === 0) {
-      setAnalyticsData([]);
-      return;
+      setAnalyticsData([])
+      return
     }
 
-    const now = new Date();
-    const startDate = new Date();
+    const now = new Date()
+    const startDate = new Date()
 
     if (range === "24hours") {
-      startDate.setDate(now.getDate() - 1);
+      startDate.setDate(now.getDate() - 1)
     } else if (range === "7days") {
-      startDate.setDate(now.getDate() - 7);
+      startDate.setDate(now.getDate() - 7)
     } else if (range === "30days") {
-      startDate.setDate(now.getDate() - 30);
+      startDate.setDate(now.getDate() - 30)
     } else {
-      startDate.setTime(cards[0].createdAt.getTime());
+      startDate.setTime(cards[0].createdAt.getTime())
     }
 
-    const dateRange: string[] = [];
-    const currentDate = new Date(startDate);
+    const dateRange: string[] = []
+    const currentDate = new Date(startDate)
 
     while (currentDate <= now) {
-      dateRange.push(currentDate.toISOString().split("T")[0]);
-      currentDate.setDate(currentDate.getDate() + 1);
+      dateRange.push(currentDate.toISOString().split("T")[0])
+      currentDate.setDate(currentDate.getDate() + 1)
     }
 
     const data = dateRange.map((date) => ({
       date,
       views: 0,
       clicks: 0,
-    }));
+    }))
 
     cards.forEach((card) => {
-      (card.viewHistory || []).forEach(
+      ;(card.viewHistory || []).forEach(
         (view: { date: Date; count: number }) => {
-          const viewDate = new Date(view.date).toISOString().split("T")[0];
+          const viewDate = new Date(view.date).toISOString().split("T")[0]
           if (dateRange.includes(viewDate)) {
-            const dataPoint = data.find((d) => d.date === viewDate);
+            const dataPoint = data.find((d) => d.date === viewDate)
             if (dataPoint) {
-              dataPoint.views += view.count || 1;
+              dataPoint.views += view.count || 1
             }
           }
-        },
-      );
-      (card.clickHistory || []).forEach(
+        }
+      )
+      ;(card.clickHistory || []).forEach(
         (click: { date: Date; count: number }) => {
-          const clickDate = new Date(click.date).toISOString().split("T")[0];
+          const clickDate = new Date(click.date).toISOString().split("T")[0]
           if (dateRange.includes(clickDate)) {
-            const dataPoint = data.find((d) => d.date === clickDate);
+            const dataPoint = data.find((d) => d.date === clickDate)
             if (dataPoint) {
-              dataPoint.clicks += click.count || 1;
+              dataPoint.clicks += click.count || 1
             }
           }
-        },
-      );
-    });
+        }
+      )
+    })
 
-    setAnalyticsData(data);
-  };
+    setAnalyticsData(data)
+  }
 
   useEffect(() => {
-    if (isUserError && !isUserLoading) toast.error(isUserError);
+    if (isUserError && !isUserLoading) toast.error(isUserError)
     if (
       isCardError &&
       !isCardError.includes("You've reached the maximum number of cards") &&
       !isCardLoading
     )
-      toast.error(isCardError);
-  }, [isUserError, isCardError, isUserLoading, isCardLoading]);
+      toast.error(isCardError)
+  }, [isUserError, isCardError, isUserLoading, isCardLoading])
 
   if (isUserLoading || isCardLoading) {
-    return <AnalyticsSkeleton />;
+    return <AnalyticsSkeleton />
   }
 
   if (user?.currentPlan === "free") {
@@ -281,7 +280,7 @@ export function Analytics() {
           </Button>
         </EmptyStateAction>
       </EmptyState>
-    );
+    )
   }
 
   if (cards.length === 0) {
@@ -300,7 +299,7 @@ export function Analytics() {
           </Button>
         </EmptyStateAction>
       </EmptyState>
-    );
+    )
   }
 
   return (
@@ -359,7 +358,7 @@ export function Analytics() {
                   ? "text-green-500"
                   : viewsChange < 0
                     ? "text-red-500"
-                    : "text-blue-500",
+                    : "text-blue-500"
               )}
             >
               {viewsChange > 0 ? "+" : ""}
@@ -382,7 +381,7 @@ export function Analytics() {
                   ? "text-green-500"
                   : clicksChange < 0
                     ? "text-red-500"
-                    : "text-blue-500",
+                    : "text-blue-500"
               )}
             >
               {clicksChange > 0 ? "+" : ""}
@@ -407,7 +406,7 @@ export function Analytics() {
                   ? "text-green-500"
                   : ctrChange < 0
                     ? "text-red-500"
-                    : "text-blue-500",
+                    : "text-blue-500"
               )}
             >
               {ctrChange > 0 ? "+" : ""}
@@ -492,11 +491,11 @@ export function Analytics() {
                   tickMargin={8}
                   minTickGap={32}
                   tickFormatter={(value) => {
-                    const date = new Date(value);
+                    const date = new Date(value)
                     return date.toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
-                    });
+                    })
                   }}
                 />
                 <ChartTooltip
@@ -507,7 +506,7 @@ export function Analytics() {
                         return new Date(value).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
-                        });
+                        })
                       }}
                       indicator="dot"
                     />
@@ -534,5 +533,5 @@ export function Analytics() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

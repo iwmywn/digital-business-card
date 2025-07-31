@@ -1,24 +1,25 @@
+import { Dispatch, SetStateAction } from "react"
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/components/ui/accordion"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Dispatch, SetStateAction } from "react";
+} from "@/components/ui/dialog"
 
 export function FAQDialog({
   open,
   setOpen,
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -143,5 +144,5 @@ export function FAQDialog({
         </section>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

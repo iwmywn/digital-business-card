@@ -1,21 +1,22 @@
-"use client";
+"use client"
 
-import { CheckCircle2 } from "lucide-react";
+import { subscriptionPlans } from "@/constants"
+import { CheckCircle2 } from "lucide-react"
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { subscriptionPlans } from "@/constants";
-import { useUser } from "@/lib/swr";
+} from "@/components/ui/card"
+import { useUser } from "@/lib/swr"
 
 export function CurrentPlan() {
-  const { user } = useUser();
+  const { user } = useUser()
   const selectedPlan =
     subscriptionPlans.find((plan) => plan.id === user?.currentPlan) ||
-    subscriptionPlans[0];
+    subscriptionPlans[0]
 
   return (
     <Card className="rounded-lg">
@@ -50,5 +51,5 @@ export function CurrentPlan() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -1,54 +1,55 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import Image from "next/image"
+import { differenceInDays, format } from "date-fns"
+import {
+  Briefcase,
+  Building,
+  CalendarDays,
+  Globe,
+  Mars,
+  NonBinary,
+  Venus,
+} from "lucide-react"
+
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { differenceInDays, format } from "date-fns";
-import {
-  Mars,
-  Venus,
-  CalendarDays,
-  Briefcase,
-  Building,
-  Globe,
-  NonBinary,
-} from "lucide-react";
-import { formatDate, getCloudinaryUrl } from "@/lib/utils";
-import type { User } from "@/lib/definitions";
-import { FormLink } from "@/components/form-link";
-import Image from "next/image";
+} from "@/components/ui/tooltip"
+import { FormLink } from "@/components/form-link"
+import type { User } from "@/lib/definitions"
+import { formatDate, getCloudinaryUrl } from "@/lib/utils"
 
 export function UserProfileDisplay({
   user,
   dynamicSlugs,
 }: {
-  user: Pick<User, "profile" | "createdAt">;
+  user: Pick<User, "profile" | "createdAt">
   dynamicSlugs:
     | string[]
     | {
-        error: string;
-      };
+        error: string
+      }
 }) {
-  const { profile, createdAt } = user;
-  const joinedDate = new Date(createdAt);
-  const daysJoined = differenceInDays(new Date(), joinedDate);
-  const joinedFormatted = `Joined ${format(joinedDate, "d MMM yyyy")}`;
+  const { profile, createdAt } = user
+  const joinedDate = new Date(createdAt)
+  const daysJoined = differenceInDays(new Date(), joinedDate)
+  const joinedFormatted = `Joined ${format(joinedDate, "d MMM yyyy")}`
 
   const renderGenderIcon = () => {
     switch (profile.gender?.toLowerCase()) {
       case "male":
-        return <Mars className="size-4 text-blue-500" />;
+        return <Mars className="size-4 text-blue-500" />
       case "female":
-        return <Venus className="size-4 text-pink-500" />;
+        return <Venus className="size-4 text-pink-500" />
       case "non-binary":
-        return <NonBinary className="size-4 text-purple-500" />;
+        return <NonBinary className="size-4 text-purple-500" />
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center p-8">
@@ -60,7 +61,7 @@ export function UserProfileDisplay({
                 <Image
                   src={getCloudinaryUrl(
                     profile.coverImage,
-                    profile.imageTransforms?.cover,
+                    profile.imageTransforms?.cover
                   )}
                   alt="Cover photo"
                   fill
@@ -80,7 +81,7 @@ export function UserProfileDisplay({
                 <Image
                   src={getCloudinaryUrl(
                     profile.profileImage,
-                    profile.imageTransforms?.profile,
+                    profile.imageTransforms?.profile
                   )}
                   alt="Profile picture"
                   fill
@@ -222,5 +223,5 @@ export function UserProfileDisplay({
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

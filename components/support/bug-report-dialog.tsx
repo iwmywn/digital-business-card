@@ -1,8 +1,14 @@
-"use client";
+"use client"
 
-import type { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react"
+import { bugReportSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
+
+import { submitIssue } from "@/actions/support-requests"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -10,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -19,27 +25,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
-import { FormButton } from "@/components/form-button";
-import { bugReportSchema } from "@/schemas";
-import { submitIssue } from "@/actions/support-requests";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { FormButton } from "@/components/form-button"
 
-export type BugReportFormValues = z.infer<typeof bugReportSchema>;
+export type BugReportFormValues = z.infer<typeof bugReportSchema>
 
 export function BugReportDialog() {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false)
   const form = useForm<BugReportFormValues>({
     resolver: zodResolver(bugReportSchema),
     defaultValues: {
@@ -48,17 +49,17 @@ export function BugReportDialog() {
       description: "",
       steps: "",
     },
-  });
+  })
 
   async function onSubmit(values: BugReportFormValues) {
-    const { success, error } = await submitIssue(values);
+    const { success, error } = await submitIssue(values)
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
-      form.reset();
-      setOpen(false);
-      toast.success(success);
+      form.reset()
+      setOpen(false)
+      toast.success(success)
     }
   }
 
@@ -169,5 +170,5 @@ export function BugReportDialog() {
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

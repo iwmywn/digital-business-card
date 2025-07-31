@@ -1,10 +1,13 @@
-"use client";
+"use client"
 
-import type { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { useCallback, useEffect, useRef, useState } from "react"
+import { emailSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
 
+import { forgotPassword } from "@/actions/auth"
 import {
   Form,
   FormControl,
@@ -12,71 +15,68 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { FormLink } from "@/components/form-link";
-import { useState, useEffect, useCallback, useRef } from "react";
-import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog";
-import { emailSchema } from "@/schemas";
-import { FormButton } from "@/components/form-button";
-import { forgotPassword } from "@/actions/auth";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog"
+import { FormButton } from "@/components/form-button"
+import { FormLink } from "@/components/form-link"
 
-export type EmailFormValues = z.infer<typeof emailSchema>;
+export type EmailFormValues = z.infer<typeof emailSchema>
 
 export function ForgotPasswordForm() {
-  const [isReCaptchaOpen, setIsReCaptchaOpen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const isProcessingRef = useRef<boolean>(false);
+  const [isReCaptchaOpen, setIsReCaptchaOpen] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
+  const isProcessingRef = useRef<boolean>(false)
   const form = useForm<EmailFormValues>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
       email: "",
     },
-  });
+  })
 
   const processForgotPassword = useCallback(
     async (values: EmailFormValues, token: string) => {
-      if (isProcessingRef.current) return;
+      if (isProcessingRef.current) return
 
-      isProcessingRef.current = true;
-      setIsLoading(true);
+      isProcessingRef.current = true
+      setIsLoading(true)
 
-      const { success, error } = await forgotPassword(values, token);
+      const { success, error } = await forgotPassword(values, token)
 
       if (error || !success) {
-        toast.error(error);
+        toast.error(error)
       } else {
-        toast.success(success);
-        form.reset();
+        toast.success(success)
+        form.reset()
       }
 
-      setIsLoading(false);
-      setRecaptchaToken(null);
-      isProcessingRef.current = false;
+      setIsLoading(false)
+      setRecaptchaToken(null)
+      isProcessingRef.current = false
     },
-    [form],
-  );
+    [form]
+  )
 
   const onSubmit = useCallback(
     async (values: EmailFormValues) => {
-      if (isProcessingRef.current) return;
+      if (isProcessingRef.current) return
 
       if (!recaptchaToken) {
-        setIsReCaptchaOpen(true);
-        return;
+        setIsReCaptchaOpen(true)
+        return
       }
 
-      await processForgotPassword(values, recaptchaToken);
+      await processForgotPassword(values, recaptchaToken)
     },
-    [recaptchaToken, processForgotPassword],
-  );
+    [recaptchaToken, processForgotPassword]
+  )
 
   useEffect(() => {
     if (recaptchaToken && !isProcessingRef.current) {
-      processForgotPassword(form.getValues(), recaptchaToken);
+      processForgotPassword(form.getValues(), recaptchaToken)
     }
-  }, [recaptchaToken, form, processForgotPassword]);
+  }, [recaptchaToken, form, processForgotPassword])
 
   return (
     <>
@@ -119,5 +119,5 @@ export function ForgotPasswordForm() {
         setRecaptchaToken={(token) => setRecaptchaToken(token)}
       />
     </>
-  );
+  )
 }

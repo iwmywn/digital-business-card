@@ -1,70 +1,69 @@
-import { Mail, Phone, Globe, Link2, MapPin, Ghost } from "lucide-react";
-
+import type { ElementType } from "react"
+import { Ghost, Globe, Link2, Mail, MapPin, Phone } from "lucide-react"
 import {
-  type SimpleIcon,
-  siX,
-  siInstagram,
-  siFacebook,
-  siYoutube,
-  siSnapchat,
-  siTiktok,
-  siTwitch,
-  siYelp,
-  siWhatsapp,
-  siDiscord,
-  siBluesky,
-  siTelegram,
-  siGithub,
-  siPaypal,
-  siThreads,
-  siSignal,
-  siCashapp,
-  siVenmo,
-  siCalendly,
-  siPinterest,
-  siReddit,
-  siTumblr,
-  siQuora,
-  siWechat,
-  siLine,
-  siNotion,
-  siMedium,
-  siSlack,
-  siDribbble,
-  siFigma,
-  siPatreon,
-  siBuymeacoffee,
-  siKofi,
-  siGooglepay,
   siApplepay,
+  siBluesky,
+  siBuymeacoffee,
+  siCalendly,
+  siCashapp,
+  siDiscord,
+  siDribbble,
+  siFacebook,
+  siFigma,
+  siGithub,
+  siGooglepay,
+  siInstagram,
+  siKofi,
+  siLine,
+  siMedium,
+  siNotion,
+  siPatreon,
+  siPaypal,
+  siPinterest,
+  siQuora,
+  siReddit,
   siSamsungpay,
+  siSignal,
+  siSlack,
+  siSnapchat,
   siStripe,
-  siXiaohongshu,
+  siTelegram,
+  siThreads,
+  siTiktok,
+  siTumblr,
+  siTwitch,
+  siVenmo,
   siViber,
-} from "simple-icons";
-import type { ElementType } from "react";
+  siWechat,
+  siWhatsapp,
+  siX,
+  siXiaohongshu,
+  siYelp,
+  siYoutube,
+  type SimpleIcon,
+} from "simple-icons"
 
 interface SimpleIconProps {
-  className?: string;
-  icon: SimpleIcon;
+  className?: string
+  icon: SimpleIcon
 }
 
 export type LinkType = {
-  id: string;
-  type: string;
-  value: string;
-  category: string;
-  icon: ElementType;
-  label?: string;
-};
+  id: string
+  type: string
+  value: string
+  category: string
+  icon: ElementType
+  label?: string
+}
 
 export type SerializableLinkType = {
-  id: string;
-  type: string;
-  value: string;
-  category: string;
-  label?: string;
-};
+  id: string
+  type: string
+  value: string
+  category: string
+  label?: string
+}
 
 export const SimpleIconComponent = ({ icon, className }: SimpleIconProps) => {
   return (
@@ -81,23 +80,23 @@ export const SimpleIconComponent = ({ icon, className }: SimpleIconProps) => {
     >
       <path d={icon.path} />
     </svg>
-  );
-};
+  )
+}
 
 export function toSerializableLink(link: LinkType): SerializableLinkType {
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  const { icon, ...rest } = link;
+  const { icon, ...rest } = link
   /* eslint-enable @typescript-eslint/no-unused-vars */
-  return rest;
+  return rest
 }
 
 export function toLinkType(link: SerializableLinkType): LinkType {
-  const linkType = linkTypes.find((lt) => lt.type === link.type);
+  const linkType = linkTypes.find((lt) => lt.type === link.type)
   return {
     ...link,
     icon: linkType?.icon || Ghost,
     category: link.category || "General",
-  };
+  }
 }
 
 export const LinkedInIcon = (
@@ -116,7 +115,7 @@ export const LinkedInIcon = (
     <rect width="4" height="12" x="2" y="9" />
     <circle cx="4" cy="4" r="2" />
   </svg>
-);
+)
 
 export const linkTypes = [
   // General
@@ -333,7 +332,7 @@ export const linkTypes = [
     icon: () => <SimpleIconComponent icon={siStripe} />,
     category: "Payment",
   },
-];
+]
 
 export const categories = [
   "General",
@@ -341,4 +340,4 @@ export const categories = [
   "Messaging",
   "Business",
   "Payment",
-];
+]

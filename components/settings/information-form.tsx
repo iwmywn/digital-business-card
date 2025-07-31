@@ -1,9 +1,19 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import type { z } from "zod";
+import { useEffect, useState } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import { publicProfileSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { format } from "date-fns"
+import { CalendarIcon, ImageIcon } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
+
+import { updateProfile } from "@/actions/setting"
+import { Button } from "@/components/ui/button"
+import { CalendarComponent } from "@/components/ui/calendar"
 import {
   Form,
   FormControl,
@@ -11,76 +21,67 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
-import { FormButton } from "@/components/form-button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon, ImageIcon } from "lucide-react";
-import { CalendarComponent } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
-import { checkEnv, cn, getCloudinaryUrl } from "@/lib/utils";
-import { format } from "date-fns";
-import { publicProfileSchema } from "@/schemas";
-import { updateProfile } from "@/actions/setting";
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import type { Image as ImageType } from "@/components/card/card-design"
+import { FormButton } from "@/components/form-button"
 import {
   ImageEditorDialog,
   ImageTransform,
-} from "@/components/image-editor-dialog";
-import { useUser } from "@/lib/swr";
-import Image from "next/image";
-import type { Image as ImageType } from "@/components/card/card-design";
-import Link from "next/link";
-import { Label } from "@/components/ui/label";
-import { InformationSkeleton } from "@/components/skeletons";
+} from "@/components/image-editor-dialog"
+import { InformationSkeleton } from "@/components/skeletons"
+import { useUser } from "@/lib/swr"
+import { checkEnv, cn, getCloudinaryUrl } from "@/lib/utils"
 
-export type ProfileFormValues = z.infer<typeof publicProfileSchema>;
+export type ProfileFormValues = z.infer<typeof publicProfileSchema>
 
 export function InformationSetting() {
-  const { isUserError, isUserLoading } = useUser();
+  const { isUserError, isUserLoading } = useUser()
 
   useEffect(() => {
-    if (isUserError && !isUserLoading) toast.error(isUserError);
-  }, [isUserError, isUserLoading]);
+    if (isUserError && !isUserLoading) toast.error(isUserError)
+  }, [isUserError, isUserLoading])
 
   if (isUserLoading) {
-    return <InformationSkeleton />;
+    return <InformationSkeleton />
   }
 
-  return <InformationForm />;
+  return <InformationForm />
 }
 
 function InformationForm() {
-  const [showCalendar, setShowCalendar] = useState<boolean>(false);
-  const [imageEditorOpen, setImageEditorOpen] = useState<boolean>(false);
-  const [tempImage, setTempImage] = useState<string | null>(null);
-  const [cloudinaryName, setCloudinaryName] = useState<string | null>(null);
-  const { user, userResponse, mutate } = useUser();
+  const [showCalendar, setShowCalendar] = useState<boolean>(false)
+  const [imageEditorOpen, setImageEditorOpen] = useState<boolean>(false)
+  const [tempImage, setTempImage] = useState<string | null>(null)
+  const [cloudinaryName, setCloudinaryName] = useState<string | null>(null)
+  const { user, userResponse, mutate } = useUser()
   const [profileImage, setProfileImage] = useState<ImageType | undefined>(
-    user?.profile?.profileImage,
-  );
+    user?.profile?.profileImage
+  )
   const [coverImage, setCoverImage] = useState<ImageType | undefined>(
-    user?.profile?.coverImage,
-  );
+    user?.profile?.coverImage
+  )
   const [imageTransforms, setImageTransforms] = useState<{
-    profile?: ImageTransform;
-    cover?: ImageTransform;
-  }>(user?.profile?.imageTransforms || {});
+    profile?: ImageTransform
+    cover?: ImageTransform
+  }>(user?.profile?.imageTransforms || {})
   const [currentImageType, setCurrentImageType] = useState<
     "profile" | "cover" | undefined
-  >(undefined);
+  >(undefined)
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(publicProfileSchema),
@@ -93,7 +94,7 @@ function InformationForm() {
       website: user?.profile?.website,
       bio: user?.profile?.bio,
     },
-  });
+  })
 
   async function onSubmit(values: ProfileFormValues) {
     const { success, error } = await updateProfile(
@@ -102,13 +103,13 @@ function InformationForm() {
         profileImage,
         coverImage,
       },
-      imageTransforms,
-    );
+      imageTransforms
+    )
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
-      toast.success(success);
+      toast.success(success)
       if (userResponse?.user) {
         mutate({
           ...userResponse,
@@ -116,120 +117,116 @@ function InformationForm() {
             ...userResponse.user,
             profile: { ...values, profileImage, coverImage, imageTransforms },
           },
-        });
+        })
       }
     }
   }
 
   const handleImageClick = (type: "profile" | "cover") => {
-    let currentImage;
-    if (type === "profile") currentImage = profileImage;
-    if (type === "cover") currentImage = coverImage;
+    let currentImage
+    if (type === "profile") currentImage = profileImage
+    if (type === "cover") currentImage = coverImage
 
     if (currentImage) {
-      setCurrentImageType(type);
-      setTempImage(currentImage[1]);
-      setCloudinaryName(currentImage[0]);
-      setImageEditorOpen(true);
+      setCurrentImageType(type)
+      setTempImage(currentImage[1])
+      setCloudinaryName(currentImage[0])
+      setImageEditorOpen(true)
     } else {
-      setCloudinaryName(null);
-      document.getElementById(`${type}-image`)?.click();
+      setCloudinaryName(null)
+      document.getElementById(`${type}-image`)?.click()
     }
-  };
+  }
 
   function handleImageUpload(
     event: React.ChangeEvent<HTMLInputElement>,
-    type: "profile" | "cover",
+    type: "profile" | "cover"
   ) {
-    const fileInput = event.target;
-    const file = fileInput.files?.[0];
-    if (!file) return;
+    const fileInput = event.target
+    const file = fileInput.files?.[0]
+    if (!file) return
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("File size exceeds 5MB limit!");
-      fileInput.value = "";
-      return;
+      toast.error("File size exceeds 5MB limit!")
+      fileInput.value = ""
+      return
     }
 
     if (!file.type.match(/image\/(jpg|jpeg|png)/)) {
-      toast.error("Only JPG, JPEG and PNG images are allowed!");
-      fileInput.value = "";
-      return;
+      toast.error("Only JPG, JPEG and PNG images are allowed!")
+      fileInput.value = ""
+      return
     }
 
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = (e) => {
-      const result = e.target?.result as string;
+      const result = e.target?.result as string
 
-      setCurrentImageType(type);
-      setTempImage(result);
-      setImageEditorOpen(true);
+      setCurrentImageType(type)
+      setTempImage(result)
+      setImageEditorOpen(true)
 
-      fileInput.value = "";
-    };
+      fileInput.value = ""
+    }
     reader.onerror = () => {
-      toast.error(`Failed to upload ${type} image!`);
-      fileInput.value = "";
-    };
-    reader.readAsDataURL(file);
+      toast.error(`Failed to upload ${type} image!`)
+      fileInput.value = ""
+    }
+    reader.readAsDataURL(file)
   }
 
   const handleSaveImage = (transform: ImageTransform, type?: string) => {
-    if (!tempImage || !type) return;
+    if (!tempImage || !type) return
 
     const { cloudinaryName: cloudinaryNameEnv } = checkEnv({
       cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
-    });
+    })
 
     if (type === "profile")
-      setProfileImage([cloudinaryName ?? cloudinaryNameEnv, tempImage]);
+      setProfileImage([cloudinaryName ?? cloudinaryNameEnv, tempImage])
     if (type === "cover")
-      setCoverImage([cloudinaryName ?? cloudinaryNameEnv, tempImage]);
+      setCoverImage([cloudinaryName ?? cloudinaryNameEnv, tempImage])
 
     setImageTransforms((prev) => ({
       ...prev,
       [type]: transform,
-    }));
+    }))
 
-    toast.info(
-      `${type.charAt(0).toUpperCase() + type.slice(1)} image updated.`,
-    );
-    setImageEditorOpen(false);
-  };
+    toast.info(`${type.charAt(0).toUpperCase() + type.slice(1)} image updated.`)
+    setImageEditorOpen(false)
+  }
 
   const handleDeleteImage = (type?: string) => {
-    if (!type) return;
+    if (!type) return
 
-    if (type === "profile") setProfileImage(undefined);
-    if (type === "cover") setCoverImage(undefined);
+    if (type === "profile") setProfileImage(undefined)
+    if (type === "cover") setCoverImage(undefined)
 
-    const newTransforms = { ...imageTransforms };
-    delete newTransforms[type as keyof typeof newTransforms];
-    setImageTransforms(newTransforms);
-    setCloudinaryName(null);
+    const newTransforms = { ...imageTransforms }
+    delete newTransforms[type as keyof typeof newTransforms]
+    setImageTransforms(newTransforms)
+    setCloudinaryName(null)
 
-    toast.info(
-      `${type.charAt(0).toUpperCase() + type.slice(1)} image removed.`,
-    );
-    setImageEditorOpen(false);
-  };
+    toast.info(`${type.charAt(0).toUpperCase() + type.slice(1)} image removed.`)
+    setImageEditorOpen(false)
+  }
 
   const getImageUrl = (type: "profile" | "cover") => {
-    const transform = imageTransforms[type];
+    const transform = imageTransforms[type]
 
-    let imageUrl;
+    let imageUrl
 
-    if (type === "profile") imageUrl = profileImage;
-    if (type === "cover") imageUrl = coverImage;
+    if (type === "profile") imageUrl = profileImage
+    if (type === "cover") imageUrl = coverImage
 
-    return getCloudinaryUrl(imageUrl, transform);
-  };
+    return getCloudinaryUrl(imageUrl, transform)
+  }
 
   useEffect(() => {
-    setProfileImage(user?.profile?.profileImage);
-    setCoverImage(user?.profile?.coverImage);
-    setImageTransforms(user?.profile?.imageTransforms ?? {});
-  }, [user]);
+    setProfileImage(user?.profile?.profileImage)
+    setCoverImage(user?.profile?.coverImage)
+    setImageTransforms(user?.profile?.imageTransforms ?? {})
+  }, [user])
 
   return (
     <>
@@ -393,7 +390,7 @@ function InformationForm() {
                               variant={"outline"}
                               className={cn(
                                 "truncate pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground",
+                                !field.value && "text-muted-foreground"
                               )}
                             >
                               {field.value ? (
@@ -413,9 +410,9 @@ function InformationForm() {
                             }
                             onSelect={(day) => {
                               field.onChange(
-                                day ? format(day, "MM/dd/yyyy") : undefined,
-                              );
-                              setShowCalendar(false);
+                                day ? format(day, "MM/dd/yyyy") : undefined
+                              )
+                              setShowCalendar(false)
                             }}
                             disabled={(date) =>
                               date > new Date() || date < new Date("1900-01-01")
@@ -544,5 +541,5 @@ function InformationForm() {
         />
       )}
     </>
-  );
+  )
 }

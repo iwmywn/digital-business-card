@@ -1,38 +1,39 @@
-import { redirect } from "next/navigation";
-import type { Metadata } from "next";
-import { verifyCheckoutSession } from "@/actions/stripe";
+import type { Metadata } from "next"
+import { redirect } from "next/navigation"
+
+import { verifyCheckoutSession } from "@/actions/stripe"
 import {
   PaymentErrorUI,
   PaymentSuccessUI,
   UnauthorizedAccessUI,
-} from "@/components/subscription/payment-status";
+} from "@/components/subscription/payment-status"
 
 export function generateMetadata(): Metadata {
   return {
     title: "Payment Status",
     description: "View the current status of your payments.",
-  };
+  }
 }
 
 export default async function page({
   searchParams,
 }: {
-  searchParams: Promise<{ session_id?: string }>;
+  searchParams: Promise<{ session_id?: string }>
 }) {
-  const param = await searchParams;
-  const sessionId = param.session_id;
+  const param = await searchParams
+  const sessionId = param.session_id
   if (!sessionId) {
-    redirect("/subscription");
+    redirect("/subscription")
   }
 
-  const { success, error } = await verifyCheckoutSession(sessionId);
+  const { success, error } = await verifyCheckoutSession(sessionId)
 
   if (error || !success) {
     if (error === "unauthorized_access") {
-      return <UnauthorizedAccessUI />;
+      return <UnauthorizedAccessUI />
     }
-    return <PaymentErrorUI errorMessage={error} />;
+    return <PaymentErrorUI errorMessage={error} />
   }
 
-  return <PaymentSuccessUI successMessage={success} />;
+  return <PaymentSuccessUI successMessage={success} />
 }

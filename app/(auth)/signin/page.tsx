@@ -1,15 +1,16 @@
-import { SignInForm } from "@/components/auth/signin-form";
-import type { Metadata } from "next";
+import type { Metadata } from "next"
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
+import { SignInForm } from "@/components/auth/signin-form"
 
 export function generateMetadata(): Metadata {
-  return { title: "Sign in" };
+  return { title: "Sign in" }
 }
 
 export default function page() {
@@ -25,5 +26,5 @@ export default function page() {
         <SignInForm />
       </CardContent>
     </Card>
-  );
+  )
 }

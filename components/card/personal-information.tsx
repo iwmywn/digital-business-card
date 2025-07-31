@@ -1,19 +1,21 @@
-"use client";
+"use client"
 
-import { forwardRef, Ref, useEffect, useImperativeHandle } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useWatch } from "react-hook-form";
-import type { z } from "zod";
+import { forwardRef, Ref, useEffect, useImperativeHandle } from "react"
+import { personalInformationSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
 import {
-  User,
-  Briefcase,
-  Users,
-  Building,
   Award,
-  FileText,
+  Briefcase,
+  Building,
   FileEdit,
-} from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+  FileText,
+  User,
+  Users,
+} from "lucide-react"
+import { useForm, useWatch } from "react-hook-form"
+import type { z } from "zod"
+
+import { Card, CardContent } from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -21,24 +23,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { personalInformationSchema } from "@/schemas";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 
 export type PersonalInformationValues = z.infer<
   typeof personalInformationSchema
->;
+>
 
 export const PersonalInformation = forwardRef(function PersonalInformation(
   {
     onSave,
     initialValues,
   }: {
-    onSave: (data: PersonalInformationValues) => void;
-    initialValues?: Partial<PersonalInformationValues>;
+    onSave: (data: PersonalInformationValues) => void
+    initialValues?: Partial<PersonalInformationValues>
   },
-  ref?: Ref<{ validate: () => Promise<boolean> }>,
+  ref?: Ref<{ validate: () => Promise<boolean> }>
 ) {
   const form = useForm<PersonalInformationValues>({
     resolver: zodResolver(personalInformationSchema),
@@ -52,17 +53,17 @@ export const PersonalInformation = forwardRef(function PersonalInformation(
       headline: initialValues?.headline || "",
       bio: initialValues?.bio || "",
     },
-  });
+  })
 
   useImperativeHandle(ref, () => ({
     validate: () => form.trigger(),
-  }));
+  }))
 
-  const watchedValues = useWatch({ control: form.control });
+  const watchedValues = useWatch({ control: form.control })
 
   useEffect(() => {
-    onSave(watchedValues as PersonalInformationValues);
-  }, [watchedValues, onSave]);
+    onSave(watchedValues as PersonalInformationValues)
+  }, [watchedValues, onSave])
 
   return (
     <Card className="rounded-lg">
@@ -256,5 +257,5 @@ export const PersonalInformation = forwardRef(function PersonalInformation(
         </Form>
       </CardContent>
     </Card>
-  );
-});
+  )
+})

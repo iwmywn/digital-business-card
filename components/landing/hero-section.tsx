@@ -1,7 +1,8 @@
-import { LearnMoreButton } from "@/components/landing/learn-more-button";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { LearnMoreButton } from "@/components/landing/learn-more-button"
 
 export function HeroSection() {
   return (
@@ -25,5 +26,5 @@ export function HeroSection() {
         <LearnMoreButton />
       </div>
     </section>
-  );
+  )
 }

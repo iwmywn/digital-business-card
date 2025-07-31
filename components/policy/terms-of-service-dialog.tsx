@@ -1,19 +1,20 @@
-import { Separator } from "@/components/ui/separator";
+import { Dispatch, SetStateAction } from "react"
+
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Dispatch, SetStateAction } from "react";
+} from "@/components/ui/dialog"
+import { Separator } from "@/components/ui/separator"
 
 export function TermsOfServiceDialog({
   open,
   setOpen,
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -193,5 +194,5 @@ export function TermsOfServiceDialog({
         </section>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

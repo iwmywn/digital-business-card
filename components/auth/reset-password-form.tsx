@@ -1,10 +1,15 @@
-"use client";
+"use client"
 
-import type { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { resetPasswordSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { X } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
 
+import { findEmailAndToken, resetPassword } from "@/actions/auth"
 import {
   Form,
   FormControl,
@@ -12,72 +17,67 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { PasswordInput } from "@/components/ui/password-input";
-import { resetPasswordSchema } from "@/schemas";
-import { FormButton } from "@/components/form-button";
-import { findEmailAndToken, resetPassword } from "@/actions/auth";
-import { useRouter } from "next/navigation";
-import { FormLink } from "@/components/form-link";
-import { useEffect, useState } from "react";
-import { Loading } from "@/components/loading";
-import { X } from "lucide-react";
+} from "@/components/ui/form"
+import { PasswordInput } from "@/components/ui/password-input"
+import { FormButton } from "@/components/form-button"
+import { FormLink } from "@/components/form-link"
+import { Loading } from "@/components/loading"
 
-export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
+export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
 
 export function ResetPasswordForm({
   token,
   email,
 }: {
-  token: string | undefined;
-  email: string | undefined;
+  token: string | undefined
+  email: string | undefined
 }) {
-  const router = useRouter();
-  const [message, setMessage] = useState<string | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const router = useRouter()
+  const [message, setMessage] = useState<string | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const form = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       password: "",
       confirmPassword: "",
     },
-  });
+  })
 
   async function onSubmit(values: ResetPasswordFormValues) {
-    const { success, error } = await resetPassword(values, email, token);
+    const { success, error } = await resetPassword(values, email, token)
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
-      toast.success(success);
-      form.reset();
-      router.push("/signin");
+      toast.success(success)
+      form.reset()
+      router.push("/signin")
     }
   }
 
   useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const { error } = await findEmailAndToken(email, token);
+    ;(async () => {
+      setIsLoading(true)
+      const { error } = await findEmailAndToken(email, token)
 
       if (error) {
-        setMessage(error);
+        setMessage(error)
       }
-      setIsLoading(false);
-    })();
-  }, [email, token]);
+      setIsLoading(false)
+    })()
+  }, [email, token])
 
   if (isLoading)
     return (
       <Loading className="border-primary border-t-primary-foreground/10 size-8" />
-    );
+    )
   if (message)
     return (
       <div className="flex flex-col items-center justify-center gap-4 text-sm">
         <X className="size-[1.875rem]" />
         {message}
       </div>
-    );
+    )
 
   return (
     <Form {...form}>
@@ -133,5 +133,5 @@ export function ResetPasswordForm({
         </div>
       </form>
     </Form>
-  );
+  )
 }

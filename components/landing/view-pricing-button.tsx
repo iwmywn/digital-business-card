@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { scrollToSection } from "@/components/landing/header-nav";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
+import { scrollToSection } from "@/components/landing/header-nav"
 
 export function ViewPricingButton() {
   return (
@@ -12,5 +12,5 @@ export function ViewPricingButton() {
     >
       View Pricing
     </Button>
-  );
+  )
 }

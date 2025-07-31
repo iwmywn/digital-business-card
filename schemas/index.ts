@@ -1,19 +1,19 @@
-import { z } from "zod";
+import { z } from "zod"
 
 const tokenSchema = z.object({
   token: z
     .string()
     .length(44, { message: "Token must be exactly 44 characters long." }),
-});
+})
 
 const basePasswordSchema = z
   .string()
   .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, {
     message:
       "Password must be at least 8 characters long, include uppercase, lowercase, number and special character.",
-  });
+  })
 
-const baseEmailSchema = z.string().email({ message: "Invalid email address." });
+const baseEmailSchema = z.string().email({ message: "Invalid email address." })
 
 const signUpSchema = z
   .object({
@@ -30,12 +30,12 @@ const signUpSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
     message: "Passwords do not match.",
-  });
+  })
 
 const signInSchema = z.object({
   email: baseEmailSchema,
   password: basePasswordSchema,
-});
+})
 
 const resetPasswordSchema = z
   .object({
@@ -45,11 +45,11 @@ const resetPasswordSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
     message: "Passwords do not match.",
-  });
+  })
 
 const emailSchema = z.object({
   email: baseEmailSchema,
-});
+})
 
 const contactSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required." }),
@@ -62,7 +62,7 @@ const contactSchema = z.object({
     .optional(),
   department: z.string().min(1, { message: "Please select a department." }),
   message: z.string().min(1, { message: "Message is required." }),
-});
+})
 
 const publicProfileSchema = z
   .object({
@@ -79,12 +79,12 @@ const publicProfileSchema = z
     bio: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    const { gender, dateOfBirth, jobTitle, company, website, bio } = data;
+    const { gender, dateOfBirth, jobTitle, company, website, bio } = data
 
     if (
       gender &&
       !["male", "female", "non-binary", "prefer-not-to-say"].includes(
-        gender.toLowerCase(),
+        gender.toLowerCase()
       )
     ) {
       ctx.addIssue({
@@ -92,19 +92,19 @@ const publicProfileSchema = z
         message:
           "Gender must be one of 'male', 'female', 'non-binary or 'prefer-not-to-say'.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
 
     if (dateOfBirth) {
-      const today = new Date();
-      const parseStringToDate = new Date(dateOfBirth);
-      let age = today.getFullYear() - parseStringToDate.getFullYear();
-      const monthDifference = today.getMonth() - parseStringToDate.getMonth();
+      const today = new Date()
+      const parseStringToDate = new Date(dateOfBirth)
+      let age = today.getFullYear() - parseStringToDate.getFullYear()
+      const monthDifference = today.getMonth() - parseStringToDate.getMonth()
       if (
         monthDifference < 0 ||
         (monthDifference === 0 && today.getDate() < parseStringToDate.getDate())
       ) {
-        age--;
+        age--
       }
 
       if (age < 13) {
@@ -112,7 +112,7 @@ const publicProfileSchema = z
           path: ["dateOfBirth"],
           message: "You must be at least 13 years old.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       }
     }
 
@@ -121,7 +121,7 @@ const publicProfileSchema = z
         path: ["jobTitle"],
         message: "Job title must not exceed 50 characters.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
 
     if (company && company.length > 100) {
@@ -129,20 +129,20 @@ const publicProfileSchema = z
         path: ["company"],
         message: "Company name must not exceed 100 characters.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
 
     if (
       website &&
       !/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/.test(
-        website,
+        website
       )
     ) {
       ctx.addIssue({
         path: ["website"],
         message: "Website must be a valid URL.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
 
     if (bio && bio.length > 300) {
@@ -150,9 +150,9 @@ const publicProfileSchema = z
         path: ["bio"],
         message: "Bio must not exceed 300 characters.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
-  });
+  })
 
 const accountSchema = z
   .object({
@@ -166,30 +166,30 @@ const accountSchema = z
   })
   .superRefine((data, ctx) => {
     const { username, phone, currentPassword, newPassword, confirmPassword } =
-      data;
+      data
 
     if (username) {
-      const match = username.match(/^[a-zA-Z0-9]+$/);
+      const match = username.match(/^[a-zA-Z0-9]+$/)
       if (!match) {
         ctx.addIssue({
           path: ["username"],
           code: z.ZodIssueCode.custom,
           message: "Username contains invalid characters.",
-        });
+        })
       }
       if (username.length < 6) {
         ctx.addIssue({
           path: ["username"],
           message: "Username must be at least 6 characters long.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       }
       if (username.length > 20) {
         ctx.addIssue({
           path: ["username"],
           message: "Username must be no more than 20 characters long.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       }
     }
 
@@ -198,11 +198,10 @@ const accountSchema = z
         path: ["phone"],
         message: "Phone number must be valid.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
 
-    const isChangingPassword =
-      currentPassword || newPassword || confirmPassword;
+    const isChangingPassword = currentPassword || newPassword || confirmPassword
 
     if (isChangingPassword) {
       if (!currentPassword) {
@@ -210,7 +209,7 @@ const accountSchema = z
           path: ["currentPassword"],
           message: "Current password is required.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       }
 
       if (!newPassword || !basePasswordSchema.safeParse(newPassword).success) {
@@ -219,7 +218,7 @@ const accountSchema = z
           message:
             "Password must be at least 8 characters long, include uppercase, lowercase, number and special character.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       }
 
       if (!confirmPassword) {
@@ -227,23 +226,23 @@ const accountSchema = z
           path: ["confirmPassword"],
           message: "Please confirm your new password.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       } else if (newPassword !== confirmPassword) {
         ctx.addIssue({
           path: ["confirmPassword"],
           message: "Passwords do not match.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       }
     }
-  });
+  })
 
 const notificationSchema = z.object({
   email: z.boolean(),
   cardView: z.boolean(),
   marketing: z.boolean(),
   security: z.boolean(),
-});
+})
 
 const personalInformationSchema = z
   .object({
@@ -259,14 +258,14 @@ const personalInformationSchema = z
   })
   .superRefine((data, ctx) => {
     const { jobTitle, department, company, accreditations, headline, bio } =
-      data;
+      data
 
     if (jobTitle && jobTitle.length > 50) {
       ctx.addIssue({
         path: ["jobTitle"],
         message: "Job title must not exceed 50 characters.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
 
     if (department && department.length > 50) {
@@ -274,7 +273,7 @@ const personalInformationSchema = z
         path: ["department"],
         message: "Department must not exceed 50 characters.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
 
     if (company && company.length > 100) {
@@ -282,7 +281,7 @@ const personalInformationSchema = z
         path: ["company"],
         message: "Company must not exceed 100 characters.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
 
     if (accreditations && accreditations.length > 50) {
@@ -290,7 +289,7 @@ const personalInformationSchema = z
         path: ["accreditations"],
         message: "Accreditations must not exceed 50 characters.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
 
     if (headline && headline.length > 100) {
@@ -298,7 +297,7 @@ const personalInformationSchema = z
         path: ["headline"],
         message: "Headline must not exceed 100 characters.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
 
     if (bio && bio.length > 300) {
@@ -306,89 +305,89 @@ const personalInformationSchema = z
         path: ["bio"],
         message: "Bio must not exceed 300 characters.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
-  });
+  })
 
 const usernameSchema = z
   .object({
     username: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    const { username } = data;
+    const { username } = data
 
     if (username) {
-      const match = username.match(/^[a-zA-Z0-9]+$/);
+      const match = username.match(/^[a-zA-Z0-9]+$/)
       if (!match) {
         ctx.addIssue({
           path: ["username"],
           code: z.ZodIssueCode.custom,
           message: "Username contains invalid characters.",
-        });
+        })
       }
       if (username.length < 6) {
         ctx.addIssue({
           path: ["username"],
           message: "Username must be at least 6 characters long.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       }
       if (username.length > 20) {
         ctx.addIssue({
           path: ["username"],
           message: "Username must be no more than 20 characters long.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       }
     }
-  });
+  })
 
 const cardSlugSchema = z
   .object({
     slug: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    const { slug } = data;
+    const { slug } = data
 
     if (slug) {
-      const match = slug.match(/^[a-zA-Z0-9]+$/);
+      const match = slug.match(/^[a-zA-Z0-9]+$/)
       if (!match) {
         ctx.addIssue({
           path: ["slug"],
           code: z.ZodIssueCode.custom,
           message: "Card slug contains invalid characters.",
-        });
+        })
       }
       if (slug.length < 6) {
         ctx.addIssue({
           path: ["slug"],
           message: "Card slug must be at least 6 characters long.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       }
       if (slug.length > 20) {
         ctx.addIssue({
           path: ["slug"],
           message: "Card slug must be no more than 20 characters long.",
           code: z.ZodIssueCode.custom,
-        });
+        })
       }
     }
-  });
+  })
 
 const brandNameSchema = z
   .object({ brandName: z.string().optional() })
   .superRefine((data, ctx) => {
-    const { brandName } = data;
+    const { brandName } = data
 
     if (brandName && brandName.length > 100) {
       ctx.addIssue({
         path: ["brandName"],
         message: "Brand name must not exceed 100 characters.",
         code: z.ZodIssueCode.custom,
-      });
+      })
     }
-  });
+  })
 
 const bugReportSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters."),
@@ -397,7 +396,7 @@ const bugReportSchema = z.object({
     .string()
     .min(20, "Description must be at least 20 characters."),
   steps: z.string().optional(),
-});
+})
 
 export {
   signUpSchema,
@@ -414,4 +413,4 @@ export {
   brandNameSchema,
   bugReportSchema,
   usernameSchema,
-};
+}

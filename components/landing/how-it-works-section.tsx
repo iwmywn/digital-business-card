@@ -1,31 +1,32 @@
-"use client";
+"use client"
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Links } from "@/components/card/links";
+import { useState } from "react"
+import Link from "next/link"
+import * as constants from "@/constants"
+import { ExternalLink } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   CardDesign,
   type CardDesignValues,
-} from "@/components/card/card-design";
+} from "@/components/card/card-design"
+import { CardPreview } from "@/components/card/card-preview"
+import { Links } from "@/components/card/links"
 import {
   PersonalInformation,
   type PersonalInformationValues,
-} from "@/components/card/personal-information";
-import type { SerializableLinkType } from "@/components/icons";
-import { CardPreview } from "@/components/card/card-preview";
-import * as constants from "@/constants";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+} from "@/components/card/personal-information"
+import type { SerializableLinkType } from "@/components/icons"
 
 const demoCardDesign: CardDesignValues = {
   cardColor: constants.defaultColor,
@@ -87,7 +88,7 @@ const demoCardDesign: CardDesignValues = {
       croppedImageUrl: "/images/demo/cover-photo.jpg",
     },
   },
-};
+}
 
 const demoPersonalInformation: PersonalInformationValues = {
   fullName: "Hoàng Anh Tuấn",
@@ -97,7 +98,7 @@ const demoPersonalInformation: PersonalInformationValues = {
   accreditations: "MBA, CPA",
   headline: "Software Engineer with 1+ year of experience.",
   bio: "Software Engineer with skills in full-stack development, cloud computing, and system design.",
-};
+}
 
 const demoLinks: SerializableLinkType[] = [
   {
@@ -106,33 +107,32 @@ const demoLinks: SerializableLinkType[] = [
     value: "https://github.com/iwmywn",
     category: "Business",
   },
-];
+]
 
 export function HowItWorksSection() {
-  const [designActiveTab, setDesignActiveTab] = useState<string>("design");
-  const [planActiveTab, setPlanActiveTab] = useState<string>("free");
-  const [cardDesign, setCardDesign] =
-    useState<CardDesignValues>(demoCardDesign);
+  const [designActiveTab, setDesignActiveTab] = useState<string>("design")
+  const [planActiveTab, setPlanActiveTab] = useState<string>("free")
+  const [cardDesign, setCardDesign] = useState<CardDesignValues>(demoCardDesign)
   const [personalInformation, setPersonalInformation] =
-    useState<PersonalInformationValues>(demoPersonalInformation);
-  const [links, setLinks] = useState<SerializableLinkType[]>(demoLinks);
+    useState<PersonalInformationValues>(demoPersonalInformation)
+  const [links, setLinks] = useState<SerializableLinkType[]>(demoLinks)
 
   const handlePlanActiveTab = (tab: string) => {
-    setPlanActiveTab(tab);
+    setPlanActiveTab(tab)
     setCardDesign({
       ...cardDesign,
       cardColor: constants.defaultColor,
       fontFamily: constants.defaultFont,
       brandName: tab === "professional" ? "iwmywn" : "Visiq",
-    });
+    })
     setLinks(
       tab === "free"
         ? links.slice(0, constants.maxFreeLinks)
         : tab === "basic"
           ? links.slice(0, constants.maxBasicLinks)
-          : links.slice(0, constants.maxProfessionalLinks),
-    );
-  };
+          : links.slice(0, constants.maxProfessionalLinks)
+    )
+  }
 
   return (
     <section
@@ -284,5 +284,5 @@ export function HowItWorksSection() {
         </Button>
       </div>
     </section>
-  );
+  )
 }

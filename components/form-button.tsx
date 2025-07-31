@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Loading } from "@/components/loading";
+import { Button } from "@/components/ui/button"
+import { Loading } from "@/components/loading"
+import { cn } from "@/lib/utils"
 
 export function FormButton({
   isSubmitting,
@@ -8,9 +8,9 @@ export function FormButton({
   className,
   ...props
 }: {
-  isSubmitting: boolean;
-  text: string;
-  className?: string;
+  isSubmitting: boolean
+  text: string
+  className?: string
 } & React.ComponentProps<"button">) {
   return (
     <Button
@@ -21,5 +21,5 @@ export function FormButton({
     >
       {isSubmitting ? <Loading /> : text}
     </Button>
-  );
+  )
 }

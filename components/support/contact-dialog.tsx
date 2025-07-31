@@ -1,16 +1,20 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import type { z } from "zod";
+import { Dispatch, SetStateAction } from "react"
+import { contactSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
 
+import { submitContact } from "@/actions/support-requests"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -18,22 +22,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { PhoneInput } from "@/components/ui/phone-input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import { FormButton } from "@/components/form-button";
-import { contactSchema } from "@/schemas";
-import { PhoneInput } from "@/components/ui/phone-input";
-import { submitContact } from "@/actions/support-requests";
-import { Dispatch, SetStateAction } from "react";
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { FormButton } from "@/components/form-button"
 
 const departments = [
   { value: "support", label: "Technical Support" },
@@ -41,16 +41,16 @@ const departments = [
   { value: "billing", label: "Billing Department" },
   { value: "partnership", label: "Partnership Opportunities" },
   { value: "feedback", label: "Product Feedback" },
-];
+]
 
-export type ContactFormValues = z.infer<typeof contactSchema>;
+export type ContactFormValues = z.infer<typeof contactSchema>
 
 export function ContactDialog({
   open,
   setOpen,
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }) {
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
@@ -63,17 +63,17 @@ export function ContactDialog({
       department: "",
       message: "",
     },
-  });
+  })
 
   async function onSubmit(values: ContactFormValues) {
-    const { success, error } = await submitContact(values);
+    const { success, error } = await submitContact(values)
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
-      form.reset();
-      setOpen(false);
-      toast.success(success);
+      form.reset()
+      setOpen(false)
+      toast.success(success)
     }
   }
 
@@ -247,5 +247,5 @@ export function ContactDialog({
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

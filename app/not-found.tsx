@@ -1,19 +1,20 @@
-import type { Metadata } from "next";
-import { cn } from "@/lib/utils";
-import { Ghost } from "lucide-react";
+import type { Metadata } from "next"
+import Link from "next/link"
+import { Ghost } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 import {
   EmptyState,
-  EmptyStateIcon,
-  EmptyStateHeader,
-  EmptyStateDescription,
   EmptyStateAction,
-} from "@/components/ui/empty-state";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+  EmptyStateDescription,
+  EmptyStateHeader,
+  EmptyStateIcon,
+} from "@/components/ui/empty-state"
+import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = {
   title: "NOT FOUND",
-};
+}
 
 export default function NotFound({ className }: { className?: string }) {
   return (
@@ -31,5 +32,5 @@ export default function NotFound({ className }: { className?: string }) {
         </Button>
       </EmptyStateAction>
     </EmptyState>
-  );
+  )
 }

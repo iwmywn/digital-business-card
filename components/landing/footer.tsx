@@ -1,15 +1,16 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { TermsOfServiceDialog } from "@/components/policy/terms-of-service-dialog";
-import { PrivacyPolicyDialog } from "@/components/policy/privacy-policy-dialog";
-import { FAQDialog } from "@/components/support/faq-dialog";
-import { Separator } from "@/components/ui/separator";
-import { LandingPageThemeToggle } from "@/components/mode-toggle";
-import { useState } from "react";
-import { LinkedInIcon, SimpleIconComponent } from "@/components/icons";
-import { siFacebook, siInstagram, siX } from "simple-icons";
+import { useState } from "react"
+import Link from "next/link"
+import { siFacebook, siInstagram, siX } from "simple-icons"
+
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { LinkedInIcon, SimpleIconComponent } from "@/components/icons"
+import { LandingPageThemeToggle } from "@/components/mode-toggle"
+import { PrivacyPolicyDialog } from "@/components/policy/privacy-policy-dialog"
+import { TermsOfServiceDialog } from "@/components/policy/terms-of-service-dialog"
+import { FAQDialog } from "@/components/support/faq-dialog"
 
 const visiqSocialLinks = [
   {
@@ -32,12 +33,12 @@ const visiqSocialLinks = [
     label: "LinkedIn",
     icon: LinkedInIcon,
   },
-];
+]
 
 export function Foorter() {
-  const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false);
-  const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false);
-  const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
+  const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false)
+  const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false)
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false)
 
   return (
     <>
@@ -106,5 +107,5 @@ export function Foorter() {
       <TermsOfServiceDialog open={isTermsOpen} setOpen={setIsTermsOpen} />
       <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />
     </>
-  );
+  )
 }

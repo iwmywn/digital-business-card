@@ -1,17 +1,17 @@
-import * as fonts from "@/app/fonts";
+import * as fonts from "@/app/fonts"
 
-const basicId = process.env.NEXT_PUBLIC_BASIC_ID;
-const professionalId = process.env.NEXT_PUBLIC_PROFESSIONAL_ID;
+const basicId = process.env.NEXT_PUBLIC_BASIC_ID
+const professionalId = process.env.NEXT_PUBLIC_PROFESSIONAL_ID
 
-const maxFreeCards = 1;
-const maxBasicCards = 3;
-const maxProfessionalCards = 5;
+const maxFreeCards = 1
+const maxBasicCards = 3
+const maxProfessionalCards = 5
 
-const maxFreeLinks = 10;
-const maxBasicLinks = 25;
-const maxProfessionalLinks = 45;
+const maxFreeLinks = 10
+const maxBasicLinks = 25
+const maxProfessionalLinks = 45
 
-const defaultFont = "roboto";
+const defaultFont = "roboto"
 const freeFontOptions = [
   { value: "roboto", label: "Roboto", className: fonts.roboto.className },
   {
@@ -24,7 +24,7 @@ const freeFontOptions = [
     label: "Montserrat",
     className: fonts.montserrat.className,
   },
-];
+]
 const basicFontOptions = [
   ...freeFontOptions,
   { value: "inter", label: "Inter", className: fonts.inter.className },
@@ -35,7 +35,7 @@ const basicFontOptions = [
     label: "Playfair Display",
     className: fonts.playfairDisplay.className,
   },
-];
+]
 const allFontOptions = [
   ...basicFontOptions,
   { value: "nunito", label: "Nunito", className: fonts.nunito.className },
@@ -71,16 +71,16 @@ const allFontOptions = [
     label: "League Spartan",
     className: fonts.leagueSpartan.className,
   },
-];
+]
 
-const defaultColor = "slate";
+const defaultColor = "slate"
 const freeColorOptions = [
   { value: "slate", label: "Slate", color: "bg-slate-400" },
   { value: "gray", label: "Gray", color: "bg-gray-400" },
   { value: "zinc", label: "Zinc", color: "bg-zinc-400" },
   { value: "neutral", label: "Neutral", color: "bg-neutral-400" },
   { value: "stone", label: "Stone", color: "bg-stone-400" },
-];
+]
 const basicColorOptions = [
   ...freeColorOptions,
   { value: "red", label: "Red", color: "bg-red-400" },
@@ -100,7 +100,7 @@ const basicColorOptions = [
   { value: "fuchsia", label: "Fuchsia", color: "bg-fuchsia-400" },
   { value: "pink", label: "Pink", color: "bg-pink-400" },
   { value: "rose", label: "Rose", color: "bg-rose-400" },
-];
+]
 const allColorOptions = [
   ...basicColorOptions,
   {
@@ -241,7 +241,7 @@ const allColorOptions = [
     color:
       "bg-[linear-gradient(to_right,black,theme(colors.zinc.800),theme(colors.neutral.800))]",
   },
-];
+]
 
 const subscriptionPlans = [
   {
@@ -289,7 +289,7 @@ const subscriptionPlans = [
     popular: true,
     priceId: professionalId || "",
   },
-];
+]
 
 export {
   subscriptionPlans,
@@ -309,4 +309,4 @@ export {
   maxFreeLinks,
   maxBasicLinks,
   maxProfessionalLinks,
-};
+}

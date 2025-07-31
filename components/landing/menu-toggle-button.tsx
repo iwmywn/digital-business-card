@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
-import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { menuItems } from "@/components/landing/header-nav";
-import { useState } from "react";
-import { scrollToSection } from "@/components/landing/header-nav";
-import Link from "next/link";
+import { useState } from "react"
+import Link from "next/link"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
+import { Menu } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer"
+import { menuItems, scrollToSection } from "@/components/landing/header-nav"
 
 export function MenuToggleButton() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
 
   return (
     <>
@@ -40,8 +40,8 @@ export function MenuToggleButton() {
                 key={id}
                 variant="ghost"
                 onClick={() => {
-                  setIsDrawerOpen(false);
-                  scrollToSection(id);
+                  setIsDrawerOpen(false)
+                  scrollToSection(id)
                 }}
                 className="w-full text-base"
               >
@@ -68,5 +68,5 @@ export function MenuToggleButton() {
         </DrawerContent>
       </Drawer>
     </>
-  );
+  )
 }

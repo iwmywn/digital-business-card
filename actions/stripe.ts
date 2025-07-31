@@ -1,39 +1,41 @@
-"use server";
+"use server"
 
-import Stripe from "stripe";
-import { session } from "@/lib/session";
-import { getUserById } from "@/lib/data";
-import { processSuccessfulPayment } from "./stripe-utils";
+import Stripe from "stripe"
+
+import { getUserById } from "@/lib/data"
+import { session } from "@/lib/session"
+
+import { processSuccessfulPayment } from "./stripe-utils"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-06-30.basil",
-});
+})
 
 export async function createCheckoutSession(priceId: string, planId: string) {
   try {
     if (!priceId) {
-      return { error: "Invalid price ID!" };
+      return { error: "Invalid price ID!" }
     }
 
     if (!planId) {
-      return { error: "Invalid plan ID!" };
+      return { error: "Invalid plan ID!" }
     }
 
-    const { userId } = await session.user.get();
+    const { userId } = await session.user.get()
 
     if (!userId) {
-      return { error: "Unauthorized! Please reload the page and try again." };
+      return { error: "Unauthorized! Please reload the page and try again." }
     }
 
-    const existingUser = await getUserById(userId);
+    const existingUser = await getUserById(userId)
 
-    if (!existingUser) return { error: "User not found!" };
+    if (!existingUser) return { error: "User not found!" }
 
     if (!existingUser.stripeCustomerId) {
-      return { error: "No Stripe customer ID found!" };
+      return { error: "No Stripe customer ID found!" }
     }
 
-    const url = process.env.NEXT_PUBLIC_URL;
+    const url = process.env.NEXT_PUBLIC_URL
 
     const sessionOptions: Stripe.Checkout.SessionCreateParams = {
       customer: existingUser.stripeCustomerId,
@@ -56,16 +58,16 @@ export async function createCheckoutSession(priceId: string, planId: string) {
         name: "auto",
       },
       billing_address_collection: "required",
-    };
+    }
 
-    const stripeSession = await stripe.checkout.sessions.create(sessionOptions);
+    const stripeSession = await stripe.checkout.sessions.create(sessionOptions)
 
-    return { url: stripeSession.url, error: undefined };
+    return { url: stripeSession.url, error: undefined }
   } catch (error) {
-    console.error("Error creating checkout session:", error);
+    console.error("Error creating checkout session:", error)
     return {
       error: "Failed to create checkout session! Please try again later.",
-    };
+    }
   }
 }
 
@@ -73,64 +75,64 @@ export async function verifyCheckoutSession(sessionId: string) {
   try {
     const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["payment_intent"],
-    });
+    })
 
     if (checkoutSession.payment_status === "paid") {
-      const userId = checkoutSession.metadata?.userId;
+      const userId = checkoutSession.metadata?.userId
       const planId = checkoutSession.metadata?.planId as
         | "basic"
         | "professional"
-        | undefined;
+        | undefined
 
       if (!userId || !planId) {
         return {
           error: "Missing user ID or plan ID!",
-        };
+        }
       }
 
       const paymentIntentId =
         typeof checkoutSession.payment_intent === "string"
           ? checkoutSession.payment_intent
-          : checkoutSession.payment_intent?.id;
+          : checkoutSession.payment_intent?.id
 
       if (!paymentIntentId) {
         return {
           error: "Missing payment intent ID!",
-        };
+        }
       }
 
       const amount = checkoutSession.amount_total
         ? checkoutSession.amount_total / 100
-        : 0;
-      const { userId: id } = await session.user.get();
+        : 0
+      const { userId: id } = await session.user.get()
 
       if (userId !== id)
         return {
           error: "unauthorized_access",
-        };
+        }
 
       const { error } = await processSuccessfulPayment({
         userId,
         planId,
         paymentIntentId,
         amount,
-      });
+      })
 
       if (error) {
-        return { error };
+        return { error }
       }
 
       return {
         success: `Your ${planId} plan with the transaction ID ${paymentIntentId.slice(3)} is active. Thank you for your payment.`,
-      };
+      }
     }
 
-    return { error: undefined };
+    return { error: undefined }
   } catch (error) {
-    console.error("Error verifying checkout session:", error);
+    console.error("Error verifying checkout session:", error)
     return {
       error: "Failed to verify checkout session! PLease try again later.",
-    };
+    }
   }
 }
 
@@ -139,16 +141,16 @@ export async function createStripeCustomer(email: string, name: string) {
     const customer = await stripe.customers.create({
       email,
       name,
-    });
+    })
 
-    if (!customer) return { error: "Stripe returned no customer object!" };
+    if (!customer) return { error: "Stripe returned no customer object!" }
 
-    return { customerId: customer.id, error: undefined };
+    return { customerId: customer.id, error: undefined }
   } catch (error) {
-    console.error("Error creating Stripe customer:", error);
+    console.error("Error creating Stripe customer:", error)
     return {
       error: "Failed to create Stripe customer! Please try again later.",
-    };
+    }
   }
 }
 
@@ -163,15 +165,15 @@ export async function getPaymentDetails(paymentIntentId: string) {
           "latest_charge",
           "latest_charge.billing_details",
         ],
-      },
-    );
+      }
+    )
 
     const sessions = await stripe.checkout.sessions.list({
       payment_intent: paymentIntentId,
       expand: ["data.line_items"],
-    });
+    })
 
-    const session = sessions.data[0];
+    const session = sessions.data[0]
 
     const receiptData = {
       paymentIntent: {
@@ -222,13 +224,13 @@ export async function getPaymentDetails(paymentIntentId: string) {
           quantity: item.quantity,
           amount: item.amount_total / 100,
         })) || [],
-    };
+    }
 
-    return { data: receiptData, error: undefined };
+    return { data: receiptData, error: undefined }
   } catch (error) {
-    console.error("Error retrieving payment details:", error);
+    console.error("Error retrieving payment details:", error)
     return {
       error: "Failed to retrieve payment details! Please try again later.",
-    };
+    }
   }
 }

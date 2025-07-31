@@ -1,35 +1,22 @@
-"use client";
+"use client"
 
-import { ImageIcon } from "lucide-react";
-import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
-import {
-  ImageEditorDialog,
-  type ImageTransform,
-} from "@/components/image-editor-dialog";
-import * as constants from "@/constants";
-import { getCloudinaryUrl } from "@/lib/utils";
-import { checkEnv } from "@/lib/utils";
-import { brandNameSchema } from "@/schemas";
 import {
   forwardRef,
   Ref,
   useEffect,
   useImperativeHandle,
   useState,
-} from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useWatch } from "react-hook-form";
-import type { z } from "zod";
+} from "react"
+import Image from "next/image"
+import * as constants from "@/constants"
+import { brandNameSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { ImageIcon } from "lucide-react"
+import { useForm, useWatch } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
+
+import { Card, CardContent } from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -37,26 +24,39 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  ImageEditorDialog,
+  type ImageTransform,
+} from "@/components/image-editor-dialog"
+import { checkEnv, getCloudinaryUrl } from "@/lib/utils"
 
 // ['cloudinary image name', 'image path']
-export type Image = [string, string];
+export type Image = [string, string]
 
-type BrandNameValue = z.infer<typeof brandNameSchema>;
+type BrandNameValue = z.infer<typeof brandNameSchema>
 
 export interface CardDesignValues {
-  cardColor: string;
-  fontFamily: string;
-  logoImage?: Image;
-  profileImage?: Image;
-  coverImage?: Image;
+  cardColor: string
+  fontFamily: string
+  logoImage?: Image
+  profileImage?: Image
+  coverImage?: Image
   imageTransforms?: {
-    logo?: ImageTransform;
-    profile?: ImageTransform;
-    cover?: ImageTransform;
-  };
-  brandName?: string;
+    logo?: ImageTransform
+    profile?: ImageTransform
+    cover?: ImageTransform
+  }
+  brandName?: string
 }
 
 export const CardDesign = forwardRef(function CardDesign(
@@ -66,68 +66,68 @@ export const CardDesign = forwardRef(function CardDesign(
     publicPlan,
     currentUserPlan,
   }: {
-    onSave: (data: CardDesignValues) => void;
-    initialValues: CardDesignValues;
-    publicPlan?: "free" | "basic" | "professional";
-    currentUserPlan?: "free" | "basic" | "professional";
+    onSave: (data: CardDesignValues) => void
+    initialValues: CardDesignValues
+    publicPlan?: "free" | "basic" | "professional"
+    currentUserPlan?: "free" | "basic" | "professional"
   },
-  ref?: Ref<{ validate: () => Promise<boolean> }>,
+  ref?: Ref<{ validate: () => Promise<boolean> }>
 ) {
-  const effectivePlan = publicPlan ?? currentUserPlan;
+  const effectivePlan = publicPlan ?? currentUserPlan
   const [logoImage, setLogoImage] = useState<Image | undefined>(
-    initialValues?.logoImage,
-  );
+    initialValues?.logoImage
+  )
   const [profileImage, setProfileImage] = useState<Image | undefined>(
-    initialValues?.profileImage,
-  );
+    initialValues?.profileImage
+  )
   const [coverImage, setCoverImage] = useState<Image | undefined>(
-    initialValues?.coverImage,
-  );
-  const [cardColor, setCardColor] = useState<string>(initialValues?.cardColor);
+    initialValues?.coverImage
+  )
+  const [cardColor, setCardColor] = useState<string>(initialValues?.cardColor)
   const [fontFamily, setFontFamily] = useState<string>(
-    initialValues?.fontFamily,
-  );
+    initialValues?.fontFamily
+  )
   const [imageTransforms, setImageTransforms] = useState<{
-    logo?: ImageTransform;
-    profile?: ImageTransform;
-    cover?: ImageTransform;
-  }>(initialValues?.imageTransforms || {});
-  const [imageEditorOpen, setImageEditorOpen] = useState<boolean>(false);
+    logo?: ImageTransform
+    profile?: ImageTransform
+    cover?: ImageTransform
+  }>(initialValues?.imageTransforms || {})
+  const [imageEditorOpen, setImageEditorOpen] = useState<boolean>(false)
   const [currentImageType, setCurrentImageType] = useState<
     "logo" | "profile" | "cover" | undefined
-  >(undefined);
-  const [tempImage, setTempImage] = useState<string | null>(null);
-  const [cloudinaryName, setCloudinaryName] = useState<string | null>(null);
+  >(undefined)
+  const [tempImage, setTempImage] = useState<string | null>(null)
+  const [cloudinaryName, setCloudinaryName] = useState<string | null>(null)
   const form = useForm<BrandNameValue>({
     resolver: zodResolver(brandNameSchema),
     mode: "onChange",
     defaultValues: {
       brandName: initialValues?.brandName || "",
     },
-  });
+  })
 
   useImperativeHandle(ref, () => ({
     validate: () => form.trigger(),
-  }));
+  }))
 
   const fontOptions =
     effectivePlan === "free"
       ? constants.freeFontOptions
       : effectivePlan === "basic"
         ? constants.basicFontOptions
-        : constants.allFontOptions;
+        : constants.allFontOptions
 
   const colorOptions =
     effectivePlan === "free"
       ? constants.freeColorOptions
       : effectivePlan === "basic"
         ? constants.basicColorOptions
-        : constants.allColorOptions;
+        : constants.allColorOptions
 
   const brandName = useWatch({
     control: form.control,
     name: "brandName",
-  });
+  })
 
   useEffect(() => {
     onSave({
@@ -138,7 +138,7 @@ export const CardDesign = forwardRef(function CardDesign(
       coverImage,
       imageTransforms,
       brandName,
-    });
+    })
   }, [
     cardColor,
     fontFamily,
@@ -148,119 +148,115 @@ export const CardDesign = forwardRef(function CardDesign(
     imageTransforms,
     brandName,
     onSave,
-  ]);
+  ])
 
   const handleImageClick = (type: "logo" | "profile" | "cover") => {
-    let currentImage;
-    if (type === "logo") currentImage = logoImage;
-    if (type === "profile") currentImage = profileImage;
-    if (type === "cover") currentImage = coverImage;
+    let currentImage
+    if (type === "logo") currentImage = logoImage
+    if (type === "profile") currentImage = profileImage
+    if (type === "cover") currentImage = coverImage
 
     if (currentImage) {
-      setCurrentImageType(type);
-      setTempImage(currentImage[1]);
-      setCloudinaryName(currentImage[0]);
-      setImageEditorOpen(true);
+      setCurrentImageType(type)
+      setTempImage(currentImage[1])
+      setCloudinaryName(currentImage[0])
+      setImageEditorOpen(true)
     } else {
-      setCloudinaryName(null);
-      document.getElementById(`${type}-image`)?.click();
+      setCloudinaryName(null)
+      document.getElementById(`${type}-image`)?.click()
     }
-  };
+  }
 
   function handleImageUpload(
     event: React.ChangeEvent<HTMLInputElement>,
-    type: "logo" | "profile" | "cover",
+    type: "logo" | "profile" | "cover"
   ) {
-    const fileInput = event.target;
-    const file = fileInput.files?.[0];
-    if (!file) return;
+    const fileInput = event.target
+    const file = fileInput.files?.[0]
+    if (!file) return
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("File size exceeds 5MB limit!");
-      fileInput.value = "";
-      return;
+      toast.error("File size exceeds 5MB limit!")
+      fileInput.value = ""
+      return
     }
 
     if (!file.type.match(/image\/(jpg|jpeg|png)/)) {
-      toast.error("Only JPG, JPEG and PNG images are allowed!");
-      fileInput.value = "";
-      return;
+      toast.error("Only JPG, JPEG and PNG images are allowed!")
+      fileInput.value = ""
+      return
     }
 
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = (e) => {
-      const result = e.target?.result as string;
+      const result = e.target?.result as string
 
-      setCurrentImageType(type);
-      setTempImage(result);
-      setImageEditorOpen(true);
+      setCurrentImageType(type)
+      setTempImage(result)
+      setImageEditorOpen(true)
 
-      fileInput.value = "";
-    };
+      fileInput.value = ""
+    }
     reader.onerror = () => {
-      toast.error(`Failed to upload ${type} image!`);
-      fileInput.value = "";
-    };
-    reader.readAsDataURL(file);
+      toast.error(`Failed to upload ${type} image!`)
+      fileInput.value = ""
+    }
+    reader.readAsDataURL(file)
   }
 
   const handleSaveImage = (transform: ImageTransform, type?: string) => {
-    if (!tempImage || !type) return;
+    if (!tempImage || !type) return
 
     const { cloudinaryName: cloudinaryNameEnv } = checkEnv({
       cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
-    });
+    })
 
     if (type === "logo")
-      setLogoImage([cloudinaryName ?? cloudinaryNameEnv, tempImage]);
+      setLogoImage([cloudinaryName ?? cloudinaryNameEnv, tempImage])
     if (type === "profile")
-      setProfileImage([cloudinaryName ?? cloudinaryNameEnv, tempImage]);
+      setProfileImage([cloudinaryName ?? cloudinaryNameEnv, tempImage])
     if (type === "cover")
-      setCoverImage([cloudinaryName ?? cloudinaryNameEnv, tempImage]);
+      setCoverImage([cloudinaryName ?? cloudinaryNameEnv, tempImage])
 
     setImageTransforms((prev) => ({
       ...prev,
       [type]: transform,
-    }));
+    }))
 
-    toast.info(
-      `${type.charAt(0).toUpperCase() + type.slice(1)} image updated.`,
-    );
-    setImageEditorOpen(false);
-  };
+    toast.info(`${type.charAt(0).toUpperCase() + type.slice(1)} image updated.`)
+    setImageEditorOpen(false)
+  }
 
   const handleDeleteImage = (type?: string) => {
-    if (!type) return;
+    if (!type) return
 
-    if (type === "logo") setLogoImage(undefined);
-    if (type === "profile") setProfileImage(undefined);
-    if (type === "cover") setCoverImage(undefined);
+    if (type === "logo") setLogoImage(undefined)
+    if (type === "profile") setProfileImage(undefined)
+    if (type === "cover") setCoverImage(undefined)
 
-    const newTransforms = { ...imageTransforms };
-    delete newTransforms[type as keyof typeof newTransforms];
-    setImageTransforms(newTransforms);
-    setCloudinaryName(null);
+    const newTransforms = { ...imageTransforms }
+    delete newTransforms[type as keyof typeof newTransforms]
+    setImageTransforms(newTransforms)
+    setCloudinaryName(null)
 
-    toast.info(
-      `${type.charAt(0).toUpperCase() + type.slice(1)} image removed.`,
-    );
-    setImageEditorOpen(false);
-  };
+    toast.info(`${type.charAt(0).toUpperCase() + type.slice(1)} image removed.`)
+    setImageEditorOpen(false)
+  }
 
   const getImageUrl = (type: "logo" | "profile" | "cover") => {
-    const transform = imageTransforms[type];
+    const transform = imageTransforms[type]
 
-    let imageUrl;
+    let imageUrl
 
-    if (type === "logo") imageUrl = logoImage;
-    if (type === "profile") imageUrl = profileImage;
-    if (type === "cover") imageUrl = coverImage;
+    if (type === "logo") imageUrl = logoImage
+    if (type === "profile") imageUrl = profileImage
+    if (type === "cover") imageUrl = coverImage
 
-    return getCloudinaryUrl(imageUrl, transform);
-  };
+    return getCloudinaryUrl(imageUrl, transform)
+  }
 
   const selectedFont =
-    fontOptions.find((font) => font.value === fontFamily) || fontOptions[0];
+    fontOptions.find((font) => font.value === fontFamily) || fontOptions[0]
 
   return (
     <>
@@ -487,5 +483,5 @@ export const CardDesign = forwardRef(function CardDesign(
         />
       )}
     </>
-  );
-});
+  )
+})

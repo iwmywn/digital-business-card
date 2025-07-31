@@ -1,8 +1,14 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useWatch } from "react-hook-form";
-import type { z } from "zod";
+import { useEffect, useState } from "react"
+import { accountSchema, usernameSchema } from "@/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { CheckCircle, XCircle } from "lucide-react"
+import { useForm, useWatch } from "react-hook-form"
+import { toast } from "sonner"
+import type { z } from "zod"
+
+import { checkUsername, updateAccount } from "@/actions/setting"
 import {
   Form,
   FormControl,
@@ -11,39 +17,34 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { accountSchema, usernameSchema } from "@/schemas";
-import { FormButton } from "@/components/form-button";
-import { PasswordInput } from "@/components/ui/password-input";
-import { PhoneInput } from "@/components/ui/phone-input";
-import { useUser } from "@/lib/swr";
-import { useEffect, useState } from "react";
-import { CheckCircle, XCircle } from "lucide-react";
-import { checkUsername, updateAccount } from "@/actions/setting";
-import { useDebounce } from "@/hooks/use-debounce";
-import { Loading } from "@/components/loading";
-import { AccountSkeleton } from "@/components/skeletons";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
+import { PhoneInput } from "@/components/ui/phone-input"
+import { FormButton } from "@/components/form-button"
+import { Loading } from "@/components/loading"
+import { AccountSkeleton } from "@/components/skeletons"
+import { useDebounce } from "@/hooks/use-debounce"
+import { useUser } from "@/lib/swr"
 
-export type SettingsFormValues = z.infer<typeof accountSchema>;
+export type SettingsFormValues = z.infer<typeof accountSchema>
 
 export function AccountSetting() {
-  const { isUserError, isUserLoading } = useUser();
+  const { isUserError, isUserLoading } = useUser()
 
   useEffect(() => {
-    if (isUserError && !isUserLoading) toast.error(isUserError);
-  }, [isUserError, isUserLoading]);
+    if (isUserError && !isUserLoading) toast.error(isUserError)
+  }, [isUserError, isUserLoading])
 
   if (isUserLoading) {
-    return <AccountSkeleton />;
+    return <AccountSkeleton />
   }
 
-  return <AccountForm />;
+  return <AccountForm />
 }
 
 export function AccountForm() {
-  const { userResponse, user, mutate } = useUser();
+  const { userResponse, user, mutate } = useUser()
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(accountSchema),
     defaultValues: {
@@ -53,29 +54,29 @@ export function AccountForm() {
       newPassword: "",
       confirmPassword: "",
     },
-  });
-  const [isChecking, setIsChecking] = useState<boolean>(false);
+  })
+  const [isChecking, setIsChecking] = useState<boolean>(false)
   const [isUsernameAvailable, setIsUsernameAvailable] = useState<
     boolean | null
-  >(null);
+  >(null)
   const debouncedUsername = useDebounce(
     useWatch({
       control: form.control,
       name: "username",
     }),
-    500,
-  );
+    500
+  )
 
   async function onSubmit(values: SettingsFormValues) {
-    const { success, error } = await updateAccount(values);
+    const { success, error } = await updateAccount(values)
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
-      toast.success(success);
-      form.setValue("currentPassword", "");
-      form.setValue("newPassword", "");
-      form.setValue("confirmPassword", "");
+      toast.success(success)
+      form.setValue("currentPassword", "")
+      form.setValue("newPassword", "")
+      form.setValue("confirmPassword", "")
       if (userResponse?.user) {
         mutate({
           ...userResponse,
@@ -84,61 +85,61 @@ export function AccountForm() {
             username: values.username,
             phone: values.phone,
           },
-        });
+        })
       }
     }
   }
 
   useEffect(() => {
-    const username = debouncedUsername?.trim();
+    const username = debouncedUsername?.trim()
 
     if (!username) {
-      setIsUsernameAvailable(null);
-      form.clearErrors("username");
-      return;
+      setIsUsernameAvailable(null)
+      form.clearErrors("username")
+      return
     }
 
-    const parsedValue = usernameSchema.safeParse({ username });
+    const parsedValue = usernameSchema.safeParse({ username })
 
     if (!parsedValue.success) {
       const errorMessages = parsedValue.error.issues
         .map((err) => err.message)
-        .join(" ");
+        .join(" ")
 
       form.setError("username", {
         type: "manual",
         message: errorMessages,
-      });
+      })
 
-      setIsUsernameAvailable(false);
-      return;
+      setIsUsernameAvailable(false)
+      return
     }
 
-    setIsChecking(true);
+    setIsChecking(true)
     checkUsername(username)
       .then((res) => {
         if (res?.error) {
           form.setError("username", {
             type: "manual",
             message: res.error,
-          });
-          setIsUsernameAvailable(false);
+          })
+          setIsUsernameAvailable(false)
         } else {
-          form.clearErrors("username");
-          setIsUsernameAvailable(true);
+          form.clearErrors("username")
+          setIsUsernameAvailable(true)
         }
       })
       .catch(() => {
         form.setError("username", {
           type: "manual",
           message: "Something went wrong! Please try again.",
-        });
-        setIsUsernameAvailable(null);
+        })
+        setIsUsernameAvailable(null)
       })
       .finally(() => {
-        setIsChecking(false);
-      });
-  }, [debouncedUsername, form]);
+        setIsChecking(false)
+      })
+  }, [debouncedUsername, form])
 
   return (
     <Form {...form}>
@@ -291,5 +292,5 @@ export function AccountForm() {
         </div>
       </form>
     </Form>
-  );
+  )
 }

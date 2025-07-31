@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import type { CardDesignValues } from "@/components/card/card-design";
-import type { PersonalInformationValues } from "@/components/card/personal-information";
-import type { SerializableLinkType } from "@/components/icons";
-import { QrCode, Share2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { linkTypes } from "@/components/icons";
-import { getColorClass, getFontClass } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { getCloudinaryUrl } from "@/lib/utils";
+import Image from "next/image"
+import { QrCode, Share2 } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import type { CardDesignValues } from "@/components/card/card-design"
+import type { PersonalInformationValues } from "@/components/card/personal-information"
+import type { SerializableLinkType } from "@/components/icons"
+import { linkTypes } from "@/components/icons"
+import { getCloudinaryUrl, getColorClass, getFontClass } from "@/lib/utils"
 
 interface CardPreviewProps {
-  cardDesign: CardDesignValues;
-  personalInformation: PersonalInformationValues;
-  links: SerializableLinkType[];
+  cardDesign: CardDesignValues
+  personalInformation: PersonalInformationValues
+  links: SerializableLinkType[]
 }
 
 export function CardPreview({
@@ -22,29 +22,29 @@ export function CardPreview({
   personalInformation,
   links,
 }: CardPreviewProps) {
-  const colorClass = getColorClass(cardDesign.cardColor);
-  const fontClass = getFontClass(cardDesign.fontFamily);
+  const colorClass = getColorClass(cardDesign.cardColor)
+  const fontClass = getFontClass(cardDesign.fontFamily)
 
   const getImageUrl = (type: "logo" | "profile" | "cover") => {
-    const transform = cardDesign.imageTransforms?.[type];
+    const transform = cardDesign.imageTransforms?.[type]
 
-    let imageUrl;
+    let imageUrl
 
-    if (type === "logo") imageUrl = cardDesign.logoImage;
-    if (type === "profile") imageUrl = cardDesign.profileImage;
-    if (type === "cover") imageUrl = cardDesign.coverImage;
+    if (type === "logo") imageUrl = cardDesign.logoImage
+    if (type === "profile") imageUrl = cardDesign.profileImage
+    if (type === "cover") imageUrl = cardDesign.coverImage
 
-    return getCloudinaryUrl(imageUrl, transform);
-  };
+    return getCloudinaryUrl(imageUrl, transform)
+  }
 
   const getIconComponent = (linkType: string) => {
-    const foundLinkType = linkTypes.find((lt) => lt.type === linkType);
+    const foundLinkType = linkTypes.find((lt) => lt.type === linkType)
     if (foundLinkType) {
-      const IconComponent = foundLinkType.icon;
-      return <IconComponent />;
+      const IconComponent = foundLinkType.icon
+      return <IconComponent />
     }
-    return null;
-  };
+    return null
+  }
 
   return (
     <div className="mx-auto w-full max-w-md">
@@ -204,5 +204,5 @@ export function CardPreview({
         </div>
       </div>
     </div>
-  );
+  )
 }

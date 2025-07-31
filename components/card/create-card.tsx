@@ -1,43 +1,44 @@
-"use client";
+"use client"
 
-import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "sonner";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import {
-  CardDesign,
-  type CardDesignValues,
-} from "@/components/card/card-design";
-import {
-  PersonalInformation,
-  type PersonalInformationValues,
-} from "@/components/card/personal-information";
-import { Links } from "@/components/card/links";
-import { CardPreview } from "@/components/card/card-preview";
-import { saveCard } from "@/actions/card";
-import type { SerializableLinkType } from "@/components/icons";
-import { useCard, useUser } from "@/lib/swr";
-import { CreateCardSkeleton } from "@/components/skeletons";
-import { Loading } from "@/components/loading";
-import * as constants from "@/constants";
-import { brandNameSchema, personalInformationSchema } from "@/schemas";
+import { useEffect, useRef, useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import * as constants from "@/constants"
+import { brandNameSchema, personalInformationSchema } from "@/schemas"
+import { AlertCircle } from "lucide-react"
+import { toast } from "sonner"
+
+import { saveCard } from "@/actions/card"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  CardDesign,
+  type CardDesignValues,
+} from "@/components/card/card-design"
+import { CardPreview } from "@/components/card/card-preview"
+import { Links } from "@/components/card/links"
+import {
+  PersonalInformation,
+  type PersonalInformationValues,
+} from "@/components/card/personal-information"
+import type { SerializableLinkType } from "@/components/icons"
+import { Loading } from "@/components/loading"
+import { CreateCardSkeleton } from "@/components/skeletons"
+import { useCard, useUser } from "@/lib/swr"
 
 export function CreateCard() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState<string>("design");
-  const [previewMode, setPreviewMode] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const router = useRouter()
+  const pathname = usePathname()
+  const [activeTab, setActiveTab] = useState<string>("design")
+  const [previewMode, setPreviewMode] = useState<boolean>(false)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [cardDesign, setCardDesign] = useState<CardDesignValues>({
     cardColor: constants.defaultColor,
     fontFamily: constants.defaultFont,
@@ -45,7 +46,7 @@ export function CreateCard() {
     profileImage: undefined,
     coverImage: undefined,
     brandName: "Visiq",
-  });
+  })
   const [personalInformation, setPersonalInformation] =
     useState<PersonalInformationValues>({
       fullName: "",
@@ -55,62 +56,62 @@ export function CreateCard() {
       accreditations: "",
       headline: "",
       bio: "",
-    });
-  const [links, setLinks] = useState<SerializableLinkType[]>([]);
+    })
+  const [links, setLinks] = useState<SerializableLinkType[]>([])
   const personalInformationRef = useRef<{ validate: () => Promise<boolean> }>(
-    null,
-  );
-  const cardDesignRef = useRef<{ validate: () => Promise<boolean> }>(null);
-  const { cardResponse, cards, isCardLoading, isCardError, mutate } = useCard();
-  const { isUserError, isUserLoading, user } = useUser();
-  const [isPublic, setIsPublic] = useState<boolean>(true);
+    null
+  )
+  const cardDesignRef = useRef<{ validate: () => Promise<boolean> }>(null)
+  const { cardResponse, cards, isCardLoading, isCardError, mutate } = useCard()
+  const { isUserError, isUserLoading, user } = useUser()
+  const [isPublic, setIsPublic] = useState<boolean>(true)
 
   async function handleCreateCard() {
-    if (isSubmitting) return;
+    if (isSubmitting) return
 
     const parsedCardDesignValue = brandNameSchema.safeParse({
       brandName: cardDesign.brandName,
-    });
+    })
     const parsedPersonalInfoValues =
-      personalInformationSchema.safeParse(personalInformation);
+      personalInformationSchema.safeParse(personalInformation)
 
     if (!parsedCardDesignValue.success) {
-      setActiveTab("design");
+      setActiveTab("design")
       setTimeout(async () => {
-        await cardDesignRef.current?.validate();
-      }, 0);
-      router.push(`${pathname}#brandName`);
-      return;
+        await cardDesignRef.current?.validate()
+      }, 0)
+      router.push(`${pathname}#brandName`)
+      return
     }
 
     if (!parsedPersonalInfoValues.success) {
-      setActiveTab("personal-information");
+      setActiveTab("personal-information")
       setTimeout(async () => {
-        await personalInformationRef.current?.validate();
-      }, 0);
-      return;
+        await personalInformationRef.current?.validate()
+      }, 0)
+      return
     }
 
-    const emptyLinks = links.filter((link) => !link.value.trim());
+    const emptyLinks = links.filter((link) => !link.value.trim())
     if (emptyLinks.length > 0) {
       toast.error(
-        "Please provide values for all your links or remove empty ones!",
-      );
-      setActiveTab("links");
-      return;
+        "Please provide values for all your links or remove empty ones!"
+      )
+      setActiveTab("links")
+      return
     }
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
 
     const { success, error } = await saveCard(
       cardDesign,
       personalInformation,
       links,
-      isPublic,
-    );
+      isPublic
+    )
 
     if (error || !success) {
-      toast.error(error);
+      toast.error(error)
     } else {
       mutate({
         ...cardResponse,
@@ -137,12 +138,12 @@ export function CreateCard() {
             dynamicSlug: "temp",
           },
         ],
-      });
-      toast.success(success);
-      router.push("/management");
+      })
+      toast.success(success)
+      router.push("/management")
     }
 
-    setIsSubmitting(false);
+    setIsSubmitting(false)
   }
 
   useEffect(() => {
@@ -151,13 +152,13 @@ export function CreateCard() {
       !isCardError.includes("You've reached the maximum number of cards") &&
       !isCardLoading
     )
-      toast.error(isCardError);
+      toast.error(isCardError)
     if (isUserError && !isUserLoading) {
-      toast.error(isUserError);
+      toast.error(isUserError)
     }
-  }, [isCardError, isUserError, isUserLoading, isCardLoading]);
+  }, [isCardError, isUserError, isUserLoading, isCardLoading])
 
-  if (isCardLoading || isUserLoading) return <CreateCardSkeleton />;
+  if (isCardLoading || isUserLoading) return <CreateCardSkeleton />
 
   return (
     <div className="space-y-6">
@@ -281,5 +282,5 @@ export function CreateCard() {
         </div>
       )}
     </div>
-  );
+  )
 }

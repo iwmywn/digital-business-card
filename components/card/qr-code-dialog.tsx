@@ -1,3 +1,9 @@
+import { useCallback, useEffect, useMemo, useState } from "react"
+import Image from "next/image"
+import QRCode from "qrcode"
+import { toast } from "sonner"
+
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -5,15 +11,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Card as CardType } from "@/lib/definitions";
-import Image from "next/image";
-import { toast } from "sonner";
-import QRCode from "qrcode";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Loading } from "@/components/loading";
-import { Button } from "@/components/ui/button";
-import { handleCopyLink } from "@/lib/utils";
+} from "@/components/ui/dialog"
+import { Loading } from "@/components/loading"
+import { Card as CardType } from "@/lib/definitions"
+import { handleCopyLink } from "@/lib/utils"
 
 export function QRCodeDialog({
   card,
@@ -21,18 +22,18 @@ export function QRCodeDialog({
   setOpen,
 }: {
   card: CardType & {
-    editable: boolean;
-    message?: string;
-    dynamicSlug: string;
-  };
-  open: boolean;
-  setOpen: (open: boolean) => void;
+    editable: boolean
+    message?: string
+    dynamicSlug: string
+  }
+  open: boolean
+  setOpen: (open: boolean) => void
 }) {
-  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null)
 
   const cardUrl = useMemo(() => {
-    return `${process.env.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`;
-  }, [card.dynamicSlug]);
+    return `${process.env.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`
+  }, [card.dynamicSlug])
 
   const qrOptions = useMemo(
     () => ({
@@ -42,49 +43,49 @@ export function QRCodeDialog({
         light: "#ffffff",
       },
     }),
-    [],
-  );
+    []
+  )
 
   const generateQRCode = useCallback(async () => {
     try {
       const preview = await QRCode.toDataURL(cardUrl, {
         ...qrOptions,
         width: 200,
-      });
-      setQrCodeUrl(preview);
+      })
+      setQrCodeUrl(preview)
     } catch (error) {
-      console.error("Error generating QR code for preview:", error);
+      console.error("Error generating QR code for preview:", error)
       toast.error(
-        "Failed to generate QR code for preview! Please try again later.",
-      );
+        "Failed to generate QR code for preview! Please try again later."
+      )
     }
-  }, [cardUrl, qrOptions]);
+  }, [cardUrl, qrOptions])
 
   const downloadQRCode = async () => {
     try {
       const download = await QRCode.toDataURL(cardUrl, {
         ...qrOptions,
         width: 625,
-      });
+      })
 
-      const link = document.createElement("a");
-      link.href = download;
-      link.download = `${card.dynamicSlug}-qrcode.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      toast.info("QR code downloaded.");
+      const link = document.createElement("a")
+      link.href = download
+      link.download = `${card.dynamicSlug}-qrcode.png`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      toast.info("QR code downloaded.")
     } catch (error) {
-      console.error("Error generating QR code for download:", error);
-      toast.error("Failed to download QR code! Please try again later.");
+      console.error("Error generating QR code for download:", error)
+      toast.error("Failed to download QR code! Please try again later.")
     }
-  };
+  }
 
   useEffect(() => {
     if (open) {
-      generateQRCode();
+      generateQRCode()
     }
-  }, [open, generateQRCode]);
+  }, [open, generateQRCode])
 
   return (
     <>
@@ -134,5 +135,5 @@ export function QRCodeDialog({
         </DialogContent>
       </Dialog>
     </>
-  );
+  )
 }

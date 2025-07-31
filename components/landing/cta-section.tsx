@@ -1,7 +1,8 @@
-import { ViewPricingButton } from "@/components/landing/view-pricing-button";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { ViewPricingButton } from "@/components/landing/view-pricing-button"
 
 export function CTASection() {
   return (
@@ -21,5 +22,5 @@ export function CTASection() {
         </div>
       </div>
     </section>
-  );
+  )
 }
