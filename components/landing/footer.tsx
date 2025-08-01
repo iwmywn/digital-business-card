@@ -35,7 +35,7 @@ const visiqSocialLinks = [
   },
 ]
 
-export function Foorter() {
+export function Footer() {
   const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false)
   const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false)
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false)
