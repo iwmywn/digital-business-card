@@ -13,7 +13,7 @@ const basePasswordSchema = z
       "Password must be at least 8 characters long, include uppercase, lowercase, number and special character.",
   })
 
-const baseEmailSchema = z.string().email({ message: "Invalid email address." })
+const baseEmailSchema = z.email({ message: "Invalid email address." })
 
 const signUpSchema = z
   .object({
@@ -55,7 +55,7 @@ const contactSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required." }),
   lastName: z.string().min(1, { message: "Last name is required." }),
   company: z.string().min(1, { message: "Company name is required." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
+  email: z.email({ message: "Please enter a valid email address." }),
   phone: z
     .string()
     .regex(/^\+?[1-9][0-9]{7,14}$/, "Phone number must be valid.")
