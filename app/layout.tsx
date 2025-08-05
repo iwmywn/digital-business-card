@@ -8,8 +8,8 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { Toaster } from "@/components/ui/sonner"
+import { ProgressProvider } from "@/components/progress-provider"
 import { ThemeProvider } from "@/components/theme-provider"
-import { TopProgressBar } from "@/components/top-progress-bar"
 
 export const metadata: Metadata = {
   title: {
@@ -42,12 +42,13 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TopProgressBar />
-          <Toaster richColors closeButton />
-          {children}
-          <SpeedInsights />
-          <Analytics />
+          <ProgressProvider>
+            <Toaster richColors closeButton />
+            {children}
+          </ProgressProvider>
         </ThemeProvider>
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   )
