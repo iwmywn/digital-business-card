@@ -14,7 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Loading } from "@/components/loading"
-import { Card as CardType } from "@/lib/definitions"
+import type { Card as CardType } from "@/lib/definitions"
 import { useCard } from "@/lib/swr"
 
 export function ChangeVisibilityDialog({

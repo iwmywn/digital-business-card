@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
 import { connection } from "next/server"
+import { clientEnv } from "@/env/client"
 
 import { getCardByUserId } from "@/actions/card"
 import { UserProfileDisplay } from "@/components/settings/user-profile-display"
@@ -57,7 +58,7 @@ export async function generateMetadata({
     description: `${jobCompanyPart || ""} ${extraInfo}`.trim(),
     openGraph: {
       images: mainImage ? mainImage : [],
-      url: `${process.env.NEXT_PUBLIC_URL}/profile/${param.slug}`,
+      url: `${clientEnv.NEXT_PUBLIC_URL}/profile/${param.slug}`,
       type: "profile",
       siteName: "Visiq",
       firstName,

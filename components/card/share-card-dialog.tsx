@@ -1,3 +1,4 @@
+import { clientEnv } from "@/env/client"
 import { Mail } from "lucide-react"
 import { siWhatsapp, siX } from "simple-icons"
 
@@ -17,7 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { SimpleIconComponent } from "@/components/icons"
-import { Card as CardType } from "@/lib/definitions"
+import type { Card as CardType } from "@/lib/definitions"
 import { handleCopyLink } from "@/lib/utils"
 
 export function ShareCardDialog({
@@ -33,7 +34,7 @@ export function ShareCardDialog({
   open: boolean
   setOpen: (open: boolean) => void
 }) {
-  const cardUrl = `${process.env.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`
+  const cardUrl = `${clientEnv.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`
   const cardTitle = `Check out ${card.personalInformation.fullName}'s digital business card`
 
   const shareHandlers = {

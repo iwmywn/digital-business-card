@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import { Menu } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -30,9 +29,7 @@ export function MenuToggleButton() {
         setBackgroundColorOnScale={false}
       >
         <DrawerContent>
-          <VisuallyHidden>
-            <DrawerTitle>Navigate</DrawerTitle>
-          </VisuallyHidden>
+          <DrawerTitle className="sr-only">Navigate</DrawerTitle>
 
           <nav className="space-y-4 px-4 py-2">
             {menuItems.map(({ id, label }) => (

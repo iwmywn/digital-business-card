@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog"
 import { getImageUrl } from "@/components/card/card-management"
 import { Loading } from "@/components/loading"
-import { Card as CardType } from "@/lib/definitions"
+import type { Card as CardType } from "@/lib/definitions"
 import { useCard } from "@/lib/swr"
 import { formatDate } from "@/lib/utils"
 

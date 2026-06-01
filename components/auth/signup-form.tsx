@@ -1,28 +1,28 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
 import { signUpSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { signUp } from "@/actions/auth"
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormLink,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { PhoneInput } from "@/components/ui/phone-input"
 import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog"
-import { FormButton } from "@/components/form-button"
-import { FormLink } from "@/components/form-link"
 import { PrivacyPolicyDialog } from "@/components/policy/privacy-policy-dialog"
 import { TermsOfServiceDialog } from "@/components/policy/terms-of-service-dialog"
 
@@ -34,8 +34,6 @@ export function SignUpForm() {
   const [isTermsOpen, setIsTermsOpen] = useState<boolean>(false)
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
-  const isProcessingRef = useRef<boolean>(false)
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -49,9 +47,8 @@ export function SignUpForm() {
 
   const processSignUp = useCallback(
     async (values: SignUpFormValues, token: string) => {
-      if (isProcessingRef.current) return
+      if (isLoading) return
 
-      isProcessingRef.current = true
       setIsLoading(true)
 
       const { success, error } = await signUp(values, token)
@@ -65,31 +62,21 @@ export function SignUpForm() {
       }
 
       setIsLoading(false)
-      setRecaptchaToken(null)
-      isProcessingRef.current = false
     },
-    [form, router]
+    [isLoading, form, router]
   )
 
-  const onSubmit = useCallback(
-    async (values: SignUpFormValues) => {
-      if (isProcessingRef.current) return
-
-      if (!recaptchaToken) {
-        setIsReCaptchaOpen(true)
-        return
-      }
-
-      await processSignUp(values, recaptchaToken)
+  const onRecaptchaVerify = useCallback(
+    (token: string) => {
+      void processSignUp(form.getValues(), token)
     },
-    [recaptchaToken, processSignUp]
+    [form, processSignUp]
   )
 
-  useEffect(() => {
-    if (recaptchaToken && !isProcessingRef.current) {
-      processSignUp(form.getValues(), recaptchaToken)
-    }
-  }, [recaptchaToken, form, processSignUp])
+  function onSubmit() {
+    if (isLoading) return
+    setIsReCaptchaOpen(true)
+  }
 
   return (
     <>
@@ -212,10 +199,9 @@ export function SignUpForm() {
               .
             </div>
 
-            <FormButton
-              isSubmitting={isLoading || form.formState.isSubmitting}
-              text="Sign up"
-            />
+            <FormButton isSubmitting={isLoading || form.formState.isSubmitting}>
+              Sign up
+            </FormButton>
             <div className="text-center text-sm">
               Already have an account?{" "}
               <FormLink href="/signin">Sign in</FormLink>
@@ -227,7 +213,7 @@ export function SignUpForm() {
       <ReCaptchaDialog
         open={isReCaptchaOpen}
         setOpen={setIsReCaptchaOpen}
-        setRecaptchaToken={(token) => setRecaptchaToken(token)}
+        onVerify={onRecaptchaVerify}
       />
       <TermsOfServiceDialog open={isTermsOpen} setOpen={setIsTermsOpen} />
       <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />

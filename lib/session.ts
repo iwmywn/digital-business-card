@@ -1,6 +1,9 @@
 import { cache } from "react"
 import { cookies } from "next/headers"
-import { getIronSession, SessionOptions } from "iron-session"
+import { clientEnv } from "@/env/client"
+import { serverEnv } from "@/env/server"
+import type { SessionOptions } from "iron-session"
+import { getIronSession } from "iron-session"
 
 interface UserSession {
   userId: string
@@ -16,10 +19,10 @@ const twohours = 2 * 60 * 60
 
 const sessionOptions = {
   user: {
-    password: process.env.SESSION_SECRET!,
+    password: serverEnv.SESSION_SECRET,
     cookieName: "user_session",
     cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
+      secure: clientEnv.NEXT_PUBLIC_NODE_ENV === "production",
       httpOnly: true,
       sameSite: "lax",
       path: "/",
@@ -27,10 +30,10 @@ const sessionOptions = {
     },
   },
   private: {
-    password: process.env.SESSION_SECRET!,
+    password: serverEnv.SESSION_SECRET,
     cookieName: "private_session",
     cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
+      secure: clientEnv.NEXT_PUBLIC_NODE_ENV === "production",
       httpOnly: true,
       sameSite: "lax",
       path: "/",

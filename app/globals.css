@@ -137,8 +137,8 @@
     text-wrap: balance;
   }
 
-  [role="button"],
-  button {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
     cursor: pointer;
   }
 

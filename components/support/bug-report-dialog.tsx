@@ -5,7 +5,7 @@ import { bugReportSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { submitIssue } from "@/actions/support-requests"
 import { Button } from "@/components/ui/button"
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog"
 import {
   Form,
+  FormButton,
   FormControl,
   FormDescription,
   FormField,
@@ -35,7 +36,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { FormButton } from "@/components/form-button"
 
 export type BugReportFormValues = z.infer<typeof bugReportSchema>
 
@@ -163,9 +163,10 @@ export function BugReportDialog() {
 
             <FormButton
               isSubmitting={form.formState.isSubmitting}
-              text="Submit report"
               className="w-full"
-            />
+            >
+              Submit report
+            </FormButton>
           </form>
         </Form>
       </DialogContent>

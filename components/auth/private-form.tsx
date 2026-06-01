@@ -1,16 +1,17 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
 import { tokenSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { signInPrivate } from "@/actions/auth"
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
@@ -19,15 +20,12 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog"
-import { FormButton } from "@/components/form-button"
 
 export type PrivateFormValues = z.infer<typeof tokenSchema>
 
 export function PrivateForm() {
   const [isReCaptchaOpen, setIsReCaptchaOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
-  const isProcessingRef = useRef<boolean>(false)
   const form = useForm<PrivateFormValues>({
     resolver: zodResolver(tokenSchema),
     defaultValues: {
@@ -38,9 +36,8 @@ export function PrivateForm() {
 
   const processSignInPrivate = useCallback(
     async (values: PrivateFormValues, token: string) => {
-      if (isProcessingRef.current) return
+      if (isLoading) return
 
-      isProcessingRef.current = true
       setIsLoading(true)
 
       const { success, error } = await signInPrivate(values, token)
@@ -61,31 +58,21 @@ export function PrivateForm() {
       }
 
       setIsLoading(false)
-      setRecaptchaToken(null)
-      isProcessingRef.current = false
     },
-    [form, router]
+    [isLoading, form, router]
   )
 
-  const onSubmit = useCallback(
-    async (values: PrivateFormValues) => {
-      if (isProcessingRef.current) return
-
-      if (!recaptchaToken) {
-        setIsReCaptchaOpen(true)
-        return
-      }
-
-      await processSignInPrivate(values, recaptchaToken)
+  const onRecaptchaVerify = useCallback(
+    (token: string) => {
+      void processSignInPrivate(form.getValues(), token)
     },
-    [recaptchaToken, processSignInPrivate]
+    [form, processSignInPrivate]
   )
 
-  useEffect(() => {
-    if (recaptchaToken && !isProcessingRef.current) {
-      processSignInPrivate(form.getValues(), recaptchaToken)
-    }
-  }, [recaptchaToken, form, processSignInPrivate])
+  function onSubmit() {
+    if (isLoading) return
+    setIsReCaptchaOpen(true)
+  }
 
   return (
     <>
@@ -111,10 +98,9 @@ export function PrivateForm() {
                 </FormItem>
               )}
             />
-            <FormButton
-              isSubmitting={isLoading || form.formState.isSubmitting}
-              text="Submit"
-            />
+            <FormButton isSubmitting={isLoading || form.formState.isSubmitting}>
+              Submit
+            </FormButton>
           </div>
         </form>
       </Form>
@@ -122,7 +108,7 @@ export function PrivateForm() {
       <ReCaptchaDialog
         open={isReCaptchaOpen}
         setOpen={setIsReCaptchaOpen}
-        setRecaptchaToken={(token) => setRecaptchaToken(token)}
+        onVerify={onRecaptchaVerify}
       />
     </>
   )

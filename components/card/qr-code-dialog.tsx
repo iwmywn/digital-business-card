@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Image from "next/image"
+import { clientEnv } from "@/env/client"
 import QRCode from "qrcode"
 import { toast } from "sonner"
 
@@ -13,7 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Loading } from "@/components/loading"
-import { Card as CardType } from "@/lib/definitions"
+import type { Card as CardType } from "@/lib/definitions"
 import { handleCopyLink } from "@/lib/utils"
 
 export function QRCodeDialog({
@@ -32,7 +33,7 @@ export function QRCodeDialog({
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null)
 
   const cardUrl = useMemo(() => {
-    return `${process.env.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`
+    return `${clientEnv.NEXT_PUBLIC_URL}/card/${card.dynamicSlug}`
   }, [card.dynamicSlug])
 
   const qrOptions = useMemo(
@@ -83,6 +84,7 @@ export function QRCodeDialog({
 
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       generateQRCode()
     }
   }, [open, generateQRCode])
@@ -113,7 +115,7 @@ export function QRCodeDialog({
               )}
             </div>
             <p className="text-muted-foreground mt-4 text-center text-sm">
-              {process.env.NEXT_PUBLIC_URL}/card/{card.dynamicSlug}
+              {clientEnv.NEXT_PUBLIC_URL}/card/{card.dynamicSlug}
             </p>
           </div>
           <DialogFooter className="flex flex-col gap-2 sm:flex-row">

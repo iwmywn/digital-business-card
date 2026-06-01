@@ -40,8 +40,8 @@ import {
   siXiaohongshu,
   siYelp,
   siYoutube,
-  type SimpleIcon,
 } from "simple-icons"
+import type { SimpleIcon } from "simple-icons"
 
 interface SimpleIconProps {
   className?: string
@@ -84,9 +84,8 @@ export const SimpleIconComponent = ({ icon, className }: SimpleIconProps) => {
 }
 
 export function toSerializableLink(link: LinkType): SerializableLinkType {
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  const { icon, ...rest } = link
-  /* eslint-enable @typescript-eslint/no-unused-vars */
+  const { icon: _icon, ...rest } = link
+
   return rest
 }
 

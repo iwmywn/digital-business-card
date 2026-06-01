@@ -1,7 +1,7 @@
 "use client"
 
-import { Dispatch, SetStateAction } from "react"
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
+import type { Dispatch, SetStateAction } from "react"
+import { clientEnv } from "@/env/client"
 import ReCAPTCHA from "react-google-recaptcha"
 import { toast } from "sonner"
 
@@ -10,13 +10,13 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 interface ReCaptchaPopupProps {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
-  setRecaptchaToken: (token: string | null) => void
+  onVerify: (token: string) => void
 }
 
 export function ReCaptchaDialog({
   open,
   setOpen,
-  setRecaptchaToken,
+  onVerify,
 }: ReCaptchaPopupProps) {
   const handleRecaptchaChange = async (token: string | null) => {
     if (!token) {
@@ -24,7 +24,7 @@ export function ReCaptchaDialog({
       return
     }
 
-    setRecaptchaToken(token)
+    onVerify(token)
     setOpen(false)
   }
 
@@ -36,11 +36,9 @@ export function ReCaptchaDialog({
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogContent className="w-fit">
-        <VisuallyHidden>
-          <DialogTitle>CAPTCHA verification</DialogTitle>
-        </VisuallyHidden>
+        <DialogTitle className="sr-only">CAPTCHA verification</DialogTitle>
         <ReCAPTCHA
-          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA!}
+          sitekey={clientEnv.NEXT_PUBLIC_RECAPTCHA}
           onChange={handleRecaptchaChange}
           hl="en"
           className="m-3"

@@ -1,3 +1,4 @@
+import { collection } from "@/lib/db"
 import type {
   DBAvatar,
   DBCard,
@@ -6,7 +7,6 @@ import type {
   DBPrivateToken,
   DBUser,
 } from "@/lib/definitions"
-import { collection } from "@/lib/mongodb"
 
 export async function getPrivateTokenCollection() {
   return await collection<DBPrivateToken>("private_tokens")

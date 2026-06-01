@@ -1,18 +1,20 @@
+import { clientEnv } from "@/env/client"
+import { serverEnv } from "@/env/server"
 import nodemailer from "nodemailer"
 
 type EmailMode = "verifyEmail" | "resetPassword"
 
 export async function sendEmail(email: string, token: string, mode: EmailMode) {
   const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_SERVER_HOST,
-    port: parseInt(process.env.EMAIL_SERVER_PORT || "587"),
+    host: serverEnv.EMAIL_SERVER_HOST,
+    port: parseInt(serverEnv.EMAIL_SERVER_PORT || "587"),
     auth: {
-      user: process.env.EMAIL_SERVER_USER,
-      pass: process.env.EMAIL_SERVER_PASSWORD,
+      user: serverEnv.EMAIL_SERVER_USER,
+      pass: serverEnv.EMAIL_SERVER_PASSWORD,
     },
   })
 
-  const emailHandlerUrl = `${process.env.NEXT_PUBLIC_URL}/email-handler?mode=${mode}&email=${email}&token=${token}`
+  const emailHandlerUrl = `${clientEnv.NEXT_PUBLIC_URL}/email-handler?mode=${mode}&email=${email}&token=${token}`
   const subject =
     mode === "verifyEmail"
       ? "Verify your Visiq account"
@@ -24,7 +26,7 @@ export async function sendEmail(email: string, token: string, mode: EmailMode) {
   const btnText = mode === "verifyEmail" ? "Verify" : "Reset your password"
 
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM,
+    from: serverEnv.EMAIL_FROM,
     to: email,
     subject: subject,
     html: `

@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Check, X, type LucideIcon } from "lucide-react"
+import { Check, X } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 
 import { verifyEmail } from "@/actions/auth"
 import { Loading } from "@/components/loading"

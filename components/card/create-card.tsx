@@ -18,16 +18,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  CardDesign,
-  type CardDesignValues,
-} from "@/components/card/card-design"
+import { CardDesign } from "@/components/card/card-design"
+import type { CardDesignValues } from "@/components/card/card-design"
 import { CardPreview } from "@/components/card/card-preview"
 import { Links } from "@/components/card/links"
-import {
-  PersonalInformation,
-  type PersonalInformationValues,
-} from "@/components/card/personal-information"
+import { PersonalInformation } from "@/components/card/personal-information"
+import type { PersonalInformationValues } from "@/components/card/personal-information"
 import type { SerializableLinkType } from "@/components/icons"
 import { Loading } from "@/components/loading"
 import { CreateCardSkeleton } from "@/components/skeletons"
@@ -214,7 +210,7 @@ export function CreateCard() {
               onValueChange={setActiveTab}
               className="xl:sticky xl:top-[7.75rem]"
             >
-              <div className="hidden w-full overflow-x-auto sm:block">
+              <div className="hidden w-full sm:block">
                 <TabsList className="w-full min-w-[30.75rem]">
                   <TabsTrigger value="design">Design</TabsTrigger>
                   <TabsTrigger value="personal-information">

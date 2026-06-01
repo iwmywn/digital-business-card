@@ -7,20 +7,20 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { X } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { findEmailAndToken, resetPassword } from "@/actions/auth"
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormLink,
   FormMessage,
 } from "@/components/ui/form"
 import { PasswordInput } from "@/components/ui/password-input"
-import { FormButton } from "@/components/form-button"
-import { FormLink } from "@/components/form-link"
 import { Loading } from "@/components/loading"
 
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
@@ -123,13 +123,10 @@ export function ResetPasswordForm({
             )}
           />
 
-          <FormButton
-            isSubmitting={form.formState.isSubmitting}
-            text="Reset password"
-          />
-          <FormLink href="/signin" side="center">
-            Back to sign in
-          </FormLink>
+          <FormButton isSubmitting={form.formState.isSubmitting}>
+            Reset password
+          </FormButton>
+          <FormLink href="/signin">Back to sign in</FormLink>
         </div>
       </form>
     </Form>

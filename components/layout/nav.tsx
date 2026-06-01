@@ -3,13 +3,8 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import {
-  CircleHelpIcon,
-  Contact,
-  GlobeLock,
-  ReceiptText,
-  type LucideIcon,
-} from "lucide-react"
+import { CircleHelpIcon, Contact, GlobeLock, ReceiptText } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 
 import {
   SidebarGroup,

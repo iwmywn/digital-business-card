@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import Link from "next/link"
 import { siFacebook, siInstagram, siX } from "simple-icons"
 
@@ -75,7 +75,11 @@ export function Footer() {
             </div>
             <div className="text-muted-foreground flex flex-col-reverse items-center gap-1 min-[33.75rem]:flex-row">
               <span>
-                &copy; {new Date().getFullYear()} Visiq. All rights reserved.
+                &copy;{" "}
+                <Suspense fallback="2025">
+                  <CurrentYear />
+                </Suspense>{" "}
+                Visiq. All rights reserved.
               </span>
               <Separator
                 orientation="vertical"
@@ -108,4 +112,8 @@ export function Footer() {
       <PrivacyPolicyDialog open={isPrivacyOpen} setOpen={setIsPrivacyOpen} />
     </>
   )
+}
+
+function CurrentYear() {
+  return <>{new Date().getFullYear()}</>
 }

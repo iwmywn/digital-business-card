@@ -1,13 +1,14 @@
 "use server"
 
 import type { NextRequest } from "next/server"
+import { serverEnv } from "@/env/server"
 import Stripe from "stripe"
 
 import { processSuccessfulPayment } from "@/actions/stripe-utils"
 import { createResponse } from "@/app/api/utils"
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-06-30.basil",
+const stripe = new Stripe(serverEnv.STRIPE_SECRET, {
+  apiVersion: "2026-05-27.dahlia",
 })
 
 export async function POST(req: NextRequest) {
@@ -20,7 +21,7 @@ export async function POST(req: NextRequest) {
     event = stripe.webhooks.constructEvent(
       payload,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      serverEnv.STRIPE_WEBHOOK_SECRET
     )
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : "Unknown error"

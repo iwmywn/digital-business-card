@@ -1,7 +1,6 @@
-import * as fonts from "@/app/fonts"
+import { clientEnv } from "@/env/client"
 
-const basicId = process.env.NEXT_PUBLIC_BASIC_ID
-const professionalId = process.env.NEXT_PUBLIC_PROFESSIONAL_ID
+import * as fonts from "@/app/fonts"
 
 const maxFreeCards = 1
 const maxBasicCards = 3
@@ -269,7 +268,7 @@ const subscriptionPlans = [
       "View basic analytics on card performance",
     ],
     popular: false,
-    priceId: basicId || "",
+    priceId: clientEnv.NEXT_PUBLIC_BASIC_ID,
   },
   {
     id: "professional",
@@ -287,14 +286,12 @@ const subscriptionPlans = [
       "Use your own brand name",
     ],
     popular: true,
-    priceId: professionalId || "",
+    priceId: clientEnv.NEXT_PUBLIC_PROFESSIONAL_ID,
   },
 ]
 
 export {
   subscriptionPlans,
-  basicId,
-  professionalId,
   freeFontOptions,
   basicFontOptions,
   allFontOptions,

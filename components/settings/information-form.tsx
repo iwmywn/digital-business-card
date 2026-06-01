@@ -3,19 +3,21 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { clientEnv } from "@/env/client"
 import { publicProfileSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
 import { CalendarIcon, ImageIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { updateProfile } from "@/actions/setting"
 import { Button } from "@/components/ui/button"
-import { CalendarComponent } from "@/components/ui/calendar"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
@@ -38,14 +40,11 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import type { Image as ImageType } from "@/components/card/card-design"
-import { FormButton } from "@/components/form-button"
-import {
-  ImageEditorDialog,
-  ImageTransform,
-} from "@/components/image-editor-dialog"
+import type { ImageTransform } from "@/components/image-editor-dialog"
+import { ImageEditorDialog } from "@/components/image-editor-dialog"
 import { InformationSkeleton } from "@/components/skeletons"
 import { useUser } from "@/lib/swr"
-import { checkEnv, cn, getCloudinaryUrl } from "@/lib/utils"
+import { cn, getCloudinaryUrl } from "@/lib/utils"
 
 export type ProfileFormValues = z.infer<typeof publicProfileSchema>
 
@@ -178,9 +177,7 @@ function InformationForm() {
   const handleSaveImage = (transform: ImageTransform, type?: string) => {
     if (!tempImage || !type) return
 
-    const { cloudinaryName: cloudinaryNameEnv } = checkEnv({
-      cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
-    })
+    const cloudinaryNameEnv = clientEnv.NEXT_PUBLIC_CLOUDINARY_NAME
 
     if (type === "profile")
       setProfileImage([cloudinaryName ?? cloudinaryNameEnv, tempImage])
@@ -223,6 +220,7 @@ function InformationForm() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setProfileImage(user?.profile?.profileImage)
     setCoverImage(user?.profile?.coverImage)
     setImageTransforms(user?.profile?.imageTransforms ?? {})
@@ -403,7 +401,7 @@ function InformationForm() {
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-2" align="start">
-                          <CalendarComponent
+                          <Calendar
                             mode="single"
                             selected={
                               field.value ? new Date(field.value) : undefined
@@ -510,10 +508,9 @@ function InformationForm() {
             />
 
             <div className="flex flex-row-reverse gap-2">
-              <FormButton
-                isSubmitting={form.formState.isSubmitting}
-                text="Save changes"
-              />
+              <FormButton isSubmitting={form.formState.isSubmitting}>
+                Save changes
+              </FormButton>
               <Button asChild>
                 <Link
                   href={`/profile/${user?.username || user?._id}`}

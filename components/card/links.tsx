@@ -9,8 +9,8 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  type DragEndEvent,
 } from "@dnd-kit/core"
+import type { DragEndEvent } from "@dnd-kit/core"
 import {
   arrayMove,
   SortableContext,
@@ -32,9 +32,8 @@ import {
   linkTypes,
   toLinkType,
   toSerializableLink,
-  type LinkType,
-  type SerializableLinkType,
 } from "@/components/icons"
+import type { LinkType, SerializableLinkType } from "@/components/icons"
 
 function SortableLink({
   link,

@@ -5,21 +5,21 @@ import { signInSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { signIn } from "@/actions/auth"
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormLink,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
-import { FormButton } from "@/components/form-button"
-import { FormLink } from "@/components/form-link"
 
 export type SignInFormValues = z.infer<typeof signInSchema>
 
@@ -94,13 +94,10 @@ export function SignInForm() {
               </FormItem>
             )}
           />
-          <FormLink href="/forgot-password" side="right">
-            Forgot your password?
-          </FormLink>
-          <FormButton
-            isSubmitting={form.formState.isSubmitting}
-            text="Sign in"
-          />
+          <FormLink href="/forgot-password">Forgot your password?</FormLink>
+          <FormButton isSubmitting={form.formState.isSubmitting}>
+            Sign in
+          </FormButton>
           <div className="text-center text-sm">
             Don&apos;t have an account?{" "}
             <FormLink href="/signup">Sign up</FormLink>

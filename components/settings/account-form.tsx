@@ -6,11 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CheckCircle, XCircle } from "lucide-react"
 import { useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { checkUsername, updateAccount } from "@/actions/setting"
 import {
   Form,
+  FormButton,
   FormControl,
   FormDescription,
   FormField,
@@ -21,7 +22,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { PhoneInput } from "@/components/ui/phone-input"
-import { FormButton } from "@/components/form-button"
 import { Loading } from "@/components/loading"
 import { AccountSkeleton } from "@/components/skeletons"
 import { useDebounce } from "@/hooks/use-debounce"
@@ -94,6 +94,7 @@ export function AccountForm() {
     const username = debouncedUsername?.trim()
 
     if (!username) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsUsernameAvailable(null)
       form.clearErrors("username")
       return
@@ -285,10 +286,9 @@ export function AccountForm() {
         </div>
 
         <div className="flex flex-row-reverse">
-          <FormButton
-            isSubmitting={form.formState.isSubmitting}
-            text="Save changes"
-          />
+          <FormButton isSubmitting={form.formState.isSubmitting}>
+            Save changes
+          </FormButton>
         </div>
       </form>
     </Form>

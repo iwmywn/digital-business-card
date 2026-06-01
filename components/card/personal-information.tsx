@@ -1,6 +1,7 @@
 "use client"
 
-import { forwardRef, Ref, useEffect, useImperativeHandle } from "react"
+import type { Ref } from "react"
+import { forwardRef, useEffect, useImperativeHandle } from "react"
 import { personalInformationSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
@@ -13,7 +14,7 @@ import {
   Users,
 } from "lucide-react"
 import { useForm, useWatch } from "react-hook-form"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { Card, CardContent } from "@/components/ui/card"
 import {

@@ -4,7 +4,7 @@ import { cache } from "react"
 import { ObjectId } from "mongodb"
 
 import { getAvatarCollection, getUserCollection } from "@/lib/collections"
-import { Avatar, User } from "@/lib/definitions"
+import type { Avatar, User } from "@/lib/definitions"
 
 export async function getUserById(id: string) {
   try {

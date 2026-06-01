@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { clientEnv } from "@/env/client"
 import { differenceInDays, format } from "date-fns"
 import {
   Briefcase,
@@ -11,6 +12,7 @@ import {
 } from "lucide-react"
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { FormLink } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
 import {
   Tooltip,
@@ -18,7 +20,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { FormLink } from "@/components/form-link"
 import type { User } from "@/lib/definitions"
 import { formatDate, getCloudinaryUrl } from "@/lib/utils"
 
@@ -140,7 +141,7 @@ export function UserProfileDisplay({
                       target="_blank"
                       className="text-sm sm:text-base"
                     >
-                      {`${process.env.NEXT_PUBLIC_URL}/card/${slug}`}
+                      {`${clientEnv.NEXT_PUBLIC_URL}/card/${slug}`}
                     </FormLink>
                   </li>
                 ))}

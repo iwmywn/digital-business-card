@@ -5,19 +5,19 @@ import { notificationSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { updateNotificationSettings } from "@/actions/setting"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
+  FormButton,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
 } from "@/components/ui/form"
-import { FormButton } from "@/components/form-button"
 import { NotificationPreferencesSkeleton } from "@/components/skeletons"
 import { useUser } from "@/lib/swr"
 
@@ -159,10 +159,9 @@ function NotificationForm() {
         />
 
         <div className="flex flex-row-reverse">
-          <FormButton
-            isSubmitting={form.formState.isSubmitting}
-            text="Save changes"
-          />
+          <FormButton isSubmitting={form.formState.isSubmitting}>
+            Save changes
+          </FormButton>
         </div>
       </form>
     </Form>

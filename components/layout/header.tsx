@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { clientEnv } from "@/env/client"
 import { Slash } from "lucide-react"
 
 import {
@@ -37,7 +38,7 @@ const other = [
 ]
 
 const ColorDialog =
-  process.env.NODE_ENV === "development"
+  clientEnv.NEXT_PUBLIC_NODE_ENV === "development"
     ? dynamic(
         () =>
           import("@/components/layout/color-dialog").then(

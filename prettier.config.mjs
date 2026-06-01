@@ -1,14 +1,10 @@
 /** @type {import('prettier').Config} */
-module.exports = {
+const prettierConfig = {
   plugins: [
-    "prettier-plugin-tailwindcss",
     "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss",
   ],
-  tabWidth: 2,
-  useTabs: false,
-  endOfLine: "lf",
   semi: false,
-  singleQuote: false,
   trailingComma: "es5",
   importOrder: [
     "^(react/(.*)$)|^(react$)",
@@ -26,10 +22,6 @@ module.exports = {
     "",
     "^[./]",
   ],
-  importOrderSeparation: false,
-  importOrderSortSpecifiers: true,
-  importOrderBuiltinModulesToTop: true,
-  importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
-  importOrderMergeDuplicateImports: true,
-  importOrderCombineTypeAndValueImports: true,
 }
+
+export default prettierConfig

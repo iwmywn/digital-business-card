@@ -1,6 +1,9 @@
 "use server"
 
-import { checkEnv, extractCloudinaryPath } from "@/lib/utils"
+import { clientEnv } from "@/env/client"
+import { serverEnv } from "@/env/server"
+
+import { extractCloudinaryPath } from "@/lib/utils"
 
 export async function uploadToCloudinary(
   imageData: string,
@@ -16,12 +19,6 @@ export async function uploadToCloudinary(
     }
 > {
   try {
-    const { cloudinaryName, cloudinaryKey, cloudinarySecret } = checkEnv({
-      cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
-      cloudinaryKey: process.env.NEXT_PUBLIC_CLOUDINARY,
-      cloudinarySecret: process.env.CLOUDINARY_SECRET_KEY,
-    })
-
     const base64Data = imageData.includes("base64,")
       ? imageData.split("base64,")[1]
       : imageData
@@ -29,18 +26,18 @@ export async function uploadToCloudinary(
     const timestamp = Math.round(new Date().getTime() / 1000)
 
     const signature = await generateSignature(
-      `folder=digital-business-card/${folder}&timestamp=${timestamp}${cloudinarySecret}`
+      `folder=digital-business-card/${folder}&timestamp=${timestamp}${serverEnv.CLOUDINARY_SECRET}`
     )
 
     const formData = new FormData()
     formData.append("file", `data:image/jpeg;base64,${base64Data}`)
-    formData.append("api_key", cloudinaryKey)
+    formData.append("api_key", clientEnv.NEXT_PUBLIC_CLOUDINARY_KEY)
     formData.append("timestamp", timestamp.toString())
     formData.append("signature", signature)
     formData.append("folder", `digital-business-card/${folder}`)
 
     const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudinaryName}/image/upload`,
+      `https://api.cloudinary.com/v1_1/${clientEnv.NEXT_PUBLIC_CLOUDINARY_NAME}/image/upload`,
       {
         method: "POST",
         body: formData,

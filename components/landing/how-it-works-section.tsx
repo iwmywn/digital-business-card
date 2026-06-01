@@ -16,16 +16,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  CardDesign,
-  type CardDesignValues,
-} from "@/components/card/card-design"
+import { CardDesign } from "@/components/card/card-design"
+import type { CardDesignValues } from "@/components/card/card-design"
 import { CardPreview } from "@/components/card/card-preview"
 import { Links } from "@/components/card/links"
-import {
-  PersonalInformation,
-  type PersonalInformationValues,
-} from "@/components/card/personal-information"
+import { PersonalInformation } from "@/components/card/personal-information"
+import type { PersonalInformationValues } from "@/components/card/personal-information"
 import type { SerializableLinkType } from "@/components/icons"
 
 const demoCardDesign: CardDesignValues = {
@@ -158,7 +154,7 @@ export function HowItWorksSection() {
                 value={planActiveTab}
                 onValueChange={(tab) => handlePlanActiveTab(tab)}
               >
-                <div className="hidden w-full overflow-x-auto md:block">
+                <div className="hidden w-full md:block">
                   <TabsList className="w-full min-w-[19.5rem]">
                     <TabsTrigger value="free">Free</TabsTrigger>
                     <TabsTrigger value="basic">Basic</TabsTrigger>
@@ -197,7 +193,7 @@ export function HowItWorksSection() {
                   value={designActiveTab}
                   onValueChange={setDesignActiveTab}
                 >
-                  <div className="hidden w-full overflow-x-auto md:block">
+                  <div className="hidden w-full md:block">
                     <TabsList className="w-full min-w-[30.75rem]">
                       <TabsTrigger value="design">Design</TabsTrigger>
                       <TabsTrigger value="personal-information">

@@ -1,5 +1,7 @@
 "use server"
 
+import { clientEnv } from "@/env/client"
+import { serverEnv } from "@/env/server"
 import Stripe from "stripe"
 
 import { getUserById } from "@/lib/data"
@@ -7,8 +9,8 @@ import { session } from "@/lib/session"
 
 import { processSuccessfulPayment } from "./stripe-utils"
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-06-30.basil",
+const stripe = new Stripe(serverEnv.STRIPE_SECRET, {
+  apiVersion: "2026-05-27.dahlia",
 })
 
 export async function createCheckoutSession(priceId: string, planId: string) {
@@ -35,8 +37,6 @@ export async function createCheckoutSession(priceId: string, planId: string) {
       return { error: "No Stripe customer ID found!" }
     }
 
-    const url = process.env.NEXT_PUBLIC_URL
-
     const sessionOptions: Stripe.Checkout.SessionCreateParams = {
       customer: existingUser.stripeCustomerId,
       payment_method_types: ["card"],
@@ -47,8 +47,8 @@ export async function createCheckoutSession(priceId: string, planId: string) {
         },
       ],
       mode: "payment",
-      success_url: `${url}/subscription/status?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${url}/subscription`,
+      success_url: `${clientEnv.NEXT_PUBLIC_URL}/subscription/status?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${clientEnv.NEXT_PUBLIC_URL}/subscription`,
       metadata: {
         userId: existingUser._id.toString(),
         planId: planId,

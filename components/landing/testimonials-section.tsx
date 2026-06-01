@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 import Image from "next/image"
-import { EmblaCarouselType } from "embla-carousel"
+import type { EmblaCarouselType } from "embla-carousel"
 import AutoScroll from "embla-carousel-auto-scroll"
 import useEmblaCarousel from "embla-carousel-react"
 
@@ -150,6 +150,7 @@ export function TestimonialsSection() {
   useEffect(() => {
     if (!emblaApi) return
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     onInit(emblaApi)
     onSelect(emblaApi)
     emblaApi.on("reInit", onInit).on("reInit", onSelect).on("select", onSelect)

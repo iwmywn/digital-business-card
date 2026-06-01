@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CheckCircle, XCircle } from "lucide-react"
 import { useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { checkSlug, updateSlug } from "@/actions/card"
 import {
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
@@ -23,10 +24,9 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { FormButton } from "@/components/form-button"
 import { Loading } from "@/components/loading"
 import { useDebounce } from "@/hooks/use-debounce"
-import { Card as CardType } from "@/lib/definitions"
+import type { Card as CardType } from "@/lib/definitions"
 import { useCard } from "@/lib/swr"
 
 export type SlugFormValues = z.infer<typeof cardSlugSchema>
@@ -89,6 +89,7 @@ export function CustomSlugDialog({
     const slug = debouncedSlug?.trim()
 
     if (!slug) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSlugAvailable(null)
       form.clearErrors("slug")
       return
@@ -188,9 +189,10 @@ export function CustomSlugDialog({
             />
             <FormButton
               isSubmitting={form.formState.isSubmitting}
-              text="Save change"
               className="w-full"
-            />
+            >
+              Save change
+            </FormButton>
           </form>
         </Form>
       </DialogContent>

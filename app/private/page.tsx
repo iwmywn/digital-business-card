@@ -7,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { FormLink } from "@/components/ui/form"
 import { PrivateForm } from "@/components/auth/private-form"
-import { FormLink } from "@/components/form-link"
 
 export function generateMetadata(): Metadata {
   return { title: "Private" }

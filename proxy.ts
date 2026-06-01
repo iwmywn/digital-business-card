@@ -1,7 +1,8 @@
 "use server"
 
-import { NextURL } from "next/dist/server/web/next-url"
-import { NextResponse, type NextRequest } from "next/server"
+import type { NextURL } from "next/dist/server/web/next-url"
+import type { NextRequest } from "next/server"
+import { NextResponse } from "next/server"
 import * as routes from "@/routes"
 
 import { session } from "@/lib/session"
@@ -42,7 +43,7 @@ function redirectTo(path: string, nextUrl: NextURL) {
   return NextResponse.redirect(new URL(path, nextUrl))
 }
 
-export async function middleware(req: NextRequest) {
+export default async function proxy(req: NextRequest) {
   const { nextUrl, cookies } = req
   const { pathname } = nextUrl
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { SetStateAction } from "react"
+import type { SetStateAction } from "react"
 import { CreditCard, FileText, MapPin, User } from "lucide-react"
 import type Stripe from "stripe"
 

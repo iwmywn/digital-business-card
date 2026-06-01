@@ -1,33 +1,31 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useState } from "react"
 import { emailSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { forgotPassword } from "@/actions/auth"
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormLink,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { ReCaptchaDialog } from "@/components/auth/recaptcha-dialog"
-import { FormButton } from "@/components/form-button"
-import { FormLink } from "@/components/form-link"
 
 export type EmailFormValues = z.infer<typeof emailSchema>
 
 export function ForgotPasswordForm() {
   const [isReCaptchaOpen, setIsReCaptchaOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
-  const isProcessingRef = useRef<boolean>(false)
   const form = useForm<EmailFormValues>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
@@ -37,9 +35,8 @@ export function ForgotPasswordForm() {
 
   const processForgotPassword = useCallback(
     async (values: EmailFormValues, token: string) => {
-      if (isProcessingRef.current) return
+      if (isLoading) return
 
-      isProcessingRef.current = true
       setIsLoading(true)
 
       const { success, error } = await forgotPassword(values, token)
@@ -52,31 +49,21 @@ export function ForgotPasswordForm() {
       }
 
       setIsLoading(false)
-      setRecaptchaToken(null)
-      isProcessingRef.current = false
     },
-    [form]
+    [isLoading, form]
   )
 
-  const onSubmit = useCallback(
-    async (values: EmailFormValues) => {
-      if (isProcessingRef.current) return
-
-      if (!recaptchaToken) {
-        setIsReCaptchaOpen(true)
-        return
-      }
-
-      await processForgotPassword(values, recaptchaToken)
+  const onRecaptchaVerify = useCallback(
+    (token: string) => {
+      void processForgotPassword(form.getValues(), token)
     },
-    [recaptchaToken, processForgotPassword]
+    [form, processForgotPassword]
   )
 
-  useEffect(() => {
-    if (recaptchaToken && !isProcessingRef.current) {
-      processForgotPassword(form.getValues(), recaptchaToken)
-    }
-  }, [recaptchaToken, form, processForgotPassword])
+  function onSubmit() {
+    if (isLoading) return
+    setIsReCaptchaOpen(true)
+  }
 
   return (
     <>
@@ -102,13 +89,10 @@ export function ForgotPasswordForm() {
                 </FormItem>
               )}
             />
-            <FormButton
-              isSubmitting={isLoading || form.formState.isSubmitting}
-              text="Send reset link"
-            />
-            <FormLink href="/signin" side="center">
-              Back to sign in
-            </FormLink>
+            <FormButton isSubmitting={isLoading || form.formState.isSubmitting}>
+              Send reset link
+            </FormButton>
+            <FormLink href="/signin">Back to sign in</FormLink>
           </div>
         </form>
       </Form>
@@ -116,7 +100,7 @@ export function ForgotPasswordForm() {
       <ReCaptchaDialog
         open={isReCaptchaOpen}
         setOpen={setIsReCaptchaOpen}
-        setRecaptchaToken={(token) => setRecaptchaToken(token)}
+        onVerify={onRecaptchaVerify}
       />
     </>
   )

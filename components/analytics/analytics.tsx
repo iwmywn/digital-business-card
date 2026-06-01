@@ -20,8 +20,8 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from "@/components/ui/chart"
+import type { ChartConfig } from "@/components/ui/chart"
 import {
   EmptyState,
   EmptyStateAction,
@@ -82,6 +82,67 @@ export function Analytics() {
       selectedCard === "all"
         ? cards
         : cards.filter((card) => card._id === selectedCard)
+
+    const generateChartData = (cards: CardType[], range: string) => {
+      if (cards.length === 0) {
+        setAnalyticsData([])
+        return
+      }
+
+      const now = new Date()
+      const startDate = new Date()
+
+      if (range === "24hours") {
+        startDate.setDate(now.getDate() - 1)
+      } else if (range === "7days") {
+        startDate.setDate(now.getDate() - 7)
+      } else if (range === "30days") {
+        startDate.setDate(now.getDate() - 30)
+      } else {
+        startDate.setTime(cards[0].createdAt.getTime())
+      }
+
+      const dateRange: string[] = []
+      const currentDate = new Date(startDate)
+
+      while (currentDate <= now) {
+        dateRange.push(currentDate.toISOString().split("T")[0])
+        currentDate.setDate(currentDate.getDate() + 1)
+      }
+
+      const data = dateRange.map((date) => ({
+        date,
+        views: 0,
+        clicks: 0,
+      }))
+
+      cards.forEach((card) => {
+        ;(card.viewHistory || []).forEach(
+          (view: { date: Date; count: number }) => {
+            const viewDate = new Date(view.date).toISOString().split("T")[0]
+            if (dateRange.includes(viewDate)) {
+              const dataPoint = data.find((d) => d.date === viewDate)
+              if (dataPoint) {
+                dataPoint.views += view.count || 1
+              }
+            }
+          }
+        )
+        ;(card.clickHistory || []).forEach(
+          (click: { date: Date; count: number }) => {
+            const clickDate = new Date(click.date).toISOString().split("T")[0]
+            if (dateRange.includes(clickDate)) {
+              const dataPoint = data.find((d) => d.date === clickDate)
+              if (dataPoint) {
+                dataPoint.clicks += click.count || 1
+              }
+            }
+          }
+        )
+      })
+
+      setAnalyticsData(data)
+    }
 
     const calculatePercentageChanges = () => {
       if (filteredCards.length === 0) {
@@ -187,67 +248,6 @@ export function Analytics() {
       generateChartData(filteredCards, dateRange)
     }
   }, [cards, dateRange, selectedCard, user?.currentPlan])
-
-  const generateChartData = (cards: CardType[], range: string) => {
-    if (cards.length === 0) {
-      setAnalyticsData([])
-      return
-    }
-
-    const now = new Date()
-    const startDate = new Date()
-
-    if (range === "24hours") {
-      startDate.setDate(now.getDate() - 1)
-    } else if (range === "7days") {
-      startDate.setDate(now.getDate() - 7)
-    } else if (range === "30days") {
-      startDate.setDate(now.getDate() - 30)
-    } else {
-      startDate.setTime(cards[0].createdAt.getTime())
-    }
-
-    const dateRange: string[] = []
-    const currentDate = new Date(startDate)
-
-    while (currentDate <= now) {
-      dateRange.push(currentDate.toISOString().split("T")[0])
-      currentDate.setDate(currentDate.getDate() + 1)
-    }
-
-    const data = dateRange.map((date) => ({
-      date,
-      views: 0,
-      clicks: 0,
-    }))
-
-    cards.forEach((card) => {
-      ;(card.viewHistory || []).forEach(
-        (view: { date: Date; count: number }) => {
-          const viewDate = new Date(view.date).toISOString().split("T")[0]
-          if (dateRange.includes(viewDate)) {
-            const dataPoint = data.find((d) => d.date === viewDate)
-            if (dataPoint) {
-              dataPoint.views += view.count || 1
-            }
-          }
-        }
-      )
-      ;(card.clickHistory || []).forEach(
-        (click: { date: Date; count: number }) => {
-          const clickDate = new Date(click.date).toISOString().split("T")[0]
-          if (dateRange.includes(clickDate)) {
-            const dataPoint = data.find((d) => d.date === clickDate)
-            if (dataPoint) {
-              dataPoint.clicks += click.count || 1
-            }
-          }
-        }
-      )
-    })
-
-    setAnalyticsData(data)
-  }
 
   useEffect(() => {
     if (isUserError && !isUserLoading) toast.error(isUserError)

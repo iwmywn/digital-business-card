@@ -1,11 +1,11 @@
 "use client"
 
-import { Dispatch, SetStateAction } from "react"
+import type { Dispatch, SetStateAction } from "react"
 import { contactSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { submitContact } from "@/actions/support-requests"
 import {
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog"
 import {
   Form,
+  FormButton,
   FormControl,
   FormField,
   FormItem,
@@ -33,7 +34,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { FormButton } from "@/components/form-button"
 
 const departments = [
   { value: "support", label: "Technical Support" },
@@ -240,9 +240,10 @@ export function ContactDialog({
 
             <FormButton
               isSubmitting={form.formState.isSubmitting}
-              text="Submit"
               className="w-full"
-            />
+            >
+              Submit
+            </FormButton>
           </form>
         </Form>
       </DialogContent>

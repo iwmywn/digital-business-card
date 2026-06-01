@@ -1,20 +1,16 @@
 "use client"
 
-import {
-  forwardRef,
-  Ref,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from "react"
+import type { Ref } from "react"
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react"
 import Image from "next/image"
 import * as constants from "@/constants"
+import { clientEnv } from "@/env/client"
 import { brandNameSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ImageIcon } from "lucide-react"
 import { useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
-import type { z } from "zod"
+import type * as z from "zod"
 
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -34,11 +30,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  ImageEditorDialog,
-  type ImageTransform,
-} from "@/components/image-editor-dialog"
-import { checkEnv, getCloudinaryUrl } from "@/lib/utils"
+import { ImageEditorDialog } from "@/components/image-editor-dialog"
+import type { ImageTransform } from "@/components/image-editor-dialog"
+import { getCloudinaryUrl } from "@/lib/utils"
 
 // ['cloudinary image name', 'image path']
 export type Image = [string, string]
@@ -207,9 +201,7 @@ export const CardDesign = forwardRef(function CardDesign(
   const handleSaveImage = (transform: ImageTransform, type?: string) => {
     if (!tempImage || !type) return
 
-    const { cloudinaryName: cloudinaryNameEnv } = checkEnv({
-      cloudinaryName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
-    })
+    const cloudinaryNameEnv = clientEnv.NEXT_PUBLIC_CLOUDINARY_NAME
 
     if (type === "logo")
       setLogoImage([cloudinaryName ?? cloudinaryNameEnv, tempImage])

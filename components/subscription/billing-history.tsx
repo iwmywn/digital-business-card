@@ -1,6 +1,7 @@
 "use client"
 
-import { HTMLAttributes, useMemo, useState } from "react"
+import type { HTMLAttributes } from "react"
+import { useMemo, useState } from "react"
 import { Receipt, Search } from "lucide-react"
 import { toast } from "sonner"
 
@@ -29,10 +30,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  PaymentReceiptDialog,
-  ReceiptData,
-} from "@/components/subscription/payment-receipt-dialog"
+import type { ReceiptData } from "@/components/subscription/payment-receipt-dialog"
+import { PaymentReceiptDialog } from "@/components/subscription/payment-receipt-dialog"
 import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { useSubscription } from "@/lib/swr"

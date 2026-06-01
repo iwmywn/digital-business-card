@@ -3,7 +3,7 @@
 import { ObjectId } from "mongodb"
 
 import { getPaymentDetails } from "@/actions/stripe"
-import { ReceiptData } from "@/components/subscription/payment-receipt-dialog"
+import type { ReceiptData } from "@/components/subscription/payment-receipt-dialog"
 import { getCardCollection, getUserCollection } from "@/lib/collections"
 import { getUserById } from "@/lib/data"
 import { session } from "@/lib/session"

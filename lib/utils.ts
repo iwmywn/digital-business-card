@@ -1,11 +1,13 @@
 import { allColorOptions, allFontOptions } from "@/constants"
-import { clsx, type ClassValue } from "clsx"
+import { clientEnv } from "@/env/client"
+import type { ClassValue } from "clsx"
+import { clsx } from "clsx"
 import { format } from "date-fns"
 import { toast } from "sonner"
 import { twMerge } from "tailwind-merge"
 
 import type { Image } from "@/components/card/card-design"
-import { type ImageTransform } from "@/components/image-editor-dialog"
+import type { ImageTransform } from "@/components/image-editor-dialog"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -63,30 +65,9 @@ export function formatDate(
 }
 
 export function handleCopyLink(slug: string) {
-  const link = `${process.env.NEXT_PUBLIC_URL}/card/${slug}`
+  const link = `${clientEnv.NEXT_PUBLIC_URL}/card/${slug}`
   navigator.clipboard.writeText(link)
   toast.info("Link copied.")
-}
-
-export function checkEnv(vars: Record<string, string | undefined>) {
-  const missingVars: string[] = []
-
-  const result: Record<string, string> = {}
-
-  for (const [key, value] of Object.entries(vars)) {
-    if (value) {
-      result[key] = value
-    } else {
-      toast.error(`Missing environment variable: ${key}!`)
-      missingVars.push(key)
-    }
-  }
-
-  if (missingVars.length > 0) {
-    throw new Error(`Missing environment variables: ${missingVars.join(", ")}`)
-  }
-
-  return result
 }
 
 export function someRight<T>(
