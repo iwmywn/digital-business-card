@@ -1,3 +1,12 @@
+## [26.23.1](https://github.com/iwmywn/digital-business-card/compare/v26.23.0...v26.23.1)
+
+
+### Nerd stuff
+
+These changes will not be visible to users, but are included for completeness and to credit contributors.
+
+- **chore:** update README ([9803cb0](https://github.com/iwmywn/digital-business-card/commit/9803cb09def142870a26b5fcf66830d5e7f76283))
+
 ## 26.23.0
 
 ### Features
