@@ -8,7 +8,7 @@ import { processSuccessfulPayment } from "@/actions/stripe-utils"
 import { createResponse } from "@/app/api/utils"
 
 const stripe = new Stripe(serverEnv.STRIPE_SECRET, {
-  apiVersion: "2026-05-27.dahlia",
+  apiVersion: "2026-07-29.dahlia",
 })
 
 export async function POST(req: NextRequest) {
@@ -36,9 +36,7 @@ export async function POST(req: NextRequest) {
       if (checkoutSession.payment_status === "paid") {
         const userId = checkoutSession.metadata?.userId
         const planId = checkoutSession.metadata?.planId as
-          | "basic"
-          | "professional"
-          | undefined
+          "basic" | "professional" | undefined
 
         if (!userId || !planId) {
           console.error("Missing user ID or plan ID!")

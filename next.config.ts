@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
+    turbopackRustReactCompiler: true,
     optimizePackageImports: ["simple-icons"],
     scrollRestoration: true,
     cpus: 1,

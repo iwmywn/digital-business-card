@@ -10,7 +10,7 @@ import { session } from "@/lib/session"
 import { processSuccessfulPayment } from "./stripe-utils"
 
 const stripe = new Stripe(serverEnv.STRIPE_SECRET, {
-  apiVersion: "2026-05-27.dahlia",
+  apiVersion: "2026-07-29.dahlia",
 })
 
 export async function createCheckoutSession(priceId: string, planId: string) {
@@ -80,9 +80,7 @@ export async function verifyCheckoutSession(sessionId: string) {
     if (checkoutSession.payment_status === "paid") {
       const userId = checkoutSession.metadata?.userId
       const planId = checkoutSession.metadata?.planId as
-        | "basic"
-        | "professional"
-        | undefined
+        "basic" | "professional" | undefined
 
       if (!userId || !planId) {
         return {
