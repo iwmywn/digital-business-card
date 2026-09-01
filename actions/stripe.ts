@@ -10,7 +10,7 @@ import { session } from "@/lib/session"
 import { processSuccessfulPayment } from "./stripe-utils"
 
 const stripe = new Stripe(serverEnv.STRIPE_SECRET, {
-  apiVersion: "2026-07-29.dahlia",
+  apiVersion: "2026-08-26.dahlia",
 })
 
 export async function createCheckoutSession(priceId: string, planId: string) {
