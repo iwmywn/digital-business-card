@@ -1,3 +1,16 @@
+## [26.36.0](https://github.com/iwmywn/digital-business-card/compare/v26.23.1...v26.36.0)
+
+### Bug Fixes
+
+- build (@iwmywn) ([#1](https://github.com/iwmywn/digital-business-card/pull/1)) ([1720cb1](https://github.com/iwmywn/digital-business-card/commit/1720cb1d18e99758e77cf91658e042699926b6cf))
+- build ([1a6c191](https://github.com/iwmywn/digital-business-card/commit/1a6c191f0efd9bbbb7008d33f8ee6ac5c3449e65))
+
+### Nerd stuff
+
+These changes will not be visible to users, but are included for completeness and to credit contributors.
+
+- **chore:** update deps ([cfe5a43](https://github.com/iwmywn/digital-business-card/commit/cfe5a431a7560427626788e3cf0a68ed61c28f1f))
+
 ## [26.23.1](https://github.com/iwmywn/digital-business-card/compare/v26.23.0...v26.23.1)
 
 
