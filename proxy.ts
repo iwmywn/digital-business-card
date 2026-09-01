@@ -55,9 +55,16 @@ export default async function proxy(req: NextRequest) {
     }
 
     const { expires } = await session.private.get()
+
+    if (!expires) {
+      await session.private.delete()
+
+      return redirectIfNotPrivateRoute(nextUrl)
+    }
+
     const expiresIn = new Date(expires).getTime() - Date.now()
 
-    if (!expires || expiresIn < 0) {
+    if (expiresIn < 0) {
       await session.private.delete()
 
       return redirectIfNotPrivateRoute(nextUrl)
@@ -91,9 +98,16 @@ export default async function proxy(req: NextRequest) {
   }
 
   const { userId, expires } = await session.user.get()
+
+  if (!userId || !expires) {
+    await session.user.delete()
+
+    return redirectIfProtectedRoute(nextUrl)
+  }
+
   const expiresIn = new Date(expires).getTime() - Date.now()
 
-  if (!userId || !expires || expiresIn < 0) {
+  if (expiresIn < 0) {
     await session.user.delete()
 
     return redirectIfProtectedRoute(nextUrl)
