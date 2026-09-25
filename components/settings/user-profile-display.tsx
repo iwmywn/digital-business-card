@@ -105,7 +105,7 @@ export function UserProfileDisplay({
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="text-muted-foreground mt-2 flex items-center justify-center gap-1.5 text-sm sm:text-base">
-                      <CalendarDays className="size-[0.875rem]" />
+                      <CalendarDays className="size-3.5" />
                       <span>{joinedFormatted}</span>
                     </div>
                   </TooltipTrigger>

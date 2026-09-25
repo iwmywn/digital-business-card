@@ -46,8 +46,9 @@ export function SignInForm() {
         callbackUrl = callbackUrl + window.location.hash
       }
 
-      form.reset()
       router.push(callbackUrl || "/home")
+      router.refresh()
+      form.reset()
     }
   }
 

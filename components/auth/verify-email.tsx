@@ -5,7 +5,7 @@ import { Check, X } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
 import { verifyEmail } from "@/actions/auth"
-import { Loading } from "@/components/loading"
+import { Spinner } from "@/components/ui/spinner"
 
 export function VerifyEmail({
   token,
@@ -35,14 +35,14 @@ export function VerifyEmail({
 
   if (isLoading) {
     return (
-      <Loading className="border-primary border-t-primary-foreground/10 size-8" />
+      <Spinner className="border-primary border-t-primary-foreground/10 size-8" />
     )
   }
 
   return (
     <>
       <div className="flex flex-col items-center justify-center gap-4 text-sm">
-        <Icon className="size-[1.875rem]" />
+        <Icon className="size-7.5" />
         {message}
       </div>
     </>

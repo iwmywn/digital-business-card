@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { PasswordInput } from "@/components/ui/password-input"
-import { Loading } from "@/components/loading"
+import { Spinner } from "@/components/ui/spinner"
 
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
 
@@ -69,12 +69,12 @@ export function ResetPasswordForm({
 
   if (isLoading)
     return (
-      <Loading className="border-primary border-t-primary-foreground/10 size-8" />
+      <Spinner className="border-primary border-t-primary-foreground/10 size-8" />
     )
   if (message)
     return (
       <div className="flex flex-col items-center justify-center gap-4 text-sm">
-        <X className="size-[1.875rem]" />
+        <X className="size-7.5" />
         {message}
       </div>
     )

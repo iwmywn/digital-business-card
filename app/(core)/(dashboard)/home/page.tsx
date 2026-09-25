@@ -2,12 +2,13 @@ import type { Metadata } from "next"
 import { Bug } from "lucide-react"
 
 import {
-  EmptyState,
-  EmptyStateAction,
-  EmptyStateDescription,
-  EmptyStateHeader,
-  EmptyStateIcon,
-} from "@/components/ui/empty-state"
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 import { BugReportDialog } from "@/components/support/bug-report-dialog"
 
 export function generateMetadata(): Metadata {
@@ -16,18 +17,20 @@ export function generateMetadata(): Metadata {
 
 export default function page() {
   return (
-    <EmptyState className="min-h-[calc(100vh-4.83rem)]">
-      <EmptyStateIcon>
-        <Bug />
-      </EmptyStateIcon>
-      <EmptyStateHeader>HELP IMPROVE THIS PROJECT</EmptyStateHeader>
-      <EmptyStateDescription>
-        Found a bug or have a suggestion? We appreciate your feedback to make
-        this project better.
-      </EmptyStateDescription>
-      <EmptyStateAction>
+    <Empty className="min-h-[calc(100vh-4.83rem)]">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <Bug />
+        </EmptyMedia>
+        <EmptyTitle>HELP IMPROVE THIS PROJECT</EmptyTitle>
+        <EmptyDescription>
+          Found a bug or have a suggestion? We appreciate your feedback to make
+          this project better.
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
         <BugReportDialog />
-      </EmptyStateAction>
-    </EmptyState>
+      </EmptyContent>
+    </Empty>
   )
 }

@@ -57,8 +57,8 @@ export function SignUpForm() {
         toast.error(error)
       } else {
         toast.success(success)
-        form.reset()
         router.push("/signin")
+        form.reset()
       }
 
       setIsLoading(false)

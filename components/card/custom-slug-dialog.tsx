@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Loading } from "@/components/loading"
+import { Spinner } from "@/components/ui/spinner"
 import { useDebounce } from "@/hooks/use-debounce"
 import type { Card as CardType } from "@/lib/definitions"
 import { useCard } from "@/lib/swr"
@@ -174,7 +174,7 @@ export function CustomSlugDialog({
 
                     <div className="absolute top-2.5 right-2.5">
                       {isChecking ? (
-                        <Loading className="border-primary border-t-primary-foreground/10" />
+                        <Spinner className="border-primary border-t-primary-foreground/10" />
                       ) : isSlugAvailable === true ? (
                         <CheckCircle className="size-4 text-green-500" />
                       ) : isSlugAvailable === false ? (

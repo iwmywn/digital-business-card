@@ -30,11 +30,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
-  EmptyState,
-  EmptyStateDescription,
-  EmptyStateHeader,
-  EmptyStateIcon,
-} from "@/components/ui/empty-state"
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 import { Input } from "@/components/ui/input"
 import {
   Tooltip,
@@ -156,23 +157,25 @@ export function CardManagement() {
       </div>
 
       {filteredCards.length === 0 ? (
-        <EmptyState
+        <Empty
           style={{
             minHeight: isMobile
               ? "250px"
               : `calc(100vh - ${calculatedHeight}px - 9.33rem)`,
           }}
         >
-          <EmptyStateIcon>
-            <Search />
-          </EmptyStateIcon>
-          <EmptyStateHeader>NO CARDS FOUND</EmptyStateHeader>
-          <EmptyStateDescription>
-            {cards.length === 0
-              ? "You haven't created any cards yet."
-              : "We couldn't find any cards matching your search. Try a different search term."}
-          </EmptyStateDescription>
-        </EmptyState>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Search />
+            </EmptyMedia>
+            <EmptyTitle>NO CARDS FOUND</EmptyTitle>
+            <EmptyDescription>
+              {cards.length === 0
+                ? "You haven't created any cards yet."
+                : "We couldn't find any cards matching your search. Try a different search term."}
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredCards.map((card) => (
@@ -228,7 +231,7 @@ export function CardManagement() {
               </div>
               <CardHeader>
                 <div className="relative flex items-center gap-4">
-                  <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-full shadow-md">
+                  <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full shadow-md">
                     <div className="relative h-full w-full">
                       <Image
                         src={getImageUrl(card, "profile")}
@@ -245,9 +248,9 @@ export function CardManagement() {
                       </span>
                       <span title={card.isPublic ? "Public" : "Private"}>
                         {card.isPublic ? (
-                          <Globe className="size-[0.875rem]" />
+                          <Globe className="size-3.5" />
                         ) : (
-                          <Lock className="size-[0.875rem]" />
+                          <Lock className="size-3.5" />
                         )}
                       </span>
                     </CardTitle>

@@ -74,23 +74,23 @@ function SortableLink({
       >
         <GripVertical className="text-muted-foreground size-5" />
       </div>
-      <div className="[&>svg]:size-5 [&>svg]:flex-shrink-0">
+      <div className="[&>svg]:size-5 [&>svg]:shrink-0">
         <IconComponent />
       </div>
-      <div className="flex flex-grow flex-col gap-2 sm:flex-row">
+      <div className="flex grow flex-col gap-2 sm:flex-row">
         <Input
           id={link.id + "Label"}
           placeholder="Custom label (optional)"
           value={link.label || ""}
           onChange={(e) => updateLink(link.id, "label", e.target.value)}
-          className="flex-grow sm:w-1/2"
+          className="grow sm:w-1/2"
         />
         <Input
           id={link.id + "Value"}
           placeholder={`Enter your ${link.type}`}
           value={link.value}
           onChange={(e) => updateLink(link.id, "value", e.target.value)}
-          className="flex-grow"
+          className="grow"
         />
       </div>
       <Button variant="ghost" size="icon" onClick={() => removeLink(link.id)}>
@@ -200,7 +200,7 @@ export function Links({
                 items={links.map((link) => link.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="max-h-[13rem] space-y-2 overflow-y-auto">
+                <div className="max-h-52 space-y-2 overflow-y-auto">
                   {links.map((link) => (
                     <SortableLink
                       key={link.id}

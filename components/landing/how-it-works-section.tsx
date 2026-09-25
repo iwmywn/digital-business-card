@@ -155,7 +155,7 @@ export function HowItWorksSection() {
                 onValueChange={(tab) => handlePlanActiveTab(tab)}
               >
                 <div className="hidden w-full md:block">
-                  <TabsList className="w-full min-w-[19.5rem]">
+                  <TabsList className="w-full min-w-78">
                     <TabsTrigger value="free">Free</TabsTrigger>
                     <TabsTrigger value="basic">Basic</TabsTrigger>
                     <TabsTrigger value="professional">Professional</TabsTrigger>
@@ -194,7 +194,7 @@ export function HowItWorksSection() {
                   onValueChange={setDesignActiveTab}
                 >
                   <div className="hidden w-full md:block">
-                    <TabsList className="w-full min-w-[30.75rem]">
+                    <TabsList className="w-full min-w-123">
                       <TabsTrigger value="design">Design</TabsTrigger>
                       <TabsTrigger value="personal-information">
                         Personal Information

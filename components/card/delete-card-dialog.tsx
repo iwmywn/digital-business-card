@@ -12,8 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { Spinner } from "@/components/ui/spinner"
 import { getImageUrl } from "@/components/card/card-management"
-import { Loading } from "@/components/loading"
 import type { Card as CardType } from "@/lib/definitions"
 import { useCard } from "@/lib/swr"
 import { formatDate } from "@/lib/utils"
@@ -93,7 +93,7 @@ export function DeleteCardDialog({
             disabled={isDeleting}
           >
             {isDeleting ? (
-              <Loading className="border-white border-t-black/10" />
+              <Spinner className="border-white border-t-black/10" />
             ) : (
               "Delete card"
             )}

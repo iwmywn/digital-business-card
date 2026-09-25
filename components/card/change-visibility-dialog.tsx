@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Loading } from "@/components/loading"
+import { Spinner } from "@/components/ui/spinner"
 import type { Card as CardType } from "@/lib/definitions"
 import { useCard } from "@/lib/swr"
 
@@ -76,7 +76,7 @@ export function ChangeVisibilityDialog({
           </Button>
           <Button onClick={handleVisibilityChange} disabled={isUpdating}>
             {isUpdating ? (
-              <Loading />
+              <Spinner />
             ) : card.isPublic ? (
               "Make private"
             ) : (

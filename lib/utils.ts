@@ -1,17 +1,10 @@
 import { allColorOptions, allFontOptions } from "@/constants"
 import { clientEnv } from "@/env/client"
-import type { ClassValue } from "clsx"
-import { clsx } from "clsx"
 import { format } from "date-fns"
 import { toast } from "sonner"
-import { twMerge } from "tailwind-merge"
 
 import type { Image } from "@/components/card/card-design"
 import type { ImageTransform } from "@/components/image-editor-dialog"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
 
 export function getColorClass(value: string) {
   return allColorOptions.find((option) => option.value === value)?.color || ""
