@@ -1,3 +1,12 @@
+## [26.40.0](https://github.com/iwmywn/visiq/compare/v26.36.0...v26.40.0)
+
+
+### Nerd stuff
+
+These changes will not be visible to users, but are included for completeness and to credit contributors.
+
+- **chore:** update deps (@iwmywn) ([#2](https://github.com/iwmywn/visiq/pull/2)) ([b41e7d7](https://github.com/iwmywn/visiq/commit/b41e7d77eb0794baedf5760c262955130b0b8790))
+
 ## [26.36.0](https://github.com/iwmywn/digital-business-card/compare/v26.23.1...v26.36.0)
 
 ### Bug Fixes
