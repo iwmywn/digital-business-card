@@ -85,7 +85,7 @@ export function CardPreview({
 
         <div className="relative space-y-4 bg-white p-6">
           {cardDesign.profileImage && (
-            <div className="absolute top-[-3.125rem] left-6 h-25 w-25 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
+            <div className="absolute -top-12.5 left-6 h-25 w-25 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
               <div className="pointer-events-none relative h-full w-full select-none">
                 <Image
                   src={getImageUrl("profile")}
@@ -156,7 +156,7 @@ export function CardPreview({
                     className="flex items-center gap-3 text-base"
                   >
                     <div
-                      className={`${colorClass} flex items-center justify-center rounded-full p-2 text-white [&>svg]:size-6 [&>svg]:flex-shrink-0`}
+                      className={`${colorClass} flex items-center justify-center rounded-full p-2 text-white [&>svg]:size-6 [&>svg]:shrink-0`}
                     >
                       {getIconComponent(link.type)}
                     </div>

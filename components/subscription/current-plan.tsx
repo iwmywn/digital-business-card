@@ -43,7 +43,7 @@ export function CurrentPlan() {
           <ul className="grid gap-1">
             {selectedPlan.features.map((feature: string) => (
               <li key={feature} className="flex items-center text-sm">
-                <CheckCircle2 className="text-primary mr-2 size-4 flex-shrink-0" />
+                <CheckCircle2 className="text-primary mr-2 size-4 shrink-0" />
                 <span>{feature}</span>
               </li>
             ))}

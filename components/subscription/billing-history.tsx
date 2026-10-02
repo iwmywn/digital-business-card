@@ -16,11 +16,12 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import {
-  EmptyState,
-  EmptyStateDescription,
-  EmptyStateHeader,
-  EmptyStateIcon,
-} from "@/components/ui/empty-state"
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 import { Input } from "@/components/ui/input"
 import {
   Table,
@@ -117,24 +118,25 @@ export function BillingHistory({
         </CardHeader>
         <CardContent>
           {filteredHistory.length === 0 ? (
-            <EmptyState
-              className="border border-dashed"
+            <Empty
               style={{
                 minHeight: isMobile
                   ? "250px"
                   : `calc(100vh - ${calculatedHeight}px - ${calculatedBillingHistoryHeight}px - 13.9375rem)`,
               }}
             >
-              <EmptyStateIcon>
-                <Receipt />
-              </EmptyStateIcon>
-              <EmptyStateHeader>NO TRANSACTIONS FOUND</EmptyStateHeader>
-              <EmptyStateDescription>
-                {paymentHistory.length === 0
-                  ? "You haven't made any payments yet."
-                  : "We couldn't find any transactions matching your search. Try a different search term."}
-              </EmptyStateDescription>
-            </EmptyState>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Receipt />
+                </EmptyMedia>
+                <EmptyTitle>NO TRANSACTIONS FOUND</EmptyTitle>
+                <EmptyDescription>
+                  {paymentHistory.length === 0
+                    ? "You haven't made any payments yet."
+                    : "We couldn't find any transactions matching your search. Try a different search term."}
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
           ) : (
             <div
               className="overflow-auto [&>div]:overflow-x-visible!"

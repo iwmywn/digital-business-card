@@ -6,6 +6,7 @@ import Link from "next/link"
 import { clientEnv } from "@/env/client"
 import { publicProfileSchema } from "@/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { cn } from "cn"
 import { format } from "date-fns"
 import { CalendarIcon, ImageIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -44,7 +45,7 @@ import type { ImageTransform } from "@/components/image-editor-dialog"
 import { ImageEditorDialog } from "@/components/image-editor-dialog"
 import { InformationSkeleton } from "@/components/skeletons"
 import { useUser } from "@/lib/swr"
-import { cn, getCloudinaryUrl } from "@/lib/utils"
+import { getCloudinaryUrl } from "@/lib/utils"
 
 export type ProfileFormValues = z.infer<typeof publicProfileSchema>
 

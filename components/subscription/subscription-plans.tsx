@@ -17,7 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Loading } from "@/components/loading"
+import { Spinner } from "@/components/ui/spinner"
 import { useSubscription, useUser } from "@/lib/swr"
 import { formatDate } from "@/lib/utils"
 
@@ -79,7 +79,7 @@ export function SubscriptionPlans() {
         return (
           <Card
             key={plan.id}
-            className={`relative flex-1 overflow-hidden shadow-sm transition-all duration-200 min-[25rem]:min-w-[17.5rem] ${isCurrentPlan ? "ring-primary ring-1 ring-offset-1" : "hover:ring-primary hover:ring-1 hover:ring-offset-1"}`}
+            className={`relative flex-1 overflow-hidden shadow-sm transition-all duration-200 min-[25rem]:min-w-70 ${isCurrentPlan ? "ring-primary ring-1 ring-offset-1" : "hover:ring-primary hover:ring-1 hover:ring-offset-1"}`}
           >
             {plan.popular && (
               <div className="absolute top-0 right-0">
@@ -105,7 +105,7 @@ export function SubscriptionPlans() {
               <ul className="space-y-2">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start">
-                    <CheckCircle2 className="text-primary mt-0.5 mr-2 size-4 flex-shrink-0" />
+                    <CheckCircle2 className="text-primary mt-0.5 mr-2 size-4 shrink-0" />
                     <span className="text-sm">{feature}</span>
                   </li>
                 ))}
@@ -133,7 +133,7 @@ export function SubscriptionPlans() {
                     }
                     disabled={isLoading[plan.id]}
                   >
-                    {isLoading[plan.id] ? <Loading /> : "Switch to this plan"}
+                    {isLoading[plan.id] ? <Spinner /> : "Switch to this plan"}
                   </Button>
                 ) : (
                   plan.id !== "free" && (
@@ -142,7 +142,7 @@ export function SubscriptionPlans() {
                       onClick={() => handleSubscribe(plan.priceId, plan.id)}
                       disabled={isLoading[plan.id]}
                     >
-                      {isLoading[plan.id] ? <Loading /> : "Upgrade"}
+                      {isLoading[plan.id] ? <Spinner /> : "Upgrade"}
                     </Button>
                   )
                 )}

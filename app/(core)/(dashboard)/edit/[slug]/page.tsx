@@ -7,12 +7,13 @@ import { Ghost } from "lucide-react"
 import { getCardToEditBySlug } from "@/actions/card"
 import { Button } from "@/components/ui/button"
 import {
-  EmptyState,
-  EmptyStateAction,
-  EmptyStateDescription,
-  EmptyStateHeader,
-  EmptyStateIcon,
-} from "@/components/ui/empty-state"
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 import { EditCard } from "@/components/card/edit-card"
 import { CreateCardSkeleton } from "@/components/skeletons"
 
@@ -63,18 +64,20 @@ async function EditCardContent({
 
   if (error || !card) {
     return (
-      <EmptyState className="min-h-[calc(100vh-4.83rem)]">
-        <EmptyStateIcon>
-          <Ghost />
-        </EmptyStateIcon>
-        <EmptyStateHeader>OOPS! AN ERROR OCCURRED</EmptyStateHeader>
-        <EmptyStateDescription>{error}</EmptyStateDescription>
-        <EmptyStateAction>
+      <Empty className="min-h-[calc(100vh-4.83rem)]">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Ghost />
+          </EmptyMedia>
+          <EmptyTitle>OOPS! AN ERROR OCCURRED</EmptyTitle>
+          <EmptyDescription>{error}</EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
           <Button asChild>
             <Link href="/home">Go home</Link>
           </Button>
-        </EmptyStateAction>
-      </EmptyState>
+        </EmptyContent>
+      </Empty>
     )
   }
 

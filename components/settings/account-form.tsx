@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { PhoneInput } from "@/components/ui/phone-input"
-import { Loading } from "@/components/loading"
+import { Spinner } from "@/components/ui/spinner"
 import { AccountSkeleton } from "@/components/skeletons"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useUser } from "@/lib/swr"
@@ -163,7 +163,7 @@ export function AccountForm() {
 
                 <div className="absolute top-2.5 right-2.5">
                   {isChecking ? (
-                    <Loading className="border-primary border-t-primary-foreground/10" />
+                    <Spinner className="border-primary border-t-primary-foreground/10" />
                   ) : isUsernameAvailable === true ? (
                     <CheckCircle className="size-4 text-green-500" />
                   ) : isUsernameAvailable === false ? (

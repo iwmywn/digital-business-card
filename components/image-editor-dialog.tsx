@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
-import { Loading } from "@/components/loading"
+import { Spinner } from "@/components/ui/spinner"
 import { getCloudinaryUrl } from "@/lib/utils"
 
 export type ImageTransform = {
@@ -266,7 +266,7 @@ export function ImageEditorDialog({
                   Cancel
                 </Button>
                 <Button onClick={saveImage} disabled={isProcessing}>
-                  {isProcessing ? <Loading /> : "Apply"}
+                  {isProcessing ? <Spinner /> : "Apply"}
                 </Button>
               </div>
             </div>

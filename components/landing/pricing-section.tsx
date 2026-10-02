@@ -31,7 +31,7 @@ export function PricingSection() {
             <Card
               key={plan.id}
               className={
-                "hover:ring-primary relative max-w-sm flex-1 overflow-hidden shadow-sm transition-all duration-200 hover:ring-1 hover:ring-offset-1 min-[25rem]:min-w-[17.5rem]"
+                "hover:ring-primary relative max-w-sm flex-1 overflow-hidden shadow-sm transition-all duration-200 hover:ring-1 hover:ring-offset-1 min-[25rem]:min-w-70"
               }
             >
               {plan.popular && (
@@ -58,7 +58,7 @@ export function PricingSection() {
                 <ul className="space-y-2">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start">
-                      <Check className="text-primary mt-0.5 mr-2 size-4 flex-shrink-0" />
+                      <Check className="text-primary mt-0.5 mr-2 size-4 shrink-0" />
                       <span className="text-sm">{feature}</span>
                     </li>
                   ))}

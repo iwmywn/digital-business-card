@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { cn } from "cn"
 import { ChartColumnIncreasing, Eye, MousePointerClick } from "lucide-react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { toast } from "sonner"
@@ -23,12 +24,13 @@ import {
 } from "@/components/ui/chart"
 import type { ChartConfig } from "@/components/ui/chart"
 import {
-  EmptyState,
-  EmptyStateAction,
-  EmptyStateDescription,
-  EmptyStateHeader,
-  EmptyStateIcon,
-} from "@/components/ui/empty-state"
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 import {
   Select,
   SelectContent,
@@ -41,7 +43,6 @@ import { useDynamicHeightAuto } from "@/hooks/use-dynamic-height-auto"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import type { Card as CardType } from "@/lib/definitions"
 import { useCard, useUser } from "@/lib/swr"
-import { cn } from "@/lib/utils"
 
 const chartConfig = {
   views: {
@@ -265,40 +266,44 @@ export function Analytics() {
 
   if (user?.currentPlan === "free") {
     return (
-      <EmptyState className="min-h-[calc(100vh-4.83rem)]">
-        <EmptyStateIcon>
-          <ChartColumnIncreasing />
-        </EmptyStateIcon>
-        <EmptyStateHeader>UNLOCK ANALYTICS</EmptyStateHeader>
-        <EmptyStateDescription>
-          Upgrade to our basic or professional plan to access analytics for your
-          digital business cards.
-        </EmptyStateDescription>
-        <EmptyStateAction>
+      <Empty className="min-h-[calc(100vh-4.83rem)]">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <ChartColumnIncreasing />
+          </EmptyMedia>
+          <EmptyTitle>UNLOCK ANALYTICS</EmptyTitle>
+          <EmptyDescription>
+            Upgrade to our basic or professional plan to access analytics for
+            your digital business cards.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
           <Button asChild>
             <Link href="/subscription">Go to subscription</Link>
           </Button>
-        </EmptyStateAction>
-      </EmptyState>
+        </EmptyContent>
+      </Empty>
     )
   }
 
   if (cards.length === 0) {
     return (
-      <EmptyState className="min-h-[calc(100vh-4.83rem)]">
-        <EmptyStateIcon>
-          <ChartColumnIncreasing />
-        </EmptyStateIcon>
-        <EmptyStateHeader>NO CARDS YET</EmptyStateHeader>
-        <EmptyStateDescription>
-          Create a digital business card to start tracking your analytics.
-        </EmptyStateDescription>
-        <EmptyStateAction>
+      <Empty className="min-h-[calc(100vh-4.83rem)]">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <ChartColumnIncreasing />
+          </EmptyMedia>
+          <EmptyTitle>NO CARDS YET</EmptyTitle>
+          <EmptyDescription>
+            Create a digital business card to start tracking your analytics.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
           <Button asChild>
             <Link href="/create">Create your first card</Link>
           </Button>
-        </EmptyStateAction>
-      </EmptyState>
+        </EmptyContent>
+      </Empty>
     )
   }
 
@@ -316,7 +321,7 @@ export function Analytics() {
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <Select value={selectedCard} onValueChange={setSelectedCard}>
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-full sm:w-45">
               <SelectValue placeholder="Select card" />
             </SelectTrigger>
             <SelectContent>
@@ -330,7 +335,7 @@ export function Analytics() {
           </Select>
 
           <Select value={dateRange} onValueChange={setDateRange}>
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-full sm:w-45">
               <SelectValue placeholder="Select date range" />
             </SelectTrigger>
             <SelectContent>
@@ -425,27 +430,29 @@ export function Analytics() {
         </CardHeader>
         <CardContent>
           {user?.currentPlan === "basic" ? (
-            <EmptyState
+            <Empty
               style={{
                 height: isMobile
                   ? "250px"
                   : `calc(100vh - ${calculatedHeight}px - 12.4375rem)`,
               }}
             >
-              <EmptyStateIcon>
-                <ChartColumnIncreasing />
-              </EmptyStateIcon>
-              <EmptyStateHeader>UNLOCK ANALYTICS</EmptyStateHeader>
-              <EmptyStateDescription>
-                Upgrade to our professional plan to access detailed analytics
-                for your digital business cards.
-              </EmptyStateDescription>
-              <EmptyStateAction>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <ChartColumnIncreasing />
+                </EmptyMedia>
+                <EmptyTitle>UNLOCK ANALYTICS</EmptyTitle>
+                <EmptyDescription>
+                  Upgrade to our professional plan to access detailed analytics
+                  for your digital business cards.
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
                 <Button asChild>
                   <Link href="/subscription">Go to subscription</Link>
                 </Button>
-              </EmptyStateAction>
-            </EmptyState>
+              </EmptyContent>
+            </Empty>
           ) : (
             <ChartContainer
               config={chartConfig}

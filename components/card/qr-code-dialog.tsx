@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Loading } from "@/components/loading"
+import { Spinner } from "@/components/ui/spinner"
 import type { Card as CardType } from "@/lib/definitions"
 import { handleCopyLink } from "@/lib/utils"
 
@@ -110,7 +110,7 @@ export function QRCodeDialog({
                 />
               ) : (
                 <div className="flex h-48 w-48 items-center justify-center">
-                  <Loading className="size-8" />
+                  <Spinner className="size-8" />
                 </div>
               )}
             </div>

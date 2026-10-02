@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Spinner } from "@/components/ui/spinner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CardDesign } from "@/components/card/card-design"
 import type { CardDesignValues } from "@/components/card/card-design"
@@ -25,7 +26,6 @@ import { Links } from "@/components/card/links"
 import { PersonalInformation } from "@/components/card/personal-information"
 import type { PersonalInformationValues } from "@/components/card/personal-information"
 import type { SerializableLinkType } from "@/components/icons"
-import { Loading } from "@/components/loading"
 import { CreateCardSkeleton } from "@/components/skeletons"
 import { useCard, useUser } from "@/lib/swr"
 
@@ -158,7 +158,7 @@ export function CreateCard() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-primary-foreground/75 sticky top-[3.25rem] z-50 flex flex-col gap-6 backdrop-blur-xs backdrop-saturate-150 sm:flex-row sm:items-center sm:justify-between">
+      <div className="bg-primary-foreground/75 sticky top-13 z-50 flex flex-col gap-6 backdrop-blur-xs backdrop-saturate-150 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold">
             {previewMode ? "Card Preview" : "Create Card"}
@@ -180,7 +180,7 @@ export function CreateCard() {
           </Button>
           {!isCardError && (
             <Button onClick={handleCreateCard} disabled={isSubmitting}>
-              {isSubmitting ? <Loading /> : "Create card"}
+              {isSubmitting ? <Spinner /> : "Create card"}
             </Button>
           )}
         </div>
@@ -208,10 +208,10 @@ export function CreateCard() {
             <Tabs
               value={activeTab}
               onValueChange={setActiveTab}
-              className="xl:sticky xl:top-[7.75rem]"
+              className="xl:sticky xl:top-31"
             >
               <div className="hidden w-full sm:block">
-                <TabsList className="w-full min-w-[30.75rem]">
+                <TabsList className="w-full min-w-123">
                   <TabsTrigger value="design">Design</TabsTrigger>
                   <TabsTrigger value="personal-information">
                     Personal Information
@@ -267,7 +267,7 @@ export function CreateCard() {
           </div>
 
           <div className="hidden xl:block">
-            <div className="sticky top-[7.75rem] space-y-4">
+            <div className="sticky top-31 space-y-4">
               <CardPreview
                 cardDesign={cardDesign}
                 personalInformation={personalInformation}

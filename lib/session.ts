@@ -7,11 +7,11 @@ import { getIronSession } from "iron-session"
 
 interface UserSession {
   userId: string
-  expires: Date
+  expires: string
 }
 
 interface PrivateSession {
-  expires: Date
+  expires: string
 }
 
 const sevenDays = 7 * 24 * 60 * 60
@@ -52,12 +52,12 @@ const session = {
     create: async (userId: string) => {
       const s = await session.user.get()
       s.userId = userId
-      s.expires = new Date(Date.now() + sevenDays * 1000)
+      s.expires = new Date(Date.now() + sevenDays * 1000).toISOString()
       await s.save()
     },
     update: async () => {
       const s = await session.user.get()
-      s.expires = new Date(Date.now() + sevenDays * 1000)
+      s.expires = new Date(Date.now() + sevenDays * 1000).toISOString()
       s.updateConfig(sessionOptions.user)
       await s.save()
     },
@@ -70,7 +70,7 @@ const session = {
     get: cache(async () => getSession<PrivateSession>(sessionOptions.private)),
     create: async () => {
       const s = await session.private.get()
-      s.expires = new Date(Date.now() + twohours * 1000)
+      s.expires = new Date(Date.now() + twohours * 1000).toISOString()
       await s.save()
     },
     delete: async () => {

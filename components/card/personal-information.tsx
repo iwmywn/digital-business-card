@@ -245,7 +245,7 @@ export const PersonalInformation = forwardRef(function PersonalInformation(
                     <Textarea
                       id="bio"
                       placeholder="Write a short bio about yourself..."
-                      className="min-h-[100px] resize-none"
+                      className="min-h-25 resize-none"
                       {...field}
                       value={field.value || ""}
                     />

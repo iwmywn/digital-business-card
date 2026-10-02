@@ -53,7 +53,7 @@ export function CardSkeleton() {
       <div className="overflow-hidden rounded-xl shadow-sm">
         <Skeleton className="relative aspect-2/1 w-full rounded-none" />
         <div className="bg-background/15 relative space-y-4 p-6">
-          <Skeleton className="absolute top-[-3.125rem] left-6 h-25 w-25 rounded-full shadow-md" />
+          <Skeleton className="absolute -top-12.5 left-6 h-25 w-25 rounded-full shadow-md" />
           <Skeleton className="absolute -top-8 right-6 h-16 w-16 rounded-lg shadow-md" />
 
           <div className="mt-10 w-full space-y-2">
@@ -171,7 +171,7 @@ export function CreateCardSkeleton() {
         </div>
 
         <div className="hidden xl:block">
-          <div className="sticky top-[3.75rem] space-y-4">
+          <div className="sticky top-15 space-y-4">
             <CardSkeleton />
           </div>
         </div>
@@ -230,8 +230,8 @@ export function AnalyticsSkeleton() {
           <Skeleton className="h-4 w-64" />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
-          <Skeleton className="h-9 rounded-md sm:w-[180px]" />
-          <Skeleton className="h-9 rounded-md sm:w-[180px]" />
+          <Skeleton className="h-9 rounded-md sm:w-45" />
+          <Skeleton className="h-9 rounded-md sm:w-45" />
         </div>
       </div>
 
@@ -302,7 +302,7 @@ export function SubscriptionPlansSkeleton() {
         {[...Array(3)].map((_, i) => (
           <div
             key={i}
-            className="flex min-w-[17.5rem] flex-1 flex-col space-y-4 rounded-lg border p-4 shadow-sm"
+            className="flex min-w-70 flex-1 flex-col space-y-4 rounded-lg border p-4 shadow-sm"
             style={{
               minHeight: `calc(100vh - ${calculatedHeight}px - 9.4375rem)`,
             }}

@@ -55,7 +55,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar
-      className="pr-0 group-data-[state=collapsed]:pr-[0.5625rem]"
+      className="pr-0 group-data-[state=collapsed]:pr-2.25"
       variant="floating"
       collapsible="icon"
       {...props}

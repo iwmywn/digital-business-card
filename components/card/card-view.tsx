@@ -3,20 +3,20 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import FingerprintJS from "@fingerprintjs/fingerprintjs"
+import { cn } from "cn"
 import { QrCode, Share2 } from "lucide-react"
 import { toast } from "sonner"
 
 import { trackCardClick, trackCardView } from "@/actions/card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { Spinner } from "@/components/ui/spinner"
 import { QRCodeDialog } from "@/components/card/qr-code-dialog"
 import { ShareCardDialog } from "@/components/card/share-card-dialog"
 import { linkTypes } from "@/components/icons"
 import type { SerializableLinkType } from "@/components/icons"
-import { Loading } from "@/components/loading"
 import type { Card as CardType } from "@/lib/definitions"
 import {
-  cn,
   getCloudinaryUrl,
   getColorClass,
   getFontClass,
@@ -241,7 +241,7 @@ export function CardView({
 
             <div className="relative space-y-4 bg-white p-6">
               {card.cardDesign.profileImage && (
-                <div className="absolute top-[-3.125rem] left-6 h-25 w-25 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
+                <div className="absolute -top-12.5 left-6 h-25 w-25 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
                   <div className="pointer-events-none relative h-full w-full select-none">
                     <Image
                       src={getImageUrl("profile")}
@@ -327,10 +327,10 @@ export function CardView({
                         onClick={() => handleLinkClick(link)}
                       >
                         <div
-                          className={`${colorClass} flex items-center justify-center rounded-full p-2 text-white [&>svg]:size-6 [&>svg]:flex-shrink-0`}
+                          className={`${colorClass} flex items-center justify-center rounded-full p-2 text-white [&>svg]:size-6 [&>svg]:shrink-0`}
                         >
                           {isLoading[link.id] ? (
-                            <Loading className="size-6 border-white border-t-black/10" />
+                            <Spinner className="size-6 border-white border-t-black/10" />
                           ) : (
                             getIconComponent(link.type)
                           )}
@@ -384,7 +384,7 @@ export function CardView({
 
           <div
             ref={saveButtonRef}
-            className={`${showGradient ? "bg-[linear-gradient(to_top,theme(colors.white),transparent)]" : ""} sticky right-0 bottom-0 left-0 z-50 flex items-center justify-center py-4 transition-all duration-200`}
+            className={`${showGradient ? "bg-[linear-gradient(to_top,var(--color-white),transparent)]" : ""} sticky right-0 bottom-0 left-0 z-50 flex items-center justify-center py-4 transition-all duration-200`}
           >
             <button
               onClick={handleSaveContact}

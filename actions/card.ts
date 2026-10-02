@@ -399,7 +399,9 @@ export async function getCardByUserId(userId: string) {
 
     if (!existingUser) return { error: "User not found!" }
 
-    const allCards = await (await getCardCollection())
+    const allCards = await (
+      await getCardCollection()
+    )
       .find({ userId })
       .sort({ createdAt: 1 })
       .toArray()
