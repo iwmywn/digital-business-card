@@ -10,7 +10,7 @@ import { session } from "@/lib/session"
 import { processSuccessfulPayment } from "./stripe-utils"
 
 const stripe = new Stripe(serverEnv.STRIPE_SECRET, {
-  apiVersion: "2026-08-26.dahlia",
+  apiVersion: "2026-09-30.endive",
 })
 
 export async function createCheckoutSession(priceId: string, planId: string) {
@@ -39,7 +39,7 @@ export async function createCheckoutSession(priceId: string, planId: string) {
 
     const sessionOptions: Stripe.Checkout.SessionCreateParams = {
       customer: existingUser.stripeCustomerId,
-      payment_method_types: ["card"],
+      allowed_payment_method_types: ["card"],
       line_items: [
         {
           price: priceId,

@@ -8,7 +8,7 @@ import { processSuccessfulPayment } from "@/actions/stripe-utils"
 import { createResponse } from "@/app/api/utils"
 
 const stripe = new Stripe(serverEnv.STRIPE_SECRET, {
-  apiVersion: "2026-08-26.dahlia",
+  apiVersion: "2026-09-30.endive",
 })
 
 export async function POST(req: NextRequest) {
